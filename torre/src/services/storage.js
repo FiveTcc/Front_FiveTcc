@@ -136,6 +136,34 @@ export const db = {
   buscarUsuario(id) {
     return read().usuarios.find((u) => u.id === id) || null
   },
+  criarUsuario({ nome, email, senha, perfil }) {
+    const data = read()
+    const nomeLimpo = String(nome || '').trim()
+    const emailLimpo = String(email || '').trim().toLowerCase()
+    const senhaLimpa = String(senha || '').trim()
+    const perfilLimpo = String(perfil || '').trim()
+
+    if (!nomeLimpo || !emailLimpo || !senhaLimpa || !perfilLimpo) {
+      return { ok: false, erro: 'Preencha nome, e-mail, senha e perfil.' }
+    }
+
+    const jaExiste = data.usuarios.some((u) => u.email.toLowerCase() === emailLimpo)
+    if (jaExiste) {
+      return { ok: false, erro: 'Já existe um usuário com este e-mail.' }
+    }
+
+    const novoUsuario = {
+      id: `u${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      nome: nomeLimpo,
+      email: emailLimpo,
+      senha: senhaLimpa,
+      perfil: perfilLimpo,
+    }
+
+    data.usuarios.push(novoUsuario)
+    write(data)
+    return { ok: true, usuario: novoUsuario }
+  },
 
   // ---- Chamados ----
   listarChamados() {

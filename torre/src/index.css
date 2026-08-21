@@ -383,6 +383,7 @@ textarea { resize: vertical; font-family: inherit; }
 .form label { display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: var(--text-dim); }
 .form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .form__actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+.form__success { color: var(--green); font-size: 0.85rem; }
 
 /* ---------- Ticket detail ---------- */
 
