@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import CircuitAnimation from '../components/CircuitAnimation'
 
 export default function Login() {
   const { usuario, login } = useAuth()
@@ -19,11 +20,11 @@ export default function Login() {
   return (
     <div className="login">
       <div className="login__panel">
-        <div className="login__brand">
-          <span className="sidebar__brand-mark sidebar__brand-mark--lg" aria-hidden="true" />
-          <h1>TORRE</h1>
-          <p>Central de chamados de TI — visibilidade total, do abertura ao fechamento.</p>
-        </div>
+          <div className="login__brand">
+            <span className="sidebar__brand-mark sidebar__brand-mark--lg" aria-hidden="true" />
+            <h1>N.O.S</h1>
+            <p>New Occurrence System</p>
+          </div>
 
         <form className="login__form" onSubmit={handleSubmit}>
           <label>
@@ -41,10 +42,7 @@ export default function Login() {
       </div>
 
       <div className="login__side" aria-hidden="true">
-        <div className="radar">
-          <div className="radar__sweep" />
-          {[1, 2, 3].map((n) => <div key={n} className="radar__ring" />)}
-        </div>
+        <CircuitAnimation className="radar" />
       </div>
     </div>
   )

@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useEffect, useState } from 'react'
 
 const ICONS = {
   painel: (
@@ -26,6 +27,28 @@ const ICONS = {
 
 export default function Sidebar() {
   const { usuario, logout } = useAuth()
+  const [theme, setTheme] = useState(() => {
+    try {
+      const saved = localStorage.getItem('theme')
+      if (saved) return saved
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    } catch {
+      return 'light'
+    }
+  })
+
+  useEffect(() => {
+    try {
+      document.documentElement.setAttribute('data-theme', theme)
+      localStorage.setItem('theme', theme)
+    } catch {
+      // ignore
+    }
+  }, [theme])
+
+  function toggleTheme() {
+    setTheme((t) => (t === 'dark' ? 'light' : 'dark'))
+  }
 
   return (
     <aside className="sidebar">
@@ -62,7 +85,12 @@ export default function Sidebar() {
             <small>{usuario?.perfil}</small>
           </div>
         </div>
-        <button className="btn btn--ghost btn--sm" onClick={logout}>Sair</button>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <button className="btn btn--ghost btn--sm" onClick={toggleTheme} aria-label="Alternar tema">
+            {theme === 'dark' ? 'Escuro' : 'Claro'}
+          </button>
+          <button className="btn btn--ghost btn--sm" onClick={logout}>Sair</button>
+        </div>
       </div>
     </aside>
   )

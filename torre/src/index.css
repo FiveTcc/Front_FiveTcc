@@ -32,6 +32,20 @@
   --shadow-card: 0 1px 2px rgba(16,24,40,0.04), 0 4px 16px rgba(16,24,40,0.06);
 }
 
+/* ---------- Theme: Dark (overrides) ---------- */
+:root[data-theme='dark'], html[data-theme='dark'] {
+  --bg: #0b1220;
+  --surface: #0f1724;
+  --surface-2: #0d1722;
+  --surface-3: #111827;
+  --border: rgba(255,255,255,0.06);
+  --text: #E6EEF8;
+  --text-dim: #9FB0C8;
+  --text-faint: #7D98B3;
+  --accent: #2B6CE6;
+  --accent-dim: rgba(43,108,230,0.12);
+}
+
 * { box-sizing: border-box; }
 
 html, body, #root { height: 100%; }
@@ -354,6 +368,55 @@ input::placeholder, textarea::placeholder { color: var(--text-faint); }
 select { cursor: pointer; }
 textarea { resize: vertical; font-family: inherit; }
 
+
+/* ---------- Login screen ---------- */
+.login {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: linear-gradient(180deg, var(--bg), var(--surface-2));
+}
+.login__panel {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 28px;
+  width: min(1100px, 96%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+}
+.login__brand {
+  padding: 46px 48px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  color: var(--text);
+}
+.login__brand h1 { font-size: 2.05rem; margin-bottom: 10px; }
+.login__brand p { margin-top: 10px; color: var(--text-dim); max-width: 520px; }
+
+.login__form {
+  padding: 48px 46px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: transparent;
+}
+.login__form label { display: flex; flex-direction: column; gap: 8px; font-weight: 600; color: var(--text-dim); }
+.login__form input { padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
+.login__erro { color: var(--red); margin-top: 6px; }
+.login__side { background: linear-gradient(180deg, rgba(37,99,235,0.03), rgba(2,6,23,0.04)); }
+
+@media (max-width: 880px) {
+  .login__panel { grid-template-columns: 1fr; }
+  .login__brand, .login__form { padding: 28px; }
+}
+
+/* small helper for sidebar theme button alignment */
+/* small helper for sidebar theme button alignment */
+.sidebar__footer button[aria-label='Alternar tema'] { min-width: 120px; }
+
+
 /* ---------- Table ---------- */
 
 .table { width: 100%; border-collapse: collapse; }
@@ -416,17 +479,17 @@ textarea { resize: vertical; font-family: inherit; }
 /* ---------- Login ---------- */
 
 .login {
-  min-height: 100vh;
+  min-height: 90vh;
   display: grid;
-  grid-template-columns: minmax(340px, 480px) 1fr;
+  grid-template-columns: minmax(300px, 400px) 1fr;
   background: var(--bg);
 }
 .login__panel {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 28px;
-  padding: 40px 56px;
+  gap: 10px;
+  padding: 20px 36px;
 }
 .login__brand h1 { font-size: 2.1rem; letter-spacing: 0.05em; margin: 14px 0 8px; }
 .login__brand p { color: var(--text-dim); max-width: 360px; }
@@ -439,10 +502,8 @@ textarea { resize: vertical; font-family: inherit; }
 .login__hint code { font-family: var(--font-mono); color: var(--accent); }
 
 .login__side {
-  position: relative;
-  background:
-    radial-gradient(circle at 60% 45%, rgba(37,99,235,0.10), transparent 60%),
-    linear-gradient(160deg, #EEF3FC, #F8FAFE);
+  position: center;
+  background: transparent;
   border-left: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -466,6 +527,23 @@ textarea { resize: vertical; font-family: inherit; }
   mask: radial-gradient(circle, transparent 0, black 1px);
 }
 @keyframes sweep { to { transform: rotate(360deg); } }
+
+/* light theme: use accent (blue); dark theme: use muted text color */
+:root:not([data-theme='dark']) .pcb-anim { color: var(--accent); }
+:root[data-theme='dark'] .pcb-anim { color: var(--text-faint); }
+.pcb-anim { color: var(--text-faint); }
+.pcb-anim svg { overflow: visible; }
+.pcb-anim .pcb-led { fill: currentColor; opacity: 0.12; transform-origin: center; animation: pcb-led 2.6s ease-in-out infinite; }
+.pcb-anim .pcb-led[style] { /* allow stagger via inline delay */ }
+@keyframes pcb-led { 0%{ opacity:0.12; transform:scale(1)} 50%{ opacity:0.6; transform:scale(1.12)} 100%{ opacity:0.12; transform:scale(1)} }
+
+.pcb-pulse { stroke: currentColor; stroke-dasharray: 1; stroke-dashoffset: 1; vector-effect: non-scaling-stroke; animation: pcb-trace 1.6s linear infinite; }
+.pcb-pulse[style] { /* supports inline animationDelay */ }
+@keyframes pcb-trace { to { stroke-dashoffset: 0; } }
+
+.pcb-chip-pulse { stroke: currentColor; stroke-opacity: 0.28; animation: pcb-chip 1.8s ease-in-out infinite; }
+@keyframes pcb-chip { 0%{ stroke-opacity:0.28 } 50%{ stroke-opacity:0.85 } 100%{ stroke-opacity:0.28 } }
+
 
 /* ---------- Responsive ---------- */
 

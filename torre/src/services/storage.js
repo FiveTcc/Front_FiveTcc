@@ -185,6 +185,7 @@ export const db = {
       prioridade,
       status: 'aberto',
       solicitanteId,
+      
       responsavelId: null,
       criadoEm: Date.now(),
       atualizadoEm: Date.now(),

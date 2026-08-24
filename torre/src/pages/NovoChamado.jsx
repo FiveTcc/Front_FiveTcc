@@ -11,6 +11,7 @@ export default function NovoChamado() {
   const [categoria, setCategoria] = useState(db.CATEGORIAS[0])
   const [prioridade, setPrioridade] = useState('media')
   const [enviando, setEnviando] = useState(false)
+  
 
   function handleSubmit(e) {
     e.preventDefault()
