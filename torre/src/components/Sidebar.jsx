@@ -10,6 +10,12 @@ const ICONS = {
       <circle cx="12" cy="13" r="1.4" fill="currentColor" stroke="none" />
     </svg>
   ),
+  perfil: (
+    <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" stroke="currentColor">
+      <circle cx="12" cy="8" r="3.2" />
+      <path d="M5 19a7 7 0 0 1 14 0" strokeLinecap="round" />
+    </svg>
+  ),
   chamados: (
     <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" stroke="currentColor">
       <path d="M5 4h11l3 3v13H5z" strokeLinejoin="round" />
@@ -74,8 +80,9 @@ export default function Sidebar() {
       <nav className="sidebar__nav">
         <NavLink to="/painel" className={getNavLinkClassName}>
           {ICONS.painel}
-          Painel
+          DashBoard
         </NavLink>
+        
         <NavLink to="/chamados" className={getNavLinkClassName}>
           {ICONS.chamados}
           Chamados
@@ -86,6 +93,11 @@ export default function Sidebar() {
             Usuários
           </NavLink>
         )}
+
+        <NavLink to="/perfil" className={getNavLinkClassName}>
+          {ICONS.perfil}
+          Perfil
+        </NavLink>
       </nav>
 
       <div className="sidebar__footer">

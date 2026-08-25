@@ -34,8 +34,16 @@ export function AuthProvider({ children }) {
     setUsuario(null)
   }
 
+  function atualizarSessao(dados) {
+    setUsuario((atual) => {
+      const proximo = atual ? { ...atual, ...dados } : dados
+      localStorage.setItem(SESSION_KEY, JSON.stringify(proximo))
+      return proximo
+    })
+  }
+
   return (
-    <AuthContext.Provider value={{ usuario, login, logout, carregando }}>
+    <AuthContext.Provider value={{ usuario, login, logout, atualizarSessao, carregando }}>
       {children}
     </AuthContext.Provider>
   )

@@ -7,6 +7,7 @@ import Chamados from './pages/Chamados'
 import ChamadoDetalhe from './pages/ChamadoDetalhe'
 import NovoChamado from './pages/NovoChamado'
 import Usuarios from './pages/Usuarios'
+import Perfil from './pages/Perfil'
 
 function RotaProtegida({ children }) {
   const { usuario, carregando } = useAuth()
@@ -29,6 +30,7 @@ export default function App() {
       >
         <Route index element={<Navigate to="/painel" replace />} />
         <Route path="painel" element={<Dashboard />} />
+        <Route path="perfil" element={<Perfil />} />
         <Route path="chamados" element={<Chamados />} />
         <Route path="chamados/novo" element={<NovoChamado />} />
         <Route path="chamados/:id" element={<ChamadoDetalhe />} />

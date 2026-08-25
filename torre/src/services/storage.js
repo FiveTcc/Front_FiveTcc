@@ -136,6 +136,57 @@ export const db = {
   buscarUsuario(id) {
     return read().usuarios.find((u) => u.id === id) || null
   },
+  atualizarUsuario(id, patch) {
+    const data = read()
+    const idx = data.usuarios.findIndex((u) => u.id === id)
+    if (idx === -1) return { ok: false, erro: 'Usuário não encontrado.' }
+
+    const nomeLimpo = String(patch?.nome || '').trim()
+    const emailLimpo = String(patch?.email || '').trim().toLowerCase()
+
+    if (!nomeLimpo || !emailLimpo) {
+      return { ok: false, erro: 'Nome e e-mail são obrigatórios.' }
+    }
+
+    const jaExiste = data.usuarios.some(
+      (u, index) => index !== idx && u.email.toLowerCase() === emailLimpo
+    )
+    if (jaExiste) {
+      return { ok: false, erro: 'Já existe outro usuário com este e-mail.' }
+    }
+
+    data.usuarios[idx] = {
+      ...data.usuarios[idx],
+      nome: nomeLimpo,
+      email: emailLimpo,
+    }
+    write(data)
+    return { ok: true, usuario: data.usuarios[idx] }
+  },
+  alterarSenha(id, { senhaAtual, novaSenha, confirmarNovaSenha }) {
+    const data = read()
+    const idx = data.usuarios.findIndex((u) => u.id === id)
+    if (idx === -1) return { ok: false, erro: 'Usuário não encontrado.' }
+
+    if (String(senhaAtual || '').trim() !== data.usuarios[idx].senha) {
+      return { ok: false, erro: 'Senha atual incorreta.' }
+    }
+
+    const nova = String(novaSenha || '').trim()
+    const confirmacao = String(confirmarNovaSenha || '').trim()
+
+    if (!nova || nova.length < 6) {
+      return { ok: false, erro: 'A nova senha deve ter pelo menos 6 caracteres.' }
+    }
+
+    if (nova !== confirmacao) {
+      return { ok: false, erro: 'A confirmação da nova senha não confere.' }
+    }
+
+    data.usuarios[idx].senha = nova
+    write(data)
+    return { ok: true }
+  },
   criarUsuario({ nome, email, senha, perfil }) {
     const data = read()
     const nomeLimpo = String(nome || '').trim()
