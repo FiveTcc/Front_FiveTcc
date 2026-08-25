@@ -25,17 +25,28 @@ const ICONS = {
   ),
 }
 
+function getInitialTheme() {
+  try {
+    const savedTheme = localStorage.getItem('theme')
+    if (savedTheme) return savedTheme
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark'
+    }
+
+    return 'light'
+  } catch {
+    return 'light'
+  }
+}
+
+function getNavLinkClassName({ isActive }) {
+  return `sidebar__link${isActive ? ' is-active' : ''}`
+}
+
 export default function Sidebar() {
   const { usuario, logout } = useAuth()
-  const [theme, setTheme] = useState(() => {
-    try {
-      const saved = localStorage.getItem('theme')
-      if (saved) return saved
-      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-    } catch {
-      return 'light'
-    }
-  })
+  const [theme, setTheme] = useState(getInitialTheme)
 
   useEffect(() => {
     try {
@@ -47,7 +58,7 @@ export default function Sidebar() {
   }, [theme])
 
   function toggleTheme() {
-    setTheme((t) => (t === 'dark' ? 'light' : 'dark'))
+    setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))
   }
 
   return (
@@ -61,16 +72,16 @@ export default function Sidebar() {
       </div>
 
       <nav className="sidebar__nav">
-        <NavLink to="/painel" className={({ isActive }) => `sidebar__link${isActive ? ' is-active' : ''}`}>
+        <NavLink to="/painel" className={getNavLinkClassName}>
           {ICONS.painel}
           Painel
         </NavLink>
-        <NavLink to="/chamados" className={({ isActive }) => `sidebar__link${isActive ? ' is-active' : ''}`}>
+        <NavLink to="/chamados" className={getNavLinkClassName}>
           {ICONS.chamados}
           Chamados
         </NavLink>
         {usuario?.perfil === 'admin' && (
-          <NavLink to="/usuarios" className={({ isActive }) => `sidebar__link${isActive ? ' is-active' : ''}`}>
+          <NavLink to="/usuarios" className={getNavLinkClassName}>
             {ICONS.usuarios}
             Usuários
           </NavLink>
@@ -85,7 +96,8 @@ export default function Sidebar() {
             <small>{usuario?.perfil}</small>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+
+        <div className="sidebar__actions">
           <button className="btn btn--ghost btn--sm" onClick={toggleTheme} aria-label="Alternar tema">
             {theme === 'dark' ? 'Escuro' : 'Claro'}
           </button>

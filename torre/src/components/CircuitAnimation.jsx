@@ -1,12 +1,14 @@
-import React from 'react'
+const NODE_POINTS = [[26, 26], [374, 26], [26, 234], [374, 234]]
+const LED_POINTS = [[96, 44], [300, 44], [70, 219], [330, 219]]
+const TRACE_IDS = ['tr1', 'tr2', 'tr3', 'tr4', 'tr5', 'tr6', 'tr7']
+const CHIP_Y_POSITIONS = [110, 124, 138, 152]
+const CHIP_X_POSITIONS = [176, 192, 208, 224]
 
 export default function CircuitAnimation({ className = '' }) {
   return (
     <div className={`pcb-anim relative w-full ${className}`} aria-hidden="true">
       <svg viewBox="0 0 400 260" fill="none" className="w-full" role="presentation">
-        <rect x="8" y="8" width="384" height="244" rx="14" stroke="currentColor" strokeOpacity="0.28" strokeWidth="1.2" />
-
-        {[[26, 26], [374, 26], [26, 234], [374, 234]].map(([cx, cy]) => (
+        {NODE_POINTS.map(([cx, cy]) => (
           <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="3.5" stroke="currentColor" strokeOpacity="0.3" />
         ))}
 
@@ -28,8 +30,16 @@ export default function CircuitAnimation({ className = '' }) {
           <rect x="44" y="206" width="42" height="26" rx="4" />
         </g>
 
-        {[ [96, 44], [300, 44], [70, 219], [330, 219] ].map(([cx, cy], i) => (
-          <circle key={`led-${cx}`} cx={cx} cy={cy} r="2.6" fill="currentColor" className="pcb-led" style={{ animationDelay: `${i * 1.3}s` }} />
+        {LED_POINTS.map(([cx, cy], i) => (
+          <circle
+            key={`led-${cx}`}
+            cx={cx}
+            cy={cy}
+            r="2.6"
+            fill="currentColor"
+            className="pcb-led"
+            style={{ animationDelay: `${i * 1.3}s` }}
+          />
         ))}
 
         <g>
@@ -37,25 +47,28 @@ export default function CircuitAnimation({ className = '' }) {
           <rect x="172" y="104" width="56" height="52" rx="6" stroke="currentColor" strokeOpacity="0.25" strokeWidth="1" />
 
           <g stroke="currentColor" strokeOpacity="0.35" strokeWidth="1.4" strokeLinecap="round">
-            {[110, 124, 138, 152].map((y) => (
+            {CHIP_Y_POSITIONS.map((y) => (
               <g key={y}>
                 <path d={`M150 ${y} H160`} />
                 <path d={`M240 ${y} H250`} />
               </g>
             ))}
-            {[176, 192, 208, 224].map((x) => (
+            {CHIP_X_POSITIONS.map((x) => (
               <g key={x}>
                 <path d={`M${x} 82 V92`} />
                 <path d={`M${x} 168 V178`} />
               </g>
             ))}
           </g>
-          <text x="200" y="136" textAnchor="middle" fill="currentColor" fillOpacity="0.9" fontSize="15" fontWeight="700" letterSpacing="2.5">N.O.S</text>
+
+          <text x="200" y="136" textAnchor="middle" fill="currentColor" fillOpacity="0.9" fontSize="15" fontWeight="700" letterSpacing="2.5">
+            N.O.S
+          </text>
           <rect x="160" y="92" width="80" height="76" rx="10" stroke="currentColor" strokeWidth="1.4" className="pcb-chip-pulse" />
         </g>
 
         <g stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.85">
-          {['tr1','tr2','tr3','tr4','tr5','tr6','tr7'].map((id, i) => (
+          {TRACE_IDS.map((id, i) => (
             <use key={id} href={`#${id}`} className="pcb-pulse" style={{ animationDelay: `${i * 0.85}s` }} />
           ))}
         </g>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import CircuitAnimation from '../components/CircuitAnimation'
@@ -8,6 +8,24 @@ export default function Login() {
   const [email, setEmail] = useState('admin@torre.edu')
   const [senha, setSenha] = useState('admin123')
   const [erro, setErro] = useState('')
+  const [theme, setTheme] = useState(() => {
+    try {
+      const saved = localStorage.getItem('theme')
+      if (saved) return saved
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    } catch {
+      return 'light'
+    }
+  })
+
+  useEffect(() => {
+    try {
+      document.documentElement.setAttribute('data-theme', theme)
+      localStorage.setItem('theme', theme)
+    } catch {
+      // ignore
+    }
+  }, [theme])
 
   if (usuario) return <Navigate to="/painel" replace />
 
@@ -17,32 +35,75 @@ export default function Login() {
     if (!resultado.ok) setErro(resultado.erro)
   }
 
+  function toggleTheme() {
+    setTheme((t) => (t === 'dark' ? 'light' : 'dark'))
+  }
+
   return (
     <div className="login">
+      <button type="button" className="login__theme-toggle" onClick={toggleTheme} aria-label="Alternar tema">
+        {theme === 'dark' ? '☀' : '☾'}
+      </button>
+
       <div className="login__panel">
-          <div className="login__brand">
-            <span className="sidebar__brand-mark sidebar__brand-mark--lg" aria-hidden="true" />
-            <h1>N.O.S</h1>
-            <p>New Occurrence System</p>
+        <div className="login__visual">
+          {/* <div className="login__brand"> */}
+            {/* <span className="sidebar__brand-mark sidebar__brand-mark--lg" aria-hidden="true" /> */}
+            {/* <div className="login__brand-copy">
+              <strong>N.O.S.</strong>
+              <small>New Occurrence System</small>
+            </div> */}
+          {/* </div> */}
+
+          <div className="login__hero">
+            <h2>Abra chamados em segundos.</h2>
+            <p>Registre e acompanhe suas ocorrências de forma simples e transparente.</p>
+
+            <div className="login__illustration" aria-hidden="true">
+              <CircuitAnimation className="login__circuit" />
+            </div>
           </div>
+        </div>
 
-        <form className="login__form" onSubmit={handleSubmit}>
-          <label>
-            E-mail
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          </label>
-          <label>
-            Senha
-            <input type="password" value={senha} onChange={(e) => setSenha(e.target.value)} required />
-          </label>
-          {erro && <p className="login__erro">{erro}</p>}
-          <button type="submit" className="btn btn--primary">Entrar</button>
-        </form>
+        <div className="login__form-panel">
+          <h3>Bem-vindo!</h3>
+          <p>Entre com suas credenciais para acessar seus chamados.</p>
 
-      </div>
+          <form className="login__form" onSubmit={handleSubmit}>
+            <div className="login__field login__field--icon">
+              <span className="login__field-icon" aria-hidden="true">✉</span>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email corporativo"
+                required
+              />
+            </div>
 
-      <div className="login__side" aria-hidden="true">
-        <CircuitAnimation className="radar" />
+            <div className="login__field login__field--icon login__field--password">
+              <span className="login__field-icon" aria-hidden="true">🔒</span>
+              <input
+                type="password"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                placeholder="Senha"
+                required
+              />
+              <button type="button" className="login__toggle-password" aria-label="Mostrar senha">◌</button>
+            </div>
+
+            {erro && <p className="login__erro">{erro}</p>}
+
+            <button type="submit" className="btn btn--primary login__submit">
+              Entrar <span aria-hidden="true">→</span>
+            </button>
+
+            {/* <button type="button" className="btn btn--ghost login__secondary">
+              Criar conta
+            </button> */}
+          </form>
+        </div>
       </div>
     </div>
   )
