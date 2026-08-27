@@ -70,10 +70,10 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar__brand">
-        <span className="sidebar__brand-mark" aria-hidden="true" />
+        {/* <span className="sidebar__brand-mark" aria-hidden="true" /> */}
         <div>
-          <strong>TORRE</strong>
-          <small>controle de chamados</small>
+          <strong>N.O.S</strong>
+          <small>New Occurrence System</small>
         </div>
       </div>
 
@@ -110,9 +110,6 @@ export default function Sidebar() {
         </div>
 
         <div className="sidebar__actions">
-          <button className="btn btn--ghost btn--sm" onClick={toggleTheme} aria-label="Alternar tema">
-            {theme === 'dark' ? 'Escuro' : 'Claro'}
-          </button>
           <button className="btn btn--ghost btn--sm" onClick={logout}>Sair</button>
         </div>
       </div>

@@ -1,10 +1,23 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { db } from '../services/storage'
 import { STATUS_LABEL, tempoRelativo } from '../services/utils'
 import StatusBeacon from '../components/StatusBeacon'
 import PriorityBadge from '../components/PriorityBadge'
+
+function getInitialTheme() {
+  try {
+    const savedTheme = localStorage.getItem('theme')
+    if (savedTheme) return savedTheme
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark'
+    }
+    return 'light'
+  } catch {
+    return 'light'
+  }
+}
 
 const CORES_STATUS = {
   aberto: '#E8862E',
@@ -50,7 +63,17 @@ function Donut({ dados, total }) {
 
 export default function Dashboard() {
   const { usuario } = useAuth()
+  const [theme, setTheme] = useState(getInitialTheme)
   const chamados = useMemo(() => db.listarChamados(), [])
+
+  useEffect(() => {
+    try {
+      document.documentElement.setAttribute('data-theme', theme)
+      localStorage.setItem('theme', theme)
+    } catch {
+      // ignore
+    }
+  }, [theme])
 
   const contagem = useMemo(() => {
     const base = { aberto: 0, em_andamento: 0, aguardando: 0, resolvido: 0, fechado: 0 }
@@ -64,9 +87,28 @@ export default function Dashboard() {
 
   return (
     <div className="page">
+      <div className="topbar">
+        <div className="topbar__search">
+          <span className="topbar__icon" aria-hidden="true">⌕</span>
+          <input type="search" placeholder="Pesquisar meus chamados..." aria-label="Pesquisar chamados" />
+        </div>
+
+        <div className="topbar__actions">
+          <button type="button" className="topbar__icon-button" aria-label="Notificações">🔔</button>
+          <button
+            type="button"
+            className="topbar__icon-button"
+            aria-label={theme === 'dark' ? 'Ativar tema claro' : 'Ativar tema escuro'}
+            onClick={() => setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))}
+          >
+            {theme === 'dark' ? '☀' : '☾'}
+          </button>
+        </div>
+      </div>
+
       <header className="page__header">
         <div>
-          <span className="eyebrow">Torre de controle</span>
+          <span className="eyebrow">N.O.S</span>
           <h1>Olá, {usuario?.nome?.split(' ')[0]}</h1>
           <p className="muted">Visão geral dos chamados sob monitoramento agora.</p>
         </div>

@@ -1,5 +1,5 @@
 /* =========================================================
-   TORRE — design tokens
+   N.O.S — design tokens
    Metáfora: torre de controle. Sinais luminosos indicam
    status como luzes de pista; códigos de chamado seguem o
    padrão de códigos de voo (CH-2026-0001).
@@ -14,6 +14,15 @@
   --text: #101826;
   --text-dim: #5B6B80;
   --text-faint: #93A2B3;
+
+  --panel: #FFFFFF;
+  --panel-strong: #F7F9FC;
+  --panel-soft: #F4F7FB;
+  --panel-input: #F8FAFC;
+  --panel-input-border: #DCE5F1;
+  --panel-icon-bg: rgba(37,99,235,0.08);
+  --panel-icon: #4F7AF6;
+  --panel-muted: rgba(15,23,36,0.03);
 
   --accent: #2563EB;
   --accent-dim: #DCE8FE;
@@ -42,6 +51,16 @@
   --text: #E6EEF8;
   --text-dim: #9FB0C8;
   --text-faint: #7D98B3;
+
+  --panel: #0f1724;
+  --panel-strong: #111827;
+  --panel-soft: rgba(148, 163, 184, 0.04);
+  --panel-input: rgba(148, 163, 184, 0.05);
+  --panel-input-border: rgba(255,255,255,0.06);
+  --panel-icon-bg: rgba(85, 119, 255, 0.12);
+  --panel-icon: #7aa7ff;
+  --panel-muted: rgba(148, 163, 184, 0.03);
+
   --accent: #2B6CE6;
   --accent-dim: rgba(43,108,230,0.12);
 }
@@ -81,9 +100,16 @@ button, input, select, textarea {
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: none;
+  border-radius: 0;
+}
+
+.login__field input:focus,
+.login__field input:focus-visible,
+.login__field:focus-within {
+  outline: none;
+  box-shadow: none;
+  border-color: transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -233,72 +259,80 @@ button, input, select, textarea {
 }
 
 .profile-shell {
-  max-width: 1120px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 
-.profile-topbar {
+.topbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
-  background: rgba(15, 23, 36, 0.9);
+  width: 100%;
+  min-height: 72px;
+  background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 12px 18px;
+  border-radius: 18px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow-card);
 }
 
-.profile-search {
+.topbar__search {
   display: flex;
   align-items: center;
   gap: 10px;
   flex: 1;
-  background: rgba(148, 163, 184, 0.08);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 12px;
+  min-height: 52px;
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  border-radius: 14px;
   padding: 10px 14px;
 }
-.profile-search__icon {
+.topbar__icon {
   font-size: 1.1rem;
   color: var(--text-dim);
 }
-.profile-search input {
+.topbar__search input {
   flex: 1;
   border: none;
   background: transparent;
   color: var(--text);
   font-size: 0.95rem;
+  min-width: 0;
 }
-.profile-search input::placeholder { color: var(--text-faint); }
+.topbar__search input::placeholder { color: var(--text-faint); }
 
-.profile-header-tools {
+.topbar__actions {
   display: flex;
   align-items: center;
   gap: 12px;
 }
-.profile-header-tools__icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
+.topbar__icon-button {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
   border: 1px solid var(--border);
-  background: rgba(255,255,255,0.02);
+  background: var(--panel-soft);
   color: var(--text);
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
-.profile-mini-user {
+.topbar__user {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding-left: 10px;
+  padding-left: 6px;
 }
-.profile-mini-user strong {
+.topbar__user strong {
   display: block;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
 }
-.profile-mini-user small {
+.topbar__user small {
   color: var(--text-faint);
   font-size: 0.72rem;
 }
@@ -308,7 +342,7 @@ button, input, select, textarea {
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  background: rgba(15, 23, 36, 0.92);
+  background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 22px 20px;
@@ -349,7 +383,7 @@ button, input, select, textarea {
 }
 
 .profile-section {
-  background: rgba(15, 23, 36, 0.92);
+  background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 20px 20px 18px;
@@ -367,8 +401,8 @@ button, input, select, textarea {
   align-items: center;
   justify-content: center;
   border-radius: 9px;
-  background: rgba(85, 119, 255, 0.12);
-  color: #7aa7ff;
+  background: var(--panel-icon-bg);
+  color: var(--panel-icon);
   font-size: 0.9rem;
 }
 .section-title h3 {
@@ -395,8 +429,8 @@ button, input, select, textarea {
 .field-block input {
   width: 100%;
   min-height: 42px;
-  background: rgba(148, 163, 184, 0.05);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: var(--panel-input);
+  border: 1px solid var(--panel-input-border);
   border-radius: 10px;
   color: var(--text);
   padding: 10px 12px;
@@ -411,8 +445,8 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: rgba(148, 163, 184, 0.04);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
   border-radius: 14px;
   padding: 16px 14px;
 }
@@ -478,7 +512,7 @@ button, input, select, textarea {
 }
 
 .profile-history {
-  background: rgba(15, 23, 36, 0.92);
+  background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 18px 20px 10px;
@@ -496,8 +530,8 @@ button, input, select, textarea {
   width: 100%;
   padding: 12px 12px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.04);
-  background: rgba(148, 163, 184, 0.03);
+  border: 1px solid var(--border);
+  background: var(--panel-muted);
   text-decoration: none;
   color: var(--text);
 }
@@ -531,7 +565,7 @@ button, input, select, textarea {
   margin-top: 8px;
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1080px) {
   .profile-form__grid,
   .security-grid,
   .summary-grid {
@@ -560,18 +594,23 @@ button, input, select, textarea {
   }
 }
 
-.shell__content { padding: 32px 40px 60px; max-width: 1180px; }
+.shell__content {
+  width: 100%;
+  max-width: none;
+  justify-self: stretch;
+  padding: 32px 40px 60px;
+}
 
 /* ---------- Page ---------- */
 
-.page { display: flex; flex-direction: column; gap: 24px; }
-.page--narrow { max-width: 780px; }
+.page { display: flex; flex-direction: column; gap: 20px; }
+.page--narrow { max-width: 1080px; }
 
 .page__header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 20px;
+  gap: 40px;
   flex-wrap: wrap;
 }
 .page__header h1 { margin-bottom: 4px; }
@@ -584,7 +623,7 @@ button, input, select, textarea {
   gap: 14px;
 }
 .stat-card {
-  background: var(--surface);
+  background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 18px;
@@ -605,7 +644,7 @@ button, input, select, textarea {
 .grid-2--asym { grid-template-columns: 1.6fr 1fr; align-items: start; }
 
 .card {
-  background: var(--surface);
+  background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 20px;
@@ -697,8 +736,8 @@ button, input, select, textarea {
 .filters__search { flex: 1; min-width: 220px; }
 
 input, select, textarea {
-  background: var(--surface-2);
-  border: 1px solid var(--border);
+  background: var(--panel-input);
+  border: 1px solid var(--panel-input-border);
   border-radius: var(--radius);
   padding: 10px 12px;
   color: var(--text);
@@ -921,8 +960,8 @@ textarea { resize: vertical; font-family: inherit; }
 }
 
 .login__field:focus-within {
-  border-color: rgba(91, 145, 255, 0.8);
-  box-shadow: 0 0 0 3px rgba(43,108,230,0.12);
+  border-color: rgba(91, 145, 255, 1);
+  box-shadow: 0 0 0 4px rgba(43,108,230,0.16);
 }
 
 .login__toggle-password {

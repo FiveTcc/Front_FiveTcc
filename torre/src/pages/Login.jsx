@@ -7,6 +7,7 @@ export default function Login() {
   const { usuario, login } = useAuth()
   const [email, setEmail] = useState('admin@torre.edu')
   const [senha, setSenha] = useState('admin123')
+  const [mostrarSenha, setMostrarSenha] = useState(false)
   const [erro, setErro] = useState('')
   const [theme, setTheme] = useState(() => {
     try {
@@ -84,13 +85,21 @@ export default function Login() {
             <div className="login__field login__field--icon login__field--password">
               <span className="login__field-icon" aria-hidden="true">🔒</span>
               <input
-                type="password"
+                type={mostrarSenha ? 'text' : 'password'}
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
                 placeholder="Senha"
                 required
               />
-              <button type="button" className="login__toggle-password" aria-label="Mostrar senha">◌</button>
+              <button
+                type="button"
+                className="login__toggle-password"
+                aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
+                aria-pressed={mostrarSenha}
+                onClick={() => setMostrarSenha((value) => !value)}
+              >
+                {mostrarSenha ? '🙈' : '👁'}
+              </button>
             </div>
 
             {erro && <p className="login__erro">{erro}</p>}

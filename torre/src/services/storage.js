@@ -15,10 +15,46 @@ function codigo(n) {
 
 function seed() {
   const usuarios = [
-    { id: 'u1', nome: 'Marina Cavalcanti', email: 'admin@torre.edu', senha: 'admin123', perfil: 'admin' },
-    { id: 'u2', nome: 'Diego Farias', email: 'tecnico@torre.edu', senha: 'tecnico123', perfil: 'tecnico' },
-    { id: 'u3', nome: 'Renata Souza', email: 'renata@torre.edu', senha: 'usuario123', perfil: 'usuario' },
-    { id: 'u4', nome: 'Paulo Nakamura', email: 'paulo@torre.edu', senha: 'usuario1234', perfil: 'usuario' },
+    {
+      id: 'u1',
+      nome: 'Marina Cavalcanti',
+      email: 'admin@torre.edu',
+      senha: 'admin123',
+      perfil: 'admin',
+      telefone: '(11) 98876-4410',
+      setor: 'Secretaria Acadêmica',
+      cargo: 'Administrador',
+    },
+    {
+      id: 'u2',
+      nome: 'Diego Farias',
+      email: 'tecnico@torre.edu',
+      senha: 'tecnico123',
+      perfil: 'tecnico',
+      telefone: '(11) 91234-5678',
+      setor: 'TI',
+      cargo: 'Técnico',
+    },
+    {
+      id: 'u3',
+      nome: 'Renata Souza',
+      email: 'renata@torre.edu',
+      senha: 'usuario123',
+      perfil: 'usuario',
+      telefone: '(11) 95555-1234',
+      setor: 'Coordenação',
+      cargo: 'Assistente Administrativa',
+    },
+    {
+      id: 'u4',
+      nome: 'Paulo Nakamura',
+      email: 'paulo@torre.edu',
+      senha: 'usuario1234',
+      perfil: 'usuario',
+      telefone: '(11) 94444-4321',
+      setor: 'Financeiro',
+      cargo: 'Assistente Administrativa',
+    },
   ]
 
   const agora = Date.now()
@@ -143,9 +179,17 @@ export const db = {
 
     const nomeLimpo = String(patch?.nome || '').trim()
     const emailLimpo = String(patch?.email || '').trim().toLowerCase()
+    const telefoneLimpo = String(patch?.telefone || data.usuarios[idx].telefone || '').trim()
+    const setorLimpo = String(patch?.setor || data.usuarios[idx].setor || '').trim()
+    const cargoLimpo = String(patch?.cargo || data.usuarios[idx].cargo || '').trim()
+    const perfilLimpo = String(patch?.perfil || data.usuarios[idx].perfil || '').trim()
 
     if (!nomeLimpo || !emailLimpo) {
       return { ok: false, erro: 'Nome e e-mail são obrigatórios.' }
+    }
+
+    if (perfilLimpo && !['admin', 'tecnico', 'usuario'].includes(perfilLimpo)) {
+      return { ok: false, erro: 'Perfil inválido.' }
     }
 
     const jaExiste = data.usuarios.some(
@@ -159,6 +203,10 @@ export const db = {
       ...data.usuarios[idx],
       nome: nomeLimpo,
       email: emailLimpo,
+      telefone: telefoneLimpo,
+      setor: setorLimpo,
+      cargo: cargoLimpo,
+      perfil: perfilLimpo || data.usuarios[idx].perfil,
     }
     write(data)
     return { ok: true, usuario: data.usuarios[idx] }
@@ -187,15 +235,22 @@ export const db = {
     write(data)
     return { ok: true }
   },
-  criarUsuario({ nome, email, senha, perfil }) {
+  criarUsuario({ nome, email, senha, perfil, telefone = '', setor = '', cargo = '' }) {
     const data = read()
     const nomeLimpo = String(nome || '').trim()
     const emailLimpo = String(email || '').trim().toLowerCase()
     const senhaLimpa = String(senha || '').trim()
     const perfilLimpo = String(perfil || '').trim()
+    const telefoneLimpo = String(telefone || '').trim()
+    const setorLimpo = String(setor || '').trim()
+    const cargoLimpo = String(cargo || '').trim()
 
     if (!nomeLimpo || !emailLimpo || !senhaLimpa || !perfilLimpo) {
       return { ok: false, erro: 'Preencha nome, e-mail, senha e perfil.' }
+    }
+
+    if (!['admin', 'tecnico', 'usuario'].includes(perfilLimpo)) {
+      return { ok: false, erro: 'Perfil inválido.' }
     }
 
     const jaExiste = data.usuarios.some((u) => u.email.toLowerCase() === emailLimpo)
@@ -209,6 +264,9 @@ export const db = {
       email: emailLimpo,
       senha: senhaLimpa,
       perfil: perfilLimpo,
+      telefone: telefoneLimpo,
+      setor: setorLimpo,
+      cargo: cargoLimpo,
     }
 
     data.usuarios.push(novoUsuario)

@@ -65,7 +65,16 @@ export default function Perfil() {
       return
     }
 
-    atualizarSessao({
+    const dadosSessao = {
+      nome: resultado.usuario.nome,
+      email: resultado.usuario.email,
+      telefone: resultado.usuario.telefone || '',
+      setor: resultado.usuario.setor || '',
+      cargo: resultado.usuario.cargo || '',
+    }
+
+    atualizarSessao(dadosSessao)
+    setPerfilForm({
       nome: resultado.usuario.nome,
       email: resultado.usuario.email,
     })
@@ -98,43 +107,6 @@ export default function Perfil() {
 
   return (
     <div className="profile-shell">
-      <div className="profile-topbar">
-        <div className="profile-search">
-          <span className="profile-search__icon">⌕</span>
-          <input type="text" placeholder="Pesquisar meus chamados..." aria-label="Pesquisar meus chamados" />
-        </div>
-
-        <div className="profile-header-tools">
-          <button type="button" className="profile-header-tools__icon" aria-label="Notificações">◔</button>
-          <button type="button" className="profile-header-tools__icon" aria-label="Mensagens">✦</button>
-          <div className="profile-mini-user">
-            <span className="avatar avatar--sm">{usuario?.nome?.[0] || 'U'}</span>
-            <div>
-              <strong>{usuario?.nome}</strong>
-              <small>{PERFIL_LABEL[usuario?.perfil] || usuario?.perfil}</small>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <section className="profile-hero">
-        <div className="profile-hero__user">
-          <span className="profile-avatar">{usuario?.nome?.[0] || 'U'}</span>
-          <div>
-            <h2>{usuario?.nome}</h2>
-            <div className="profile-hero__meta">
-              <span>{usuario?.email}</span>
-              <span>•</span>
-              <span>{PERFIL_LABEL[usuario?.perfil] || usuario?.perfil}</span>
-            </div>
-          </div>
-        </div>
-
-        <button type="button" className="btn btn--ghost profile-edit" onClick={toggleEditMode}>
-          {editMode ? 'Cancelar' : 'Editar perfil'}
-        </button>
-      </section>
-
       <section className="profile-section">
         <div className="section-title">
           <span className="section-title__icon">✎</span>

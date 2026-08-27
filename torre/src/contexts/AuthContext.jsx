@@ -23,7 +23,15 @@ export function AuthProvider({ children }) {
   function login(email, senha) {
     const encontrado = db.autenticar(email, senha)
     if (!encontrado) return { ok: false, erro: 'E-mail ou senha incorretos.' }
-    const sessao = { id: encontrado.id, nome: encontrado.nome, email: encontrado.email, perfil: encontrado.perfil }
+    const sessao = {
+      id: encontrado.id,
+      nome: encontrado.nome,
+      email: encontrado.email,
+      perfil: encontrado.perfil,
+      telefone: encontrado.telefone || '',
+      setor: encontrado.setor || '',
+      cargo: encontrado.cargo || '',
+    }
     localStorage.setItem(SESSION_KEY, JSON.stringify(sessao))
     setUsuario(sessao)
     return { ok: true }
