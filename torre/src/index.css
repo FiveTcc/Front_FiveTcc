@@ -151,7 +151,7 @@ button, input, select, textarea {
   transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease;
   text-decoration: none;
 }
-.btn:active { transform: translateY(1px); }
+.btn:active { transform: translateY(-10px); }
 .btn--primary {
   background: var(--accent);
   color: #FFFFFF;
@@ -162,8 +162,8 @@ button, input, select, textarea {
   border-color: var(--border);
   color: var(--text);
 }
-.btn--ghost:hover { border-color: var(--text-dim); }
-.btn--sm { padding: 6px 12px; font-size: 0.8rem; }
+.btn--ghost:hover { border-color: red; }
+.btn--sm { padding: 10px 90px; font-size: 1.0rem; }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* ---------- Shell / Sidebar ---------- */
@@ -207,7 +207,7 @@ button, input, select, textarea {
 .sidebar__brand-mark {
   width: 30px; height: 30px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #7CA8FF, var(--accent) 60%, #123A9E 100%);
+  background: radial-gradient(circle at 50% 45%, #7CA8FF, var(--accent) 70%, #123A9E 100%);
   box-shadow: 0 0 0 4px var(--accent-dim), 0 0 18px rgba(37,99,235,0.35);
   flex-shrink: 0;
 }
@@ -237,7 +237,7 @@ button, input, select, textarea {
 .sidebar__actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 
 .avatar {
@@ -280,6 +280,15 @@ button, input, select, textarea {
   box-shadow: var(--shadow-card);
 }
 
+/* .topbar_chamados {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  min-height: 5px;
+  justify-content: flex-end;
+  padding-right: 1px;
+} */
+
 .topbar__search {
   display: flex;
   align-items: center;
@@ -314,7 +323,7 @@ button, input, select, textarea {
   width: 38px;
   height: 38px;
   border-radius: 12px;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   background: var(--panel-soft);
   color: var(--text);
   cursor: pointer;
@@ -565,7 +574,7 @@ button, input, select, textarea {
   margin-top: 8px;
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .profile-form__grid,
   .security-grid,
   .summary-grid {
@@ -732,19 +741,41 @@ button, input, select, textarea {
 
 /* ---------- Filters ---------- */
 
-.filters { display: flex; gap: 10px; flex-wrap: wrap; }
-.filters__search { flex: 1; min-width: 220px; }
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
 
-input, select, textarea {
+.filters__search {
+  flex: 1;
+  min-width: 50px;
+}
+
+input,
+select,
+textarea {
   background: var(--panel-input);
   border: 1px solid var(--panel-input-border);
   border-radius: var(--radius);
   padding: 10px 12px;
   color: var(--text);
 }
-input::placeholder, textarea::placeholder { color: var(--text-faint); }
-select { cursor: pointer; }
-textarea { resize: vertical; font-family: inherit; }
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-faint);
+}
+
+select {
+  cursor: pointer;
+}
+
+textarea {
+  resize: vertical;
+  font-family: inherit;
+}
 
 
 /* ---------- Table ---------- */

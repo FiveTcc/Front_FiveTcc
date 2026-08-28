@@ -164,56 +164,7 @@ export default function Perfil() {
         </form>
       </section>
 
-      <section className="profile-section">
-        <div className="section-title">
-          <span className="section-title__icon">▣</span>
-          <h3>Meus dados</h3>
-        </div>
-
-        <div className="summary-grid">
-          <div className="summary-card summary-card--total">
-            <div className="summary-card__icon">▣</div>
-            <div>
-              <strong>{total}</strong>
-              <span>Total enviados</span>
-            </div>
-          </div>
-
-          <div className="summary-card summary-card--warning">
-            <div className="summary-card__icon">◔</div>
-            <div>
-              <strong>{abertos}</strong>
-              <span>Aberto</span>
-            </div>
-          </div>
-
-          <div className="summary-card summary-card--info">
-            <div className="summary-card__icon">◫</div>
-            <div>
-              <strong>{andamento}</strong>
-              <span>Em andamento</span>
-            </div>
-          </div>
-
-          <div className="summary-card summary-card--success">
-            <div className="summary-card__icon">◉</div>
-            <div>
-              <strong>{concluidos}</strong>
-              <span>Concluídos</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="summary-meta">
-          {ultimoChamado ? (
-            <>Último chamado enviado: #{ultimoChamado.numero}</>
-          ) : (
-            'Ainda não há chamados registrados.'
-          )}
-        </div>
-      </section>
-
-      <section className="profile-section profile-security">
+      {/* <section className="profile-section profile-security">
         <div className="section-title">
           <span className="section-title__icon">◌</span>
           <h3>Segurança</h3>
@@ -262,35 +213,7 @@ export default function Perfil() {
           {senhaErro && <p className="form-message form-message--error">{senhaErro}</p>}
           {senhaSucesso && <p className="form-message form-message--success">{senhaSucesso}</p>}
         </form>
-      </section>
-
-      <div className="profile-history">
-        <div className="section-title section-title--compact">
-          <span className="section-title__icon">☰</span>
-          <h3>Histórico de chamados</h3>
-        </div>
-
-        {meusChamados.length === 0 ? (
-          <div className="empty empty--light">
-            <strong>Você ainda não tem chamados</strong>
-            <p>Quando abrir uma solicitação, ela aparecerá aqui.</p>
-          </div>
-        ) : (
-          <div className="profile-history__list">
-            {meusChamados.map((chamado) => (
-              <Link to={`/chamados/${chamado.id}`} key={chamado.id} className="profile-history__item">
-                <div className="profile-history__status"><StatusBeacon status={chamado.status} comLabel={false} /></div>
-                <div className="profile-history__meta">
-                  <strong>{chamado.numero}</strong>
-                  <span>{chamado.titulo}</span>
-                </div>
-                <div className="profile-history__priority"><PriorityBadge prioridade={chamado.prioridade} /></div>
-                <div className="profile-history__time">{tempoRelativo(chamado.atualizadoEm)}</div>
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
+      </section> */}
     </div>
   )
 }

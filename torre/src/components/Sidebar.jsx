@@ -72,7 +72,7 @@ export default function Sidebar() {
       <div className="sidebar__brand">
         {/* <span className="sidebar__brand-mark" aria-hidden="true" /> */}
         <div>
-          <strong>N.O.S</strong>
+          <strong>N.O.S.</strong>
           <small>New Occurrence System</small>
         </div>
       </div>

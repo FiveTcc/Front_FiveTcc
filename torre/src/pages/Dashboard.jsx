@@ -108,7 +108,7 @@ export default function Dashboard() {
 
       <header className="page__header">
         <div>
-          <span className="eyebrow">N.O.S</span>
+          {/* <span className="eyebrow">N.O.S</span> */}
           <h1>Olá, {usuario?.nome?.split(' ')[0]}</h1>
           <p className="muted">Visão geral dos chamados sob monitoramento agora.</p>
         </div>
