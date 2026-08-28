@@ -206,6 +206,16 @@ button, input, select, textarea {
 }
 .sidebar__brand-mark--lg { width: 52px; height: 52px; box-shadow: 0 0 0 6px var(--accent-dim), 0 0 30px rgba(37,99,235,0.4); }
 
+.sidebar__brand-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+[data-theme="dark"] .sidebar__brand-logo {
+  filter: brightness(0) invert(1) brightness(0.9);
+}
+
 .sidebar__nav { display: flex; flex-direction: column; gap: 2px; flex: 1; }
 .sidebar__link {
   display: flex;
