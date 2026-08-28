@@ -10,6 +10,8 @@ export default function NovoChamado() {
   const [descricao, setDescricao] = useState('')
   const [categoria, setCategoria] = useState(db.CATEGORIAS[0])
   const [prioridade, setPrioridade] = useState('media')
+  const [foto, setFoto] = useState(null)
+  const [arquivos, setArquivos] = useState([])
   const [enviando, setEnviando] = useState(false)
   
 
@@ -23,6 +25,11 @@ export default function NovoChamado() {
       categoria,
       prioridade,
       solicitanteId: usuario.id,
+      anexos: [foto, ...arquivos].filter(Boolean).map((arquivo) => ({
+        nome: arquivo.name,
+        tipo: arquivo.type,
+        tamanho: arquivo.size,
+      })),
     })
     navigate(`/chamados/${criado.id}`)
   }
@@ -49,16 +56,44 @@ export default function NovoChamado() {
           />
         </label>
 
-        <label>
+        <label className="form__description">
           Descrição
           <textarea
-            rows={5}
+            rows={4}
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
             placeholder="Conte o que aconteceu, quando começou e o que já foi tentado…"
             required
           />
         </label>
+
+        <div className="form__attachments">
+          <span>Anexos</span>
+          <div className="form__attachment-actions">
+            <label className="btn btn--ghost form__file-button">
+              Tirar foto
+              <input
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onChange={(e) => setFoto(e.target.files?.[0] || null)}
+              />
+            </label>
+            <label className="btn btn--ghost form__file-button">
+              Enviar arquivos
+              <input
+                type="file"
+                multiple
+                onChange={(e) => setArquivos(Array.from(e.target.files || []))}
+              />
+            </label>
+          </div>
+          {(foto || arquivos.length > 0) && (
+            <p className="form__attachments-list">
+              {[foto, ...arquivos].filter(Boolean).map((arquivo) => arquivo.name).join(', ')}
+            </p>
+          )}
+        </div>
 
         <div className="form__row">
           <label>

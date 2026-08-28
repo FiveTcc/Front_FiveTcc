@@ -53,7 +53,7 @@ export default function Chamados() {
       (chamado) =>
         chamado.usuarioId === usuario.id ||
         chamado.solicitanteId === usuario.id ||
-        chamado.criadoPorId === usuario.id
+        chamado.criadoPorId === usuario.id,
     );
   }, [todos, usuario]);
 
@@ -61,27 +61,23 @@ export default function Chamados() {
   const total = meusChamados.length;
 
   const abertos = meusChamados.filter(
-    (chamado) => chamado.status === "aberto"
+    (chamado) => chamado.status === "aberto",
   ).length;
 
   const andamento = meusChamados.filter(
-    (chamado) => chamado.status === "em_andamento"
+    (chamado) => chamado.status === "em_andamento",
   ).length;
 
   const concluidos = meusChamados.filter(
-    (chamado) =>
-      chamado.status === "resolvido" ||
-      chamado.status === "fechado"
+    (chamado) => chamado.status === "resolvido" || chamado.status === "fechado",
   ).length;
 
-  
   // ÚLTIMO CHAMADO
   const ultimoChamado = useMemo(() => {
     if (meusChamados.length === 0) return null;
 
     return [...meusChamados].sort(
-      (a, b) =>
-        new Date(b.atualizadoEm) - new Date(a.atualizadoEm)
+      (a, b) => new Date(b.atualizadoEm) - new Date(a.atualizadoEm),
     )[0];
   }, [meusChamados]);
 
@@ -101,85 +97,19 @@ export default function Chamados() {
           .toLowerCase()
           .includes(termo);
 
-      const statusOk =
-        filtroStatus === "todos" ||
-        c.status === filtroStatus;
+      const statusOk = filtroStatus === "todos" || c.status === filtroStatus;
 
       const prioridadeOk =
-        filtroPrioridade === "todas" ||
-        c.prioridade === filtroPrioridade;
+        filtroPrioridade === "todas" || c.prioridade === filtroPrioridade;
 
       return buscaOk && statusOk && prioridadeOk;
     });
-  }, [
-    todos,
-    busca,
-    filtroStatus,
-    filtroPrioridade,
-  ]);
+  }, [todos, busca, filtroStatus, filtroPrioridade]);
 
   return (
-    <div className="page">
-
-      {/* ==========================================
-          TOPBAR
-      ========================================== */}
-      <div className="topbar">
-
-        <div className="topbar__search">
-          <span
-            className="topbar__icon"
-            aria-hidden="true"
-          >
-            ⌕
-          </span>
-
-          <input
-            type="search"
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-            placeholder="Pesquisar chamados..."
-            aria-label="Pesquisar chamados"
-          />
-        </div>
-
-        <div className="topbar__actions">
-
-          <button
-            type="button"
-            className="topbar__icon-button"
-            aria-label="Notificações"
-          >
-            🔔
-          </button>
-
-          <button
-            type="button"
-            className="topbar__icon-button"
-            aria-label={
-              theme === "dark"
-                ? "Ativar tema claro"
-                : "Ativar tema escuro"
-            }
-            onClick={() =>
-              setTheme((currentTheme) =>
-                currentTheme === "dark"
-                  ? "light"
-                  : "dark"
-              )
-            }
-          >
-            {theme === "dark" ? "☀" : "☾"}
-          </button>
-
-        </div>
-      </div>
-
-      {/* ==========================================
-          CABEÇALHO
-      ========================================== */}
-      <header className="page__header">
-
+    <div className="page page--tickets">
+      <div className="page__top">
+        <header className="page__header">
         <div>
           <span className="eyebrow">
             {filtrados.length} de {todos.length}
@@ -192,20 +122,38 @@ export default function Chamados() {
           </p>
         </div>
 
-        <Link
-          to="/chamados/novo"
-          className="btn btn--primary"
-        >
-          + Novo chamado
-        </Link>
+        </header>
 
-      </header>
+        <div className="topbar">
+          <div className="topbar__search">
+            <span className="topbar__icon" aria-hidden="true">⌕</span>
+            <input
+              type="search"
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              placeholder="Pesquisar chamados..."
+              aria-label="Pesquisar chamados"
+            />
+          </div>
+
+          <div className="topbar__actions">
+            <button type="button" className="topbar__icon-button" aria-label="Notificações">🔔</button>
+            <button
+              type="button"
+              className="topbar__icon-button"
+              aria-label={theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"}
+              onClick={() => setTheme((currentTheme) => currentTheme === "dark" ? "light" : "dark")}
+            >
+              {theme === "dark" ? "☀" : "☾"}
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* ==========================================
           FILTROS
       ========================================== */}
       <div className="filters">
-
         {/* <input
           type="search"
           placeholder="Buscar por título, código ou categoria…"
@@ -216,86 +164,53 @@ export default function Chamados() {
 
         <select
           value={filtroStatus}
-          onChange={(e) =>
-            setFiltroStatus(e.target.value)
-          }
+          onChange={(e) => setFiltroStatus(e.target.value)}
         >
-          <option value="todos">
-            Todos os status
-          </option>
+          <option value="todos">Todos os status</option>
 
-          <option value="aberto">
-            Aberto
-          </option>
+          <option value="aberto">Aberto</option>
 
-          <option value="em_andamento">
-            Em andamento
-          </option>
+          <option value="em_andamento">Em andamento</option>
 
-          <option value="aguardando">
-            Aguardando
-          </option>
+          <option value="aguardando">Aguardando</option>
 
-          <option value="resolvido">
-            Resolvido
-          </option>
+          <option value="resolvido">Resolvido</option>
 
-          <option value="fechado">
-            Fechado
-          </option>
+          <option value="fechado">Fechado</option>
         </select>
 
         <select
           value={filtroPrioridade}
-          onChange={(e) =>
-            setFiltroPrioridade(e.target.value)
-          }
+          onChange={(e) => setFiltroPrioridade(e.target.value)}
         >
-          <option value="todas">
-            Todas as prioridades
-          </option>
+          <option value="todas">Todas as prioridades</option>
 
-          <option value="critica">
-            Crítica
-          </option>
+          <option value="critica">Crítica</option>
 
-          <option value="alta">
-            Alta
-          </option>
+          <option value="alta">Alta</option>
 
-          <option value="media">
-            Média
-          </option>
+          <option value="media">Média</option>
 
-          <option value="baixa">
-            Baixa
-          </option>
+          <option value="baixa">Baixa</option>
         </select>
 
+        <Link to="/chamados/novo" className="btn btn--primary">
+          + Novo chamado
+        </Link>
       </div>
 
       {/* ==========================================
           TABELA DE CHAMADOS
       ========================================== */}
       <div className="card card--table">
-
         {filtrados.length === 0 ? (
-
           <div className="empty">
-            <strong>
-              Nenhum chamado encontrado
-            </strong>
+            <strong>Nenhum chamado encontrado</strong>
 
-            <p>
-              Ajuste os filtros ou abra um novo chamado
-              para começar.
-            </p>
+            <p>Ajuste os filtros ou abra um novo chamado para começar.</p>
           </div>
-
         ) : (
-
           <table className="table">
-
             <thead>
               <tr>
                 <th>Status</th>
@@ -309,167 +224,95 @@ export default function Chamados() {
             </thead>
 
             <tbody>
-
               {filtrados.map((c) => {
-
-                const responsavel =
-                  usuarioPorId(c.responsavelId);
+                const responsavel = usuarioPorId(c.responsavelId);
 
                 return (
                   <tr key={c.id}>
-
                     <td>
-                      <StatusBeacon
-                        status={c.status}
-                        comLabel={false}
-                      />
+                      <StatusBeacon status={c.status} comLabel={false} />
                     </td>
 
                     <td>
-                      <Link
-                        to={`/chamados/${c.id}`}
-                        className="table__code"
-                      >
+                      <Link to={`/chamados/${c.id}`} className="table__code">
                         {c.numero}
                       </Link>
                     </td>
 
                     <td>
-                      <Link
-                        to={`/chamados/${c.id}`}
-                        className="table__title"
-                      >
+                      <Link to={`/chamados/${c.id}`} className="table__title">
                         {c.titulo}
                       </Link>
                     </td>
 
-                    <td className="muted">
-                      {c.categoria}
-                    </td>
+                    <td className="muted">{c.categoria}</td>
 
                     <td>
-                      <PriorityBadge
-                        prioridade={c.prioridade}
-                      />
+                      <PriorityBadge prioridade={c.prioridade} />
                     </td>
 
                     <td className="muted">
-                      {responsavel
-                        ? responsavel.nome
-                        : "Não atribuído"}
+                      {responsavel ? responsavel.nome : "Não atribuído"}
                     </td>
 
-                    <td className="muted">
-                      {tempoRelativo(c.atualizadoEm)}
-                    </td>
-
+                    <td className="muted">{tempoRelativo(c.atualizadoEm)}</td>
                   </tr>
                 );
               })}
-
             </tbody>
-
           </table>
-
         )}
-
       </div>
 
       {/* ==========================================
           HISTÓRICO
       ========================================== */}
       <div className="profile-history">
-
         <div className="section-title section-title--compact">
+          <span className="section-title__icon">☰</span>
 
-          <span className="section-title__icon">
-            ☰
-          </span>
-
-          <h3>
-            Histórico de chamados
-          </h3>
-
+          <h3>Histórico de chamados</h3>
         </div>
-
 
         {/* ========================================
             LISTA DO HISTÓRICO
         ======================================== */}
         {meusChamados.length === 0 ? (
-
           <div className="empty empty--light">
+            <strong>Você ainda não tem chamados</strong>
 
-            <strong>
-              Você ainda não tem chamados
-            </strong>
-
-            <p>
-              Quando abrir uma solicitação,
-              ela aparecerá aqui.
-            </p>
-
+            <p>Quando abrir uma solicitação, ela aparecerá aqui.</p>
           </div>
-
         ) : (
-
           <div className="profile-history__list">
-
             {meusChamados.map((chamado) => (
-
               <Link
                 to={`/chamados/${chamado.id}`}
                 key={chamado.id}
                 className="profile-history__item"
               >
-
                 <div className="profile-history__status">
-
-                  <StatusBeacon
-                    status={chamado.status}
-                    comLabel={false}
-                  />
-
+                  <StatusBeacon status={chamado.status} comLabel={false} />
                 </div>
 
                 <div className="profile-history__meta">
+                  <strong>{chamado.numero}</strong>
 
-                  <strong>
-                    {chamado.numero}
-                  </strong>
-
-                  <span>
-                    {chamado.titulo}
-                  </span>
-
+                  <span>{chamado.titulo}</span>
                 </div>
 
                 <div className="profile-history__priority">
-
-                  <PriorityBadge
-                    prioridade={chamado.prioridade}
-                  />
-
+                  <PriorityBadge prioridade={chamado.prioridade} />
                 </div>
 
                 <div className="profile-history__time">
-
-                  {tempoRelativo(
-                    chamado.atualizadoEm
-                  )}
-
+                  {tempoRelativo(chamado.atualizadoEm)}
                 </div>
-
               </Link>
-
             ))}
-
           </div>
-
         )}
-
       </div>
-
     </div>
   );
 }

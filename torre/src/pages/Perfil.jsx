@@ -163,57 +163,6 @@ export default function Perfil() {
           {perfilSucesso && <p className="form-message form-message--success">{perfilSucesso}</p>}
         </form>
       </section>
-
-      {/* <section className="profile-section profile-security">
-        <div className="section-title">
-          <span className="section-title__icon">◌</span>
-          <h3>Segurança</h3>
-        </div>
-
-        <form className="profile-security__form" onSubmit={handleSalvarSenha}>
-          <div className="security-grid">
-            <label className="field-block">
-              <span>Senha atual</span>
-              <input
-                type="password"
-                name="senhaAtual"
-                value={senhaForm.senhaAtual}
-                onChange={handleSenhaChange}
-                placeholder="Digite a senha atual"
-              />
-            </label>
-
-            <label className="field-block">
-              <span>Nova senha</span>
-              <input
-                type="password"
-                name="novaSenha"
-                value={senhaForm.novaSenha}
-                onChange={handleSenhaChange}
-                placeholder="Nova senha"
-              />
-            </label>
-
-            <label className="field-block">
-              <span>Confirmar nova senha</span>
-              <input
-                type="password"
-                name="confirmarNovaSenha"
-                value={senhaForm.confirmarNovaSenha}
-                onChange={handleSenhaChange}
-                placeholder="Confirmar nova senha"
-              />
-            </label>
-          </div>
-
-          <div className="profile-form__actions">
-            <button type="submit" className="btn btn--primary profile-save">Alterar senha</button>
-          </div>
-
-          {senhaErro && <p className="form-message form-message--error">{senhaErro}</p>}
-          {senhaSucesso && <p className="form-message form-message--success">{senhaSucesso}</p>}
-        </form>
-      </section> */}
     </div>
   )
 }

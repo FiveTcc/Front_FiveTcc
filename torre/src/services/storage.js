@@ -282,7 +282,7 @@ export const db = {
   buscarChamado(id) {
     return read().chamados.find((c) => c.id === id) || null
   },
-  criarChamado({ titulo, descricao, categoria, prioridade, solicitanteId }) {
+  criarChamado({ titulo, descricao, categoria, prioridade, solicitanteId, anexos = [] }) {
     const data = read()
     const seq = data.seq + 1
     const novo = {
@@ -294,6 +294,7 @@ export const db = {
       prioridade,
       status: 'aberto',
       solicitanteId,
+      anexos,
       
       responsavelId: null,
       criadoEm: Date.now(),

@@ -125,7 +125,7 @@ export default function Usuarios() {
           <h2>Novo usuário</h2>
         </div>
 
-        <form className="form" onSubmit={handleSubmit} autoComplete="off">
+        <form className="form usuarios-new-form" onSubmit={handleSubmit} autoComplete="off">
           <div className="form__row">
             <label>
               Nome
