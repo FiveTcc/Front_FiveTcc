@@ -206,6 +206,16 @@ button, input, select, textarea {
 }
 .sidebar__brand-mark--lg { width: 52px; height: 52px; box-shadow: 0 0 0 6px var(--accent-dim), 0 0 30px rgba(37,99,235,0.4); }
 
+.sidebar__brand-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+[data-theme="dark"] .sidebar__brand-logo {
+  filter: brightness(0) invert(1) brightness(0.9);
+}
+
 .sidebar__nav { display: flex; flex-direction: column; gap: 2px; flex: 1; }
 .sidebar__link {
   display: flex;
@@ -755,10 +765,19 @@ input,
 select,
 textarea {
   background: var(--panel-input);
-  border: 1px solid var(--panel-input-border);
+  border: 1px solid rgba(148, 163, 184, 0.24);
   border-radius: var(--radius);
   padding: 10px 12px;
   color: var(--text);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+input:focus,
+textarea:focus,
+.custom-select__trigger:focus {
+  outline: none;
+  border-color: rgba(96, 165, 250, 0.9);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
 }
 
 input::placeholder,
@@ -766,8 +785,74 @@ textarea::placeholder {
   color: var(--text-faint);
 }
 
-select {
+.custom-select {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.custom-select__label {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.custom-select__trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--panel-input-border);
+  border-radius: var(--radius);
+  background: var(--panel-input);
+  color: var(--text);
   cursor: pointer;
+  text-align: left;
+  font: inherit;
+}
+
+.custom-select__trigger.is-open {
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.18);
+}
+
+.custom-select__caret {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.custom-select__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--panel);
+  border: 1px solid var;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  z-index: 20;
+  overflow: hidden;
+}
+
+.custom-select__option {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  padding: 10px 12px;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease, transform 0.12s ease;
+}
+
+.custom-select__option:hover {
+  background: linear-gradient(90deg, rgba(95, 146, 255, 0.733));
+  color: var(--text);
 }
 
 textarea {

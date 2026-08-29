@@ -13,7 +13,14 @@ export default function NovoChamado() {
   const [foto, setFoto] = useState(null)
   const [arquivos, setArquivos] = useState([])
   const [enviando, setEnviando] = useState(false)
-  
+  const [openSelect, setOpenSelect] = useState(null)
+
+  const prioridadeLabels = {
+    baixa: 'Baixa',
+    media: 'Média',
+    alta: 'Alta',
+    critica: 'Crítica',
+  }
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -96,22 +103,63 @@ export default function NovoChamado() {
         </div>
 
         <div className="form__row">
-          <label>
-            Categoria
-            <select value={categoria} onChange={(e) => setCategoria(e.target.value)}>
-              {db.CATEGORIAS.map((c) => <option key={c} value={c}>{c}</option>)}
-            </select>
-          </label>
+          <div className="custom-select">
+            <span className="custom-select__label">Categoria</span>
+            <button
+              type="button"
+              className={`custom-select__trigger ${openSelect === 'categoria' ? 'is-open' : ''}`}
+              onClick={() => setOpenSelect((current) => current === 'categoria' ? null : 'categoria')}
+            >
+              <span>{categoria}</span>
+              <span className="custom-select__caret">▾</span>
+            </button>
+            {openSelect === 'categoria' && (
+              <div className="custom-select__menu" role="listbox" aria-label="Categoria">
+                {db.CATEGORIAS.map((option) => (
+                  <button
+                    key={option}
+                    type="button"
+                    className={`custom-select__option ${categoria === option ? 'is-selected' : ''}`}
+                    onClick={() => {
+                      setCategoria(option)
+                      setOpenSelect(null)
+                    }}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
-          <label>
-            Prioridade
-            <select value={prioridade} onChange={(e) => setPrioridade(e.target.value)}>
-              <option value="baixa">Baixa</option>
-              <option value="media">Média</option>
-              <option value="alta">Alta</option>
-              <option value="critica">Crítica</option>
-            </select>
-          </label>
+          <div className="custom-select">
+            <span className="custom-select__label">Prioridade</span>
+            <button
+              type="button"
+              className={`custom-select__trigger ${openSelect === 'prioridade' ? 'is-open' : ''}`}
+              onClick={() => setOpenSelect((current) => current === 'prioridade' ? null : 'prioridade')}
+            >
+              <span>{prioridadeLabels[prioridade]}</span>
+              <span className="custom-select__caret">▾</span>
+            </button>
+            {openSelect === 'prioridade' && (
+              <div className="custom-select__menu" role="listbox" aria-label="Prioridade">
+                {Object.entries(prioridadeLabels).map(([value, label]) => (
+                  <button
+                    key={value}
+                    type="button"
+                    className={`custom-select__option ${prioridade === value ? 'is-selected' : ''}`}
+                    onClick={() => {
+                      setPrioridade(value)
+                      setOpenSelect(null)
+                    }}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="form__actions">
