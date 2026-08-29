@@ -119,10 +119,6 @@ export default function Login() {
             <Link to="/recuperar-senha" className="login__forgot-password">
               Recuperar senha
             </Link>
-
-            {/* <button type="button" className="btn btn--ghost login__secondary">
-              Criar conta
-            </button> */}
           </form>
         </div>
       </div>
