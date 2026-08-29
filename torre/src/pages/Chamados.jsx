@@ -110,20 +110,23 @@ export default function Chamados() {
     <div className="page page--tickets">
       <div className="page__top">
         <header className="page__header">
-          <div>
-            <h1>Chamados</h1>
+        <div>
+          <span className="eyebrow">
+            {filtrados.length} de {todos.length}
+          </span>
 
-            <p className="muted">
-              Acompanhe, filtre e priorize as solicitações abertas.
-            </p>
-          </div>
+          <h1>Chamados</h1>
+
+          <p className="muted">
+            Acompanhe, filtre e priorize as solicitações abertas.
+          </p>
+        </div>
+
         </header>
 
         <div className="topbar">
           <div className="topbar__search">
-            <span className="topbar__icon" aria-hidden="true">
-              ⌕
-            </span>
+            <span className="topbar__icon" aria-hidden="true">⌕</span>
             <input
               type="search"
               value={busca}
@@ -134,24 +137,12 @@ export default function Chamados() {
           </div>
 
           <div className="topbar__actions">
+            <button type="button" className="topbar__icon-button" aria-label="Notificações">🔔</button>
             <button
               type="button"
               className="topbar__icon-button"
-              aria-label="Notificações"
-            >
-              🔔
-            </button>
-            <button
-              type="button"
-              className="topbar__icon-button"
-              aria-label={
-                theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
-              }
-              onClick={() =>
-                setTheme((currentTheme) =>
-                  currentTheme === "dark" ? "light" : "dark",
-                )
-              }
+              aria-label={theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"}
+              onClick={() => setTheme((currentTheme) => currentTheme === "dark" ? "light" : "dark")}
             >
               {theme === "dark" ? "☀" : "☾"}
             </button>
