@@ -1,13 +1,41 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import api from '../services/api'
 
 export default function RecuperarSenha() {
   const [email, setEmail] = useState('')
   const [enviado, setEnviado] = useState(false)
+  const [carregando, setCarregando] = useState(false)
+  const [erro, setErro] = useState('')
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
-    setEnviado(true)
+
+    if (!email.trim()) {
+      setErro('Informe um e-mail válido.')
+      return
+    }
+
+    setErro('')
+    setCarregando(true)
+
+    try {
+     await api.post('auth/recuperar-senha', {
+      email: email.trim(),
+    })
+
+    console.log(email)
+
+      setEnviado(true)
+    } catch (error) {
+      console.error('Erro ao solicitar recuperação:', error)
+      setErro(
+        error.response?.data?.message ||
+          'Não foi possível enviar as instruções. Tente novamente.'
+      )
+    } finally {
+      setCarregando(false)
+    }
   }
 
   return (
@@ -27,6 +55,7 @@ export default function RecuperarSenha() {
           <form className="recovery-form" onSubmit={handleSubmit}>
             <label className="recovery-field">
               <span>E-mail corporativo</span>
+
               <input
                 type="email"
                 value={email}
@@ -35,8 +64,22 @@ export default function RecuperarSenha() {
                 required
               />
             </label>
-            <button type="submit" className="btn btn--primary recovery-form__submit">
-              Enviar instruções
+
+             {erro && (
+              <div className="recovery-error">
+                {erro}
+              </div>
+            )}
+            
+            <button type="submit" className="btn btn--primary recovery-form__submit"
+            disabled={carregando}
+            >
+              {
+                carregando
+                 ? 'Enviando...'
+                : 'Enviar instruções'
+              }
+              
             </button>
           </form>
         )}
