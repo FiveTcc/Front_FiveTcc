@@ -44,7 +44,7 @@ export default function RecuperarSenha() {
         <span className="eyebrow">Acesso seguro</span>
         <h1>Recuperar senha</h1>
         <p className="muted">
-          Informe seu e-mail corporativo e enviaremos as instruções para redefinir sua senha.
+          Informe seu e-mail e enviaremos as instruções para redefinir sua senha.
         </p>
 
         {enviado ? (
