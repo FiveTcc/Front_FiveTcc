@@ -211,6 +211,29 @@ export const db = {
     write(data)
     return { ok: true, usuario: data.usuarios[idx] }
   },
+  redefinirSenhaPorEmail(email, novaSenha, confirmarNovaSenha) {
+    const data = read()
+    const idx = data.usuarios.findIndex((u) => u.email.toLowerCase() === String(email || '').trim().toLowerCase())
+
+    if (idx === -1) {
+      return { ok: false, erro: 'E-mail não encontrado.' }
+    }
+
+    const nova = String(novaSenha || '').trim()
+    const confirmacao = String(confirmarNovaSenha || '').trim()
+
+    if (!nova || nova.length < 6) {
+      return { ok: false, erro: 'A nova senha deve ter pelo menos 6 caracteres.' }
+    }
+
+    if (nova !== confirmacao) {
+      return { ok: false, erro: 'A confirmação da nova senha não confere.' }
+    }
+
+    data.usuarios[idx].senha = nova
+    write(data)
+    return { ok: true }
+  },
   alterarSenha(id, { senhaAtual, novaSenha, confirmarNovaSenha }) {
     const data = read()
     const idx = data.usuarios.findIndex((u) => u.id === id)

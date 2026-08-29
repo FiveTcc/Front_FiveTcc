@@ -32,6 +32,24 @@ export default function Chamados() {
   const [busca, setBusca] = useState("");
   const [filtroStatus, setFiltroStatus] = useState("todos");
   const [filtroPrioridade, setFiltroPrioridade] = useState("todas");
+  const [openSelect, setOpenSelect] = useState(null);
+
+  const statusLabels = {
+    todos: "Todos os status",
+    aberto: "Aberto",
+    em_andamento: "Em andamento",
+    aguardando: "Aguardando",
+    resolvido: "Resolvido",
+    fechado: "Fechado",
+  };
+
+  const prioridadeLabels = {
+    todas: "Todas as prioritades",
+    critica: "Crítica",
+    alta: "Alta",
+    media: "Média",
+    baixa: "Baixa",
+  };
 
   const todos = useMemo(() => db.listarChamados(), []);
   const usuarios = useMemo(() => db.listarUsuarios(), []);
@@ -154,45 +172,63 @@ export default function Chamados() {
           FILTROS
       ========================================== */}
       <div className="filters">
-        {/* <input
-          type="search"
-          placeholder="Buscar por título, código ou categoria…"
-          value={busca}
-          onChange={(e) => setBusca(e.target.value)}
-          className="filters__search"
-        /> */}
+        <div className="custom-select" style={{ minWidth: 190 }}>
+          <button
+            type="button"
+            className={`custom-select__trigger ${openSelect === "status" ? "is-open" : ""}`}
+            onClick={() => setOpenSelect((current) => (current === "status" ? null : "status"))}
+          >
+            <span>{statusLabels[filtroStatus]}</span>
+            <span className="custom-select__caret">▾</span>
+          </button>
 
-        <select
-          value={filtroStatus}
-          onChange={(e) => setFiltroStatus(e.target.value)}
-        >
-          <option value="todos">Todos os status</option>
+          {openSelect === "status" && (
+            <div className="custom-select__menu" role="listbox" aria-label="Status">
+              {Object.entries(statusLabels).map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  className={`custom-select__option ${filtroStatus === value ? "is-selected" : ""}`}
+                  onClick={() => {
+                    setFiltroStatus(value);
+                    setOpenSelect(null);
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
-          <option value="aberto">Aberto</option>
+        <div className="custom-select" style={{ minWidth: 210 }}>
+          <button
+            type="button"
+            className={`custom-select__trigger ${openSelect === "prioridade" ? "is-open" : ""}`}
+            onClick={() => setOpenSelect((current) => (current === "prioridade" ? null : "prioridade"))}
+          >
+            <span>{prioridadeLabels[filtroPrioridade]}</span>
+            <span className="custom-select__caret">▾</span>
+          </button>
 
-          <option value="em_andamento">Em andamento</option>
-
-          <option value="aguardando">Aguardando</option>
-
-          <option value="resolvido">Resolvido</option>
-
-          <option value="fechado">Fechado</option>
-        </select>
-
-        <select
-          value={filtroPrioridade}
-          onChange={(e) => setFiltroPrioridade(e.target.value)}
-        >
-          <option value="todas">Todas as prioridades</option>
-
-          <option value="critica">Crítica</option>
-
-          <option value="alta">Alta</option>
-
-          <option value="media">Média</option>
-
-          <option value="baixa">Baixa</option>
-        </select>
+          {openSelect === "prioridade" && (
+            <div className="custom-select__menu" role="listbox" aria-label="Prioridade">
+              {Object.entries(prioridadeLabels).map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  className={`custom-select__option ${filtroPrioridade === value ? "is-selected" : ""}`}
+                  onClick={() => {
+                    setFiltroPrioridade(value);
+                    setOpenSelect(null);
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
         <Link to="/chamados/novo" className="btn btn--primary">
           + Novo chamado
