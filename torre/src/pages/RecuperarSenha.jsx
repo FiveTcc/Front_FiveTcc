@@ -77,7 +77,7 @@ export default function RecuperarSenha() {
               {
                 carregando
                  ? 'Enviando...'
-                : 'Enviar instruções'
+                : 'Enviar'
               }
               
             </button>
