@@ -56,13 +56,6 @@ export default function Login() {
 
       <div className="login__panel">
         <div className="login__visual">
-          {/* <div className="login__brand"> */}
-          {/* <span className="sidebar__brand-mark sidebar__brand-mark--lg" aria-hidden="true" /> */}
-          {/* <div className="login__brand-copy">
-              <strong>N.O.S.</strong>
-              <small>New Occurrence System</small>
-            </div> */}
-          {/* </div> */}
 
           <div className="login__hero">
             <h2>Abra chamados em segundos.</h2>
