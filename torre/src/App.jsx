@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from './contexts/AuthContext'
 import Layout from './components/Layout'
 import Login from './pages/Login'
+import NovaSenha from './pages/NovaSenha'
 import RecuperarSenha from './pages/RecuperarSenha'
 import Dashboard from './pages/Dashboard'
 import Chamados from './pages/Chamados'
@@ -21,6 +22,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/nova-senha" element={<NovaSenha />} />
       <Route path="/recuperar-senha" element={<RecuperarSenha />} />
       <Route
         path="/"

@@ -116,6 +116,10 @@ export default function Login() {
               Entrar <span aria-hidden="true">→</span>
             </button>
 
+            <Link to="/nova-senha" className="login__forgot-password">
+              Redefinir senha
+            </Link>
+
             <Link to="/recuperar-senha" className="login__forgot-password">
               Recuperar senha
             </Link>
