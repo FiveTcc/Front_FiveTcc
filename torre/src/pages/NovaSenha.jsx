@@ -1,58 +1,69 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { db } from '../services/storage'
+import { Link, useNavigate } from 'react-router-dom'
+
+
+import api from '../services/api'
+
+
 
 export default function NovaSenha() {
-  const [email, setEmail] = useState('')
+  const navigate = useNavigate()
+
+  const params = new URLSearchParams(window.location.search)
+  const token = params.get('token')
+
   const [novaSenha, setNovaSenha] = useState('')
   const [confirmarSenha, setConfirmarSenha] = useState('')
   const [erro, setErro] = useState('')
   const [sucesso, setSucesso] = useState('')
   const [carregando, setCarregando] = useState(false)
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
 
-    const emailLimpo = email.trim()
-    const nova = novaSenha.trim()
-    const confirmacao = confirmarSenha.trim()
+    setErro('')
+    setSucesso('')
 
-    if (!emailLimpo) {
-      setErro('Informe o e-mail cadastrado.')
+    if (!token) {
+      setErro('Token de recuperação não encontrado ou inválido.')
+      return
+    }
+
+    if (!novaSenha || novaSenha.length < 8) {
+      setErro('A nova senha deve ter pelo menos 8 caracteres.')
       setSucesso('')
       return
     }
 
-    if (!nova || nova.length < 6) {
-      setErro('A nova senha deve ter pelo menos 6 caracteres.')
-      setSucesso('')
-      return
-    }
-
-    if (nova !== confirmacao) {
+    if (novaSenha !== confirmarSenha) {
       setErro('A confirmação da senha não confere com a nova senha.')
       setSucesso('')
       return
     }
 
-    setErro('')
     setCarregando(true)
 
-    const resultado = db.redefinirSenhaPorEmail(emailLimpo, nova, confirmacao)
+    try {
+      await api.post('/auth/redefinir-senha', {
+        token,
+        novaSenha
+      });
 
-    if (!resultado.ok) {
-      setErro(resultado.erro)
       setSucesso('')
+      setConfirmarSenha('')
+
+      setTimeout(() => { navigate('/login') }, 2000)
+
+    } catch (error) {
+      console.error('Erro ao redefinir senha:', error) 
+      setErro(error.response?.data?.message || 'Não foi possível redefinir a senha. O token pode estar expirado ou inválido.')
+
+
+    } finally {
       setCarregando(false)
-      return
+
     }
 
-    setSucesso('Senha redefinida com sucesso. Você já pode voltar para o login.')
-    setErro('')
-    setEmail('')
-    setNovaSenha('')
-    setConfirmarSenha('')
-    setCarregando(false)
   }
 
   return (
@@ -63,17 +74,6 @@ export default function NovaSenha() {
         <p className="muted">Crie uma nova senha para continuar com acesso ao sistema.</p>
 
         <form className="recovery-form recovery-form--reset" onSubmit={handleSubmit}>
-          <label className="recovery-field">
-            <span>E-mail cadastrado</span>
-            <input
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder="seu.email@torre.edu"
-              autoComplete="email"
-            />
-          </label>
-
           <label className="recovery-field">
             <span>Nova senha</span>
             <input

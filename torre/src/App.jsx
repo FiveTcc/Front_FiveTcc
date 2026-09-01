@@ -24,6 +24,7 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/nova-senha" element={<NovaSenha />} />
       <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+      
       <Route
         path="/"
         element={
