@@ -53,6 +53,17 @@ const ICONS = {
       />
     </svg>
   ),
+  relatorios: (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      strokeWidth="1.8"
+      stroke="currentColor"
+    >
+      <path d="M6 18V9M12 18V5M18 18v-8" strokeLinecap="round" />
+      <path d="M4 18h16" strokeLinecap="round" />
+    </svg>
+  ),
 };
 
 function getInitialTheme() {
@@ -114,6 +125,12 @@ export default function Sidebar() {
           {ICONS.chamados}
           Chamados
         </NavLink>
+
+        <NavLink to="/relatorios" className={getNavLinkClassName}>
+          {ICONS.relatorios}
+          Relatórios
+        </NavLink>
+
         {usuario?.perfil === "admin" && (
           <NavLink to="/usuarios" className={getNavLinkClassName}>
             {ICONS.usuarios}

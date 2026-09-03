@@ -1,40 +1,40 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import api from '../services/api'
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import api from "../services/api";
 
 export default function RecuperarSenha() {
-  const [email, setEmail] = useState('')
-  const [enviado, setEnviado] = useState(false)
-  const [carregando, setCarregando] = useState(false)
-  const [erro, setErro] = useState('')
+  const [email, setEmail] = useState("");
+  const [enviado, setEnviado] = useState(false);
+  const [carregando, setCarregando] = useState(false);
+  const [erro, setErro] = useState("");
 
   async function handleSubmit(event) {
-    event.preventDefault()
+    event.preventDefault();
 
     if (!email.trim()) {
-      setErro('Informe um e-mail válido.')
-      return
+      setErro("Informe um e-mail válido.");
+      return;
     }
 
-    setErro('')
-    setCarregando(true)
+    setErro("");
+    setCarregando(true);
 
     try {
-     await api.post('auth/recuperar-senha', {
-      email: email.trim(),
-    })
+      await api.post("auth/recuperar-senha", {
+        email: email.trim(),
+      });
 
-    console.log(email)
+      console.log(email);
 
-      setEnviado(true)
+      setEnviado(true);
     } catch (error) {
-      console.error('Erro ao solicitar recuperação:', error)
+      console.error("Erro ao solicitar recuperação:", error);
       setErro(
         error.response?.data?.message ||
-          'Não foi possível enviar as instruções. Tente novamente.'
-      )
+          "Não foi possível enviar as instruções. Tente novamente.",
+      );
     } finally {
-      setCarregando(false)
+      setCarregando(false);
     }
   }
 
@@ -44,12 +44,14 @@ export default function RecuperarSenha() {
         <span className="eyebrow">Acesso seguro</span>
         <h1>Recuperar senha</h1>
         <p className="muted">
-          Informe seu e-mail e enviaremos as instruções para redefinir sua senha.
+          Informe seu e-mail e enviaremos as instruções para redefinir sua
+          senha.
         </p>
 
         {enviado ? (
           <div className="recovery-message" role="status">
-            Se o e-mail estiver cadastrado, você receberá as instruções em instantes.
+            Se o e-mail estiver cadastrado, você receberá as instruções em
+            instantes.
           </div>
         ) : (
           <form className="recovery-form" onSubmit={handleSubmit}>
@@ -65,27 +67,22 @@ export default function RecuperarSenha() {
               />
             </label>
 
-             {erro && (
-              <div className="recovery-error">
-                {erro}
-              </div>
-            )}
-            
-            <button type="submit" className="btn btn--primary recovery-form__submit"
-            disabled={carregando}
+            {erro && <div className="recovery-error">{erro}</div>}
+
+            <button
+              type="submit"
+              className="btn btn--primary recovery-form__submit"
+              disabled={carregando}
             >
-              {
-                carregando
-                 ? 'Enviando...'
-                : 'Enviar'
-              }
-              
+              {carregando ? "Enviando..." : "Enviar"}
             </button>
           </form>
         )}
 
-        <Link to="/login" className="recovery-back">← Voltar para o login</Link>
+        <Link to="/login" className="recovery-back">
+          ← Voltar para o login
+        </Link>
       </div>
     </div>
-  )
+  );
 }

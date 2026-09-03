@@ -1,31 +1,31 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { db } from '../services/storage'
-import { useAuth } from '../contexts/AuthContext'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { db } from "../services/storage";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function NovoChamado() {
-  const { usuario } = useAuth()
-  const navigate = useNavigate()
-  const [titulo, setTitulo] = useState('')
-  const [descricao, setDescricao] = useState('')
-  const [categoria, setCategoria] = useState(db.CATEGORIAS[0])
-  const [prioridade, setPrioridade] = useState('media')
-  const [foto, setFoto] = useState(null)
-  const [arquivos, setArquivos] = useState([])
-  const [enviando, setEnviando] = useState(false)
-  const [openSelect, setOpenSelect] = useState(null)
+  const { usuario } = useAuth();
+  const navigate = useNavigate();
+  const [titulo, setTitulo] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [categoria, setCategoria] = useState(db.CATEGORIAS[0]);
+  const [prioridade, setPrioridade] = useState("media");
+  const [foto, setFoto] = useState(null);
+  const [arquivos, setArquivos] = useState([]);
+  const [enviando, setEnviando] = useState(false);
+  const [openSelect, setOpenSelect] = useState(null);
 
   const prioridadeLabels = {
-    baixa: 'Baixa',
-    media: 'Média',
-    alta: 'Alta',
-    critica: 'Crítica',
-  }
+    baixa: "Baixa",
+    media: "Média",
+    alta: "Alta",
+    critica: "Crítica",
+  };
 
   function handleSubmit(e) {
-    e.preventDefault()
-    if (!titulo.trim() || !descricao.trim()) return
-    setEnviando(true)
+    e.preventDefault();
+    if (!titulo.trim() || !descricao.trim()) return;
+    setEnviando(true);
     const criado = db.criarChamado({
       titulo: titulo.trim(),
       descricao: descricao.trim(),
@@ -37,8 +37,8 @@ export default function NovoChamado() {
         tipo: arquivo.type,
         tamanho: arquivo.size,
       })),
-    })
-    navigate(`/chamados/${criado.id}`)
+    });
+    navigate(`/chamados/${criado.id}`);
   }
 
   return (
@@ -47,7 +47,10 @@ export default function NovoChamado() {
         <div>
           <span className="eyebrow">Abertura</span>
           <h1>Novo chamado</h1>
-          <p className="muted">Descreva o problema com o máximo de detalhe possível para agilizar o atendimento.</p>
+          <p className="muted">
+            Descreva o problema com o máximo de detalhe possível para agilizar o
+            atendimento.
+          </p>
         </div>
       </header>
 
@@ -97,7 +100,10 @@ export default function NovoChamado() {
           </div>
           {(foto || arquivos.length > 0) && (
             <p className="form__attachments-list">
-              {[foto, ...arquivos].filter(Boolean).map((arquivo) => arquivo.name).join(', ')}
+              {[foto, ...arquivos]
+                .filter(Boolean)
+                .map((arquivo) => arquivo.name)
+                .join(", ")}
             </p>
           )}
         </div>
@@ -107,22 +113,30 @@ export default function NovoChamado() {
             <span className="custom-select__label">Categoria</span>
             <button
               type="button"
-              className={`custom-select__trigger ${openSelect === 'categoria' ? 'is-open' : ''}`}
-              onClick={() => setOpenSelect((current) => current === 'categoria' ? null : 'categoria')}
+              className={`custom-select__trigger ${openSelect === "categoria" ? "is-open" : ""}`}
+              onClick={() =>
+                setOpenSelect((current) =>
+                  current === "categoria" ? null : "categoria",
+                )
+              }
             >
               <span>{categoria}</span>
               <span className="custom-select__caret">▾</span>
             </button>
-            {openSelect === 'categoria' && (
-              <div className="custom-select__menu" role="listbox" aria-label="Categoria">
+            {openSelect === "categoria" && (
+              <div
+                className="custom-select__menu"
+                role="listbox"
+                aria-label="Categoria"
+              >
                 {db.CATEGORIAS.map((option) => (
                   <button
                     key={option}
                     type="button"
-                    className={`custom-select__option ${categoria === option ? 'is-selected' : ''}`}
+                    className={`custom-select__option ${categoria === option ? "is-selected" : ""}`}
                     onClick={() => {
-                      setCategoria(option)
-                      setOpenSelect(null)
+                      setCategoria(option);
+                      setOpenSelect(null);
                     }}
                   >
                     {option}
@@ -136,22 +150,30 @@ export default function NovoChamado() {
             <span className="custom-select__label">Prioridade</span>
             <button
               type="button"
-              className={`custom-select__trigger ${openSelect === 'prioridade' ? 'is-open' : ''}`}
-              onClick={() => setOpenSelect((current) => current === 'prioridade' ? null : 'prioridade')}
+              className={`custom-select__trigger ${openSelect === "prioridade" ? "is-open" : ""}`}
+              onClick={() =>
+                setOpenSelect((current) =>
+                  current === "prioridade" ? null : "prioridade",
+                )
+              }
             >
               <span>{prioridadeLabels[prioridade]}</span>
               <span className="custom-select__caret">▾</span>
             </button>
-            {openSelect === 'prioridade' && (
-              <div className="custom-select__menu" role="listbox" aria-label="Prioridade">
+            {openSelect === "prioridade" && (
+              <div
+                className="custom-select__menu"
+                role="listbox"
+                aria-label="Prioridade"
+              >
                 {Object.entries(prioridadeLabels).map(([value, label]) => (
                   <button
                     key={value}
                     type="button"
-                    className={`custom-select__option ${prioridade === value ? 'is-selected' : ''}`}
+                    className={`custom-select__option ${prioridade === value ? "is-selected" : ""}`}
                     onClick={() => {
-                      setPrioridade(value)
-                      setOpenSelect(null)
+                      setPrioridade(value);
+                      setOpenSelect(null);
                     }}
                   >
                     {label}
@@ -163,10 +185,22 @@ export default function NovoChamado() {
         </div>
 
         <div className="form__actions">
-          <button type="button" className="btn btn--ghost" onClick={() => navigate(-1)}>Cancelar</button>
-          <button type="submit" className="btn btn--primary" disabled={enviando}>Abrir chamado</button>
+          <button
+            type="button"
+            className="btn btn--ghost"
+            onClick={() => navigate(-1)}
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            className="btn btn--primary"
+            disabled={enviando}
+          >
+            Abrir chamado
+          </button>
         </div>
       </form>
     </div>
-  )
+  );
 }

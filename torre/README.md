@@ -28,6 +28,7 @@ Os dados ficam salvos no `localStorage` do navegador (chave `torre_db_v1`), simu
 | Técnico       | tecnico@torre.edu    | tecnico123    |
 | Usuário       | renata@torre.edu     | usuario123    |
 | Usuário       | paulo@torre.edu      | usuario123    |
+| Secretário    | secretario@torre.edu | secretario123 |
 
 ## Estrutura
 

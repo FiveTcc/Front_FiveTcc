@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { db } from '../services/storage'
 import { iniciais } from '../services/utils'
 
-const PERFIL_LABEL = { admin: 'Administrador', tecnico: 'Técnico', usuario: 'Usuário' }
+const PERFIL_LABEL = { admin: 'Administrador', secretario: 'Secretário', tecnico: 'Técnico', usuario: 'Usuário' }
 
 const formInicial = {
   nome: '',
@@ -137,6 +137,7 @@ export default function Usuarios() {
                 <option value="">Selecione</option>
                 <option value="usuario">Usuário</option>
                 <option value="tecnico">Técnico</option>
+                <option value="secretario">Secretário</option>
                 <option value="admin">Administrador</option>
               </select>
             </label>
@@ -198,6 +199,7 @@ export default function Usuarios() {
                   <option value="">Selecione</option>
                   <option value="usuario">Usuário</option>
                   <option value="tecnico">Técnico</option>
+                  <option value="secretario">Secretário</option>
                   <option value="admin">Administrador</option>
                 </select>
               </label>

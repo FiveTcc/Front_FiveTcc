@@ -27,6 +27,16 @@ function seed() {
     },
     {
       id: 'u2',
+      nome: 'Lúcia Mendonça',
+      email: 'secretario@torre.edu',
+      senha: 'secretario123',
+      perfil: 'secretario',
+      telefone: '(11) 93333-1000',
+      setor: 'Secretaria Acadêmica',
+      cargo: 'Secretário',
+    },
+    {
+      id: 'u3',
       nome: 'Diego Farias',
       email: 'tecnico@torre.edu',
       senha: 'tecnico123',
@@ -36,7 +46,7 @@ function seed() {
       cargo: 'Técnico',
     },
     {
-      id: 'u3',
+      id: 'u4',
       nome: 'Renata Souza',
       email: 'renata@torre.edu',
       senha: 'usuario123',
@@ -46,7 +56,7 @@ function seed() {
       cargo: 'Assistente Administrativa',
     },
     {
-      id: 'u4',
+      id: 'u5',
       nome: 'Paulo Nakamura',
       email: 'paulo@torre.edu',
       senha: 'usuario1234',
@@ -130,6 +140,28 @@ function seed() {
   return { usuarios, chamados, seq: 6 }
 }
 
+function ensureSeedIntegrity(data) {
+  const initial = seed()
+  const usuarios = Array.isArray(data?.usuarios) ? [...data.usuarios] : []
+  const usuariosPorEmail = new Map(usuarios.map((usuario) => [String(usuario.email || '').trim().toLowerCase(), usuario]))
+
+  initial.usuarios.forEach((usuario) => {
+    const chave = String(usuario.email || '').trim().toLowerCase()
+    if (!chave) return
+    if (!usuariosPorEmail.has(chave)) {
+      usuariosPorEmail.set(chave, usuario)
+    }
+  })
+
+  return {
+    ...initial,
+    ...data,
+    usuarios: [...usuariosPorEmail.values()],
+    chamados: Array.isArray(data?.chamados) ? data.chamados : initial.chamados,
+    seq: Number.isFinite(Number(data?.seq)) ? Number(data.seq) : initial.seq,
+  }
+}
+
 function read() {
   const raw = localStorage.getItem(DB_KEY)
   if (!raw) {
@@ -137,8 +169,14 @@ function read() {
     localStorage.setItem(DB_KEY, JSON.stringify(initial))
     return initial
   }
+
   try {
-    return JSON.parse(raw)
+    const parsed = JSON.parse(raw)
+    const normalized = ensureSeedIntegrity(parsed)
+    if (JSON.stringify(parsed) !== JSON.stringify(normalized)) {
+      localStorage.setItem(DB_KEY, JSON.stringify(normalized))
+    }
+    return normalized
   } catch {
     const initial = seed()
     localStorage.setItem(DB_KEY, JSON.stringify(initial))
@@ -188,7 +226,7 @@ export const db = {
       return { ok: false, erro: 'Nome e e-mail são obrigatórios.' }
     }
 
-    if (perfilLimpo && !['admin', 'tecnico', 'usuario'].includes(perfilLimpo)) {
+    if (perfilLimpo && !['admin', 'secretario', 'tecnico', 'usuario'].includes(perfilLimpo)) {
       return { ok: false, erro: 'Perfil inválido.' }
     }
 
@@ -272,7 +310,7 @@ export const db = {
       return { ok: false, erro: 'Preencha nome, e-mail, senha e perfil.' }
     }
 
-    if (!['admin', 'tecnico', 'usuario'].includes(perfilLimpo)) {
+    if (!['admin', 'secretario', 'tecnico', 'usuario'].includes(perfilLimpo)) {
       return { ok: false, erro: 'Perfil inválido.' }
     }
 

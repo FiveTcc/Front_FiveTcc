@@ -81,7 +81,22 @@ export default function Dashboard() {
   const { usuario } = useAuth();
   const [theme, setTheme] = useState(getInitialTheme);
   const [busca, setBusca] = useState("");
+  const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
   const chamados = useMemo(() => db.listarChamados(), []);
+
+  const notificacoes = useMemo(
+    () => [
+      {
+        id: 1,
+        titulo: "2 chamados críticos aguardam atenção",
+        tempo: "há 10 min",
+      },
+      { id: 2, titulo: "Novo chamado de rede foi aberto", tempo: "há 25 min" },
+      { id: 3, titulo: "Chamado #CH-2025-0002 foi atualizado", tempo: "há 1h" },
+      { id: 4, titulo: "Relatório de manutenção está pronto", tempo: "há 2h" },
+    ],
+    [],
+  );
 
   useEffect(() => {
     try {
@@ -138,48 +153,74 @@ export default function Dashboard() {
               Visão geral dos chamados sob monitoramento agora.
             </p>
           </div>
-
         </header>
 
         <div className="topbar">
-        <div className="topbar__search">
-          <span className="topbar__icon" aria-hidden="true">
-            ⌕
-          </span>
+          <div className="topbar__search">
+            <span className="topbar__icon" aria-hidden="true">
+              ⌕
+            </span>
 
-          <input
-            type="search"
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-            placeholder="Pesquisar meus chamados..."
-            aria-label="Pesquisar chamados"
-          />
-        </div>
+            <input
+              type="search"
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              placeholder="Pesquisar meus chamados..."
+              aria-label="Pesquisar chamados"
+            />
+          </div>
 
-        <div className="topbar__actions">
-          <button
-            type="button"
-            className="topbar__icon-button"
-            aria-label="Notificações"
-          >
-            🔔
-          </button>
+          <div className="topbar__actions">
+            <div className="topbar__notifications-wrap">
+              <button
+                type="button"
+                className="topbar__icon-button"
+                aria-label="Notificações"
+                onClick={() => setMostrarNotificacoes((valor) => !valor)}
+              >
+                🕭
+              </button>
 
-          <button
-            type="button"
-            className="topbar__icon-button"
-            aria-label={
-              theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
-            }
-            onClick={() =>
-              setTheme((currentTheme) =>
-                currentTheme === "dark" ? "light" : "dark",
-              )
-            }
-          >
-            {theme === "dark" ? "☀" : "☾"}
-          </button>
-        </div>
+              {mostrarNotificacoes && (
+                <div
+                  className="topbar__notifications"
+                  role="menu"
+                  aria-label="Notificações"
+                >
+                  <div className="topbar__notifications-header">
+                    <strong>Notificações</strong>
+                    <span>{notificacoes.length}</span>
+                  </div>
+
+                  {notificacoes.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className="topbar__notification-item"
+                    >
+                      <span>{item.titulo}</span>
+                      <small>{item.tempo}</small>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <button
+              type="button"
+              className="topbar__icon-button"
+              aria-label={
+                theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
+              }
+              onClick={() =>
+                setTheme((currentTheme) =>
+                  currentTheme === "dark" ? "light" : "dark",
+                )
+              }
+            >
+              {theme === "dark" ? "☀" : "☾"}
+            </button>
+          </div>
         </div>
       </div>
 

@@ -33,6 +33,7 @@ export default function Chamados() {
   const [filtroStatus, setFiltroStatus] = useState("todos");
   const [filtroPrioridade, setFiltroPrioridade] = useState("todas");
   const [openSelect, setOpenSelect] = useState(null);
+  const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
 
   const statusLabels = {
     todos: "Todos os status",
@@ -44,7 +45,7 @@ export default function Chamados() {
   };
 
   const prioridadeLabels = {
-    todas: "Todas as prioritades",
+    todas: "Todas as prioridades",
     critica: "Crítica",
     alta: "Alta",
     media: "Média",
@@ -53,6 +54,20 @@ export default function Chamados() {
 
   const todos = useMemo(() => db.listarChamados(), []);
   const usuarios = useMemo(() => db.listarUsuarios(), []);
+
+  const notificacoes = useMemo(
+    () => [
+      {
+        id: 1,
+        titulo: "2 chamados críticos aguardam atenção",
+        tempo: "há 10 min",
+      },
+      { id: 2, titulo: "Novo chamado de rede foi aberto", tempo: "há 25 min" },
+      { id: 3, titulo: "Chamado #CH-2025-0002 foi atualizado", tempo: "há 1h" },
+      { id: 4, titulo: "Relatório de manutenção está pronto", tempo: "há 2h" },
+    ],
+    [],
+  );
 
   useEffect(() => {
     try {
@@ -128,23 +143,20 @@ export default function Chamados() {
     <div className="page page--tickets">
       <div className="page__top">
         <header className="page__header">
-        <div>
-          <span className="eyebrow">
-            {filtrados.length} de {todos.length}
-          </span>
+          <div>
+            <h1>Chamados</h1>
 
-          <h1>Chamados</h1>
-
-          <p className="muted">
-            Acompanhe, filtre e priorize as solicitações abertas.
-          </p>
-        </div>
-
+            <p className="muted">
+              Acompanhe, filtre e priorize as solicitações abertas.
+            </p>
+          </div>
         </header>
 
         <div className="topbar">
           <div className="topbar__search">
-            <span className="topbar__icon" aria-hidden="true">⌕</span>
+            <span className="topbar__icon" aria-hidden="true">
+              ⌕
+            </span>
             <input
               type="search"
               value={busca}
@@ -155,12 +167,52 @@ export default function Chamados() {
           </div>
 
           <div className="topbar__actions">
-            <button type="button" className="topbar__icon-button" aria-label="Notificações">🔔</button>
+            <div className="topbar__notifications-wrap">
+              <button
+                type="button"
+                className="topbar__icon-button"
+                aria-label="Notificações"
+                onClick={() => setMostrarNotificacoes((valor) => !valor)}
+              >
+                🕭
+              </button>
+
+              {mostrarNotificacoes && (
+                <div
+                  className="topbar__notifications"
+                  role="menu"
+                  aria-label="Notificações"
+                >
+                  <div className="topbar__notifications-header">
+                    <strong>Notificações</strong>
+                    <span>{notificacoes.length}</span>
+                  </div>
+
+                  {notificacoes.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className="topbar__notification-item"
+                    >
+                      <span>{item.titulo}</span>
+                      <small>{item.tempo}</small>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <button
               type="button"
               className="topbar__icon-button"
-              aria-label={theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"}
-              onClick={() => setTheme((currentTheme) => currentTheme === "dark" ? "light" : "dark")}
+              aria-label={
+                theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
+              }
+              onClick={() =>
+                setTheme((currentTheme) =>
+                  currentTheme === "dark" ? "light" : "dark",
+                )
+              }
             >
               {theme === "dark" ? "☀" : "☾"}
             </button>
@@ -176,14 +228,22 @@ export default function Chamados() {
           <button
             type="button"
             className={`custom-select__trigger ${openSelect === "status" ? "is-open" : ""}`}
-            onClick={() => setOpenSelect((current) => (current === "status" ? null : "status"))}
+            onClick={() =>
+              setOpenSelect((current) =>
+                current === "status" ? null : "status",
+              )
+            }
           >
             <span>{statusLabels[filtroStatus]}</span>
             <span className="custom-select__caret">▾</span>
           </button>
 
           {openSelect === "status" && (
-            <div className="custom-select__menu" role="listbox" aria-label="Status">
+            <div
+              className="custom-select__menu"
+              role="listbox"
+              aria-label="Status"
+            >
               {Object.entries(statusLabels).map(([value, label]) => (
                 <button
                   key={value}
@@ -205,14 +265,22 @@ export default function Chamados() {
           <button
             type="button"
             className={`custom-select__trigger ${openSelect === "prioridade" ? "is-open" : ""}`}
-            onClick={() => setOpenSelect((current) => (current === "prioridade" ? null : "prioridade"))}
+            onClick={() =>
+              setOpenSelect((current) =>
+                current === "prioridade" ? null : "prioridade",
+              )
+            }
           >
             <span>{prioridadeLabels[filtroPrioridade]}</span>
             <span className="custom-select__caret">▾</span>
           </button>
 
           {openSelect === "prioridade" && (
-            <div className="custom-select__menu" role="listbox" aria-label="Prioridade">
+            <div
+              className="custom-select__menu"
+              role="listbox"
+              aria-label="Prioridade"
+            >
               {Object.entries(prioridadeLabels).map(([value, label]) => (
                 <button
                   key={value}
