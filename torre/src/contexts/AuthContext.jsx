@@ -1,64 +1,134 @@
-import { createContext, useContext, useEffect, useState } from 'react'
-import { db } from '../services/storage'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
-const SESSION_KEY = 'torre_session_v1'
-const AuthContext = createContext(null)
+import authService from "../services/authService";
+import { authStorage } from "../strorage/authStorage";
+
+const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [usuario, setUsuario] = useState(null)
-  const [carregando, setCarregando] = useState(true)
+  const [usuario, setUsuario] = useState(null);
+  const [carregando, setCarregando] = useState(true);
+
+  const autenticado = !!usuario;
+
+  async function login(email, senha) {
+    try {
+      const responseData = await authService.login(email, senha);
+      const data = responseData?.data ?? responseData;
+
+      const accessToken =
+        data?.accessToken ??
+        data?.token ??
+        data?.access_token ??
+        data?.data?.accessToken ??
+        data?.data?.token ??
+        null;
+
+      const refreshToken =
+        data?.refreshToken ??
+        data?.refresh_token ??
+        data?.refreshTokenValue ??
+        data?.data?.refreshToken ??
+        data?.data?.refresh_token ??
+        null;
+
+      const usuarioLogado =
+        data?.usuario ??
+        data?.user ??
+        data?.userData ??
+        data?.data?.usuario ??
+        data?.data?.user ??
+        { email };
+
+      if (accessToken || refreshToken || usuarioLogado) {
+        authStorage.salvar(
+          {
+            accessToken: accessToken || "",
+            refreshToken: refreshToken || "",
+          },
+          usuarioLogado
+        );
+
+        setUsuario(usuarioLogado);
+
+        return {
+          sucesso: true,
+          usuario: usuarioLogado,
+        };
+      }
+
+      return {
+        sucesso: false,
+        mensagem: "Resposta de login inválida da API.",
+      };
+    } catch (error) {
+      console.error("[AuthContext] Erro no login:", error.response?.data || error);
+
+      return {
+        sucesso: false,
+        mensagem:
+          error.response?.data?.message ||
+          error.response?.data?.error ||
+          "E-mail ou senha inválidos.",
+      };
+    }
+  }
+
+  async function logout() {
+    try {
+      await authService.logout();
+    } catch (error) {
+      console.warn("[AuthContext] Falha no logout da API:", error);
+    } finally {
+      authStorage.limpar();
+      setUsuario(null);
+    }
+  }
 
   useEffect(() => {
-    const raw = localStorage.getItem(SESSION_KEY)
-    if (raw) {
-      try {
-        setUsuario(JSON.parse(raw))
-      } catch {
-        localStorage.removeItem(SESSION_KEY)
+    try {
+      const token = authStorage.getAccessToken();
+      const usuarioSalvo = authStorage.getUsuario();
+
+      if (token && usuarioSalvo) {
+        setUsuario(usuarioSalvo);
       }
+    } catch (error) {
+      console.error("Erro ao carregar sessão:", error);
+      authStorage.limpar();
+    } finally {
+      setCarregando(false);
     }
-    setCarregando(false)
-  }, [])
+  }, []);
 
-  function login(email, senha) {
-    const encontrado = db.autenticar(email, senha)
-    if (!encontrado) return { ok: false, erro: 'E-mail ou senha incorretos.' }
-    const sessao = {
-      id: encontrado.id,
-      nome: encontrado.nome,
-      email: encontrado.email,
-      perfil: encontrado.perfil,
-      telefone: encontrado.telefone || '',
-      setor: encontrado.setor || '',
-      cargo: encontrado.cargo || '',
-    }
-    localStorage.setItem(SESSION_KEY, JSON.stringify(sessao))
-    setUsuario(sessao)
-    return { ok: true }
-  }
-
-  function logout() {
-    localStorage.removeItem(SESSION_KEY)
-    setUsuario(null)
-  }
-
-  function atualizarSessao(dados) {
-    setUsuario((atual) => {
-      const proximo = atual ? { ...atual, ...dados } : dados
-      localStorage.setItem(SESSION_KEY, JSON.stringify(proximo))
-      return proximo
-    })
-  }
+  const value = useMemo(
+    () => ({
+      usuario,
+      autenticado,
+      carregando,
+      login,
+      logout,
+    }),
+    [usuario, carregando]
+  );
 
   return (
-    <AuthContext.Provider value={{ usuario, login, logout, atualizarSessao, carregando }}>
-      {children}
-    </AuthContext.Provider>
-  )
+    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
-  const ctx = useContext(AuthContext)
-  if (!ctx) throw new Error('useAuth deve ser usado dentro de AuthProvider')
-  return ctx
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error("useAuth deve ser usado dentro de AuthProvider");
+  }
+
+  return context;
 }

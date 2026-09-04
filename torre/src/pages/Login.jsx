@@ -1,14 +1,24 @@
 import { useEffect, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import CircuitAnimation from "../components/CircuitAnimation";
+import LoadingScreen from "../components/LoadingScreen";
+
 
 export default function Login() {
+
+  const navigate = useNavigate();
+
   const { usuario, login } = useAuth();
-  const [email, setEmail] = useState("admin@torre.edu");
-  const [senha, setSenha] = useState("admin123");
+
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
   const [mostrarSenha, setMostrarSenha] = useState(false);
+
+  const [carregando, setCarregando] = useState(false);
+
   const [erro, setErro] = useState("");
+
   const [theme, setTheme] = useState(() => {
     try {
       const saved = localStorage.getItem("theme");
@@ -31,16 +41,85 @@ export default function Login() {
     }
   }, [theme]);
 
-  if (usuario) return <Navigate to="/painel" replace />;
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    const resultado = login(email, senha);
-    if (!resultado.ok) setErro(resultado.erro);
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    console.log("[Login] Submit iniciado", {
+      email,
+      senha: "***",
+    });
+
+    setErro("");
+
+    if (!email || !senha) {
+      setErro("Preencha todos os campos.");
+      return;
+    }
+
+    try {
+      setCarregando(true);
+
+      console.log("[Login] Chamando login do AuthContext...");
+
+      const resultado = await login(email, senha);
+
+      console.log("[Login] Resultado do login:", resultado);
+
+      if (!resultado?.sucesso) {
+        console.log("[Login] Login retornou falha");
+
+        setErro(
+          resultado?.mensagem ||
+          "Não foi possível realizar o login."
+        );
+
+        return;
+      }
+
+      console.log("[Login] Login confirmado!");
+
+      const tempoMinimo = 350;
+      const inicio = Date.now();
+
+      await new Promise((resolve) => setTimeout(resolve, tempoMinimo));
+
+      const tempoDecorrido = Date.now() - inicio;
+      if (tempoDecorrido < tempoMinimo) {
+        await new Promise((resolve) =>
+          setTimeout(resolve, tempoMinimo - tempoDecorrido)
+        );
+      }
+
+        // Limpa os campos
+    setEmail("");
+    setSenha("");
+
+
+      console.log("[Login] Navegando para /painel");
+      navigate("/painel", {
+        replace: true,
+      });
+    } catch (error) {
+      console.error("[Login] Erro no submit:", error);
+
+      setErro(
+        error?.response?.data?.message ||
+        error?.message ||
+        "Não foi possível realizar o login."
+      );
+    } finally {
+      setCarregando(false);
+      console.log("[Login] Finalizou o submit");
+    }
   }
 
   function toggleTheme() {
     setTheme((t) => (t === "dark" ? "light" : "dark"));
+  }
+
+  if (carregando) {
+    return <LoadingScreen />;
   }
 
   return (
@@ -82,7 +161,7 @@ export default function Login() {
               <input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(event) => setEmail(event.target.value)}
                 placeholder="Email corporativo"
                 required
               />
@@ -95,7 +174,7 @@ export default function Login() {
               <input
                 type={mostrarSenha ? "text" : "password"}
                 value={senha}
-                onChange={(e) => setSenha(e.target.value)}
+                onChange={(event) => setSenha(event.target.value)}
                 placeholder="Senha"
                 required
               />
@@ -110,12 +189,17 @@ export default function Login() {
               </button>
             </div>
 
-            {erro && <p className="login__erro">{erro}</p>}
+            {erro && (
+              <p>{erro}</p>
+            )}
 
-            <button type="submit" className="btn btn--primary login__submit">
-              Entrar <span aria-hidden="true">→</span>
+            <button type="submit"
+              className="btn btn--primary login__submit"
+              disabled={carregando}
+            >
+              {carregando ? "Entrando..." : "Entrar"} <span aria-hidden="true">→</span>
             </button>
-            
+
             <Link to="/recuperar-senha" className="login__forgot-password">
               Recuperar senha
             </Link>
