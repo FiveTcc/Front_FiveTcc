@@ -2,12 +2,17 @@ import api from "./api";
 
 const authService = {
   async login(email, senha) {
-    const response = await api.post("/auth/login", {
-      user_email: email,
-      user_senha: senha,
-    });
+    try {
+      const response = await api.post("/auth/login", {
+        user_email: email,
+        user_senha: senha,
+      });
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+      throw error;
+    }
   },
 
   async refresh(refreshToken) {

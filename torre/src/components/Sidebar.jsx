@@ -3,6 +3,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import logoNOS from "../icon/logoNOS.png";
 
+import userService from "../services/userServices";
+
 const ICONS = {
   painel: (
     <svg
@@ -89,7 +91,30 @@ function getNavLinkClassName({ isActive }) {
 }
 
 export default function Sidebar() {
-  const { usuario, logout } = useAuth();
+
+const { usuario, logout } = useAuth();
+const [nome, setNome] = useState("");
+const [cargo, setCargo] = useState("");
+
+const PERFIL_LABEL = { admin: 'Administrador', tecnico: 'Técnico', funcionario: 'Funcionário' };
+
+
+useEffect(() => {
+  async function buscarNome() {
+    try {
+
+      const response = await userService.buscarperfil();
+      setNome(response.nome || response.user_nome || "");
+      setCargo(response.user_tipo || response.cargo || response.user_cargo || "");
+
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  buscarNome();
+}, [usuario]);
+
   const [theme, setTheme] = useState(getInitialTheme);
 
   useEffect(() => {
@@ -131,7 +156,7 @@ export default function Sidebar() {
           Relatórios
         </NavLink>
 
-        {usuario?.perfil === "admin" && (
+        {cargo === "admin" && (
           <NavLink to="/usuarios" className={getNavLinkClassName}>
             {ICONS.usuarios}
             Usuários
@@ -146,10 +171,11 @@ export default function Sidebar() {
 
       <div className="sidebar__footer">
         <div className="sidebar__user">
-          <span className="avatar">{usuario?.nome?.[0]}</span>
+          <span className="avatar">{(nome || usuario?.nome)?.[0]?.toUpperCase()}</span>
           <div>
-            <strong>{usuario?.nome}</strong>
-            <small>{usuario?.perfil}</small>
+            <strong>{nome || usuario?.nome}</strong>
+            <small>{PERFIL_LABEL[cargo || usuario?.perfil] || cargo || usuario?.perfil}
+            </small>
           </div>
         </div>
 

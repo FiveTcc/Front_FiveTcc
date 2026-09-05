@@ -248,6 +248,8 @@ button, input, select, textarea {
     opacity: 0.5;
   }
   50% {
+    transform: scale(1.2);
+    opacity: 1;
   }
 }
 
