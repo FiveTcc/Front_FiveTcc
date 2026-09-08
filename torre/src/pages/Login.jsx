@@ -156,7 +156,10 @@ export default function Login() {
           <form className="login__form" onSubmit={handleSubmit}>
             <div className="login__field login__field--icon">
               <span className="login__field-icon" aria-hidden="true">
-                ✉
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <path d="m3 7 9 6 9-6" />
+                </svg>
               </span>
               <input
                 type="email"
@@ -169,7 +172,10 @@ export default function Login() {
 
             <div className="login__field login__field--icon login__field--password">
               <span className="login__field-icon" aria-hidden="true">
-                🔒
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="5" y="10" width="14" height="10" rx="2" />
+                  <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                </svg>
               </span>
               <input
                 type={mostrarSenha ? "text" : "password"}
@@ -185,7 +191,19 @@ export default function Login() {
                 aria-pressed={mostrarSenha}
                 onClick={() => setMostrarSenha((value) => !value)}
               >
-                {mostrarSenha ? "🙈" : "👁"}
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  {mostrarSenha ? (
+                    <>
+                      <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" />
+                      <circle cx="12" cy="12" r="2.5" />
+                    </>
+                  ) : (
+                    <>
+                      <path d="M3 3l18 18" />
+                      <path d="M10.6 6.2A10.8 10.8 0 0 1 12 6c6 0 9.5 6 9.5 6a17 17 0 0 1-3.1 3.7M6.2 6.2C3.9 7.6 2.5 12 2.5 12a17 17 0 0 0 5.2 4.8A10.7 10.7 0 0 0 12 18c.5 0 1-.1 1.5-.2" />
+                    </>
+                  )}
+                </svg>
               </button>
             </div>
 
