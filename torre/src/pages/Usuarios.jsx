@@ -11,7 +11,6 @@ const formInicial = {
   senha: '',
   perfil: '',
   telefone: '',
-  setor: '',
   cargo: '',
 }
 
@@ -58,7 +57,6 @@ export default function Usuarios() {
       senha: '',
       perfil: usuario.perfil || 'usuario',
       telefone: usuario.telefone || '',
-      setor: usuario.setor || '',
       cargo: usuario.cargo || '',
     })
     setErro('')
@@ -79,7 +77,6 @@ export default function Usuarios() {
       email: editForm.email,
       perfil: editForm.perfil,
       telefone: editForm.telefone,
-      setor: editForm.setor,
       cargo: editForm.cargo,
     })
 
@@ -160,13 +157,6 @@ export default function Usuarios() {
               <input name="telefone" value={form.telefone} onChange={handleChange} placeholder="(11) 99999-9999" autoComplete="off" />
             </label>
             <label>
-              Setor
-              <input name="setor" value={form.setor} onChange={handleChange} placeholder="Secretaria Acadêmica" autoComplete="off" />
-            </label>
-          </div>
-
-          <div className="form__row">
-            <label>
               Cargo
               <input name="cargo" value={form.cargo} onChange={handleChange} placeholder="Assistente Administrativa" autoComplete="off" />
             </label>
@@ -217,13 +207,6 @@ export default function Usuarios() {
                 Telefone
                 <input name="telefone" value={editForm.telefone} onChange={handleEditChange} />
               </label>
-              <label>
-                Setor
-                <input name="setor" value={editForm.setor} onChange={handleEditChange} />
-              </label>
-            </div>
-
-            <div className="form__row">
               <label>
                 Cargo
                 <input name="cargo" value={editForm.cargo} onChange={handleEditChange} />

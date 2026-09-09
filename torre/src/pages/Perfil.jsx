@@ -13,6 +13,7 @@ export default function Perfil() {
   const [perfil, setPerfil] = useState(null);
   const [carregandoPerfil, setCarregandoPerfil] = useState(false);
   const [perfilForm, setPerfilForm] = useState({ nome: "", email: "", telefone: "", setor: "" , cargo: ""});
+  const [fotoPerfil, setFotoPerfil] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [perfilErro, setPerfilErro] = useState("");
   const [perfilSucesso, setPerfilSucesso] = useState("");
@@ -49,6 +50,12 @@ export default function Perfil() {
     if (perfilSucesso) setPerfilSucesso("");
   }
 
+  function handleFotoPerfilChange(event) {
+    const arquivo = event.target.files?.[0];
+    if (!arquivo) return;
+    setFotoPerfil(URL.createObjectURL(arquivo));
+  }
+
   async function handleSalvarPerfil(event) {
     event.preventDefault();
 
@@ -72,6 +79,26 @@ export default function Perfil() {
         <div className="section-title">
           <span className="section-title__icon">✎</span>
           <h3>Dados pessoais</h3>
+        </div>
+
+        <div className="profile-photo">
+          <div className="profile-photo__preview">
+            {fotoPerfil ? (
+              <img src={fotoPerfil} alt="Foto de perfil" />
+            ) : (
+              <span>{(perfilForm.nome || usuario?.nome || "U").charAt(0).toUpperCase()}</span>
+            )}
+          </div>
+
+          <label className="btn btn--ghost profile-photo__button">
+            Editar foto
+            <input
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={handleFotoPerfilChange}
+            />
+          </label>
         </div>
 
         <form className="profile-form" onSubmit={handleSalvarPerfil}>
