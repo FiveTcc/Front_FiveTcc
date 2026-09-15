@@ -75,96 +75,115 @@ export default function Perfil() {
   return (
     <div className="profile-shell">
       {carregandoPerfil && <p>Carregando perfil...</p>}
-      <section className="profile-section">
-        <div className="section-title">
-          <span className="section-title__icon">✎</span>
-          <h3>Dados pessoais</h3>
+
+      <header className="profile-page-header">
+        <div className="profile-page-header__icon" aria-hidden>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M5 19C6.22116 16.4781 8.98557 14.8 12 14.8C15.0144 14.8 17.7788 16.4781 19 19" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </div>
 
-        <div className="profile-photo">
-          <div className="profile-photo__preview">
-            {fotoPerfil ? (
-              <img src={fotoPerfil} alt="Foto de perfil" />
-            ) : (
-              <span>{(perfilForm.nome || usuario?.nome || "U").charAt(0).toUpperCase()}</span>
+        <div>
+          <h1>Meu Perfil</h1>
+          <p>Gerencie suas informações pessoais e mantenha seus dados sempre atualizados.</p>
+        </div>
+      </header>
+
+      <div className="profile-layout">
+        <aside className="profile-summary">
+          <div className="profile-summary__avatar-wrap">
+            <div className="profile-summary__avatar">
+              {fotoPerfil ? <img src={fotoPerfil} alt="Foto de perfil" /> : (perfilForm.nome || usuario?.nome || "U").charAt(0).toUpperCase()}
+            </div>
+
+            <label className="profile-summary__camera" aria-label="Alterar foto de perfil">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.5 4.5L19.5 8.5M7.5 20.5L3.5 20.5L3.5 16.5L14.5 5.5L18.5 9.5L7.5 20.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <input type="file" accept="image/*" onChange={handleFotoPerfilChange} />
+            </label>
+          </div>
+
+          <div className="profile-summary__content">
+            <h2>{perfilForm.nome || usuario?.nome || "Usuário"}</h2>
+            <p>{PERFIL_LABEL[perfilForm.cargo || perfil?.user_tipo || usuario?.perfil || usuario?.user_tipo] || "Usuário"}</p>
+
+            <div className="profile-summary__list">
+              <div className="profile-summary__item">
+                <span className="profile-summary__icon" aria-hidden>✉</span>
+                <span>{perfilForm.email || usuario?.email || "-"}</span>
+              </div>
+
+              <div className="profile-summary__item">
+                <span className="profile-summary__icon" aria-hidden>◔</span>
+                <span>{perfilForm.telefone || usuario?.telefone || "-"}</span>
+              </div>
+            </div>
+
+            <div className="profile-summary__status">
+              <span className="profile-summary__status-dot" aria-hidden />
+              Conta ativa
+            </div>
+          </div>
+        </aside>
+
+        <section className="profile-main-panel">
+          <form className="profile-main-panel__body" onSubmit={handleSalvarPerfil}>
+            <div className="profile-form__title-group">
+              <h3>Dados Pessoais</h3>
+              <p>Atualize suas informações pessoais e de contato.</p>
+            </div>
+
+            <div className="profile-form__grid">
+              <label className="field-block">
+                <span>Nome completo</span>
+                <input type="text" name="nome" value={perfilForm.nome} onChange={handlePerfilChange} readOnly />
+              </label>
+
+                <label className="field-block">
+                  <span>E-mail</span>
+                  <input type="email" name="email" value={perfilForm.email} onChange={handlePerfilChange} readOnly />
+                </label>
+
+              <label className="field-block">
+                <span>Telefone</span>
+                <input type="text" name="telefone" value={perfilForm.telefone} onChange={handlePerfilChange} readOnly />
+              </label>
+
+              <label className="field-block">
+                <span>Cargo</span>
+                  <select name="cargo" value={perfilForm.cargo} onChange={handlePerfilChange} disabled>
+                  <option value="admin">Administrador</option>
+                  <option value="tecnico">Técnico</option>
+                  <option value="funcionario">Funcionário</option>
+                </select>
+              </label>
+            </div>
+
+            <div className="profile-form__upload">
+              <h4>Alterar Foto de Perfil</h4>
+              <p>Use uma imagem de boa qualidade para facilitar o seu reconhecimento no sistema.</p>
+              <label className="btn btn--ghost profile-form__upload-button">
+                <span aria-hidden>◌</span>
+                Escolher imagem
+              </label>
+            </div>
+
+            <p className="profile-form__note">Formatos aceitos: JPG, PNG. Tamanho máximo: 2MB.</p>
+
+            {(perfilErro || perfilSucesso) && (
+              <p className={`form-message ${perfilErro ? "form-message--error" : "form-message--success"}`}>
+                {perfilErro || perfilSucesso}
+              </p>
             )}
-          </div>
 
-          <label className="btn btn--ghost profile-photo__button">
-            Editar foto
-            <input
-              type="file"
-              accept="image/*"
-              capture="environment"
-              onChange={handleFotoPerfilChange}
-            />
-          </label>
-        </div>
-
-        <form className="profile-form" onSubmit={handleSalvarPerfil}>
-          <div className="profile-form__grid">
-            <label className="field-block">
-              <span>Nome completo</span>
-              <input
-                type="text"
-                name="nome"
-                value={perfilForm.nome}
-                onChange={handlePerfilChange}
-                readOnly={!editMode}
-              />
-            </label>
-
-            <label className="field-block">
-              <span>E-mail</span>
-              <input
-                type="email"
-                name="email"
-                value={perfilForm.email}
-                onChange={handlePerfilChange}
-                readOnly={!editMode}
-              />
-            </label>
-
-            <label className="field-block">
-              <span>Telefone</span>
-              <input type="text" name="telefone" value={perfilForm.telefone} onChange={handlePerfilChange} readOnly={!editMode} />
-            </label>
-
-        
-            <label className="field-block">
-              <span>Cargo</span>
-              <input
-                type="text"
-                value={PERFIL_LABEL[perfilForm.cargo || perfil?.user_tipo || usuario?.perfil || usuario?.user_tipo] || perfilForm.cargo || perfil?.user_tipo || usuario?.perfil || usuario?.user_tipo || "Usuário"}
-                readOnly
-              />
-            </label>
-          </div>
-
-          {!editMode && (
             <div className="profile-form__actions">
-              <button type="button" className="btn" onClick={() => setEditMode(true)}>
-                Editar perfil
-              </button>
+              <button type="submit" className="btn btn--primary">Salvar alterações</button>
             </div>
-          )}
-
-          {editMode && (
-            <div className="profile-form__actions">
-              <button type="submit" className="btn btn--primary">
-                Salvar perfil
-              </button>
-            </div>
-          )}
-
-          {perfilErro && (
-            <p className="form-message form-message--error">{perfilErro}</p>
-          )}
-          {perfilSucesso && (
-            <p className="form-message form-message--success">{perfilSucesso}</p>
-          )}
-        </form>
-      </section>
+          </form>
+        </section>
+      </div>
     </div>
   );
 }
