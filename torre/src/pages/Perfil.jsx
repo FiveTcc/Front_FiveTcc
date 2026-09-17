@@ -165,7 +165,6 @@ export default function Perfil() {
               <h4>Alterar Foto de Perfil</h4>
               <p>Use uma imagem de boa qualidade para facilitar o seu reconhecimento no sistema.</p>
               <label className="btn btn--ghost profile-form__upload-button">
-                <span aria-hidden>◌</span>
                 Escolher imagem
               </label>
             </div>

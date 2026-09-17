@@ -200,16 +200,17 @@ export default function Usuarios() {
                 E-mail
                 <input type="email" name="email" value={editForm.email} onChange={handleEditChange} />
               </label>
+
+              <label>
+                Cargo
+                <input name="cargo" value={editForm.cargo} onChange={handleEditChange} />
+              </label>
             </div>
 
             <div className="form__row">
               <label>
                 Telefone
                 <input name="telefone" value={editForm.telefone} onChange={handleEditChange} />
-              </label>
-              <label>
-                Cargo
-                <input name="cargo" value={editForm.cargo} onChange={handleEditChange} />
               </label>
             </div>
 

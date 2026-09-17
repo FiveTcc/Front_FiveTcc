@@ -165,7 +165,7 @@ export default function Dashboard() {
               type="search"
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              placeholder="Pesquisar meus chamados..."
+              placeholder="Pesquisar chamados..."
               aria-label="Pesquisar chamados"
             />
           </div>

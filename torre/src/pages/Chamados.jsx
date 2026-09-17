@@ -371,17 +371,17 @@ export default function Chamados() {
       {/* ==========================================
           HISTÓRICO
       ========================================== */}
-      <div className="profile-history">
-        <div className="section-title section-title--compact">
+      {/* <div className="profile-history"> */}
+        {/* <div className="section-title section-title--compact">
           <span className="section-title__icon">☰</span>
 
           <h3>Histórico de chamados</h3>
-        </div>
+        </div> */}
 
         {/* ========================================
             LISTA DO HISTÓRICO
         ======================================== */}
-        {meusChamados.length === 0 ? (
+        {/* {meusChamados.length === 0 ? (
           <div className="empty empty--light">
             <strong>Você ainda não tem chamados</strong>
 
@@ -415,8 +415,8 @@ export default function Chamados() {
               </Link>
             ))}
           </div>
-        )}
-      </div>
+        )} */}
+      {/* </div> */}
     </div>
   );
 }
