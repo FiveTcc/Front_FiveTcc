@@ -17,6 +17,9 @@ export default function Perfil() {
   const [editMode, setEditMode] = useState(false);
   const [perfilErro, setPerfilErro] = useState("");
   const [perfilSucesso, setPerfilSucesso] = useState("");
+  const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
+  const [notificacoes] = useState([]);
+  const [theme, setTheme] = useState('light');
 
   useEffect(() => {
     async function carregarPerfil() {
@@ -77,16 +80,70 @@ export default function Perfil() {
       {carregandoPerfil && <p>Carregando perfil...</p>}
 
       <header className="profile-page-header">
-        <div className="profile-page-header__icon" aria-hidden>
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M5 19C6.22116 16.4781 8.98557 14.8 12 14.8C15.0144 14.8 17.7788 16.4781 19 19" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+        <div className="profile-page-header__brand">
+          <div className="profile-page-header__icon" aria-hidden>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M5 19C6.22116 16.4781 8.98557 14.8 12 14.8C15.0144 14.8 17.7788 16.4781 19 19" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+
+          <div className="profile-page-header__title">
+            <h1>Meu Perfil</h1>
+            <p>Gerencie suas informações pessoais e mantenha seus dados sempre atualizados.</p>
+          </div>
         </div>
 
-        <div>
-          <h1>Meu Perfil</h1>
-          <p>Gerencie suas informações pessoais e mantenha seus dados sempre atualizados.</p>
+        <div className="topbar__actions">
+          <div className="topbar__notifications-wrap">
+            <button
+              type="button"
+              className="topbar__icon-button"
+              aria-label="Notificações"
+              onClick={() => setMostrarNotificacoes((valor) => !valor)}
+            >
+              🕭
+            </button>
+
+            {mostrarNotificacoes && (
+              <div
+                className="topbar__notifications"
+                role="menu"
+                aria-label="Notificações"
+              >
+                <div className="topbar__notifications-header">
+                  <strong>Notificações</strong>
+                  <span>{notificacoes.length}</span>
+                </div>
+
+                {notificacoes.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className="topbar__notification-item"
+                  >
+                    <span>{item.titulo}</span>
+                    <small>{item.tempo}</small>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <button
+            type="button"
+            className="topbar__icon-button"
+            aria-label={
+              theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
+            }
+            onClick={() =>
+              setTheme((currentTheme) =>
+                currentTheme === "dark" ? "light" : "dark"
+              )
+            }
+          >
+            {theme === "dark" ? "☀" : "☾"}
+          </button>
         </div>
       </header>
 

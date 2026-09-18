@@ -23,6 +23,9 @@ export default function Usuarios() {
   const [editForm, setEditForm] = useState(formInicial)
   const [erro, setErro] = useState('')
   const [sucesso, setSucesso] = useState('')
+  const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false)
+  const [notificacoes] = useState([])
+  const [theme, setTheme] = useState('light')
 
   const chamadosPorUsuario = (id) => chamados.filter((c) => c.responsavelId === id || c.solicitanteId === id).length
 
@@ -107,15 +110,82 @@ export default function Usuarios() {
     setSucesso(`Dados de ${resultado.usuario.nome} atualizados com sucesso.`)
   }
 
+  function handleToggleAtivo(usuario) {
+    const resultado = db.inativarUsuario(usuario.id)
+
+    if (!resultado.ok) {
+      setErro(resultado.erro)
+      setSucesso('')
+      return
+    }
+
+    setUsuarios((atual) => atual.map((u) => (u.id === resultado.usuario.id ? resultado.usuario : u)))
+    setErro('')
+    setSucesso(resultado.usuario.ativo ? `Usuário ${resultado.usuario.nome} ativado.` : `Usuário ${resultado.usuario.nome} inativado.`)
+  }
+
   return (
     <div className="page">
       <header className="page__header">
         <div>
           <span className="eyebrow">Administração</span>
-          <h1>Usuários</h1>
+          <h1>Usuários </h1> 
           <p className="muted">Pessoas com acesso à central de chamados.</p>
         </div>
+
+        <div className="topbar__actions">
+          <div className="topbar__notifications-wrap">
+            <button
+              type="button"
+              className="topbar__icon-button"
+              aria-label="Notificações"
+              onClick={() => setMostrarNotificacoes((valor) => !valor)}
+            >
+              🕭
+            </button>
+
+            {mostrarNotificacoes && (
+              <div
+                className="topbar__notifications"
+                role="menu"
+                aria-label="Notificações"
+              >
+                <div className="topbar__notifications-header">
+                  <strong>Notificações</strong>
+                  <span>{notificacoes.length}</span>
+                </div>
+
+                {notificacoes.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className="topbar__notification-item"
+                  >
+                    <span>{item.titulo}</span>
+                    <small>{item.tempo}</small>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <button
+            type="button"
+            className="topbar__icon-button"
+            aria-label={
+              theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
+            }
+            onClick={() =>
+              setTheme((currentTheme) =>
+                currentTheme === "dark" ? "light" : "dark"
+              )
+            }
+          >
+            {theme === "dark" ? "☀" : "☾"}
+          </button>
+        </div>
       </header>
+
 
       <div className="card">
         <div className="card__header">
@@ -244,6 +314,9 @@ export default function Usuarios() {
                 <td>
                   <button type="button" className="btn btn--ghost" onClick={() => abrirEdicao(u)}>
                     Editar
+                  </button>
+                  <button type="button" className="btn btn--ghost" onClick={() => handleToggleAtivo(u)} style={{ marginLeft: 8 }}>
+                    {u.ativo === false ? 'Ativar' : 'Inativar'}
                   </button>
                 </td>
               </tr>

@@ -24,6 +24,7 @@ function seed() {
       telefone: '(11) 98876-4410',
       setor: 'Secretaria Acadêmica',
       cargo: 'Administrador',
+      ativo: true,
     },
     {
       id: 'u2',
@@ -34,6 +35,7 @@ function seed() {
       telefone: '(11) 93333-1000',
       setor: 'Secretaria Acadêmica',
       cargo: 'Secretário',
+      ativo: true,
     },
     {
       id: 'u3',
@@ -44,6 +46,7 @@ function seed() {
       telefone: '(11) 91234-5678',
       setor: 'TI',
       cargo: 'Técnico',
+      ativo: true,
     },
     {
       id: 'u4',
@@ -54,6 +57,7 @@ function seed() {
       telefone: '(11) 95555-1234',
       setor: 'Coordenação',
       cargo: 'Assistente Administrativa',
+      ativo: true,
     },
     {
       id: 'u5',
@@ -64,6 +68,7 @@ function seed() {
       telefone: '(11) 94444-4321',
       setor: 'Financeiro',
       cargo: 'Assistente Administrativa',
+      ativo: true,
     },
   ]
 
@@ -246,6 +251,16 @@ export const db = {
       cargo: cargoLimpo,
       perfil: perfilLimpo || data.usuarios[idx].perfil,
     }
+    write(data)
+    return { ok: true, usuario: data.usuarios[idx] }
+  },
+  inativarUsuario(id) {
+    const data = read()
+    const idx = data.usuarios.findIndex((u) => u.id === id)
+    if (idx === -1) return { ok: false, erro: 'Usuário não encontrado.' }
+
+    // toggle ativo flag (default true)
+    data.usuarios[idx].ativo = !data.usuarios[idx].ativo
     write(data)
     return { ok: true, usuario: data.usuarios[idx] }
   },

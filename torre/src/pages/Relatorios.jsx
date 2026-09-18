@@ -377,6 +377,7 @@ export default function Relatorios() {
               </div>
             </header>
 
+
             <section class="rel-html__summary">
               ${resumo
                 .map(

@@ -1372,6 +1372,11 @@ textarea {
 .table__title { font-weight: 500; text-decoration: none; color: var(--text); }
 .table__title:hover { color: var(--accent); }
 
+/* ensure a subtle divider appears above the table when inside a card--table */
+.card.card--table .table thead th {
+  border-top: 1px solid var(--border);
+}
+
 .empty { padding: 48px 20px; text-align: center; color: var(--text-dim); }
 .empty strong { display: block; color: var(--text); margin-bottom: 6px; }
 
@@ -1852,8 +1857,16 @@ textarea {
   display: flex;
   gap: 18px;
   align-items: center;
+  justify-content: space-between;
   padding: 12px 0 20px;
 }
+.profile-page-header__brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.profile-page-header__title h1 { margin: 0; }
+.profile-page-header__title p { margin: 0; color: var(--text-dim); }
 .profile-page-header h1 { font-size: 1.5rem; margin-bottom: 6px; }
 .profile-page-header p { color: var(--text-dim); font-size: 0.95rem; }
 
@@ -1934,7 +1947,8 @@ textarea {
 .field-block input, .field-block select { min-height:46px; border-radius:10px; }
 
 .profile-form__upload { margin-top:26px; }
-.profile-form__upload-button { display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:12px; border:1px solid var(--panel-input-border); background:transparent; margin-top:12px; }
+.profile-form__upload-button { display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:12px; border:1px solid var(--panel-input-border); background: var(--panel); color: var(--text); margin-top:12px; box-shadow: var(--shadow-card); }
+.profile-form__upload-button.btn--ghost:hover { border-color: var(--panel-input-border); background: var(--panel); }
 .profile-form__note { color:var(--text-dim); margin-top:14px; font-size:0.88rem; }
 
 .profile-form__actions { margin-top:0; margin-bottom:6px; display:flex; justify-content:flex-end; }
