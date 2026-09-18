@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { db } from "../services/storage";
@@ -34,6 +34,7 @@ export default function Chamados() {
   const [filtroPrioridade, setFiltroPrioridade] = useState("todas");
   const [openSelect, setOpenSelect] = useState(null);
   const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
+  const notificacoesRef = useRef(null);
 
   const statusLabels = {
     todos: "Todos os status",
@@ -77,6 +78,22 @@ export default function Chamados() {
       // Ignora erros de localStorage
     }
   }, [theme]);
+
+  useEffect(() => {
+    function handleClickFora(event) {
+      if (
+        notificacoesRef.current &&
+        !notificacoesRef.current.contains(event.target)
+      ) {
+        setMostrarNotificacoes(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickFora);
+    return () => {
+      document.removeEventListener("mousedown", handleClickFora);
+    };
+  }, []);
 
   // CHAMADOS DO USUÁRIO LOGADO
   const meusChamados = useMemo(() => {
@@ -167,7 +184,7 @@ export default function Chamados() {
           </div>
 
           <div className="topbar__actions">
-            <div className="topbar__notifications-wrap">
+            <div className="topbar__notifications-wrap" ref={notificacoesRef}>
               <button
                 type="button"
                 className="topbar__icon-button"

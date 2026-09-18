@@ -315,7 +315,7 @@ export default function Usuarios() {
                   <button type="button" className="btn btn--ghost" onClick={() => abrirEdicao(u)}>
                     Editar
                   </button>
-                  <button type="button" className="btn btn--ghost" onClick={() => handleToggleAtivo(u)} style={{ marginLeft: 8 }}>
+                  <button type="button" className="btn btn--danger" onClick={() => handleToggleAtivo(u)} style={{ marginLeft: 8 }}>
                     {u.ativo === false ? 'Ativar' : 'Inativar'}
                   </button>
                 </td>
