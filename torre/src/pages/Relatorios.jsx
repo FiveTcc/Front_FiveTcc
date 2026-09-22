@@ -636,38 +636,87 @@ export default function Relatorios() {
           </div>
         )}
       </header>
+      <section className="report-container">
+        <section className="report-summary">
+          {metricasBase.map((item) => (
+            <div
+              key={item.label}
+              className={`report-summary__card ${item.destaque ? "is-featured" : ""}`}
+            >
+              <span>{item.label}</span>
+              <strong>{item.valor}</strong>
+            </div>
+          ))}
+        </section>
 
-      <section className="report-summary">
-        {metricasBase.map((item) => (
-          <div
-            key={item.label}
-            className={`report-summary__card ${item.destaque ? "is-featured" : ""}`}
-          >
-            <span>{item.label}</span>
-            <strong>{item.valor}</strong>
+        {acessos.includes("geral") && (
+          <div className="card">
+            <div className="card__header">
+              <h2>Relatório geral de ocorrências</h2>
+            </div>
+
+            <div className="report-grid">
+              <div className="report-list">
+                <h3>Por status</h3>
+                {chamadosPorStatus.map((item) => (
+                  <div key={item.label} className="report-row">
+                    <span>{item.label}</span>
+                    <strong>{item.total}</strong>
+                  </div>
+                ))}
+              </div>
+
+              <div className="report-list">
+                <h3>Por prioridade</h3>
+                {chamadosPorPrioridade.map((item) => (
+                  <div key={item.label} className="report-row">
+                    <span>{item.label}</span>
+                    <strong>{item.total}</strong>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        ))}
-      </section>
+        )}
 
-      {acessos.includes("geral") && (
-        <div className="card">
-          <div className="card__header">
-            <h2>Relatório geral de ocorrências</h2>
-          </div>
-
-          <div className="report-grid">
-            <div className="report-list">
-              <h3>Por status</h3>
-              {chamadosPorStatus.map((item) => (
+        {acessos.includes("periodo") && (
+          <div className="card">
+            <div className="card__header">
+              <h2>Ocorrências por período</h2>
+            </div>
+            <div className="report-list report-list--compact">
+              {chamadosPorPeriodo.map((item) => (
                 <div key={item.label} className="report-row">
                   <span>{item.label}</span>
                   <strong>{item.total}</strong>
                 </div>
               ))}
             </div>
+          </div>
+        )}
 
-            <div className="report-list">
-              <h3>Por prioridade</h3>
+        {acessos.includes("ambiente") && (
+          <div className="card">
+            <div className="card__header">
+              <h2>Ocorrências por ambiente</h2>
+            </div>
+            <div className="report-list report-list--compact">
+              {chamadosPorAmbiente.map((item) => (
+                <div key={item.label} className="report-row">
+                  <span>{item.label}</span>
+                  <strong>{item.total}</strong>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {acessos.includes("prioridade") && (
+          <div className="card">
+            <div className="card__header">
+              <h2>Ocorrências por prioridade</h2>
+            </div>
+            <div className="report-list report-list--compact">
               {chamadosPorPrioridade.map((item) => (
                 <div key={item.label} className="report-row">
                   <span>{item.label}</span>
@@ -676,138 +725,90 @@ export default function Relatorios() {
               ))}
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {acessos.includes("periodo") && (
-        <div className="card">
-          <div className="card__header">
-            <h2>Ocorrências por período</h2>
-          </div>
-          <div className="report-list report-list--compact">
-            {chamadosPorPeriodo.map((item) => (
-              <div key={item.label} className="report-row">
-                <span>{item.label}</span>
-                <strong>{item.total}</strong>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {acessos.includes("ambiente") && (
-        <div className="card">
-          <div className="card__header">
-            <h2>Ocorrências por ambiente</h2>
-          </div>
-          <div className="report-list report-list--compact">
-            {chamadosPorAmbiente.map((item) => (
-              <div key={item.label} className="report-row">
-                <span>{item.label}</span>
-                <strong>{item.total}</strong>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {acessos.includes("prioridade") && (
-        <div className="card">
-          <div className="card__header">
-            <h2>Ocorrências por prioridade</h2>
-          </div>
-          <div className="report-list report-list--compact">
-            {chamadosPorPrioridade.map((item) => (
-              <div key={item.label} className="report-row">
-                <span>{item.label}</span>
-                <strong>{item.total}</strong>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {acessos.includes("status") && (
-        <div className="card">
-          <div className="card__header">
-            <h2>Ocorrências por status</h2>
-          </div>
-          <div className="report-list report-list--compact">
-            {chamadosPorStatus.map((item) => (
-              <div key={item.label} className="report-row">
-                <span>{item.label}</span>
-                <strong>{item.total}</strong>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {acessos.includes("tecnicos") && (
-        <div className="card">
-          <div className="card__header">
-            <h2>Desempenho dos técnicos</h2>
-          </div>
-          <div className="report-list report-list--compact">
-            {tecnicos.map((item) => (
-              <div key={item.nome} className="report-row">
-                <span>{item.nome}</span>
-                <strong>{item.atendidos} chamados</strong>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {acessos.includes("usuarios") && (
-        <div className="card">
-          <div className="card__header">
-            <h2>Usuários que abriram chamados</h2>
-          </div>
-          <div className="report-list report-list--compact">
-            {chamadosPorUsuario.map((item) => (
-              <div key={item.nome} className="report-row">
-                <span>{item.nome}</span>
-                <strong>{item.total}</strong>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {acessos.includes("proprio") && (
-        <div className="card">
-          <div className="card__header">
-            <h2>Seus chamados</h2>
-          </div>
-          <div className="report-grid">
-            <div className="report-list">
-              <h3>Resumo</h3>
-              <div className="report-row">
-                <span>Pendentes</span>
-                <strong>{meusChamadosResumo.abertos}</strong>
-              </div>
-              <div className="report-row">
-                <span>Em andamento</span>
-                <strong>{meusChamadosResumo.andamento}</strong>
-              </div>
-              <div className="report-row">
-                <span>Concluídos</span>
-                <strong>{meusChamadosResumo.concluido}</strong>
-              </div>
+        {acessos.includes("status") && (
+          <div className="card">
+            <div className="card__header">
+              <h2>Ocorrências por status</h2>
             </div>
-            <div className="report-list">
-              <h3>Tempo médio</h3>
-              <div className="report-metric report-metric--compact">
-                <strong>{formatarHoras(tempoMedioUsuario)}</strong>
-                <span>média do seu atendimento</span>
+            <div className="report-list report-list--compact">
+              {chamadosPorStatus.map((item) => (
+                <div key={item.label} className="report-row">
+                  <span>{item.label}</span>
+                  <strong>{item.total}</strong>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {acessos.includes("tecnicos") && (
+          <div className="card">
+            <div className="card__header">
+              <h2>Desempenho dos técnicos</h2>
+            </div>
+            <div className="report-list report-list--compact">
+              {tecnicos.map((item) => (
+                <div key={item.nome} className="report-row">
+                  <span>{item.nome}</span>
+                  <strong>{item.atendidos} chamados</strong>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {acessos.includes("usuarios") && (
+          <div className="card">
+            <div className="card__header">
+              <h2>Usuários que abriram chamados</h2>
+            </div>
+            <div className="report-list report-list--compact">
+              {chamadosPorUsuario.map((item) => (
+                <div key={item.nome} className="report-row">
+                  <span>{item.nome}</span>
+                  <strong>{item.total}</strong>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {acessos.includes("proprio") && (
+          <div className="card">
+            <div className="card__header">
+              <h2>Seus chamados</h2>
+            </div>
+            <div className="report-grid">
+              <div className="report-list">
+                <h3>Resumo</h3>
+                <div className="report-row">
+                  <span>Pendentes</span>
+                  <strong>{meusChamadosResumo.abertos}</strong>
+                </div>
+                <div className="report-row">
+                  <span>Em andamento</span>
+                  <strong>{meusChamadosResumo.andamento}</strong>
+                </div>
+                <div className="report-row">
+                  <span>Concluídos</span>
+                  <strong>{meusChamadosResumo.concluido}</strong>
+                </div>
+              </div>
+              <div className="report-list">
+                <h3>Tempo médio</h3>
+                <div className="report-metric report-metric--compact">
+                  <strong>{formatarHoras(tempoMedioUsuario)}</strong>
+                  <span>média do seu atendimento</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </section>
 
-      {acessos.includes("meus") && (
+      {/* {acessos.includes("meus") && (
         <div className="card">
           <div className="card__header">
             <h2>Meus chamados</h2>
@@ -835,10 +836,10 @@ export default function Relatorios() {
             )}
           </div>
         </div>
-      )}
+      )} */}
 
       {acessos.includes("historico") && (
-        <div className="card">
+        <div className="card_historico">
           <div className="card__header">
             <h2>Histórico completo</h2>
           </div>
