@@ -1070,29 +1070,15 @@ textarea {
   margin: 8px auto 0;
 }
 
-.report-container {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  width: 100%;
-}
-
 .report-summary {
   display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 12px;
-  margin-left: auto;
-  width: 15%;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .report-summary__card {
-  background: linear-gradient(
-    135deg,
-    rgba(37, 99, 235, 0.09),
-    rgba(37, 99, 235, 0.02)
-  );
+  background: var(--panel);
   border: 1px solid var(--border);
-  border-color: rgba(37, 99, 235, 0.25);
   border-radius: 16px;
   padding: 18px 16px;
   box-shadow: var(--shadow-card);
@@ -1189,7 +1175,7 @@ textarea {
 }
 
 .report-list--compact {
-  gap: 45px;
+  gap: 8px;
 }
 
 .report-row {
@@ -1345,24 +1331,20 @@ textarea {
   color: var(--text-faint);
 }
 .stat-card--alert {
-  background: linear-gradient(
-    135deg,
-    rgba(224, 50, 90, 0.09),
-    rgba(224, 50, 90, 0.02)
-  );
   border-color: rgba(224, 50, 90, 0.35);
 }
 .stat-card--total {
   background: linear-gradient(
     135deg,
-    rgba(37, 99, 235, 0.09),
-    rgba(37, 99, 235, 0.02)
+    rgba(37, 99, 235, 0.1),
+    rgba(37, 99, 235, -0.02)
   );
   border-color: rgba(37, 99, 235, 0.25);
 }
 
 .stat-card--alert .stat-card__value {
   color: var(--red);
+  background:linear-gradient();
 }
 
 /* ---------- Cards / grid ---------- */
@@ -1388,20 +1370,7 @@ textarea {
   padding: 20px;
   margin-bottom: 16px;
   box-shadow: var(--shadow-card);
-  width: 90%;
-  height: 496px;
 }
-
-.card_historico{
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: var(--shadow-card);
-  width: 100%;
-}
-
 .card:last-child {
   margin-bottom: 0;
 }
