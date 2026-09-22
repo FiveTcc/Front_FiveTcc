@@ -92,28 +92,31 @@ function getNavLinkClassName({ isActive }) {
 
 export default function Sidebar() {
 
-const { usuario, logout } = useAuth();
-const [nome, setNome] = useState("");
-const [cargo, setCargo] = useState("");
+  const { usuario, logout } = useAuth();
+  const [nome, setNome] = useState("");
+  const [cargo, setCargo] = useState("");
+  const [FotoPerfil, setFotoPerfil] = useState("");
 
-const PERFIL_LABEL = { admin: 'Administrador', tecnico: 'Técnico', funcionario: 'Funcionário' };
+  const PERFIL_LABEL = { admin: 'Administrador', tecnico: 'Técnico', funcionario: 'Funcionário' };
 
 
-useEffect(() => {
-  async function buscarNome() {
-    try {
+  useEffect(() => {
+    async function buscarNome() {
+      try {
 
-      const response = await userService.buscarperfil();
-      setNome(response.nome || response.user_nome || "");
-      setCargo(response.user_tipo || response.cargo || response.user_cargo || "");
+        const response = await userService.buscarperfil();
+        setNome(response.nome || response.user_nome || "");
+        setCargo(response.user_tipo || response.cargo || response.user_cargo || "");
+        setFotoPerfil(response.FotoPerfil || response.user_imagem);
 
-    } catch (err) {
-      console.error(err);
+
+      } catch (err) {
+        console.error(err);
+      }
     }
-  }
 
-  buscarNome();
-}, [usuario]);
+    buscarNome();
+  }, [usuario]);
 
   const [theme, setTheme] = useState(getInitialTheme);
 
@@ -171,7 +174,20 @@ useEffect(() => {
 
       <div className="sidebar__footer">
         <div className="sidebar__user">
-          <span className="avatar">{(nome || usuario?.nome)?.[0]?.toUpperCase()}</span>
+
+          {FotoPerfil ? (
+            <img
+              src={FotoPerfil}
+              alt="Foto de perfil"
+              className="sidebar__avatar"
+            />
+          ) : (
+            <span className="avatar">
+              {(nome || usuario?.nome)?.[0]?.toUpperCase()}
+            </span>
+          )}
+
+
           <div>
             <strong>{nome || usuario?.nome}</strong>
             <small>{PERFIL_LABEL[cargo || usuario?.perfil] || cargo || usuario?.perfil}

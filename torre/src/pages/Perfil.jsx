@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
+import AvatarCropper from "../components/AvatarCropper";
 import api from "../services/api";
 import userService from "../services/userServices";
 
@@ -10,6 +11,20 @@ const PERFIL_LABEL = {
   tecnico: "Técnico",
   funcionario: "Funcionário",
 };
+
+function dataUrlParaArquivo(dataUrl, nomeArquivo = "perfil.jpg") {
+  const divisao = dataUrl.split(",");
+  const mimeMatch = divisao[0].match(/:(.*?);/);
+  const mime = mimeMatch ? mimeMatch[1] : "image/jpeg";
+  const dados = atob(divisao[1]);
+  const array = new Uint8Array(dados.length);
+
+  for (let i = 0; i < dados.length; i += 1) {
+    array[i] = dados.charCodeAt(i);
+  }
+
+  return new File([array], nomeArquivo, { type: mime });
+}
 
 export default function Perfil() {
   const { usuario, logout } = useAuth();
@@ -30,6 +45,8 @@ export default function Perfil() {
   const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
   const [notificacoes] = useState([]);
   const [theme, setTheme] = useState("light");
+  const [mostrarCropModal, setMostrarCropModal] = useState(false);
+  const [imagemOriginal, setImagemOriginal] = useState("");
 
   useEffect(() => {
     async function carregarPerfil() {
@@ -38,6 +55,10 @@ export default function Perfil() {
         const perfilData = await userService.buscarperfil();
         console.log("buscarperfil ->", perfilData);
         setPerfil(perfilData);
+
+       setFotoPerfil(perfilData.user_imagem || null);
+
+
         setPerfilForm({
           nome: perfilData.nome || perfilData.user_nome || "",
           email: perfilData.email || perfilData.user_email || "",
@@ -73,7 +94,53 @@ export default function Perfil() {
   function handleFotoPerfilChange(event) {
     const arquivo = event.target.files?.[0];
     if (!arquivo) return;
-    setFotoPerfil(URL.createObjectURL(arquivo));
+
+    const leitor = new FileReader();
+    leitor.onload = () => {
+      setImagemOriginal(leitor.result);
+      setMostrarCropModal(true);
+    };
+    leitor.readAsDataURL(arquivo);
+    event.target.value = "";
+  }
+
+  async function handleSalvarFotoPerfil(imagemCortada) {
+    if (!imagemCortada) {
+      setPerfilErro("Selecione uma imagem antes de salvar.");
+      return;
+    }
+
+    try {
+      const arquivoFoto = dataUrlParaArquivo(imagemCortada, "perfil.jpg");
+      const respostaUpload = await userService.adicionarFoto(arquivoFoto);
+      const novaUrlFoto =
+        respostaUpload?.foto ||
+        respostaUpload?.url ||
+        respostaUpload?.imagem ||
+        respostaUpload?.user_imagem_url ||
+        respostaUpload?.imagem_url ||
+        imagemCortada;
+
+      setFotoPerfil(novaUrlFoto);
+      setPerfil((prev) => ({
+        ...(prev || {}),
+        user_imagem_url: novaUrlFoto,
+        imagem_url: novaUrlFoto,
+        user_foto: novaUrlFoto,
+        foto_perfil: novaUrlFoto,
+      }));
+
+      setPerfilSucesso("Foto de perfil atualizada com sucesso.");
+      setPerfilErro("");
+      setMostrarCropModal(false);
+      setImagemOriginal("");
+    } catch (error) {
+      console.error(error);
+      setPerfilErro(
+        error?.message || "Erro ao processar a imagem do perfil.",
+      );
+      setPerfilSucesso("");
+    }
   }
 
   async function handleSalvarPerfil(event) {
@@ -194,7 +261,14 @@ export default function Perfil() {
           <div className="profile-summary__avatar-wrap">
             <div className="profile-summary__avatar">
               {fotoPerfil ? (
-                <img src={fotoPerfil} alt="Foto de perfil" />
+                <img
+                  src={fotoPerfil}
+                  alt="Foto de perfil"
+                  onError={(event) => {
+                    event.currentTarget.style.display = "none";
+                    setFotoPerfil(null);
+                  }}
+                />
               ) : (
                 (perfilForm.nome || usuario?.nome || "U")
                   .charAt(0)
@@ -202,29 +276,7 @@ export default function Perfil() {
               )}
             </div>
 
-            <label
-              className="profile-summary__camera"
-              aria-label="Alterar foto de perfil"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M15.5 4.5L19.5 8.5M7.5 20.5L3.5 20.5L3.5 16.5L14.5 5.5L18.5 9.5L7.5 20.5Z"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFotoPerfilChange}
-              />
-            </label>
+            
           </div>
 
           <div className="profile-summary__content">
@@ -340,6 +392,16 @@ export default function Perfil() {
             <p className="profile-form__note">
               Formatos aceitos: JPG, PNG. Tamanho máximo: 2MB.
             </p>
+
+            <AvatarCropper
+              isOpen={mostrarCropModal}
+              imageSrc={imagemOriginal}
+              onClose={() => {
+                setMostrarCropModal(false);
+                setImagemOriginal("");
+              }}
+              onSave={handleSalvarFotoPerfil}
+            />
 
             {(perfilErro || perfilSucesso) && (
               <p
