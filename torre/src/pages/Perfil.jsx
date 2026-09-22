@@ -6,11 +6,7 @@ import AvatarCropper from "../components/AvatarCropper";
 import api from "../services/api";
 import userService from "../services/userServices";
 
-const PERFIL_LABEL = {
-  admin: "Administrador",
-  tecnico: "Técnico",
-  funcionario: "Funcionário",
-};
+const PERFIL_LABEL = { admin: 'Administrador',  tecnico: 'Técnico', funcionario: 'Funcionário' };
 
 function dataUrlParaArquivo(dataUrl, nomeArquivo = "perfil.jpg") {
   const divisao = dataUrl.split(",");
@@ -31,13 +27,7 @@ export default function Perfil() {
 
   const [perfil, setPerfil] = useState(null);
   const [carregandoPerfil, setCarregandoPerfil] = useState(false);
-  const [perfilForm, setPerfilForm] = useState({
-    nome: "",
-    email: "",
-    telefone: "",
-    setor: "",
-    cargo: "",
-  });
+  const [perfilForm, setPerfilForm] = useState({ nome: "", email: "", telefone: "", setor: "" , cargo: ""});
   const [fotoPerfil, setFotoPerfil] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [perfilErro, setPerfilErro] = useState("");
@@ -62,21 +52,14 @@ export default function Perfil() {
         setPerfilForm({
           nome: perfilData.nome || perfilData.user_nome || "",
           email: perfilData.email || perfilData.user_email || "",
-          telefone:
-            perfilData.telefone ||
-            perfilData.user_telefone ||
-            perfilData.user_tel ||
-            "",
-          cargo:
-            perfilData.user_tipo ||
-            perfilData.cargo ||
-            perfilData.user_cargo ||
-            "",
+          telefone: perfilData.telefone || perfilData.user_telefone || perfilData.user_tel || "",
+          cargo: perfilData.user_tipo || perfilData.cargo || perfilData.user_cargo || ""
         });
       } catch (err) {
         console.error(err);
         setPerfilErro("Erro ao carregar perfil.");
-      } finally {
+      }
+      finally {
         setCarregandoPerfil(false);
       }
     }
@@ -154,11 +137,7 @@ export default function Perfil() {
       setEditMode(false);
     } catch (error) {
       console.error(error);
-      setPerfilErro(
-        error?.response?.data?.message ||
-          error.message ||
-          "Erro ao salvar perfil.",
-      );
+      setPerfilErro(error?.response?.data?.message || error.message || "Erro ao salvar perfil.");
       setPerfilSucesso("");
     }
   }
@@ -170,36 +149,15 @@ export default function Perfil() {
       <header className="profile-page-header">
         <div className="profile-page-header__brand">
           <div className="profile-page-header__icon" aria-hidden>
-            <svg
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M5 19C6.22116 16.4781 8.98557 14.8 12 14.8C15.0144 14.8 17.7788 16.4781 19 19"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M5 19C6.22116 16.4781 8.98557 14.8 12 14.8C15.0144 14.8 17.7788 16.4781 19 19" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
 
           <div className="profile-page-header__title">
             <h1>Meu Perfil</h1>
-            <p>
-              Gerencie suas informações pessoais e mantenha seus dados sempre
-              atualizados.
-            </p>
+            <p>Gerencie suas informações pessoais e mantenha seus dados sempre atualizados.</p>
           </div>
         </div>
 
@@ -247,7 +205,7 @@ export default function Perfil() {
             }
             onClick={() =>
               setTheme((currentTheme) =>
-                currentTheme === "dark" ? "light" : "dark",
+                currentTheme === "dark" ? "light" : "dark"
               )
             }
           >
@@ -281,27 +239,16 @@ export default function Perfil() {
 
           <div className="profile-summary__content">
             <h2>{perfilForm.nome || usuario?.nome || "Usuário"}</h2>
-            <p>
-              {PERFIL_LABEL[
-                perfilForm.cargo ||
-                  perfil?.user_tipo ||
-                  usuario?.perfil ||
-                  usuario?.user_tipo
-              ] || "Usuário"}
-            </p>
+            <p>{PERFIL_LABEL[perfilForm.cargo || perfil?.user_tipo || usuario?.perfil || usuario?.user_tipo] || "Usuário"}</p>
 
             <div className="profile-summary__list">
               <div className="profile-summary__item">
-                <span className="profile-summary__icon" aria-hidden>
-                  ✉
-                </span>
+                <span className="profile-summary__icon" aria-hidden>✉</span>
                 <span>{perfilForm.email || usuario?.email || "-"}</span>
               </div>
 
               <div className="profile-summary__item">
-                <span className="profile-summary__icon" aria-hidden>
-                  ◔
-                </span>
+                <span className="profile-summary__icon" aria-hidden>◔</span>
                 <span>{perfilForm.telefone || usuario?.telefone || "-"}</span>
               </div>
             </div>
@@ -314,10 +261,7 @@ export default function Perfil() {
         </aside>
 
         <section className="profile-main-panel">
-          <form
-            className="profile-main-panel__body"
-            onSubmit={handleSalvarPerfil}
-          >
+          <form className="profile-main-panel__body" onSubmit={handleSalvarPerfil}>
             <div className="profile-form__title-group">
               <h3>Dados Pessoais</h3>
               <p>Atualize suas informações pessoais e de contato.</p>
@@ -326,45 +270,22 @@ export default function Perfil() {
             <div className="profile-form__grid">
               <label className="field-block">
                 <span>Nome completo</span>
-                <input
-                  type="text"
-                  name="nome"
-                  value={perfilForm.nome}
-                  onChange={handlePerfilChange}
-                  readOnly
-                />
+                <input type="text" name="nome" value={perfilForm.nome} onChange={handlePerfilChange} readOnly />
               </label>
 
-              <label className="field-block">
-                <span>E-mail</span>
-                <input
-                  type="email"
-                  name="email"
-                  value={perfilForm.email}
-                  onChange={handlePerfilChange}
-                  readOnly
-                />
-              </label>
+                <label className="field-block">
+                  <span>E-mail</span>
+                  <input type="email" name="email" value={perfilForm.email} onChange={handlePerfilChange} readOnly />
+                </label>
 
               <label className="field-block">
                 <span>Telefone</span>
-                <input
-                  type="text"
-                  name="telefone"
-                  value={perfilForm.telefone}
-                  onChange={handlePerfilChange}
-                  readOnly
-                />
+                <input type="text" name="telefone" value={perfilForm.telefone} onChange={handlePerfilChange} readOnly />
               </label>
 
               <label className="field-block">
                 <span>Cargo</span>
-                <select
-                  name="cargo"
-                  value={perfilForm.cargo}
-                  onChange={handlePerfilChange}
-                  disabled
-                >
+                  <select name="cargo" value={perfilForm.cargo} onChange={handlePerfilChange} disabled>
                   <option value="admin">Administrador</option>
                   <option value="tecnico">Técnico</option>
                   <option value="funcionario">Funcionário</option>
@@ -374,24 +295,13 @@ export default function Perfil() {
 
             <div className="profile-form__upload">
               <h4>Alterar Foto de Perfil</h4>
-              <p>
-                Use uma imagem de boa qualidade para facilitar o seu
-                reconhecimento no sistema.
-              </p>
+              <p>Use uma imagem de boa qualidade para facilitar o seu reconhecimento no sistema.</p>
               <label className="btn btn--ghost profile-form__upload-button">
                 Escolher imagem
-                <input
-                  type="file"
-                  accept="image/jpeg,image/png"
-                  onChange={handleFotoPerfilChange}
-                  hidden
-                />
               </label>
             </div>
 
-            <p className="profile-form__note">
-              Formatos aceitos: JPG, PNG. Tamanho máximo: 2MB.
-            </p>
+            <p className="profile-form__note">Formatos aceitos: JPG, PNG. Tamanho máximo: 2MB.</p>
 
             <AvatarCropper
               isOpen={mostrarCropModal}
@@ -404,17 +314,13 @@ export default function Perfil() {
             />
 
             {(perfilErro || perfilSucesso) && (
-              <p
-                className={`form-message ${perfilErro ? "form-message--error" : "form-message--success"}`}
-              >
+              <p className={`form-message ${perfilErro ? "form-message--error" : "form-message--success"}`}>
                 {perfilErro || perfilSucesso}
               </p>
             )}
 
             <div className="profile-form__actions">
-              <button type="submit" className="btn btn--primary">
-                Salvar alterações
-              </button>
+              <button type="submit" className="btn btn--primary">Salvar alterações</button>
             </div>
           </form>
         </section>

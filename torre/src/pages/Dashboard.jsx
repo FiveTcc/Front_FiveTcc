@@ -232,7 +232,7 @@ export default function Dashboard() {
 
       {/* Estatísticas */}
       <section className="stat-grid">
-        <div className="stat-card stat-card--total">
+        <div className="stat-card">
           <span className="stat-card__label">Em aberto</span>
 
           <span className="stat-card__value">{abertos}</span>
@@ -248,7 +248,7 @@ export default function Dashboard() {
           <span className="stat-card__hint">prioridade máxima</span>
         </div>
 
-        <div className="stat-card stat-card--total">
+        <div className="stat-card">
           <span className="stat-card__label">Resolvidos</span>
 
           <span className="stat-card__value">{contagem.resolvido}</span>
@@ -256,7 +256,7 @@ export default function Dashboard() {
           <span className="stat-card__hint">este período</span>
         </div>
 
-        <div className="stat-card stat-card--total">
+        <div className="stat-card">
           <span className="stat-card__label">Total no sistema</span>
 
           <span className="stat-card__value">{chamados.length}</span>
