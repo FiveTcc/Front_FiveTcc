@@ -296,7 +296,19 @@ export default function Perfil() {
             <div className="profile-form__upload">
               <h4>Alterar Foto de Perfil</h4>
               <p>Use uma imagem de boa qualidade para facilitar o seu reconhecimento no sistema.</p>
-              <label className="btn btn--ghost profile-form__upload-button">
+
+              <input
+                id="input-foto-perfil"
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={handleFotoPerfilChange}
+              />
+
+              <label
+                htmlFor="input-foto-perfil"
+                className="btn btn--ghost profile-form__upload-button"
+              >
                 Escolher imagem
               </label>
             </div>
