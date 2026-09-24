@@ -187,7 +187,7 @@ export default function Usuarios() {
       </header>
 
 
-      <div className="card">
+      <div className="card__novousuario">
         <div className="card__header">
           <h2>Novo usuário</h2>
         </div>
@@ -292,7 +292,7 @@ export default function Usuarios() {
         </div>
       )}
 
-      <div className="card card--table">
+      <div className="card__tabela card--table">
         <table className="table">
           <thead>
             <tr>

@@ -59,7 +59,7 @@ export default function NovoChamado() {
         </div>
       </header>
 
-      <form className="card form" onSubmit={handleSubmit}>
+      <form className="card__novochamado form" onSubmit={handleSubmit}>
         <label>
           Micro
           <input

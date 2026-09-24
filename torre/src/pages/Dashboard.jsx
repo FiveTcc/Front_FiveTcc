@@ -268,7 +268,7 @@ export default function Dashboard() {
       {/* Conteúdo principal */}
       <section className="grid-2">
         {/* Distribuição por status */}
-        <div className="card">
+        <div className="card__status">
           <h2>Distribuição por status</h2>
 
           <div className="donut-row">
@@ -297,7 +297,7 @@ export default function Dashboard() {
         </div>
 
         {/* Atividade recente */}
-        <div className="card">
+        <div className="card__atividade">
           <div className="card__header">
             <h2>Atividade recente</h2>
 

@@ -37,7 +37,7 @@ export default function Perfil() {
   const [theme, setTheme] = useState("light");
   const [mostrarCropModal, setMostrarCropModal] = useState(false);
   const [imagemOriginal, setImagemOriginal] = useState("");
-
+  
   useEffect(() => {
     async function carregarPerfil() {
       try {

@@ -323,7 +323,7 @@ export default function Chamados() {
       {/* ==========================================
           TABELA DE CHAMADOS
       ========================================== */}
-      <div className="card card--table">
+      <div className="card__chamados card--table">
         {filtrados.length === 0 ? (
           <div className="empty">
             <strong>Nenhum chamado encontrado</strong>
