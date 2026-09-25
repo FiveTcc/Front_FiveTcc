@@ -169,7 +169,7 @@ export default function Usuarios() {
             )}
           </div>
 
-          <button
+          {/* <button
             type="button"
             className="topbar__icon-button"
             aria-label={
@@ -182,7 +182,7 @@ export default function Usuarios() {
             }
           >
             {theme === "dark" ? "☀" : "☾"}
-          </button>
+          </button> */}
         </div>
       </header>
 

@@ -6,21 +6,21 @@ import { STATUS_LABEL, tempoRelativo } from "../services/utils";
 import StatusBeacon from "../components/StatusBeacon";
 import PriorityBadge from "../components/PriorityBadge";
 
-function getInitialTheme() {
-  try {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) return savedTheme;
-    if (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
-      return "dark";
-    }
-    return "light";
-  } catch {
-    return "light";
-  }
-}
+// function getInitialTheme() {
+//   try {
+//     const savedTheme = localStorage.getItem("theme");
+//     if (savedTheme) return savedTheme;
+//     if (
+//       window.matchMedia &&
+//       window.matchMedia("(prefers-color-scheme: dark)").matches
+//     ) {
+//       return "dark";
+//     }
+//     return "light";
+//   } catch {
+//     return "light";
+//   }
+// }
 
 const CORES_STATUS = {
   aberto: "#E8862E",
@@ -79,7 +79,7 @@ function Donut({ dados, total }) {
 
 export default function Dashboard() {
   const { usuario } = useAuth();
-  const [theme, setTheme] = useState(getInitialTheme);
+  // const [theme, setTheme] = useState(getInitialTheme);
   const [busca, setBusca] = useState("");
   const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
   const chamados = useMemo(() => db.listarChamados(), []);
@@ -98,14 +98,14 @@ export default function Dashboard() {
     [],
   );
 
-  useEffect(() => {
-    try {
-      document.documentElement.setAttribute("data-theme", theme);
-      localStorage.setItem("theme", theme);
-    } catch {
-      // ignore
-    }
-  }, [theme]);
+  // useEffect(() => {
+  //   try {
+  //     document.documentElement.setAttribute("data-theme", theme);
+  //     localStorage.setItem("theme", theme);
+  //   } catch {
+  //     // ignore
+  //   }
+  // }, [theme]);
 
   const contagem = useMemo(() => {
     const base = {
@@ -206,7 +206,7 @@ export default function Dashboard() {
               )}
             </div>
 
-            <button
+            {/* <button
               type="button"
               className="topbar__icon-button"
               aria-label={
@@ -219,7 +219,7 @@ export default function Dashboard() {
               }
             >
               {theme === "dark" ? "☀" : "☾"}
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

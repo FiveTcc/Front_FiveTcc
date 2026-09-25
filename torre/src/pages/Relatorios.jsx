@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { db } from "../services/storage";
 import {
@@ -9,7 +9,6 @@ import {
 
 const PERFIL_LABEL = {
   admin: "Administrador",
-  secretario: "Secretário",
   tecnico: "Técnico",
   usuario: "Usuário",
 };
@@ -27,18 +26,10 @@ const PERMISSOES = {
     "historico",
     "exportar",
   ],
-  secretario: [
-    "periodo",
-    "ambiente",
-    "prioridade",
-    "status",
-    "apertados",
-    "tempo",
-    "exportar",
-  ],
   tecnico: ["proprio", "pendentes", "andamento", "concluidos", "tempo"],
   usuario: ["meus", "abertos", "status", "historico"],
 };
+
 
 function formatarHoras(valor) {
   if (!Number.isFinite(valor) || valor <= 0) return "0h";
@@ -70,6 +61,51 @@ export default function Relatorios() {
   const acessos = PERMISSOES[perfil] || PERMISSOES.usuario;
   const [menuExportarAberto, setMenuExportarAberto] = useState(false);
   const [mensagemExportacao, setMensagemExportacao] = useState("");
+  const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
+  const notificacoesRef = useRef(null);
+
+   const notificacoes = useMemo(
+    () => [
+      {
+        id: 1,
+        titulo: "2 chamados críticos aguardam atenção",
+        tempo: "há 10 min",
+      },
+      {
+        id: 2,
+        titulo: "Novo chamado de rede foi aberto",
+        tempo: "há 25 min",
+      },
+      {
+        id: 3,
+        titulo: "Chamado #CH-2025-0002 foi atualizado",
+        tempo: "há 1h",
+      },
+      {
+        id: 4,
+        titulo: "Relatório de manutenção está pronto",
+        tempo: "há 2h",
+      },
+    ],
+    []
+  );
+
+  useEffect(() => {
+    function handleClickFora(event) {
+      if (
+        notificacoesRef.current &&
+        !notificacoesRef.current.contains(event.target)
+      ) {
+        setMostrarNotificacoes(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickFora);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickFora);
+    };
+  }, []);
 
   const chamados = useMemo(() => db.listarChamados(), []);
   const chamadosVisiveis = useMemo(() => {
@@ -573,6 +609,50 @@ export default function Relatorios() {
         {mensagemExportacao && (
           <div className="report-export__status">{mensagemExportacao}</div>
         )}
+
+        <div className="topbar__actions">
+          <div className="topbar__notifications-wrap" ref={notificacoesRef}>
+            <button
+              type="button"
+              className="topbar__icon-button"
+              aria-label={
+                mostrarNotificacoes
+                  ? "Fechar notificações"
+                  : "Abrir notificações"
+              }
+              aria-expanded={mostrarNotificacoes}
+              onClick={() => setMostrarNotificacoes((valor) => !valor)}
+            >
+              🕭
+            </button>
+
+            {mostrarNotificacoes && (
+              <div
+                className="topbar__notifications"
+                role="menu"
+                aria-label="Notificações"
+              >
+                <div className="topbar__notifications-header">
+                  <strong>Notificações</strong>
+
+                  <span>{notificacoes.length}</span>
+                </div>
+
+                {notificacoes.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className="topbar__notification-item"
+                    onClick={() => setMostrarNotificacoes(false)}
+                  >
+                    <span>{item.titulo}</span>
+                    <small>{item.tempo}</small>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
 
         {acessos.includes("exportar") && (
           <div className="report-export">

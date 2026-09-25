@@ -6,29 +6,29 @@ import { tempoRelativo } from "../services/utils";
 import StatusBeacon from "../components/StatusBeacon";
 import PriorityBadge from "../components/PriorityBadge";
 
-function getInitialTheme() {
-  try {
-    const savedTheme = localStorage.getItem("theme");
+// function getInitialTheme() {
+//   try {
+//     const savedTheme = localStorage.getItem("theme");
 
-    if (savedTheme) return savedTheme;
+//     if (savedTheme) return savedTheme;
 
-    if (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
-      return "dark";
-    }
+//     if (
+//       window.matchMedia &&
+//       window.matchMedia("(prefers-color-scheme: dark)").matches
+//     ) {
+//       return "dark";
+//     }
 
-    return "light";
-  } catch {
-    return "light";
-  }
-}
+//     return "light";
+//   } catch {
+//     return "light";
+//   }
+// }
 
 export default function Chamados() {
   const { usuario } = useAuth();
 
-  const [theme, setTheme] = useState(getInitialTheme);
+  // const [theme, setTheme] = useState(getInitialTheme);
   const [busca, setBusca] = useState("");
   const [filtroStatus, setFiltroStatus] = useState("todos");
   const [filtroPrioridade, setFiltroPrioridade] = useState("todas");
@@ -70,14 +70,15 @@ export default function Chamados() {
     [],
   );
 
-  useEffect(() => {
-    try {
-      document.documentElement.setAttribute("data-theme", theme);
-      localStorage.setItem("theme", theme);
-    } catch {
-      // Ignora erros de localStorage
-    }
-  }, [theme]);
+//  useEffect(() => {
+//   try {
+//     document.documentElement.setAttribute("data-theme", theme);
+//     document.body.setAttribute("data-theme", theme);
+//     localStorage.setItem("theme", theme);
+//   } catch {
+//     // Ignora erros de localStorage
+//   }
+// }, [theme]);
 
   useEffect(() => {
     function handleClickFora(event) {
@@ -219,7 +220,7 @@ export default function Chamados() {
               )}
             </div>
 
-            <button
+            {/* <button
               type="button"
               className="topbar__icon-button"
               aria-label={
@@ -232,7 +233,7 @@ export default function Chamados() {
               }
             >
               {theme === "dark" ? "☀" : "☾"}
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

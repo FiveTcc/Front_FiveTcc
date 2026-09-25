@@ -3,6 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <script>
+      const tema = localStorage.getItem("theme") || "light";
+      document.documentElement.setAttribute("data-theme", tema);
+    </script>
+
     <title>New Occurrence System</title>
     <link rel="icon" href="src/icon/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

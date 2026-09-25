@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useMemo, } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -33,10 +33,69 @@ export default function Perfil() {
   const [perfilErro, setPerfilErro] = useState("");
   const [perfilSucesso, setPerfilSucesso] = useState("");
   const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
-  const [notificacoes] = useState([]);
-  const [theme, setTheme] = useState("light");
+  const notificacoesRef = useRef(null);
+  const [theme, setTheme] = useState(getInitialTheme);
   const [mostrarCropModal, setMostrarCropModal] = useState(false);
   const [imagemOriginal, setImagemOriginal] = useState("");
+
+  function getInitialTheme() {
+  try {
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme) return savedTheme;
+
+    if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
+      return "dark";
+    }
+
+    return "light";
+  } catch {
+    return "light";
+  }
+}
+
+   const notificacoes = useMemo(
+    () => [
+      {
+        id: 1,
+        titulo: "2 chamados críticos aguardam atenção",
+        tempo: "há 10 min",
+      },
+      { id: 2, titulo: "Novo chamado de rede foi aberto", tempo: "há 25 min" },
+      { id: 3, titulo: "Chamado #CH-2025-0002 foi atualizado", tempo: "há 1h" },
+      { id: 4, titulo: "Relatório de manutenção está pronto", tempo: "há 2h" },
+    ],
+    [],
+  );
+
+ useEffect(() => {
+  try {
+    document.documentElement.setAttribute("data-theme", theme);
+    document.body.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  } catch {
+    // Ignora erros de localStorage
+  }
+}, [theme]);
+
+ useEffect(() => {
+    function handleClickFora(event) {
+      if (
+        notificacoesRef.current &&
+        !notificacoesRef.current.contains(event.target)
+      ) {
+        setMostrarNotificacoes(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickFora);
+    return () => {
+      document.removeEventListener("mousedown", handleClickFora);
+    };
+  }, []);
   
   useEffect(() => {
     async function carregarPerfil() {
@@ -66,6 +125,7 @@ export default function Perfil() {
 
     carregarPerfil();
   }, []);
+
 
   function handlePerfilChange(event) {
     const { name, value } = event.target;
