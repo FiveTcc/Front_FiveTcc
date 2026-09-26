@@ -11,7 +11,7 @@ export default function NovoChamado() {
   const [categoria, setCategoria] = useState(db.CATEGORIAS[0]);
   const [local, setLocal] = useState("");
   const [dataOcorrencia, setDataOcorrencia] = useState("");
-  const [prioridade, setPrioridade] = useState("media");
+  const [prioridade, setPrioridade] = useState("Selecione");
   const [foto, setFoto] = useState(null);
   const [arquivos, setArquivos] = useState([]);
   const [enviando, setEnviando] = useState(false);
@@ -109,6 +109,43 @@ export default function NovoChamado() {
             )}
           </div>
 
+          <div className="custom-select">
+            <span className="custom-select__label">Prioridade</span>
+            <button
+              type="button"
+              className={`custom-select__trigger ${openSelect === "prioridade" ? "is-open" : ""}`}
+              onClick={() =>
+                setOpenSelect((current) =>
+                  current === "prioridade" ? null : "prioridade",
+                )
+              }
+            >
+              <span>{prioridade}</span>
+              <span className="custom-select__caret">▾</span>
+            </button>
+            {openSelect === "prioridade" && (
+              <div
+                className="custom-select__menu"
+                role="listbox"
+                aria-label="Prioridade"
+              >
+                {db.PRIORIDADES.map((option) => (
+                  <button
+                    key={option}
+                    type="button"
+                    className={`custom-select__option ${prioridade === option ? "is-selected" : ""}`}
+                    onClick={() => {
+                      setPrioridade(option);
+                      setOpenSelect(null);
+                    }}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           <label>
             Local
             <input
@@ -118,16 +155,16 @@ export default function NovoChamado() {
               placeholder="Ex.: Sala 12, Bloco B"
             />
           </label>
-        </div>
 
-        <label>
-          Data da ocorrência
-          <input
-            type="date"
-            value={dataOcorrencia}
-            onChange={(e) => setDataOcorrencia(e.target.value)}
-          />
-        </label>
+          <label>
+            Data da ocorrência
+            <input
+              type="date"
+              value={dataOcorrencia}
+              onChange={(e) => setDataOcorrencia(e.target.value)}
+            />
+          </label>
+        </div>
 
         <label className="form__description">
           Descrição

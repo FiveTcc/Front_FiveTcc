@@ -5,8 +5,8 @@
 const DB_KEY = 'torre_db_v1'
 
 const CATEGORIAS = ['Hardware', 'Software', 'Rede', 'Acesso e Permissões', 'Outros']
-const PRIORIDADES = ['baixa', 'media', 'alta', 'critica']
-const STATUS = ['aberto', 'em_andamento', 'aguardando', 'resolvido', 'fechado']
+const PRIORIDADES = ['Baixa', 'Média', 'Alta', 'Critica']
+const STATUS = ['Aberto', 'Em andamento', 'Aguardando', 'Resolvido', 'Fechado']
 
 function codigo(n) {
   const ano = new Date().getFullYear()
@@ -24,17 +24,6 @@ function seed() {
       telefone: '(11) 98876-4410',
       setor: 'Secretaria Acadêmica',
       cargo: 'Administrador',
-      ativo: true,
-    },
-    {
-      id: 'u2',
-      nome: 'Lúcia Mendonça',
-      email: 'secretario@torre.edu',
-      senha: 'secretario123',
-      perfil: 'secretario',
-      telefone: '(11) 93333-1000',
-      setor: 'Secretaria Acadêmica',
-      cargo: 'Secretário',
       ativo: true,
     },
     {

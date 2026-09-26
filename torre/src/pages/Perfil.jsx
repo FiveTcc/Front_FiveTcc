@@ -391,9 +391,9 @@ export default function Perfil() {
               </p>
             )}
 
-            <div className="profile-form__actions">
+            {/* <div className="profile-form__actions">
               <button type="submit" className="btn btn--primary">Salvar alterações</button>
-            </div>
+            </div> */}
           </form>
         </section>
       </div>

@@ -669,29 +669,11 @@ export default function Relatorios() {
                 <button
                   type="button"
                   onClick={() => {
-                    exportarRelatorio("csv");
+                    exportarRelatorio("Excel");
                     setMenuExportarAberto(false);
                   }}
                 >
-                  CSV
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    exportarRelatorio("json");
-                    setMenuExportarAberto(false);
-                  }}
-                >
-                  JSON
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    exportarRelatorio("html");
-                    setMenuExportarAberto(false);
-                  }}
-                >
-                  HTML
+                  Excel
                 </button>
                 <button
                   type="button"
@@ -808,7 +790,7 @@ export default function Relatorios() {
         )}
 
         {acessos.includes("status") && (
-          <div className="card">
+          <div className="card__relatorios">
             <div className="card__header">
               <h2>Ocorrências por status</h2>
             </div>
