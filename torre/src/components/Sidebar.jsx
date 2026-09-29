@@ -66,6 +66,19 @@ const ICONS = {
       <path d="M4 18h16" strokeLinecap="round" />
     </svg>
   ),
+  ambientes: (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      strokeWidth="1.8"
+      stroke="currentColor"
+    >
+      <path d="M4 20h16" strokeLinecap="round" />
+      <path d="M6 20V5h8v15" strokeLinejoin="round" />
+      <path d="M14 9h4v11" strokeLinejoin="round" />
+      <path d="M9 9h2M9 12.5h2M9 16h2" strokeLinecap="round" />
+    </svg>
+  ),
 };
 
 function getInitialTheme() {
@@ -91,25 +104,26 @@ function getNavLinkClassName({ isActive }) {
 }
 
 export default function Sidebar() {
-
   const { usuario, logout } = useAuth();
   const [nome, setNome] = useState("");
   const [cargo, setCargo] = useState("");
   const [FotoPerfil, setFotoPerfil] = useState("");
 
-  const PERFIL_LABEL = { admin: 'Administrador', tecnico: 'Técnico', funcionario: 'Funcionário' };
-
+  const PERFIL_LABEL = {
+    admin: "Administrador",
+    tecnico: "Técnico",
+    funcionario: "Funcionário",
+  };
 
   useEffect(() => {
     async function buscarNome() {
       try {
-
         const response = await userService.buscarperfil();
         setNome(response.nome || response.user_nome || "");
-        setCargo(response.user_tipo || response.cargo || response.user_cargo || "");
+        setCargo(
+          response.user_tipo || response.cargo || response.user_cargo || "",
+        );
         setFotoPerfil(response.FotoPerfil || response.user_imagem);
-
-
       } catch (err) {
         console.error(err);
       }
@@ -154,6 +168,11 @@ export default function Sidebar() {
           Chamados
         </NavLink>
 
+        <NavLink to="/ambientes" className={getNavLinkClassName}>
+          {ICONS.ambientes}
+          Ambientes
+        </NavLink>
+
         <NavLink to="/relatorios" className={getNavLinkClassName}>
           {ICONS.relatorios}
           Relatórios
@@ -174,7 +193,6 @@ export default function Sidebar() {
 
       <div className="sidebar__footer">
         <div className="sidebar__user">
-
           {FotoPerfil ? (
             <img
               src={FotoPerfil}
@@ -187,10 +205,12 @@ export default function Sidebar() {
             </span>
           )}
 
-
           <div>
             <strong>{nome || usuario?.nome}</strong>
-            <small>{PERFIL_LABEL[cargo || usuario?.perfil] || cargo || usuario?.perfil}
+            <small>
+              {PERFIL_LABEL[cargo || usuario?.perfil] ||
+                cargo ||
+                usuario?.perfil}
             </small>
           </div>
         </div>

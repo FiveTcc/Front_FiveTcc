@@ -13,6 +13,7 @@ import Relatorios from './pages/Relatorios'
 
 
 import PrivateRoute from "./routes/privateRouter";
+import Ambientes from './pages/Ambientes';
 
 
 
@@ -71,6 +72,11 @@ export default function App() {
             element={<Usuarios />}
           />
 
+          <Route
+            path="ambientes"
+            element={<Ambientes />}
+          />
+        
         </Route>
 
       </Route>

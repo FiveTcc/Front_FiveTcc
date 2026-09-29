@@ -5,30 +5,29 @@ import { db } from "../services/storage";
 import { tempoRelativo } from "../services/utils";
 import StatusBeacon from "../components/StatusBeacon";
 import PriorityBadge from "../components/PriorityBadge";
+const statusLabels = {
+  todos: "Todos os status",
+  aberto: "Aberto",
+  em_andamento: "Em andamento",
+  aguardando: "Aguardando",
+  resolvido: "Resolvido",
+  fechado: "Fechado",
+};
 
-// function getInitialTheme() {
-//   try {
-//     const savedTheme = localStorage.getItem("theme");
+const prioridadeLabels = {
+  todas: "Todas as prioridades",
+  critica: "Crítica",
+  alta: "Alta",
+  media: "Média",
+  baixa: "Baixa",
+};
 
-//     if (savedTheme) return savedTheme;
-
-//     if (
-//       window.matchMedia &&
-//       window.matchMedia("(prefers-color-scheme: dark)").matches
-//     ) {
-//       return "dark";
-//     }
-
-//     return "light";
-//   } catch {
-//     return "light";
-//   }
-// }
+const legendaStatus = Object.entries(statusLabels).filter(
+  ([value]) => value !== "todos",
+);
 
 export default function Chamados() {
   const { usuario } = useAuth();
-
-  // const [theme, setTheme] = useState(getInitialTheme);
   const [busca, setBusca] = useState("");
   const [filtroStatus, setFiltroStatus] = useState("todos");
   const [filtroPrioridade, setFiltroPrioridade] = useState("todas");
@@ -69,16 +68,6 @@ export default function Chamados() {
     ],
     [],
   );
-
-//  useEffect(() => {
-//   try {
-//     document.documentElement.setAttribute("data-theme", theme);
-//     document.body.setAttribute("data-theme", theme);
-//     localStorage.setItem("theme", theme);
-//   } catch {
-//     // Ignora erros de localStorage
-//   }
-// }, [theme]);
 
   useEffect(() => {
     function handleClickFora(event) {
@@ -219,24 +208,11 @@ export default function Chamados() {
                 </div>
               )}
             </div>
-
-            {/* <button
-              type="button"
-              className="topbar__icon-button"
-              aria-label={
-                theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
-              }
-              onClick={() =>
-                setTheme((currentTheme) =>
-                  currentTheme === "dark" ? "light" : "dark",
-                )
-              }
-            >
-              {theme === "dark" ? "☀" : "☾"}
-            </button> */}
           </div>
         </div>
       </div>
+
+      
 
       {/* ==========================================
           FILTROS
@@ -320,6 +296,18 @@ export default function Chamados() {
           + Novo chamado
         </Link>
       </div>
+
+       {/* ==========================================
+          LEGENDA DE STATUS
+      ========================================== */}
+      <ul className="status-legend" aria-label="Legenda de status">
+        {legendaStatus.map(([value, label]) => (
+          <li key={value} className="status-legend__item">
+            <StatusBeacon status={value} comLabel={false} />
+            <span>{label}</span>
+          </li>
+        ))}
+      </ul>
 
       {/* ==========================================
           TABELA DE CHAMADOS

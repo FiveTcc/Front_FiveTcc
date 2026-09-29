@@ -234,7 +234,7 @@ export default function Usuarios() {
           {erro && <div className="login__erro">{erro}</div>}
           {sucesso && <div className="form__success">{sucesso}</div>}
 
-          <div className="form__actions">
+          <div className="form-novo-usuarios__actions">
             <button type="submit" className="btn btn--primary">Salvar usuário</button>
           </div>
         </form>
