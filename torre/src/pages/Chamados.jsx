@@ -212,12 +212,24 @@ export default function Chamados() {
         </div>
       </div>
 
-      
-
       {/* ==========================================
-          FILTROS
-      ========================================== */}
+          LEGENDA + FILTROS
+       ========================================== */}
       <div className="filters">
+        {/* Legenda de status (esquerda) */}
+        <div className="status-legend-container">
+          <h2 className="status-legend__title">Legenda de status</h2>
+          <ul className="status-legend" aria-label="Legenda de status">
+            {legendaStatus.map(([value, label]) => (
+              <li key={value} className="status-legend__item">
+                <StatusBeacon status={value} comLabel={false} />
+                <span>{label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Filtros (direita) */}
         <div className="custom-select" style={{ minWidth: 190 }}>
           <button
             type="button"
@@ -297,18 +309,6 @@ export default function Chamados() {
         </Link>
       </div>
 
-       {/* ==========================================
-          LEGENDA DE STATUS
-      ========================================== */}
-      <ul className="status-legend" aria-label="Legenda de status">
-        {legendaStatus.map(([value, label]) => (
-          <li key={value} className="status-legend__item">
-            <StatusBeacon status={value} comLabel={false} />
-            <span>{label}</span>
-          </li>
-        ))}
-      </ul>
-
       {/* ==========================================
           TABELA DE CHAMADOS
       ========================================== */}
@@ -378,16 +378,16 @@ export default function Chamados() {
           HISTÓRICO
       ========================================== */}
       {/* <div className="profile-history"> */}
-        {/* <div className="section-title section-title--compact">
+      {/* <div className="section-title section-title--compact">
           <span className="section-title__icon">☰</span>
 
           <h3>Histórico de chamados</h3>
         </div> */}
 
-        {/* ========================================
+      {/* ========================================
             LISTA DO HISTÓRICO
         ======================================== */}
-        {/* {meusChamados.length === 0 ? (
+      {/* {meusChamados.length === 0 ? (
           <div className="empty empty--light">
             <strong>Você ainda não tem chamados</strong>
 

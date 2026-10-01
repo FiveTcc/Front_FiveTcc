@@ -1076,6 +1076,9 @@ textarea {
   justify-content: flex-end;
   margin-top: 1px;
 }
+.page--ambientes{
+  gap: 18px;
+}
 .page--reports {
   gap: 18px;
 }
@@ -1688,21 +1691,40 @@ textarea {
   }
 }
 
+.filters {
+  display: flex;
+  align-items: center;      /* centraliza legenda e filtros na mesma linha */
+  gap: 10px;
+  flex-wrap: wrap;          /* quebra em telas estreitas */
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+.status-legend-container {
+  margin-right: auto;       /* empurra os filtros para a direita */
+  position:relative;         /* centraliza legenda e filtros na mesma linha */
+}
+
 .status-legend {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 8px 20px;
-  margin: 0 0 12px;
-  padding: 0 4px;
+  margin: 0;
+  padding: 0;               /* remove o padding-left padrão do <ul> */
   list-style: none;
-  font-size: 13px;
-  color: #9fb0c8;
 }
 
 .status-legend__item {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 8px;
+}
+
+/* Mesma altura para selects e botão */
+.custom-select__trigger,
+.filters .btn {
+  height: 44px;
 }
 
 /* ---------- Badge (priority) ---------- */

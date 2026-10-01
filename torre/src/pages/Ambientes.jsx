@@ -398,7 +398,7 @@ export default function Ambientes() {
   );
 
   return (
-    <div className="nos">
+    <div className="page page--ambientes">
       <style>{CSS}</style>
 
       <div className="nos-page">
@@ -438,7 +438,7 @@ export default function Ambientes() {
                   novo ambiente.
                 </p>
               )}
-              <div className="nos-cards">
+              <div className="stat-card card--table">
                 {filtrados.map((a) => (
                   <CardAmbiente
                     key={a.id}
@@ -1115,7 +1115,7 @@ function FormComponente({ valor, onChange, existentes, onCancel, onSubmit }) {
   );
 }
 
-/* ---------- Estilos ---------- */
+/* ---------- Estilos Ambientes ---------- */
 
 const CSS = `
 .nos{--bg:#060f1f;--sup:#0a1830;--sup2:#0d2040;--borda:#16305a;--txt:#e8eefb;--mudo:#8ea3c7;--azul:#1d7bff;
