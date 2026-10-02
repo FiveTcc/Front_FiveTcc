@@ -358,8 +358,8 @@ export default function Ambientes() {
   };
 
   const Filtros = (
-    <div className="nos-filtros">
-      <label className="nos-busca">
+    <div className="ambientes-filtros">
+      <label className="ambientes-busca">
         <Search size={18} />
         <input
           placeholder="Buscar por nome, bloco ou tipo..."
@@ -401,8 +401,8 @@ export default function Ambientes() {
     <div className="page page--ambientes">
       <style>{CSS}</style>
 
-      <div className="nos-page">
-        <div className="nos-titulo">
+      <div className="page-ambientes">
+        <div className="ambientes-titulo">
           <Building2 size={40} color="#3b82f6" />
           <div>
             <h1>Ambientes</h1>
@@ -413,7 +413,7 @@ export default function Ambientes() {
             </p>
           </div>
           <button
-            className="nos-btn"
+            className="ambientes-btn"
             onClick={() =>
               setNovo({
                 nome: "",
@@ -429,16 +429,16 @@ export default function Ambientes() {
         </div>
 
         {modo === "grade" ? (
-          <div className="nos-grade-wrap">
+          <div className="ambientes-grade-wrap">
             <div>
-              <section className="nos-painel">{Filtros}</section>
+              <section className="ambientes-painel">{Filtros}</section>
               {filtrados.length === 0 && (
-                <p className="nos-vazio">
+                <p className="ambientes-vazio">
                   Nenhum ambiente encontrado. Limpe os filtros ou cadastre um
                   novo ambiente.
                 </p>
               )}
-              <div className="stat-card card--table">
+              <div className="card__ambientes card__ambientes--grid">
                 {filtrados.map((a) => (
                   <CardAmbiente
                     key={a.id}
@@ -451,11 +451,11 @@ export default function Ambientes() {
               </div>
             </div>
 
-            <aside className="nos-painel nos-resumo">
+            <aside className="ambientes-painel ambientes-resumo">
               <h3>
                 <ClipboardList size={18} /> Resumo dos ambientes
               </h3>
-              <div className="nos-kpis">
+              <div className="ambientes-kpis">
                 <Kpi
                   Icon={Building2}
                   cor="#3b82f6"
@@ -482,13 +482,13 @@ export default function Ambientes() {
                 />
               </div>
               <h3>Tipos de ambiente</h3>
-              <ul className="nos-tipos">
+              <ul className="ambientes-tipos">
                 {contTipos.map(([t, n]) => {
                   const { cor, Icon } = TIPOS[t];
                   return (
                     <li key={t}>
                       <span
-                        className="nos-chip-ico"
+                        className="ambientes-chip-ico"
                         style={{ background: cor + "33", color: cor }}
                       >
                         <Icon size={16} />
@@ -499,10 +499,10 @@ export default function Ambientes() {
                   );
                 })}
               </ul>
-              <div className="nos-dica">
-                <h4>
+              <div className="ambientes-dica">
+                <h3>
                   <Lightbulb size={16} /> Dica
-                </h4>
+                </h3>
                 <p>
                   Mantenha os ambientes sempre atualizados para facilitar a
                   abertura de chamados e o gerenciamento dos componentes.
@@ -512,9 +512,9 @@ export default function Ambientes() {
           </div>
         ) : (
           <>
-            <section className="nos-painel">{Filtros}</section>
-            <div className="nos-detalhe-wrap">
-              <div className="nos-lista">
+            <section className="ambientes-painel">{Filtros}</section>
+            <div className="ambientes-detalhe-wrap">
+              <div className="ambientes-lista">
                 {filtrados.map((a) => (
                   <CardAmbiente
                     key={a.id}
@@ -527,35 +527,35 @@ export default function Ambientes() {
                   />
                 ))}
                 {filtrados.length === 0 && (
-                  <p className="nos-vazio">Nenhum ambiente encontrado.</p>
+                  <p className="ambientes-vazio">Nenhum ambiente encontrado.</p>
                 )}
               </div>
 
               {sel && (
-                <section className="nos-painel nos-det">
-                  <div className="nos-det-head">
+                <section className="ambientes-painel ambientes-det">
+                  <div className="ambientes-det-head">
                     <Thumb tipo={sel.tipo} size={128} />
-                    <div className="nos-det-info">
+                    <div className="ambientes-det-info">
                       <h2>{sel.nome}</h2>
-                      <div className="nos-tags">
+                      <div className="ambientes-tags">
                         <Tag tipo={sel.tipo} />
                         <Status ativo={sel.ativo} />
                       </div>
-                      <p className="nos-local">
+                      <p className="ambientes-local">
                         <MapPin size={14} /> {sel.bloco} ·{" "}
                         {andarLabel(sel.andar)}
                       </p>
-                      <p className="nos-desc">{sel.desc}</p>
+                      <p className="ambientes-desc">{sel.desc}</p>
                     </div>
-                    <button className="nos-btn-sec" onClick={abrirEdicao}>
+                    <button className="ambientes-btn-sec" onClick={abrirEdicao}>
                       <Pencil size={15} /> Editar
                     </button>
-                    <button className="nos-icon" aria-label="Mais ações">
+                    <button className="ambientes-icon" aria-label="Mais ações">
                       <MoreVertical size={18} />
                     </button>
                   </div>
 
-                  <div className="nos-abas" role="tablist">
+                  <div className="ambientes-abas" role="tablist">
                     {[
                       ["visao", Eye, "Visão geral"],
                       ["componentes", Monitor, "Componentes"],
@@ -576,8 +576,8 @@ export default function Ambientes() {
 
                   {aba === "componentes" && (
                     <>
-                      <div className="nos-comp-filtros">
-                        <label className="nos-busca">
+                      <div className="ambientes-comp-filtros">
+                        <label className="ambientes-busca">
                           <Search size={16} />
                           <input
                             placeholder="Buscar componentes..."
@@ -610,7 +610,7 @@ export default function Ambientes() {
                           ].map((s) => [s, s])}
                         />
                         <button
-                          className="nos-btn"
+                          className="ambientes-btn"
                           onClick={() =>
                             setNovoComp({
                               nome: "",
@@ -623,8 +623,8 @@ export default function Ambientes() {
                           <Plus size={16} /> Adicionar componente
                         </button>
                       </div>
-                      <div className="nos-tabela-wrap">
-                        <table className="nos-tabela">
+                      <div className="ambientes-tabela-wrap">
+                        <table className="ambientes-tabela">
                           <thead>
                             <tr>
                               <th>Componente</th>
@@ -639,18 +639,18 @@ export default function Ambientes() {
                             {compsFiltrados.map((c) => (
                               <tr key={c.id ?? c.pat}>
                                 <td>
-                                  <span className="nos-comp-nome">
-                                    <span className="nos-chip-ico">
+                                  <span className="ambientes-comp-nome">
+                                    <span className="ambientes-chip-ico">
                                       <c.Icon size={16} />
                                     </span>
                                     {c.nome}
                                   </span>
                                 </td>
-                                <td className="nos-mudo">{c.tipo}</td>
+                                <td className="ambientes-mudo">{c.tipo}</td>
                                 <td>{c.pat}</td>
                                 <td>
                                   <span
-                                    className={`nos-pill ${c.status === "Funcionando" ? "ok" : c.status === "Com problema" ? "err" : "warn"}`}
+                                    className={`ambientes-pill ${c.status === "Funcionando" ? "ok" : c.status === "Com problema" ? "err" : "warn"}`}
                                   >
                                     {c.status}
                                   </span>
@@ -658,7 +658,7 @@ export default function Ambientes() {
                                 <td>{c.manut}</td>
                                 <td>
                                   <button
-                                    className="nos-icon"
+                                    className="ambientes-icon"
                                     aria-label={`Ações de ${c.nome}`}
                                   >
                                     <MoreVertical size={16} />
@@ -669,14 +669,14 @@ export default function Ambientes() {
                           </tbody>
                         </table>
                         {compsFiltrados.length === 0 && (
-                          <p className="nos-vazio">
+                          <p className="ambientes-vazio">
                             {comps.length === 0
                               ? "Este ambiente ainda não tem componentes. Adicione o primeiro."
                               : "Nenhum componente encontrado com esses filtros."}
                           </p>
                         )}
                       </div>
-                      <p className="nos-rodape-tabela">
+                      <p className="ambientes-rodape-tabela">
                         Mostrando {compsFiltrados.length} de {comps.length}{" "}
                         componentes
                       </p>
@@ -684,7 +684,7 @@ export default function Ambientes() {
                   )}
 
                   {aba === "visao" && (
-                    <div className="nos-visao">
+                    <div className="ambientes-visao">
                       <Info l="Nome" v={sel.nome} />
                       <Info l="Tipo" v={sel.tipo} />
                       <Info l="Bloco" v={sel.bloco} />
@@ -701,7 +701,7 @@ export default function Ambientes() {
                   )}
 
                   {aba === "historico" && (
-                    <ul className="nos-hist">
+                    <ul className="ambientes-hist">
                       {[
                         ...chamadosDe(sel.id).map((c) => ({
                           t: `Chamado #${c.id}: ${c.titulo} (${c.status.toLowerCase()})`,
@@ -720,8 +720,8 @@ export default function Ambientes() {
               )}
 
               {sel && (
-                <aside className="nos-col-dir">
-                  <section className="nos-painel">
+                <aside className="ambientes-col-dir">
+                  <section className="ambientes-painel">
                     <h3>
                       <ClipboardList size={18} /> Informações do Ambiente
                     </h3>
@@ -729,13 +729,13 @@ export default function Ambientes() {
                     <Info l="Tipo" v={sel.tipo} />
                     <Info l="Bloco" v={sel.bloco} />
                     <Info l="Andar" v={andarLabel(sel.andar)} />
-                    <div className="nos-info">
+                    <div className="ambientes-info">
                       <small>Status</small>
                       <Status ativo={sel.ativo} />
                     </div>
                     <Info l="Observações" v={sel.desc} />
                   </section>
-                  <section className="nos-painel">
+                  <section className="ambientes-painel">
                     <h3>
                       Últimos chamados{" "}
                       <a
@@ -804,7 +804,7 @@ export default function Ambientes() {
 
 function Select({ label, value, onChange, opts }) {
   return (
-    <label className="nos-select">
+    <label className="ambientes-select">
       <small>{label}</small>
       <select value={value} onChange={onChange}>
         <option value="">Todos</option>
@@ -822,7 +822,7 @@ function Thumb({ tipo, size = 72 }) {
   const { cor, Icon } = TIPOS[tipo];
   return (
     <div
-      className="nos-thumb"
+      className="ambientes-thumb"
       style={{
         width: size,
         height: size * 0.85,
@@ -837,7 +837,7 @@ function Thumb({ tipo, size = 72 }) {
 
 const Tag = ({ tipo }) => (
   <span
-    className="nos-tag"
+    className="ambientes-tag"
     style={{
       background: TIPOS[tipo].cor + "33",
       color: TIPOS[tipo].cor,
@@ -848,12 +848,12 @@ const Tag = ({ tipo }) => (
   </span>
 );
 const Status = ({ ativo }) => (
-  <span className={`nos-pill ${ativo ? "ok" : "err-sol"}`}>
+  <span className={`ambientes-pill ${ativo ? "ok" : "err-sol"}`}>
     {ativo ? "Ativo" : "Inativo"}
   </span>
 );
 const Info = ({ l, v }) => (
-  <div className="nos-info">
+  <div className="ambientes-info">
     <small>{l}</small>
     <span>{v}</span>
   </div>
@@ -861,9 +861,9 @@ const Info = ({ l, v }) => (
 
 function Kpi({ Icon, cor, n, label }) {
   return (
-    <div className="nos-kpi">
+    <div className="ambientes-kpi">
       <span
-        className="nos-kpi-ico"
+        className="ambientes-kpi-ico"
         style={{ background: cor + "26", color: cor }}
       >
         <Icon size={20} />
@@ -877,7 +877,7 @@ function Kpi({ Icon, cor, n, label }) {
 function CardAmbiente({ a, qtd, chamados, onOpen, compacto, ativo }) {
   return (
     <article
-      className={`nos-card ${compacto ? "compacto" : ""} ${ativo ? "ativo" : ""}`}
+      className={`ambientes-card ${compacto ? "compacto" : ""} ${ativo ? "ativo" : ""}`}
       tabIndex={0}
       role="button"
       aria-label={`Abrir ${a.nome}`}
@@ -886,21 +886,21 @@ function CardAmbiente({ a, qtd, chamados, onOpen, compacto, ativo }) {
         (e.key === "Enter" || e.key === " ") && (e.preventDefault(), onOpen())
       }
     >
-      <div className="nos-card-topo">
+      <div className="ambientes-card-topo">
         <Thumb tipo={a.tipo} size={compacto ? 72 : 76} />
-        <div className="nos-card-info">
+        <div className="ambientes-card-info">
           <h3>{a.nome}</h3>
-          <div className="nos-tags">
+          <div className="ambientes-tags">
             <Tag tipo={a.tipo} />
             <Status ativo={a.ativo} />
           </div>
-          <p className="nos-local">
+          <p className="ambientes-local">
             <MapPin size={13} /> {a.bloco} · {andarLabel(a.andar)}
           </p>
         </div>
-        <MoreVertical size={16} className="nos-mais" />
+        <MoreVertical size={16} className="ambientes-mais" />
       </div>
-      <div className="nos-card-meta">
+      <div className="ambientes-card-meta">
         <span>
           <Monitor size={15} /> {qtd} {qtd === 1 ? "componente" : "componentes"}
         </span>
@@ -910,7 +910,7 @@ function CardAmbiente({ a, qtd, chamados, onOpen, compacto, ativo }) {
         </span>
       </div>
       {!compacto && (
-        <div className="nos-card-meta fino">
+        <div className="ambientes-card-meta fino">
           <span>
             <Calendar size={14} /> Criado em {a.criado}
           </span>
@@ -925,17 +925,17 @@ function CardAmbiente({ a, qtd, chamados, onOpen, compacto, ativo }) {
 
 function ListaChamados({ itens, mini }) {
   if (itens.length === 0)
-    return <p className="nos-vazio">Nenhum chamado neste ambiente.</p>;
+    return <p className="ambientes-vazio">Nenhum chamado neste ambiente.</p>;
   const cls = { Aberto: "err", "Em andamento": "warn", Resolvido: "ok" };
   return (
-    <ul className={`nos-chamados ${mini ? "mini" : ""}`}>
+    <ul className={`ambientes-chamados ${mini ? "mini" : ""}`}>
       {itens.map((c) => (
         <li key={c.id}>
           <a href="#" onClick={(e) => e.preventDefault()}>
             #{c.id}
           </a>
           <span>{c.titulo}</span>
-          <span className={`nos-pill ${cls[c.status]}`}>{c.status}</span>
+          <span className={`ambientes-pill ${cls[c.status]}`}>{c.status}</span>
           <time>{c.data}</time>
         </li>
       ))}
@@ -950,17 +950,17 @@ function Modal({ titulo, onClose, children }) {
     return () => window.removeEventListener("keydown", h);
   }, [onClose]);
   return (
-    <div className="nos-modal-fundo" onClick={onClose}>
+    <div className="ambientes-modal-fundo" onClick={onClose}>
       <div
-        className="nos-modal"
+        className="ambientes-modal"
         role="dialog"
         aria-modal="true"
         aria-label={titulo}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="nos-modal-head">
+        <div className="ambientes-modal-head">
           <h2>{titulo}</h2>
-          <button className="nos-icon" onClick={onClose} aria-label="Fechar">
+          <button className="ambientes-icon" onClick={onClose} aria-label="Fechar">
             <X size={18} />
           </button>
         </div>
@@ -972,11 +972,11 @@ function Modal({ titulo, onClose, children }) {
 
 function Acoes({ onCancel, salvar, ok }) {
   return (
-    <div className="nos-modal-acoes">
-      <button type="button" className="nos-btn-sec" onClick={onCancel}>
+    <div className="ambientes-modal-acoes">
+      <button type="button" className="ambientes-btn-sec" onClick={onCancel}>
         Cancelar
       </button>
-      <button type="submit" className="nos-btn" disabled={!ok}>
+      <button type="submit" className="ambientes-btn" disabled={!ok}>
         {salvar}
       </button>
     </div>
@@ -1010,7 +1010,7 @@ function FormAmbiente({ valor, onChange, onCancel, onSubmit, salvar, edicao }) {
           ))}
         </select>
       </label>
-      <div className="nos-linha">
+      <div className="ambientes-linha">
         <label>
           Bloco
           <select value={valor.bloco} onChange={up("bloco")}>
@@ -1079,7 +1079,7 @@ function FormComponente({ valor, onChange, existentes, onCancel, onSubmit }) {
           placeholder="Ex.: Computador 06"
         />
       </label>
-      <div className="nos-linha">
+      <div className="ambientes-linha">
         <label>
           Tipo
           <select value={valor.tipo} onChange={up("tipo")}>
@@ -1106,7 +1106,7 @@ function FormComponente({ valor, onChange, existentes, onCancel, onSubmit }) {
         />
       </label>
       {dup && (
-        <p className="nos-erro">
+        <p className="ambientes-erro">
           Já existe um componente com esse patrimônio neste ambiente.
         </p>
       )}
@@ -1118,91 +1118,175 @@ function FormComponente({ valor, onChange, existentes, onCancel, onSubmit }) {
 /* ---------- Estilos Ambientes ---------- */
 
 const CSS = `
-.nos{--bg:#060f1f;--sup:#0a1830;--sup2:#0d2040;--borda:#16305a;--txt:#e8eefb;--mudo:#8ea3c7;--azul:#1d7bff;
+.ambientes{--bg:#060f1f;--sup:#0a1830;--sup2:#0d2040;--borda:#16305a;--txt:#e8eefb;--mudo:#8ea3c7;--azul:#1d7bff;
 min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;font-size:14px}
-.nos *{box-sizing:border-box}.nos h1,.nos h2,.nos h3,.nos h4,.nos p{margin:0}
-.nos button,.nos input,.nos select{font:inherit;color:inherit}
-.nos button{cursor:pointer}
-.nos :focus-visible{outline:2px solid var(--azul);outline-offset:2px}
-.nos-icon{background:none;border:0;padding:6px;border-radius:8px;display:grid;place-items:center;color:var(--txt)}.nos-icon:hover{background:var(--sup2)}
-.nos-busca{display:flex;align-items:center;gap:10px;background:var(--sup);border:1px solid var(--borda);border-radius:10px;padding:0 14px;height:44px;flex:1;min-width:180px;color:var(--mudo)}
-.nos-busca input{background:none;border:0;outline:0;flex:1;min-width:0;color:var(--txt)}
-.nos-busca:focus-within{border-color:var(--azul)}
-.nos-page{padding:26px 26px 40px}
-.nos-titulo{display:flex;align-items:center;gap:16px;margin-bottom:22px}
-.nos-titulo h1{font-size:28px}.nos-titulo p{color:var(--mudo);margin-top:4px}.nos-titulo .nos-btn{margin-left:auto}
-.nos-btn{display:inline-flex;align-items:center;gap:8px;background:var(--azul);border:0;border-radius:8px;padding:0 20px;height:42px;font-weight:600;color:#fff;white-space:nowrap}
-.nos-btn:hover{background:#3b8dff}.nos-btn:disabled{opacity:.5;cursor:not-allowed}
-.nos-btn-sec{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid var(--borda);border-radius:8px;padding:0 16px;height:38px}
-.nos-btn-sec:hover{background:var(--sup2)}
-.nos-painel{background:var(--sup);border:1px solid var(--borda);border-radius:12px;padding:16px}
-.nos-filtros{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
-.nos-select{display:flex;flex-direction:column;gap:2px;min-width:130px}.nos-select small{color:var(--mudo);padding-left:2px}
-.nos-select select{background:var(--sup2);border:1px solid var(--borda);border-radius:8px;height:36px;padding:0 10px}
-.nos-toggle{display:flex;gap:6px;margin-left:auto}
-.nos-toggle button{background:var(--sup2);border:1px solid var(--borda);border-radius:8px;width:40px;height:40px;display:grid;place-items:center;color:var(--mudo)}
-.nos-toggle .on{background:var(--azul);border-color:var(--azul);color:#fff}
-.nos-grade-wrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
-.nos-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;margin-top:16px}
-.nos-card{background:var(--sup);border:1px solid var(--borda);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px;cursor:pointer;transition:border-color .15s}
-.nos-card:hover{border-color:#2d5aa6}.nos-card.ativo{border-color:var(--azul);box-shadow:0 0 0 1px var(--azul)}
-.nos-card-topo{display:flex;gap:12px;align-items:flex-start}.nos-card-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
-.nos-card h3{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.nos-mais{color:var(--mudo);flex:none}
-.nos-tags{display:flex;gap:8px;flex-wrap:wrap}
-.nos-local{display:flex;align-items:center;gap:5px;color:var(--mudo);font-size:12.5px}
-.nos-card-meta{display:flex;justify-content:space-between;color:var(--mudo);border-top:1px solid var(--borda);padding-top:10px}
-.nos-card-meta span{display:flex;align-items:center;gap:6px}.nos-card-meta.fino{font-size:12px;border-top:0;padding-top:0}
-.nos-card.compacto{padding:12px;gap:8px}.nos-card.compacto .nos-card-meta{border:0;padding:0}
-.nos-thumb{border-radius:8px;display:grid;place-items:center;flex:none;border:1px solid var(--borda)}
-.nos-tag,.nos-pill{display:inline-block;padding:2px 10px;border-radius:6px;font-size:12px;font-weight:600;border:1px solid transparent;white-space:nowrap}
-.nos-pill.ok{background:#0f3d2a;color:#4ade80;border-color:#166a45}.nos-pill.err{background:#4a1519;color:#f87171;border-color:#7f1d24}
-.nos-pill.warn{background:#4a3308;color:#fbbf24;border-color:#7a5510}.nos-pill.err-sol{background:#dc2626;color:#fff}
-.nos-resumo h3{display:flex;align-items:center;gap:8px;font-size:15px;margin-bottom:14px}.nos-resumo h3:not(:first-child){margin-top:22px}
-.nos-kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.nos-kpi{background:var(--sup2);border:1px solid var(--borda);border-radius:10px;padding:12px;display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:center;min-height:86px}
-.nos-kpi-ico{grid-row:span 2;width:38px;height:38px;border-radius:8px;display:grid;place-items:center}.nos-kpi b{font-size:22px}.nos-kpi small{color:var(--mudo);grid-column:1/-1;font-size:12px}
-.nos-tipos{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
-.nos-tipos li{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--borda)}.nos-tipos b{margin-left:auto}
-.nos-chip-ico{width:30px;height:30px;border-radius:8px;display:inline-grid;place-items:center;background:#0b2a5c;color:#5aa2ff;flex:none}
-.nos-dica{margin-top:20px;background:var(--sup2);border:1px solid var(--borda);border-radius:10px;padding:14px}
-.nos-dica h4{display:flex;gap:8px;align-items:center;color:#5aa2ff;margin-bottom:8px}.nos-dica p{color:var(--mudo);font-size:12.5px;line-height:1.5}
-.nos-vazio{color:var(--mudo);padding:24px;text-align:center}
-.nos-detalhe-wrap{display:grid;grid-template-columns:290px minmax(0,1fr) 300px;gap:16px;margin-top:16px;align-items:start}
-.nos-lista{display:flex;flex-direction:column;gap:10px;max-height:calc(100vh - 210px);overflow:auto;padding:2px}
-.nos-det-head{display:flex;gap:18px;align-items:flex-start}.nos-det-info{flex:1;display:flex;flex-direction:column;gap:8px}.nos-det-info h2{font-size:24px}
-.nos-desc{color:var(--txt)}
-.nos-abas{display:flex;gap:6px;border-bottom:1px solid var(--borda);margin:18px 0 16px}
-.nos-abas button{display:flex;align-items:center;gap:8px;background:none;border:0;border-bottom:2px solid transparent;padding:10px 16px;color:var(--mudo);margin-bottom:-1px}
-.nos-abas .on{color:#5aa2ff;border-color:var(--azul)}
-.nos-comp-filtros{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px}
-.nos-comp-filtros .nos-busca{height:38px;flex:1}.nos-comp-filtros .nos-btn{height:38px;padding:0 14px;font-size:13px}
-.nos-tabela-wrap{overflow-x:auto;border:1px solid var(--borda);border-radius:10px}
-.nos-tabela{width:100%;border-collapse:collapse;min-width:640px}
-.nos-tabela th{text-align:left;font-weight:600;padding:12px 14px;border-bottom:1px solid var(--borda);font-size:13px}
-.nos-tabela td{padding:10px 14px;border-bottom:1px solid #0f2547;font-size:13px}.nos-tabela tr:last-child td{border-bottom:0}
-.nos-tabela tbody tr:hover{background:#0c1d3a}.nos-mudo{color:var(--mudo)}
-.nos-comp-nome{display:flex;align-items:center;gap:10px}
-.nos-rodape-tabela{color:var(--mudo);font-size:12.5px;margin-top:10px}
-.nos-visao{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
-.nos-info{display:flex;flex-direction:column;gap:4px;padding:10px 0}.nos-info small{color:var(--mudo)}.nos-info span{line-height:1.4}
-.nos-col-dir{display:flex;flex-direction:column;gap:16px}
-.nos-col-dir h3{display:flex;align-items:center;gap:8px;font-size:15px;margin-bottom:8px}.nos-col-dir h3 a{margin-left:auto;font-size:12px;color:#5aa2ff;text-decoration:none}
-.nos-chamados,.nos-hist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
-.nos-chamados li{display:grid;grid-template-columns:60px 1fr auto 90px;gap:12px;align-items:center;background:var(--sup2);border-radius:8px;padding:10px 12px}
-.nos-chamados a{color:#5aa2ff;text-decoration:none;font-weight:600}.nos-chamados time,.nos-hist time{color:var(--mudo);font-size:12.5px;text-align:right}
-.nos-chamados.mini li{grid-template-columns:auto 1fr;gap:4px 10px}.nos-chamados.mini .nos-pill{justify-self:start}.nos-chamados.mini time{text-align:left;grid-column:2}
-.nos-hist li{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--borda)}.nos-hist span{flex:1}
-.nos-modal-fundo{position:fixed;inset:0;background:#000a;display:grid;place-items:center;z-index:50;padding:16px}
-.nos-modal{background:var(--sup);border:1px solid var(--borda);border-radius:14px;padding:22px;width:100%;max-width:420px;display:flex;flex-direction:column;gap:14px}
-.nos-modal-head{display:flex;justify-content:space-between;align-items:center}
-.nos-modal label{display:flex;flex-direction:column;gap:6px;color:var(--mudo);flex:1}
-.nos-modal input,.nos-modal select{background:var(--sup2);border:1px solid var(--borda);border-radius:8px;height:40px;padding:0 12px;color:var(--txt)}
-.nos-modal form{display:flex;flex-direction:column;gap:14px}
-.nos-modal textarea{background:var(--sup2);border:1px solid var(--borda);border-radius:8px;padding:10px 12px;color:var(--txt);resize:vertical;min-height:72px}
-.nos-erro{color:#f87171;font-size:12.5px}
-.nos-linha{display:flex;gap:12px}.nos-modal-acoes{display:flex;justify-content:flex-end;gap:10px;margin-top:6px}
-@media(max-width:1280px){.nos-detalhe-wrap{grid-template-columns:270px minmax(0,1fr)}.nos-col-dir{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr}}
-@media(max-width:1000px){.nos-grade-wrap{grid-template-columns:1fr}}
-@media(max-width:760px){.nos-detalhe-wrap{grid-template-columns:1fr}.nos-lista{max-height:none;flex-direction:row;overflow-x:auto}.nos-lista .nos-card{min-width:260px}.nos-col-dir{grid-template-columns:1fr}.nos-titulo{flex-wrap:wrap}.nos-titulo .nos-btn{margin-left:0}.nos-det-head{flex-wrap:wrap}}
-@media(prefers-reduced-motion:reduce){.nos *{transition:none!important}}
+.ambientes *{box-sizing:border-box}.ambientes h1,.ambientes h2,.ambientes h3,.ambientes h4,.ambientes p{margin:0}
+.ambientes button,.ambientes input,.ambientes select{font:inherit;color:inherit}
+.ambientes button{cursor:pointer}
+.ambientes :focus-visible{outline:2px solid var(--azul);outline-offset:2px}
+.ambientes-icon{background:none;border:0;padding:6px;border-radius:8px;display:grid;place-items:center;color:var(--txt)}.ambientes-icon:hover{background:var(--sup2)}
+.ambientes-busca{display:flex;align-items:center;gap:10px;background:var(--panel-soft);border:1px solid var(--border); border-color:var(--border); border-radius:10px;padding:0 14px;height:44px;flex:1;min-width:180px;color:var(--mudo); gap:10px;}
+.ambientes-busca input{background:transparent;border:none;outline:0;flex:1;min-width:0;color:var(--text)}
+.ambientes-busca:focus-within{border-color:rgba(96, 165, 250, 0.5);box-shadow:0 0 0 2px rgba(96, 165, 250, 0.5)}
+.page-ambientes{padding:26px 26px 40px}
+.ambientes-titulo{display:flex;align-items:center;gap:16px;margin-bottom:22px}
+.ambientes-titulo h1{font-size:28px}.ambientes-titulo p{color:var(--mudo);margin-top:4px}.ambientes-titulo .ambientes-btn{margin-left:auto}
+.ambientes-btn{display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+  position: static;}
+  ambientes-btn:active{transform: translateY(-10px);box-shadow: 0 6px 16px rgba(37, 99, 235, 0.18)}
+.ambientes-btn:hover{background: #1d4fc4;}.ambientes-btn:disabled{opacity: 0.6; cursor: not-allowed;}
+.ambientes-btn-sec{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid var(--border);border-radius:8px;padding:0 16px;height:38px}
+.ambientes-btn-sec:hover{background:var(--sup2)}
+.ambientes-painel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px; box-shadow:var(--shadow-card);margin-bottom:20px}
+.ambientes-filtros{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.ambientes-select {position: relative; display: flex; flex-direction: column; gap: 2px; min-width: 130px;
+}
+.ambientes-select__label,
+.ambientes-select small {font-size: 0.85rem;color: var(--mudo);padding-left: 2px;}
+/* select nativo */
+.ambientes-select select {background: var(--sup2); border: 1px solid var(--border); border-radius: 8px; height: 36px; padding: 0 10px;}
+/* select customizado */
+.ambientes-select__trigger {width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--panel-input-border);
+  border-radius: 14px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(148, 163, 184, 0.02)
+  );
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.ambientes-select__trigger.is-open {
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.18);
+}
+
+.ambientes-select__caret {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.ambientes-select__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+  z-index: 5;
+  overflow: hidden;
+  padding: 8px;
+}
+.ambientes-select__option {
+  display: block;
+  width: calc(100% - 8px);
+  margin: 2px 4px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  padding: 10px 12px;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 10px;
+  border-color: var(--accent)
+  transition:
+    background 0.12s ease,
+    color 0.12s ease,
+    transform 0.12s ease,
+    box-shadow 0.12s ease;}
+.ambientes-select__option:hover {background: var(--surface-3); color: var(--text);box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.12);}
+.ambientes-select__option.is-selected {background: transparent; color: var(--text); box-shadow: none;}
+.ambientes-select__option.is-selected:hover {background: var(--surface-3); color: var(--text); box-shadow: none;}
+.ambientes-toggle{display:flex;gap:6px;margin-left:auto}
+.ambientes-toggle button{background:var(--surface-1);border:1px solid var(--border);border-radius:8px;width:40px;height:40px;display:grid;place-items:center;color:var(--mudo)}
+.ambientes-toggle .on{background:var(--azul);border-color:var(--azul);color:#fff}
+.ambientes-grade-wrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+.ambientes-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;margin-top:16px}
+.ambientes-card{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px;cursor:pointer;transition:border-color .15s}
+.ambientes-card:hover{border-color:var(--accent)}.ambientes-card.ativo{border-color:var(--azul);box-shadow:0 0 0 1px var(--azul)}
+.ambientes-card-topo{display:flex;gap:12px;align-items:flex-start}.ambientes-card-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.ambientes-card h3{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ambientes-mais{color:var(--mudo);flex:none}
+.ambientes-tags{display:flex;gap:8px;flex-wrap:wrap}
+.ambientes-local{display:flex;align-items:center;gap:5px;color:var(--mudo);font-size:12.5px}
+.ambientes-card-meta{display:flex;justify-content:space-between;color:var(--mudo);border-top:1px solid var(--border);padding-top:10px}
+.ambientes-card-meta span{display:flex;align-items:center;gap:6px}.ambientes-card-meta.fino{font-size:12px;border-top:0;padding-top:0}
+.ambientes-card.compacto{padding:12px;gap:8px}.ambientes-card.compacto .ambientes-card-meta{border:0;padding:0}
+.ambientes-thumb{border-radius:8px;display:grid;place-items:center;flex:none;border:1px solid var(--border)}
+.ambientes-tag,.ambientes-pill{display:inline-block;padding:2px 10px;border-radius:6px;font-size:12px;font-weight:600;border:1px solid transparent;white-space:nowrap}
+.ambientes-pill.ok{background:#0f3d2a;color:#4ade80;border-color:#166a45}.ambientes-pill.err{background:#4a1519;color:#f87171;border-color:#7f1d24}
+.ambientes-pill.warn{background:#4a3308;color:#fbbf24;border-color:#7a5510}.ambientes-pill.err-sol{background:#dc2626;color:#fff}
+.ambientes-resumo h3{display:flex;align-items:center;gap:8px;font-size:15px;margin-bottom:14px}.ambientes-resumo h3:not(:first-child){margin-top:22px}
+.ambientes-kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ambientes-kpi{background: linear-gradient(135deg,rgba(37, 99, 235, 0.09),rgba(37, 99, 235, 0.02));border: 1px solid var(--border);border-color: rgba(37, 99, 235, 0.35); border-radius:var(--radius-lg);padding:12px;display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:center;min-height:86px}
+.ambientes-kpi-ico{grid-row:span 2;width:38px;height:38px;border-radius:8px;display:grid;place-items:center}.ambientes-kpi b{font-size:22px}.ambientes-kpi small{color:var(--mudo);grid-column:1/-1;font-size:12px}
+.ambientes-tipos{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.ambientes-tipos li{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}.ambientes-tipos b{margin-left:auto}
+.ambientes-chip-ico{width:30px;height:30px;border-radius:8px;display:inline-grid;place-items:center;background:#0b2a5c;color:#5aa2ff;flex:none}
+.ambientes-dica{margin-top:20px;background: linear-gradient(135deg,rgba(37, 99, 235, 0.09),rgba(37, 99, 235, 0.02));border: 1px solid var(--border);border-color: rgba(37, 99, 235, 0.35);border-radius:var(--radius-lg);padding:14px}
+.ambientes-dica h3{display:flex;gap:8px;align-items:center;color:#5aa2ff;margin-bottom:8px}.ambientes-dica p{color:var(--mudo);font-size:14px;line-height:1.5}
+.ambientes-vazio{color:var(--mudo);padding:24px;text-align:center}
+.ambientes-detalhe-wrap{display:grid;grid-template-columns:290px minmax(0,1fr) 300px;gap:16px;margin-top:16px;align-items:start}
+.ambientes-lista{display:flex;flex-direction:column;gap:10px;max-height:calc(100vh - 210px);overflow:auto;padding:2px}
+.ambientes-det-head{display:flex;gap:18px;align-items:flex-start}.ambientes-det-info{flex:1;display:flex;flex-direction:column;gap:8px}.ambientes-det-info h2{font-size:24px}
+.ambientes-desc{color:var(--txt)}
+.ambientes-abas{display:flex;gap:6px;border-bottom:1px solid var(--border);margin:18px 0 16px}
+.ambientes-abas button{display:flex;align-items:center;gap:8px;background:none;border:0;border-bottom:2px solid transparent;padding:10px 16px;color:var(--mudo);margin-bottom:-1px}
+.ambientes-abas .on{color:#5aa2ff;border-color:var(--azul)}
+.ambientes-comp-filtros{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px}
+.ambientes-comp-filtros .ambientes-busca{height:38px;flex:1}.ambientes-comp-filtros .ambientes-btn{height:38px;padding:0 14px;font-size:13px}
+.ambientes-tabela-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:10px}
+.ambientes-tabela{width:100%;border-collapse:collapse;min-width:640px}
+.ambientes-tabela th{text-align:left;font-weight:600;padding:12px 14px;border-bottom:1px solid var(--border);font-size:13px}
+.ambientes-tabela td{padding:10px 14px;border-bottom:1px solid #0f2547;font-size:13px}.ambientes-tabela tr:last-child td{border-bottom:0}
+.ambientes-tabela tbody tr:hover{background:#0c1d3a}.ambientes-mudo{color:var(--mudo)}
+.ambientes-comp-nome{display:flex;align-items:center;gap:10px}
+.ambientes-rodape-tabela{color:var(--mudo);font-size:12.5px;margin-top:10px}
+.ambientes-visao{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.ambientes-info{display:flex;flex-direction:column;gap:4px;padding:10px 0}.ambientes-info small{color:var(--mudo)}.ambientes-info span{line-height:1.4}
+.ambientes-col-dir{display:flex;flex-direction:column;gap:16px}
+.ambientes-col-dir h3{display:flex;align-items:center;gap:8px;font-size:15px;margin-bottom:8px}.ambientes-col-dir h3 a{margin-left:auto;font-size:12px;color:#5aa2ff;text-decoration:none}
+.ambientes-chamados,.ambientes-hist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.ambientes-chamados li{display:grid;grid-template-columns:60px 1fr auto 90px;gap:12px;align-items:center;background:var(--sup2);border-radius:8px;padding:10px 12px}
+.ambientes-chamados a{color:#5aa2ff;text-decoration:none;font-weight:600}.ambientes-chamados time,.ambientes-hist time{color:var(--mudo);font-size:12.5px;text-align:right}
+.ambientes-chamados.mini li{grid-template-columns:auto 1fr;gap:4px 10px}.ambientes-chamados.mini .ambientes-pill{justify-self:start}.ambientes-chamados.mini time{text-align:left;grid-column:2}
+.ambientes-hist li{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}.ambientes-hist span{flex:1}
+.ambientes-modal-fundo{position:fixed;inset:0;background:#000a;display:grid;place-items:center;z-index:50;padding:16px}
+.ambientes-modal{background:var(--sup);border:1px solid var(--border);border-radius:14px;padding:22px;width:100%;max-width:420px;display:flex;flex-direction:column;gap:14px}
+.ambientes-modal-head{display:flex;justify-content:space-between;align-items:center}
+.ambientes-modal label{display:flex;flex-direction:column;gap:6px;color:var(--mudo);flex:1}
+.ambientes-modal input,.ambientes-modal select{background:var(--sup2);border:1px solid var(--border);border-radius:8px;height:40px;padding:0 12px;color:var(--txt)}
+.ambientes-modal form{display:flex;flex-direction:column;gap:14px}
+.ambientes-modal textarea{background:var(--sup2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--txt);resize:vertical;min-height:72px}
+.ambientes-erro{color:#f87171;font-size:12.5px}
+.ambientes-linha{display:flex;gap:12px}.ambientes-modal-acoes{display:flex;justify-content:flex-end;gap:10px;margin-top:6px}
+@media(max-width:1280px){.ambientes-detalhe-wrap{grid-template-columns:270px minmax(0,1fr)}.ambientes-col-dir{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr}}
+@media(max-width:1000px){.ambientes-grade-wrap{grid-template-columns:1fr}}
+@media(max-width:760px){.ambientes-detalhe-wrap{grid-template-columns:1fr}.ambientes-lista{max-height:none;flex-direction:row;overflow-x:auto}.ambientes-lista .ambientes-card{min-width:260px}.ambientes-col-dir{grid-template-columns:1fr}.ambientes-titulo{flex-wrap:wrap}.ambientes-titulo .ambientes-btn{margin-left:0}.ambientes-det-head{flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){.ambientes *{transition:none!important}}
 `;
