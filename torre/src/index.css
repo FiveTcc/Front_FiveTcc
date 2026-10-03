@@ -655,8 +655,8 @@ textarea {
 }
 
 .topbar__search:focus-within {
-  border-color: rgba(96, 165, 250, 0.9);
-  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.45);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--azul);
 }
 .topbar__icon {
   font-size: 1.1rem;
