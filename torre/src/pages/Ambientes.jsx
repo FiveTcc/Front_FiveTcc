@@ -960,9 +960,9 @@ function Modal({ titulo, onClose, children }) {
       >
         <div className="ambientes-modal-head">
           <h2>{titulo}</h2>
-          <button className="ambientes-icon" onClick={onClose} aria-label="Fechar">
+          {/* <button className="ambientes-icon" onClick={onClose} aria-label="Fechar">
             <X size={18} />
-          </button>
+          </button> */}
         </div>
         {children}
       </div>
@@ -1138,7 +1138,8 @@ min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",sys
   gap: 6px;
   border: 1px solid transparent;
   border-radius: 12px;
-  padding: 10px 18px;
+  padding: 14px 18px;
+  min-height: 48px;
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
@@ -1150,8 +1151,6 @@ min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",sys
   text-decoration: none;
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
   position: static;
-
-  /* cores do .btn--primary */
   background: var(--accent);
   color: #ffffff;
 }
@@ -1172,7 +1171,7 @@ min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",sys
   gap: 8px;
   border-radius: 8px;
   padding: 0 16px;
-  height: 38px;
+  height: 48px;
   cursor: pointer;
   transition:
     background 0.15s ease,
@@ -1184,8 +1183,7 @@ min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",sys
   color: var(--text);
 }
 .ambientes-btn-sec:hover {
-  border-color: var(--accent);
-  background: rgba(37, 99, 235, 0.04);
+  background: #c81d1dc9;
 }
 .ambientes-btn-sec:disabled {
   opacity: 0.6;
@@ -1209,7 +1207,7 @@ min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",sys
 .ambientes-toggle .on{background:var(--azul);border-color:var(--azul);color:#fff}
 .ambientes-grade-wrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
 .ambientes-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;margin-top:16px}
-.ambientes-card{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px;cursor:pointer;transition:border-color .15s}
+.ambientes-card{background:var(--panel);border:1px solid var(--border);border-radius:12px; box-shadow:var(--shadow-card); padding:16px;display:flex;flex-direction:column;gap:12px;cursor:pointer;transition:border-color .15s}
 .ambientes-card:hover{border-color:var(--accent)}.ambientes-card.ativo{border-color:var(--azul);box-shadow:0 0 0 1px var(--azul)}
 .ambientes-card-topo{display:flex;gap:12px;align-items:flex-start}.ambientes-card-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
 .ambientes-card h3{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ambientes-mais{color:var(--mudo);flex:none}
@@ -1242,10 +1240,57 @@ min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",sys
 .ambientes-comp-filtros{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px}
 .ambientes-comp-filtros .ambientes-busca{height:38px;flex:1}.ambientes-comp-filtros .ambientes-btn{height:38px;padding:0 14px;font-size:13px}
 .ambientes-tabela-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:10px}
-.ambientes-tabela{width:100%;border-collapse:collapse;min-width:640px}
-.ambientes-tabela th{text-align:left;font-weight:600;padding:12px 14px;border-bottom:1px solid var(--border);font-size:13px}
-.ambientes-tabela td{padding:10px 14px;border-bottom:1px solid #0f2547;font-size:13px}.ambientes-tabela tr:last-child td{border-bottom:0}
-.ambientes-tabela tbody tr:hover{background:#0c1d3a}.ambientes-mudo{color:var(--mudo)}
+.ambientes-tabela {
+  --tb-border: #e2e8f0;
+  --tb-hover: #e8ecf0;
+  --tb-text: #0a0a0a;
+  --tb-muted: #64748b;
+  --tb-icon-bg: #dbeafe;
+  --tb-icon-color: #2563eb;
+
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+  color: var(--tb-text);
+}
+
+.dark .ambientes-tabela,
+[data-theme="dark"] .ambientes-tabela {
+  --tb-border: #1e293b;
+  --tb-hover: #15294d;
+  --tb-text: #e2e8f0;
+  --tb-muted: #94a3b8;
+  --tb-icon-bg: #1e3a8a;
+  --tb-icon-color: #60a5fa;
+}
+
+.ambientes-tabela th {
+  color: var(--tb-text);
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--tb-border);
+}
+
+.ambientes-tabela td {
+  color: var(--tb-text);
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--tb-border);
+}
+
+.ambientes-tabela tbody tr:hover {
+  background: var(--tb-hover);
+}
+
+.ambientes-tabela tbody tr:hover td {
+  color: var(--tb-text);
+}
+
+/* Ícone do componente */
+.ambientes-tabela .ambientes-icone {
+  background: var(--tb-icon-bg);
+  color: var(--tb-icon-color);
+  border-radius: 8px;
+}
 .ambientes-comp-nome{display:flex;align-items:center;gap:10px}
 .ambientes-rodape-tabela{color:var(--mudo);font-size:12.5px;margin-top:10px}
 .ambientes-visao{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
@@ -1258,12 +1303,149 @@ min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",sys
 .ambientes-chamados.mini li{grid-template-columns:auto 1fr;gap:4px 10px}.ambientes-chamados.mini .ambientes-pill{justify-self:start}.ambientes-chamados.mini time{text-align:left;grid-column:2}
 .ambientes-hist li{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}.ambientes-hist span{flex:1}
 .ambientes-modal-fundo{position:fixed;inset:0;background:#000a;display:grid;place-items:center;z-index:50;padding:16px}
-.ambientes-modal{background:var(--sup, #ffffff);border:1px solid var(--border, #e2e8f0);border-radius:14px;padding:22px;width:100%;max-width:420px;display:flex;flex-direction:column;gap:14px; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);}
-.ambientes-modal-head{display:flex;justify-content:space-between;align-items:center}
-.ambientes-modal label{display:flex;flex-direction:column;gap:6px;color:var(--mudo);flex:1}
-.ambientes-modal input,.ambientes-modal select{background:var(--sup2);border:1px solid var(--border);border-radius:8px;height:40px;padding:0 12px;color:var(--txt)}
-.ambientes-modal form{display:flex;flex-direction:column;gap:14px}
-.ambientes-modal textarea{background:var(--sup2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--txt);resize:vertical;min-height:72px}
+.ambientes-modal {
+  --modal-bg: #ffffff;
+  --modal-bg-2: #f8fafc;
+  --modal-border: #e2e8f0;
+  --modal-text: #0f172a;
+  --modal-muted: #64748b;
+  --modal-accent: #2563eb;
+  --modal-accent-text: #ffffff;
+  color-scheme: light;
+
+  background: var(--modal-bg);
+  color: var(--modal-text);
+  border: 1px solid var(--modal-border);
+  border-radius: 14px;
+  padding: 22px;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+}
+
+/* Tema escuro: deixe só o seletor que o seu app usa */
+.dark .ambientes-modal,
+[data-theme="dark"] .ambientes-modal {
+  --modal-bg: #0f172a;
+  --modal-bg-2: #1e293b;
+  --modal-border: #334155;
+  --modal-text: #e2e8f0;
+  --modal-muted: #94a3b8;
+  --modal-accent: #3b82f6;
+  --modal-accent-text: #ffffff;
+  color-scheme: dark;
+}
+
+.ambientes-modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ambientes-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ambientes-modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--modal-muted);
+  flex: 1;
+}
+
+.ambientes-modal input,
+.ambientes-modal select,
+.ambientes-modal textarea {
+  background: var(--modal-bg-2);
+  border: 1px solid var(--modal-border);
+  border-radius: 8px;
+  color: var(--modal-text);
+}
+
+.ambientes-modal input,
+.ambientes-modal select {
+  height: 40px;
+  padding: 0 12px;
+}
+
+.ambientes-modal textarea {
+  padding: 10px 12px;
+  resize: vertical;
+  min-height: 72px;
+}
+
+.ambientes-modal input::placeholder,
+.ambientes-modal textarea::placeholder {
+  color: var(--modal-muted);
+  opacity: 0.7;
+}
+
+.ambientes-modal input:focus,
+.ambientes-modal select:focus,
+.ambientes-modal textarea:focus {
+  outline: none;
+  border-color: var(--modal-accent);
+}
+
+/* Botões */
+.ambientes-modal button {
+  background: transparent;
+  color: var(--modal-text);
+  border: 1px solid var(--modal-border);
+  border-radius: 8px;
+  height: 48px;
+  padding: 0 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ambientes-modal button:hover {
+  background: var(--modal-bg-2);
+}
+
+.ambientes-modal button[type="submit"] {
+  background: var(--modal-accent);
+  color: var(--modal-accent-text);
+  border-color: var(--modal-accent);
+}
+
+.ambientes-modal button[type="submit"]:hover {
+  filter: brightness(1.1);
+  background: var(--modal-accent);
+}
+
+.ambientes-modal .ambientes-btn-sec {
+  background: #dc2626;
+  border: 1px solid #dc2626;
+  color: #ffffff;
+}
+
+.ambientes-modal .ambientes-btn-sec:hover {
+  background: #b91c1ca9;
+  border: 1px solid #b91c1ca9;
+  color: #ffffff;
+}
+
+.ambientes-modal .ambientes-btn-sec:focus-visible {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+}
+
+/* Botão de fechar (X) */
+.ambientes-modal-head button {
+  background: transparent;
+  border: none;
+  color: var(--modal-muted);
+  height: auto;
+  padding: 4px 8px;
+  font-size: 20px;
+}
 .ambientes-erro{color:#f87171;font-size:12.5px}
 .ambientes-linha{display:flex;gap:12px}.ambientes-modal-acoes{display:flex;justify-content:flex-end;gap:10px;margin-top:6px}
 @media(max-width:1280px){.ambientes-detalhe-wrap{grid-template-columns:270px minmax(0,1fr)}.ambientes-col-dir{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr}}

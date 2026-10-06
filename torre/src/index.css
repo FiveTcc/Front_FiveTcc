@@ -23,7 +23,7 @@
   --blue: #2563eb;
   --green: #16a870;
   --amber: #b9860b;
-  --red: #e0325a;
+  --red: #d42424;
 
   --font-display: "Space Grotesk", "Inter", sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
@@ -350,6 +350,13 @@ textarea {
 }
 .btn--primary:hover {
   background: #1d4fc4;
+}
+.btn--cancelar{
+  background: var(--red);
+  color: #ffffff;
+}
+.btn--cancelar:hover {
+  background: #b91c1ca9;
 }
 .btn--ghost {
   background: transparent;
@@ -1466,6 +1473,7 @@ textarea {
 }
 
 .card__atividade {
+  background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 18px;

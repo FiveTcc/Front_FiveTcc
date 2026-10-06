@@ -203,7 +203,7 @@ export default function NovoChamado() {
         <div className="form__actions">
           <button
             type="button"
-            className="btn btn--ghost"
+            className="btn btn--cancelar"
             onClick={() => navigate(-1)}
           >
             Cancelar
