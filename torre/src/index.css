@@ -1092,6 +1092,7 @@ textarea {
 }
 .page--ambientes{
   gap: 18px;
+  padding-top:0;
 }
 .page--reports {
   gap: 18px;

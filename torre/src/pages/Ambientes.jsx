@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Search,
   Plus,
@@ -246,7 +246,7 @@ export default function Ambientes() {
 
   const chamadosDe = (id) => CHAMADOS.filter((c) => c.env === id);
   const qtdDe = (a) => a.comps + (extras[a.id]?.length ?? 0);
-  const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
+  const set = (k) => (v) => setF((cur) => ({ ...cur, [k]: v }));
 
   const filtrados = useMemo(() => {
     const q = f.q.trim().toLowerCase();
@@ -583,15 +583,16 @@ export default function Ambientes() {
                             placeholder="Buscar componentes..."
                             value={cf.q}
                             onChange={(e) =>
-                              setCf({ ...cf, q: e.target.value })
+                              setCf((cur) => ({ ...cur, q: e.target.value }))
                             }
                           />
                         </label>
+
                         <Select
                           label="Tipo"
                           value={cf.tipo}
-                          onChange={(e) =>
-                            setCf({ ...cf, tipo: e.target.value })
+                          onChange={(v) =>
+                            setCf((cur) => ({ ...cur, tipo: v }))
                           }
                           opts={[...new Set(comps.map((c) => c.tipo))].map(
                             (t) => [t, t],
@@ -600,15 +601,12 @@ export default function Ambientes() {
                         <Select
                           label="Status"
                           value={cf.status}
-                          onChange={(e) =>
-                            setCf({ ...cf, status: e.target.value })
+                          onChange={(v) =>
+                            setCf((cur) => ({ ...cur, status: v }))
                           }
-                          opts={[
-                            "Funcionando",
-                            "Com problema",
-                            "Em manutenção",
-                          ].map((s) => [s, s])}
+                          opts={STATUS_COMP.map((s) => [s, s])}
                         />
+
                         <button
                           className="ambientes-btn"
                           onClick={() =>
@@ -802,19 +800,64 @@ export default function Ambientes() {
 
 /* ---------- Peças menores ---------- */
 
-function Select({ label, value, onChange, opts }) {
+function Select({ label, value, onChange, opts, allLabel = "Todos" }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const options = [["", allLabel], ...opts];
+  const atual = options.find(([v]) => v === value) ?? options[0];
   return (
-    <label className="ambientes-select">
+    <div className="ambientes-select" ref={ref}>
       <small>{label}</small>
-      <select value={value} onChange={onChange}>
-        <option value="">Todos</option>
-        {opts.map(([v, l]) => (
-          <option key={v} value={v}>
-            {l}
-          </option>
-        ))}
-      </select>
-    </label>
+
+      <button
+        type="button"
+        className={`ambientes-select__trigger ${open ? "is-open" : ""}`}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+      >
+        <span>{atual[1]}</span>
+        <span className="ambientes-select__caret">▾</span>
+      </button>
+
+      {open && (
+        <div
+          className="ambientes-select__menu"
+          role="listbox"
+          aria-label={label}
+        >
+          {options.map(([v, l]) => (
+            <button
+              key={v}
+              type="button"
+              role="option"
+              aria-selected={v === value}
+              className={`ambientes-select__option ${v === value ? "is-selected" : ""}`}
+              onClick={() => {
+                onChange(v);
+                setOpen(false);
+              }}
+            >
+              {l}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -1128,8 +1171,8 @@ min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",sys
 .ambientes-busca{display:flex;align-items:center;gap:10px;background:var(--panel-soft);border:1px solid var(--border); border-color:var(--border); border-radius:10px;padding:0 14px;height:42px;flex:1;min-width:180px;color:var(--mudo); gap:10px; box-sizing: border-box;}
 .ambientes-busca input{background:transparent;border:none;outline:0;flex:1;min-width:0;color:var(--text)}
 .ambientes-busca:focus-within{border-color:var(--accent);box-shadow:0 0 0 2px var(--azul)}
-.page-ambientes{padding:26px 26px 40px}
-.ambientes-titulo{display:flex;align-items:center;gap:16px;margin-bottom:22px}
+.page-ambientes{padding:0 26px 40px}
+.ambientes-titulo{display:flex;align-items:center;gap:16px;margin-bottom:12px}
 .ambientes-titulo h1{font-size:28px}.ambientes-titulo p{color:var(--mudo);margin-top:4px}.ambientes-titulo .ambientes-btn{margin-left:auto}
 .ambientes-btn {
   display: inline-flex;
