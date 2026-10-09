@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { db } from "../services/storage";
+
+import dashboardService from "../services/dashboardService";
+
 import { STATUS_LABEL, tempoRelativo } from "../services/utils";
 import StatusBeacon from "../components/StatusBeacon";
 import PriorityBadge from "../components/PriorityBadge";
@@ -66,7 +68,29 @@ export default function Dashboard() {
   const { usuario } = useAuth();
   const [busca, setBusca] = useState("");
   const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
-  const chamados = useMemo(() => db.listarChamados(), []);
+
+  const [chamados, setChamados] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState("");
+
+  const [dadosDashboard, setDadosDashboard] = useState(null);
+  const [carregandoDashboard, setCarregandoDashboard] = useState(true);
+
+  useEffect(() => {
+    async function carregar() {
+      try {
+        const dados = await dashboardService.buscarDashboard();
+        setDadosDashboard(dados);
+      } catch (error) {
+        console.error("Erro ao carregar dashboard:", error);
+      } finally {
+        setCarregandoDashboard(false);
+      }
+    }
+
+    carregar();
+  }, []);
+
 
   const notificacoes = useMemo(
     () => [
@@ -194,36 +218,37 @@ export default function Dashboard() {
       <section className="stat-grid">
         <div className="stat-card">
           <span className="stat-card__label">Em aberto</span>
-
-          <span className="stat-card__value">{abertos}</span>
-
+          <span className="stat-card__value">
+            {dadosDashboard?.ocorrenciasAbertas ?? 0}
+          </span>
           <span className="stat-card__hint">aguardando ação</span>
         </div>
 
         <div className="stat-card stat-card--alert">
           <span className="stat-card__label">Críticos ativos</span>
-
-          <span className="stat-card__value">{criticos}</span>
-
+          <span className="stat-card__value">
+            {dadosDashboard?.ocorrenciasCriticas ?? 0}
+          </span>
           <span className="stat-card__hint">prioridade máxima</span>
         </div>
 
         <div className="stat-card">
           <span className="stat-card__label">Resolvidos</span>
-
-          <span className="stat-card__value">{contagem.resolvido}</span>
-
+          <span className="stat-card__value">
+            {dadosDashboard?.ocorrenciasResolvidas ?? 0}
+          </span>
           <span className="stat-card__hint">este período</span>
         </div>
 
         <div className="stat-card">
           <span className="stat-card__label">Total no sistema</span>
-
-          <span className="stat-card__value">{chamados.length}</span>
-
+          <span className="stat-card__value">
+            {dadosDashboard?.ocorrenciasTotal ?? 0}
+          </span>
           <span className="stat-card__hint">desde o início</span>
         </div>
       </section>
+
 
       {/* Conteúdo principal */}
       <section className="grid-2">
