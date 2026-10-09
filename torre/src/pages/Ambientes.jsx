@@ -357,6 +357,36 @@ export default function Ambientes() {
     setNovoComp(null);
   };
 
+  const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
+const notificacoesRef = useRef(null);
+
+const notificacoes = useMemo(
+  () =>
+    CHAMADOS.filter((c) => c.status === "Aberto")
+      .slice(0, 5)
+      .map((c) => ({
+        id: c.id,
+        titulo: `Chamado #${c.id}: ${c.titulo}`,
+        tempo: c.data,
+      })),
+  [],
+);
+
+useEffect(() => {
+  if (!mostrarNotificacoes) return;
+  const onDown = (e) => {
+    if (notificacoesRef.current && !notificacoesRef.current.contains(e.target))
+      setMostrarNotificacoes(false);
+  };
+  const onKey = (e) => e.key === "Escape" && setMostrarNotificacoes(false);
+  document.addEventListener("mousedown", onDown);
+  document.addEventListener("keydown", onKey);
+  return () => {
+    document.removeEventListener("mousedown", onDown);
+    document.removeEventListener("keydown", onKey);
+  };
+}, [mostrarNotificacoes]);
+
   const Filtros = (
     <div className="ambientes-filtros">
       <label className="ambientes-busca">
@@ -403,8 +433,8 @@ export default function Ambientes() {
 
       <div className="page-ambientes">
         <div className="ambientes-titulo">
-          <Building2 size={40} color="#3b82f6" />
-          <div>
+          {/* <Building2 size={40} color="#3b82f6" /> */}
+          <div className="ambientes-titulo-texto">
             <h1>Ambientes</h1>
             <p>
               {modo === "grade"
@@ -412,20 +442,66 @@ export default function Ambientes() {
                 : "Gerencie os ambientes cadastrados no sistema e visualize seus componentes."}
             </p>
           </div>
-          <button
-            className="ambientes-btn"
-            onClick={() =>
-              setNovo({
-                nome: "",
-                tipo: "Sala",
-                bloco: "Bloco A",
-                andar: "0",
-                desc: "",
-              })
-            }
-          >
-            <Plus size={18} /> Novo Ambiente
-          </button>
+
+          <div className="ambientes-titulo-acoes">
+            <div className="topbar__notifications-wrap" ref={notificacoesRef}>
+              <button
+                type="button"
+                className="topbar__icon-button"
+                aria-label={
+                  mostrarNotificacoes
+                    ? "Fechar notificações"
+                    : "Abrir notificações"
+                }
+                aria-expanded={mostrarNotificacoes}
+                onClick={() => setMostrarNotificacoes((valor) => !valor)}
+              >
+                🕭
+              </button>
+
+              {mostrarNotificacoes && (
+                <div
+                  className="topbar__notifications"
+                  role="menu"
+                  aria-label="Notificações"
+                >
+                  <div className="topbar__notifications-header">
+                    <strong>Notificações</strong>
+                    <span>{notificacoes.length}</span>
+                  </div>
+
+                  {notificacoes.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className="topbar__notification-item"
+                      onClick={() => setMostrarNotificacoes(false)}
+                    >
+                      <span>{item.titulo}</span>
+                      <small>{item.tempo}</small>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="ambientes-btn-ico">
+            <button
+              className="ambientes-btn"
+              onClick={() =>
+                setNovo({
+                  nome: "",
+                  tipo: "Sala",
+                  bloco: "Bloco A",
+                  andar: "0",
+                  desc: "",
+                })
+              }
+            >
+                <Plus size={18} />
+              Novo Ambiente
+            </button>
+            </div>
+          </div>
         </div>
 
         {modo === "grade" ? (
@@ -1171,9 +1247,11 @@ min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",sys
 .ambientes-busca{display:flex;align-items:center;gap:10px;background:var(--panel-soft);border:1px solid var(--border); border-color:var(--border); border-radius:10px;padding:0 14px;height:42px;flex:1;min-width:180px;color:var(--mudo); gap:10px; box-sizing: border-box;}
 .ambientes-busca input{background:transparent;border:none;outline:0;flex:1;min-width:0;color:var(--text)}
 .ambientes-busca:focus-within{border-color:var(--accent);box-shadow:0 0 0 2px var(--azul)}
-.page-ambientes{padding:0 26px 40px}
+.page-ambientes{padding:1 26px 40px}
 .ambientes-titulo{display:flex;align-items:center;gap:16px;margin-bottom:12px}
 .ambientes-titulo h1{font-size:28px}.ambientes-titulo p{color:var(--mudo);margin-top:4px}.ambientes-titulo .ambientes-btn{margin-left:auto}
+.ambientes-titulo-acoes{display:flex;flex-direction:column;align-items:flex-end;gap:12px;margin-left:auto;padding-top:16px}.ambientes-titulo-acoes .topbar__notifications-wrap{position:relative}
+.ambientes-titulo-texto{display:flex;flex-direction:column;gap:4px;margin-top:-60px}.ambientes-titulo-texto h1{font-size:28px}.ambientes-titulo-texto p{color:var(--mudo);margin-top:3px}
 .ambientes-btn {
   display: inline-flex;
   align-items: center;
@@ -1207,7 +1285,9 @@ min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",sys
   opacity: 0.6;
   cursor: not-allowed;
 }
-
+.ambientes-btn-ico {
+  padding: 10px  0;
+}
 .ambientes-btn-sec {
   display: inline-flex;
   align-items: center;
@@ -1219,8 +1299,6 @@ min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",sys
   transition:
     background 0.15s ease,
     border-color 0.15s ease;
-
-  /* cores do .btn--ghost */
   background: transparent;
   border: 1px solid var(--border);
   color: var(--text);
@@ -1491,6 +1569,13 @@ min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",sys
 }
 .ambientes-erro{color:#f87171;font-size:12.5px}
 .ambientes-linha{display:flex;gap:12px}.ambientes-modal-acoes{display:flex;justify-content:flex-end;gap:10px;margin-top:6px}
+.topbar__notifications-wrap{position:relative}
+.topbar__notifications{
+  position:absolute;
+  top:calc(100% + 8px);
+  right:0;
+  z-index:20;
+}
 @media(max-width:1280px){.ambientes-detalhe-wrap{grid-template-columns:270px minmax(0,1fr)}.ambientes-col-dir{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr}}
 @media(max-width:1000px){.ambientes-grade-wrap{grid-template-columns:1fr}}
 @media(max-width:760px){.ambientes-detalhe-wrap{grid-template-columns:1fr}.ambientes-lista{max-height:none;flex-direction:row;overflow-x:auto}.ambientes-lista .ambientes-card{min-width:260px}.ambientes-col-dir{grid-template-columns:1fr}.ambientes-titulo{flex-wrap:wrap}.ambientes-titulo .ambientes-btn{margin-left:0}.ambientes-det-head{flex-wrap:wrap}}

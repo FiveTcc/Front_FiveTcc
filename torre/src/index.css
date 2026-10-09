@@ -1091,11 +1091,11 @@ textarea {
   margin-top: 1px;
 }
 .page--ambientes{
-  gap: 18px;
-  padding-top:0;
+  gap: 20px;
+  padding-top:0px;
 }
 .page--reports {
-  gap: 18px;
+  gap: 20px;
 }
 .page--narrow {
   width: min(100%, 1180px);
@@ -1716,32 +1716,32 @@ textarea {
 
 .filters {
   display: flex;
-  align-items: center;      /* centraliza legenda e filtros na mesma linha */
+  align-items: center;      
   gap: 10px;
-  flex-wrap: wrap;          /* quebra em telas estreitas */
+  flex-wrap: wrap;          
   margin: 0 0 20px;
   padding: 0;
 }
 
 .status-legend-container {
-  margin-right: auto;       /* empurra os filtros para a direita */
-  position:relative;         /* centraliza legenda e filtros na mesma linha */
+  margin-right: auto;       
+  position:relative;        
 }
 
 .status-legend {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px 20px;
-  margin: 0;
-  padding: 0;               /* remove o padding-left padrão do <ul> */
+  gap: 7px 15px;
+  margin: -2px 0 0 0px;
+  padding: 0;              
   list-style: none;
 }
 
 .status-legend__item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
 }
 
 /* Mesma altura para selects e botão */
