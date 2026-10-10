@@ -133,8 +133,8 @@ textarea {
 .login__field input:focus-visible,
 .login__field:focus-within {
   outline: none;
+  box-shadow: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-dim);
 }
 
 .loading-screen {
