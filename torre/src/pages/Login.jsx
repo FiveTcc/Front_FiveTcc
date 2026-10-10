@@ -32,6 +32,8 @@ export default function Login() {
     }
   });
 
+  const [focused, setFocused] = useState(false);
+
   useEffect(() => {
     try {
       document.documentElement.setAttribute("data-theme", theme);
@@ -165,6 +167,8 @@ export default function Login() {
                 type="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
+                onFocus={() => setEmailFocused(true)}
+                onBlur={() => setEmailFocused(true)}
                 placeholder="Email corporativo"
                 required
               />
@@ -181,6 +185,8 @@ export default function Login() {
                 type={mostrarSenha ? "text" : "password"}
                 value={senha}
                 onChange={(event) => setSenha(event.target.value)}
+                onFocus={() => setSenhaFocused(true)}
+                onBlur={() => setSenhaFocused(true)}
                 placeholder="Senha"
                 required
               />
