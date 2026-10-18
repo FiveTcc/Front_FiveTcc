@@ -57,19 +57,7 @@ export default function Perfil() {
   }
 }
 
-   const notificacoes = useMemo(
-    () => [
-      {
-        id: 1,
-        titulo: "2 chamados críticos aguardam atenção",
-        tempo: "há 10 min",
-      },
-      { id: 2, titulo: "Novo chamado de rede foi aberto", tempo: "há 25 min" },
-      { id: 3, titulo: "Chamado #CH-2025-0002 foi atualizado", tempo: "há 1h" },
-      { id: 4, titulo: "Relatório de manutenção está pronto", tempo: "há 2h" },
-    ],
-    [],
-  );
+  const notificacoes = [];
 
  useEffect(() => {
   try {

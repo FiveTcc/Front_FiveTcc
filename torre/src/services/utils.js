@@ -1,9 +1,8 @@
 export const STATUS_LABEL = {
   aberto: 'Aberto',
   em_andamento: 'Em andamento',
-  aguardando: 'Aguardando',
-  resolvido: 'Resolvido',
-  fechado: 'Fechado',
+  concluida: 'Concluída',
+  cancelada: 'Cancelada',
 }
 
 export const PRIORIDADE_LABEL = {

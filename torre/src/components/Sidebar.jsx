@@ -105,6 +105,7 @@ function getNavLinkClassName({ isActive }) {
 
 export default function Sidebar() {
   const { usuario, logout } = useAuth();
+  const [menuAberto, setMenuAberto] = useState(false);
   const [nome, setNome] = useState("");
   const [cargo, setCargo] = useState("");
   const [FotoPerfil, setFotoPerfil] = useState("");
@@ -148,7 +149,20 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className="sidebar">
+    <>
+      <button
+        type="button"
+        className={`sidebar-toggle${menuAberto ? " is-open" : ""}`}
+        onClick={() => setMenuAberto((aberto) => !aberto)}
+        aria-label={menuAberto ? "Esconder menu" : "Mostrar menu"}
+        aria-expanded={menuAberto}
+      >
+        <span />
+        <span />
+        <span />
+      </button>
+
+    <aside className={`sidebar${menuAberto ? " sidebar--open" : ""}`}>
       <div className="sidebar__brand">
         <img src={logoNOS} alt="Logo N.O.S." className="sidebar__brand-logo" />
         <div>
@@ -165,7 +179,7 @@ export default function Sidebar() {
 
         <NavLink to="/chamados" className={getNavLinkClassName}>
           {ICONS.chamados}
-          Chamados
+          Ocorrências
         </NavLink>
 
         <NavLink to="/ambientes" className={getNavLinkClassName}>
@@ -222,5 +236,6 @@ export default function Sidebar() {
         </div>
       </div>
     </aside>
+    </>
   );
 }

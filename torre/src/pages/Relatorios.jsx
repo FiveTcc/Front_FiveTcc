@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { db } from "../services/storage";
 import {
   PRIORIDADE_LABEL,
   STATUS_LABEL,
@@ -64,31 +63,7 @@ export default function Relatorios() {
   const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
   const notificacoesRef = useRef(null);
 
-   const notificacoes = useMemo(
-    () => [
-      {
-        id: 1,
-        titulo: "2 chamados críticos aguardam atenção",
-        tempo: "há 10 min",
-      },
-      {
-        id: 2,
-        titulo: "Novo chamado de rede foi aberto",
-        tempo: "há 25 min",
-      },
-      {
-        id: 3,
-        titulo: "Chamado #CH-2025-0002 foi atualizado",
-        tempo: "há 1h",
-      },
-      {
-        id: 4,
-        titulo: "Relatório de manutenção está pronto",
-        tempo: "há 2h",
-      },
-    ],
-    []
-  );
+  const notificacoes = [];
 
   useEffect(() => {
     function handleClickFora(event) {
@@ -107,12 +82,12 @@ export default function Relatorios() {
     };
   }, []);
 
-  const chamados = useMemo(() => db.listarChamados(), []);
+  const chamados = [];
   const chamadosVisiveis = useMemo(() => {
     if (perfil !== "usuario") return chamados;
     return chamados.filter((chamado) => chamado.solicitanteId === usuario?.id);
   }, [chamados, perfil, usuario?.id]);
-  const usuarios = useMemo(() => db.listarUsuarios(), []);
+  const usuarios = [];
 
   const usuarioMap = useMemo(
     () => Object.fromEntries(usuarios.map((item) => [item.id, item])),

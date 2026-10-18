@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import { db } from '../services/storage'
 import { iniciais } from '../services/utils'
 
 const PERFIL_LABEL = { admin: 'Administrador', tecnico: 'Técnico', usuario: 'Usuário' }
@@ -16,8 +15,8 @@ const formInicial = {
 
 export default function Usuarios() {
   const { usuario: usuarioLogado, atualizarSessao } = useAuth()
-  const [usuarios, setUsuarios] = useState(() => db.listarUsuarios())
-  const [chamados] = useState(() => db.listarChamados())
+  const [usuarios] = useState([])
+  const [chamados] = useState([])
   const [form, setForm] = useState(formInicial)
   const [editId, setEditId] = useState('')
   const [editForm, setEditForm] = useState(formInicial)
@@ -38,7 +37,7 @@ export default function Usuarios() {
 
   function handleSubmit(event) {
     event.preventDefault()
-    const resultado = db.criarUsuario(form)
+    const resultado = { ok: false, erro: 'Conecte esta tela à API para criar usuários.' }
 
     if (!resultado.ok) {
       setErro(resultado.erro)
@@ -46,7 +45,6 @@ export default function Usuarios() {
       return
     }
 
-    setUsuarios(db.listarUsuarios())
     setForm(formInicial)
     setErro('')
     setSucesso(`Usuário criado com sucesso: ${resultado.usuario.nome}.`)
@@ -75,13 +73,7 @@ export default function Usuarios() {
 
   function handleEditSubmit(event) {
     event.preventDefault()
-    const resultado = db.atualizarUsuario(editId, {
-      nome: editForm.nome,
-      email: editForm.email,
-      perfil: editForm.perfil,
-      telefone: editForm.telefone,
-      cargo: editForm.cargo,
-    })
+    const resultado = { ok: false, erro: 'Conecte esta tela à API para editar usuários.' }
 
     if (!resultado.ok) {
       setErro(resultado.erro)
@@ -111,7 +103,7 @@ export default function Usuarios() {
   }
 
   function handleToggleAtivo(usuario) {
-    const resultado = db.inativarUsuario(usuario.id)
+    const resultado = { ok: false, erro: 'Conecte esta tela à API para alterar o status do usuário.' }
 
     if (!resultado.ok) {
       setErro(resultado.erro)

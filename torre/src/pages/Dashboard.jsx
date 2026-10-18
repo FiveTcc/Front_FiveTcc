@@ -3,19 +3,76 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 import dashboardService from "../services/dashboardService";
+import ocorrenciaService from "../services/ocorrenciaService";
+import userService from "../services/userServices";
 
-import { STATUS_LABEL, tempoRelativo } from "../services/utils";
 import StatusBeacon from "../components/StatusBeacon";
 import PriorityBadge from "../components/PriorityBadge";
 
 
 const CORES_STATUS = {
-  aberto: "#E8862E",
-  em_andamento: "#2563EB",
-  aguardando: "#B9860B",
-  resolvido: "#16A870",
-  fechado: "#93A2B3",
+  aberta: "#E8862E",
+  "em andamento": "#2563EB",
+  concluida: "#16A870",
+  cancelada: "#D42424",
 };
+
+const STATUS_LABELS = {
+  aberta: "Aberta",
+  "em andamento": "Em andamento",
+  concluida: "Concluída",
+  cancelada: "Cancelada",
+};
+
+function normalizarStatus(valor) {
+  return String(valor ?? "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/_/g, " ");
+}
+
+function normalizarOcorrencia(item) {
+  const ocorrencia = item?.ocorrencia || item || {};
+  const componente = item?.componente || {};
+  const ambiente = item?.ambiente || {};
+
+  return {
+    ...item,
+    id: ocorrencia.id_ocor ?? ocorrencia.id,
+    numero: ocorrencia.id_ocor ?? ocorrencia.numero,
+    titulo: ocorrencia.ocor_nome ?? ocorrencia.titulo,
+    status: normalizarStatus(ocorrencia.ocor_status ?? ocorrencia.status),
+    prioridade: ocorrencia.ocor_prioridade ?? ocorrencia.prioridade,
+    atualizadoEm: ocorrencia.atualizado_em ?? ocorrencia.atualizadoEm,
+    categoria:
+      componente.compo_nome || ambiente.amb_nome || ocorrencia.categoria || "",
+  };
+}
+
+function mostrarTempoAtualizacao(valor) {
+  if (!valor) return "—";
+
+  if (typeof valor === "string") {
+    const correspondencia = valor.match(
+      /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/,
+    );
+
+    if (correspondencia) {
+      const [, , , , hora, minuto] = correspondencia;
+      return `${hora}:${minuto}`;
+    }
+  }
+
+  const timestamp = typeof valor === "number" ? valor : new Date(valor).getTime();
+  return Number.isNaN(timestamp)
+    ? "—"
+    : new Intl.DateTimeFormat("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(timestamp);
+}
 
 function Donut({ dados, total }) {
   const raio = 54;
@@ -66,6 +123,7 @@ function Donut({ dados, total }) {
 
 export default function Dashboard() {
   const { usuario } = useAuth();
+  const [nome, setNome] = useState("");
   const [busca, setBusca] = useState("");
   const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
 
@@ -76,7 +134,24 @@ export default function Dashboard() {
   const [dadosDashboard, setDadosDashboard] = useState(null);
   const [carregandoDashboard, setCarregandoDashboard] = useState(true);
 
+
+
+
   useEffect(() => {
+
+    // Buscar nome do usuário
+    async function buscarNome() {
+      try {
+        const response = await userService.buscarperfil();
+        setNome(response.nome || response.user_nome || "");
+        
+      } catch (err) {
+        console.error(err);
+      }
+
+    }
+
+    // Carregar dados do dashboard
     async function carregar() {
       try {
         const dados = await dashboardService.buscarDashboard();
@@ -88,31 +163,40 @@ export default function Dashboard() {
       }
     }
 
+    async function carregarOcorrencias() {
+      try {
+        const resposta = await ocorrenciaService.listarOcorrencias();
+        const dadosBrutos = Array.isArray(resposta)
+          ? resposta
+          : Array.isArray(resposta?.ocorrencias)
+            ? resposta.ocorrencias
+            : Array.isArray(resposta?.data)
+              ? resposta.data
+              : resposta?.ocorrencia
+                ? [resposta]
+                : [];
+        setChamados(dadosBrutos.map(normalizarOcorrencia));
+      } catch (error) {
+        console.error("Erro ao carregar ocorrências recentes:", error);
+      } finally {
+        setCarregando(false);
+      }
+    }
+
     carregar();
-  }, []);
+    buscarNome();
+    carregarOcorrencias();
+  }, [usuario]);
 
 
-  const notificacoes = useMemo(
-    () => [
-      {
-        id: 1,
-        titulo: "2 chamados críticos aguardam atenção",
-        tempo: "há 10 min",
-      },
-      { id: 2, titulo: "Novo chamado de rede foi aberto", tempo: "há 25 min" },
-      { id: 3, titulo: "Chamado #CH-2025-0002 foi atualizado", tempo: "há 1h" },
-      { id: 4, titulo: "Relatório de manutenção está pronto", tempo: "há 2h" },
-    ],
-    [],
-  );
+  const notificacoes = [];
 
   const contagem = useMemo(() => {
     const base = {
-      aberto: 0,
-      em_andamento: 0,
-      aguardando: 0,
-      resolvido: 0,
-      fechado: 0,
+      aberta: 0,
+      "em andamento": 0,
+      concluida: 0,
+      cancelada: 0,
     };
     chamados.forEach((c) => {
       base[c.status] = (base[c.status] || 0) + 1;
@@ -120,12 +204,12 @@ export default function Dashboard() {
     return base;
   }, [chamados]);
 
-  const abertos = contagem.aberto + contagem.em_andamento + contagem.aguardando;
+  const abertos = contagem.aberta + contagem["em andamento"];
   const criticos = chamados.filter(
     (c) =>
       c.prioridade === "critica" &&
-      c.status !== "resolvido" &&
-      c.status !== "fechado",
+      c.status !== "concluida" &&
+      c.status !== "cancelada",
   ).length;
   const recentes = useMemo(() => {
     const termo = busca.toLowerCase().trim();
@@ -147,7 +231,7 @@ export default function Dashboard() {
         {/* Barra superior */}
         <header className="page__header">
           <div>
-            <h1>Olá, {usuario?.nome?.split(" ")[0]}</h1>
+            <h1>Olá, {(nome || usuario.nome)?.toLowerCase()} </h1>
             <p className="muted">
               Visão geral dos chamados sob monitoramento agora.
             </p>
@@ -272,7 +356,7 @@ export default function Dashboard() {
                     }}
                   />
 
-                  {STATUS_LABEL[status]}
+                  {STATUS_LABELS[status] || status}
 
                   <strong>{qtd}</strong>
                 </li>
@@ -306,7 +390,7 @@ export default function Dashboard() {
                   <PriorityBadge prioridade={c.prioridade} />
 
                   <span className="recent-item__time">
-                    {tempoRelativo(c.atualizadoEm)}
+                    {mostrarTempoAtualizacao(c.atualizadoEm)}
                   </span>
                 </Link>
               </li>

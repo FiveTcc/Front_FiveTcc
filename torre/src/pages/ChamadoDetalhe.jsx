@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { db } from "../services/storage";
 import { useAuth } from "../contexts/AuthContext";
 import { formatarData, iniciais, STATUS_LABEL } from "../services/utils";
 import StatusBeacon from "../components/StatusBeacon";
@@ -9,9 +8,8 @@ import PriorityBadge from "../components/PriorityBadge";
 export default function ChamadoDetalhe() {
   const { id } = useParams();
   const { usuario } = useAuth();
-  const [versao, setVersao] = useState(0);
-  const chamado = useMemo(() => db.buscarChamado(id), [id, versao]);
-  const usuarios = useMemo(() => db.listarUsuarios(), []);
+  const chamado = null;
+  const usuarios = [];
   const [comentario, setComentario] = useState("");
 
   if (!chamado) return <Navigate to="/chamados" replace />;
@@ -25,19 +23,13 @@ export default function ChamadoDetalhe() {
   );
 
   function atualizar(patch) {
-    db.atualizarChamado(chamado.id, patch);
-    setVersao((v) => v + 1);
+    void patch;
   }
 
   function enviarComentario(e) {
     e.preventDefault();
     if (!comentario.trim()) return;
-    db.adicionarComentario(chamado.id, {
-      autorId: usuario.id,
-      texto: comentario.trim(),
-    });
     setComentario("");
-    setVersao((v) => v + 1);
   }
 
   return (

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { db } from "../services/storage";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function NovoChamado() {
@@ -8,7 +7,9 @@ export default function NovoChamado() {
   const navigate = useNavigate();
   const [micro, setMicro] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [categoria, setCategoria] = useState(db.CATEGORIAS[0]);
+  const categorias = ["Hardware", "Software", "Rede", "Acesso e Permissões", "Outros"];
+  const prioridades = ["Baixa", "Média", "Alta", "Crítica"];
+  const [categoria, setCategoria] = useState(categorias[0]);
   const [local, setLocal] = useState("");
   const [dataOcorrencia, setDataOcorrencia] = useState("");
   const [prioridade, setPrioridade] = useState("Selecione");
@@ -28,22 +29,8 @@ export default function NovoChamado() {
     e.preventDefault();
     if (!micro.trim() || !descricao.trim()) return;
     setEnviando(true);
-    const criado = db.criarChamado({
-      titulo: `Chamado de TI - ${categoria}`,
-      descricao: descricao.trim(),
-      categoria,
-      prioridade,
-      solicitanteId: usuario.id,
-      micro: micro.trim(),
-      local: local.trim(),
-      dataOcorrencia: dataOcorrencia.trim(),
-      anexos: [foto, ...arquivos].filter(Boolean).map((arquivo) => ({
-        nome: arquivo.name,
-        tipo: arquivo.type,
-        tamanho: arquivo.size,
-      })),
-    });
-    navigate(`/chamados/${criado.id}`);
+    setEnviando(false);
+    window.alert("Conecte esta tela à API para enviar um chamado.");
   }
 
   return (
@@ -87,12 +74,8 @@ export default function NovoChamado() {
               <span className="custom-select__caret">▾</span>
             </button>
             {openSelect === "categoria" && (
-              <div
-                className="custom-select__menu"
-                role="listbox"
-                aria-label="Categoria"
-              >
-                {db.CATEGORIAS.map((option) => (
+              <div className="custom-select__menu" role="listbox" aria-label="Categoria">
+                {categorias.map((option) => (
                   <button
                     key={option}
                     type="button"
@@ -124,12 +107,8 @@ export default function NovoChamado() {
               <span className="custom-select__caret">▾</span>
             </button>
             {openSelect === "prioridade" && (
-              <div
-                className="custom-select__menu"
-                role="listbox"
-                aria-label="Prioridade"
-              >
-                {db.PRIORIDADES.map((option) => (
+              <div className="custom-select__menu" role="listbox" aria-label="Prioridade">
+                {prioridades.map((option) => (
                   <button
                     key={option}
                     type="button"
@@ -201,18 +180,10 @@ export default function NovoChamado() {
         </div>
 
         <div className="form__actions">
-          <button
-            type="button"
-            className="btn btn--cancelar"
-            onClick={() => navigate(-1)}
-          >
+          <button type="button" className="btn btn--cancelar" onClick={() => navigate(-1)}>
             Cancelar
           </button>
-          <button
-            type="submit"
-            className="btn btn--primary"
-            disabled={enviando}
-          >
+          <button type="submit" className="btn btn--primary" disabled={enviando}>
             Enviar chamado
           </button>
         </div>
