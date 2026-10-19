@@ -343,7 +343,7 @@ export default function Dashboard() {
           <div className="donut-row">
             <Donut
               dados={Object.entries(contagem)}
-              total={chamados.length || 1}
+              total={chamados.length || 0}
             />
 
             <ul className="donut-legend">
