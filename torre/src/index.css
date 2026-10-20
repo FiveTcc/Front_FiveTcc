@@ -559,8 +559,8 @@ textarea {
 }
 
 .avatar--sm {
-  width: 26px;
-  height: 26px;
+  width: 35px;
+  height: 35px;
   font-size: 0.68rem;
 }
 .avatar--xl {
@@ -2231,7 +2231,7 @@ textarea {
   padding-top: 14px;
   border-top: 1px solid var(--border);
 }
-.comment-form textarea {
+.comment-form input {
   flex: 1;
 }
 
@@ -3649,7 +3649,7 @@ textarea {
 }
 
 .ticket-detail-page .grid-2--asym {
-  align-items: start;
+  align-items: stretch;
   gap: 20px;
 }
 
@@ -3665,6 +3665,8 @@ textarea {
   background: linear-gradient(145deg, var(--panel), var(--surface));
   border-radius: 16px;
   box-shadow: var(--shadow-card);
+  width: 100%;
+  margin: 0;
 }
 
 .ticket-detail-page .card h2 {
@@ -3673,7 +3675,15 @@ textarea {
 }
 
 .ticket-detail-page .detail-list {
+  flex: 1;
+  justify-content: space-between;
   gap: 14px;
+}
+
+.ticket-detail-page aside > .card:first-child {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .ticket-detail-page .detail-list div {
@@ -3686,14 +3696,39 @@ textarea {
   border-bottom: 0;
 }
 
-.ticket-detail-page .comment-form {
-  flex-wrap: wrap;
+.ticket-detail-page .ticket-history-scroll {
+  height: 260px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 8px;
+  scrollbar-gutter: stable;
 }
 
-.ticket-detail-page .comment-form textarea {
+.ticket-detail-page .ticket-history-scroll .timeline {
+  min-height: 0;
+  justify-content: flex-start;
+}
+
+.ticket-detail-page .comment-form {
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.ticket-detail-page .comment-form input {
   min-width: 0;
+  height: 46px;
   min-height: 46px;
+  padding: 12px 14px;
+  background: var(--panel-input);
+  border: 1px solid var(--panel-input-border);
   border-radius: 12px;
+  color: var(--text);
+}
+
+.ticket-detail-page .comment-form .avatar {
+  width: 34px;
+  height: 34px;
+  font-size: 0.8rem;
 }
 
 .ticket-detail-page .form__error {
