@@ -750,10 +750,10 @@ useEffect(() => {
                           </p>
                         )}
                       </div>
-                      <p className="ambientes-rodape-tabela">
+                      {/* <p className="ambientes-rodape-tabela">
                         Mostrando {compsFiltrados.length} de {comps.length}{" "}
                         componentes
-                      </p>
+                      </p> */}
                     </>
                   )}
 
@@ -1063,26 +1063,34 @@ function ListaChamados({ itens, mini }) {
 }
 
 function Modal({ titulo, onClose, children }) {
+  // Fecha com ESC
   useEffect(() => {
     const h = (e) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
   }, [onClose]);
+
+  // Trava a rolagem da página enquanto o modal estiver aberto
+  useEffect(() => {
+    const larguraBarra =
+      window.innerWidth - document.documentElement.clientWidth;
+
+    const overflowOriginal = document.body.style.overflow;
+    const paddingOriginal = document.body.style.paddingRight;
+
+    document.body.style.overflow = "hidden";
+    document.body.style.paddingRight = `${larguraBarra}px`;
+
+    return () => {
+      document.body.style.overflow = overflowOriginal;
+      document.body.style.paddingRight = paddingOriginal;
+    };
+  }, []);
+
   return (
     <div className="ambientes-modal-fundo" onClick={onClose}>
-      <div
-        className="ambientes-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-label={titulo}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="ambientes-modal-head">
-          <h2>{titulo}</h2>
-          {/* <button className="ambientes-icon" onClick={onClose} aria-label="Fechar">
-            <X size={18} />
-          </button> */}
-        </div>
+      <div className="ambientes-modal" onClick={(e) => e.stopPropagation()}>
+        <h3>{titulo}</h3>
         {children}
       </div>
     </div>
@@ -1310,7 +1318,7 @@ min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",sys
   opacity: 0.6;
   cursor: not-allowed;
 }
-.ambientes-painel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px; box-shadow:var(--shadow-card);margin-bottom:20px}
+.ambientes-painel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px; box-shadow:var(--shadow-card);margin-bottom:20px;}
 .ambientes-filtros{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
 .ambientes-select {position: relative; display: flex; flex-direction: column; gap: 4px; min-width: 140px; padding: 0 2px; box-sizing: border-box; top: -10px;}
 .ambientes-select__label,.ambientes-select small {font-size: 0.85rem;color: var(--mudo);padding-left: 2px;}
@@ -1352,15 +1360,27 @@ min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",sys
 .ambientes-dica h3{display:flex;gap:8px;align-items:center;color:#5aa2ff;margin-bottom:8px}.ambientes-dica p{color:var(--mudo);font-size:14px;line-height:1.5}
 .ambientes-vazio{color:var(--mudo);padding:24px;text-align:center}
 .ambientes-detalhe-wrap{display:grid;grid-template-columns:290px minmax(0,1fr) 300px;gap:16px;margin-top:16px;align-items:start}
-.ambientes-lista{display:flex;flex-direction:column;gap:10px;max-height:calc(100vh - 210px);overflow:auto;padding:2px}
+.ambientes-lista{display:flex;flex-direction:column;gap:10px;max-height:calc(100vh - 260px);overflow:auto;padding:2px;scrollbar-color: #8c8c8c #f1f1f1;scrollbar-width: auto;}
 .ambientes-det-head{display:flex;gap:18px;align-items:flex-start}.ambientes-det-info{flex:1;display:flex;flex-direction:column;gap:8px}.ambientes-det-info h2{font-size:24px}
 .ambientes-desc{color:var(--txt)}
 .ambientes-abas{display:flex;gap:6px;border-bottom:1px solid var(--border);margin:18px 0 16px}
 .ambientes-abas button{display:flex;align-items:center;gap:8px;background:none;border:0;border-bottom:2px solid transparent;padding:10px 16px;color:var(--mudo);margin-bottom:-1px}
 .ambientes-abas .on{color:#5aa2ff;border-color:var(--azul)}
-.ambientes-comp-filtros{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px}
-.ambientes-comp-filtros .ambientes-busca{height:38px;flex:1}.ambientes-comp-filtros .ambientes-btn{height:38px;padding:0 14px;font-size:13px}
-.ambientes-tabela-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:10px}
+.ambientes-comp-filtros{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.ambientes-comp-filtros .ambientes-busca{height:38px;flex:1;}.ambientes-comp-filtros .ambientes-btn{height:38px;padding:0 14px;font-size:13px}
+.ambientes-tabela-wrap{background: var(--surface);border: 1px solid var(--border);border-radius: 18px;box-shadow: var(--shadow-card);z-index: 5;overflow: hidden;padding: 8px;overflow-x:auto;overflow-y:scroll;scrollbar-color: #8c8c8c #f1f1f1;scrollbar-width: auto;height:355px;border:1px solid var(--border);border-radius:10px}
+.ambientes-tabela-wrap::-webkit-scrollbar {width: 17px;}
+/* Trilho */
+.ambientes-tabela-wrap::-webkit-scrollbar-track {background: #f1f1f1;}
+/* Polegar (parte que arrasta) */
+.ambientes-tabela-wrap::-webkit-scrollbar-thumb {background: #8c8c8c;border-radius: 4px;border: 3px solid #f1f1f1;}
+.ambientes-tabela-wrap::-webkit-scrollbar-thumb:hover {background: #6b6b6b;}
+/* Botões das setas */
+.minha-area::-webkit-scrollbar-button:single-button {height: 17px;background-color: #f1f1f1;background-repeat: no-repeat;background-position: center;background-size: 10px;}
+/* Seta para cima */
+.minha-area::-webkit-scrollbar-button:single-button:vertical:decrement {background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><polygon points='5,2 9,8 1,8' fill='%23777'/></svg>");}
+/* Seta para baixo */
+.minha-area::-webkit-scrollbar-button:single-button:vertical:increment {background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><polygon points='1,2 9,2 5,8' fill='%23777'/></svg>");}
 .ambientes-tabela {
   --tb-border: #e2e8f0;
   --tb-hover: #e8ecf0;
@@ -1416,14 +1436,14 @@ min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",sys
 .ambientes-rodape-tabela{color:var(--mudo);font-size:12.5px;margin-top:10px}
 .ambientes-visao{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
 .ambientes-info{display:flex;flex-direction:column;gap:4px;padding:10px 0}.ambientes-info small{color:var(--mudo)}.ambientes-info span{line-height:1.4}
-.ambientes-col-dir{display:flex;flex-direction:column;gap:16px}
+.ambientes-col-dir{display:flex;flex-direction:column;gap:3px}
 .ambientes-col-dir h3{display:flex;align-items:center;gap:8px;font-size:15px;margin-bottom:8px}.ambientes-col-dir h3 a{margin-left:auto;font-size:12px;color:#5aa2ff;text-decoration:none}
 .ambientes-chamados,.ambientes-hist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .ambientes-chamados li{display:grid;grid-template-columns:60px 1fr auto 90px;gap:12px;align-items:center;background:var(--sup2);border-radius:8px;padding:10px 12px}
 .ambientes-chamados a{color:#5aa2ff;text-decoration:none;font-weight:600}.ambientes-chamados time,.ambientes-hist time{color:var(--mudo);font-size:12.5px;text-align:right}
 .ambientes-chamados.mini li{grid-template-columns:auto 1fr;gap:4px 10px}.ambientes-chamados.mini .ambientes-pill{justify-self:start}.ambientes-chamados.mini time{text-align:left;grid-column:2}
 .ambientes-hist li{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}.ambientes-hist span{flex:1}
-.ambientes-modal-fundo{position:fixed;inset:0;background:#000a;display:grid;place-items:center;z-index:50;padding:16px}
+.ambientes-modal-fundo{position:fixed;inset:0;background:#000a;display:grid;place-items:center;z-index:50;padding:16px;overflow:hidden;}
 .ambientes-modal {
   --modal-bg: #ffffff;
   --modal-bg-2: #f8fafc;

@@ -196,13 +196,6 @@ export default function Perfil() {
 
       <header className="profile-page-header">
         <div className="profile-page-header__brand">
-          <div className="profile-page-header__icon" aria-hidden>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M5 19C6.22116 16.4781 8.98557 14.8 12 14.8C15.0144 14.8 17.7788 16.4781 19 19" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-
           <div className="profile-page-header__title">
             <h1>Meu Perfil</h1>
             <p>Gerencie suas informações pessoais e mantenha seus dados sempre atualizados.</p>
@@ -378,10 +371,6 @@ export default function Perfil() {
                 {perfilErro || perfilSucesso}
               </p>
             )}
-
-            {/* <div className="profile-form__actions">
-              <button type="submit" className="btn btn--primary">Salvar alterações</button>
-            </div> */}
           </form>
         </section>
       </div>
