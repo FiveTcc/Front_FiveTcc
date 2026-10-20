@@ -65,6 +65,14 @@ html[data-theme="dark"] {
   box-sizing: border-box;
 }
 
+html{
+  scrollbar-gutter: stable;
+}
+
+html:has(.ambientes-modal-fundo){
+  scrollbar-gutter: auto;
+}
+
 html,
 body,
 #root {
@@ -974,11 +982,6 @@ textarea {
 .profile-save {
   align-self: flex-end;
   min-width: 160px;
-}
-.profile-form__actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 6px;
 }
 .form-message {
   margin: 0;
@@ -2873,7 +2876,7 @@ textarea {
 
 .profile-summary__content {
   text-align: left;
-  margin-top: 8px;
+  margin-top: 40px;
 }
 .profile-summary__content h2 {
   margin: 6px 0 2px;
@@ -3440,6 +3443,7 @@ textarea {
     max-width: none;
     max-height: calc(100vh - 24px);
     overflow-y: auto;
+    overscroll-behavior:contain;
   }
 }
 
