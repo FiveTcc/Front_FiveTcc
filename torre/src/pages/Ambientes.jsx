@@ -28,174 +28,12 @@ import {
   Lightbulb,
   Calendar,
   Eye,
-  History,
 } from "lucide-react";
+import ambienteService from "../services/ambienteService";
+import componenteService from "../services/componeteService";
+import componenteTipoService from "../services/componenteTipoService";
 
-/* ---------- Dados de exemplo (contagens são sempre derivadas) ---------- */
-
-const TIPOS = {
-  Laboratório: { cor: "#3b82f6", Icon: FlaskConical },
-  Sala: { cor: "#8b5cf6", Icon: Users },
-  Escritório: { cor: "#f59e0b", Icon: Briefcase },
-  Biblioteca: { cor: "#c2763a", Icon: BookOpen },
-  Depósito: { cor: "#64748b", Icon: Package },
-  Físico: { cor: "#14b8a6", Icon: MapPin },
-};
-
-const POOL = [
-  ["Computador 01", "Computador", Monitor, "Funcionando", "12/08/2026"],
-  ["Computador 02", "Computador", Monitor, "Com problema", "08/09/2026"],
-  ["Computador 03", "Computador", Monitor, "Funcionando", "12/08/2026"],
-  ["Impressora HP", "Impressora", Printer, "Funcionando", "05/08/2026"],
-  ["Projetor Epson", "Projetor", Projector, "Em manutenção", "28/08/2026"],
-  ["Roteador", "Rede", Router, "Funcionando", "15/07/2026"],
-  ["Switch", "Rede", Network, "Funcionando", "15/07/2026"],
-  ["Mesa de Som", "Áudio", Speaker, "Funcionando", "20/07/2026"],
-  ["Ar Condicionado", "Climatização", Wind, "Funcionando", "10/03/2026"],
-  ["Caixa de Som", "Áudio", Speaker, "Funcionando", "10/08/2026"],
-  ["Computador 04", "Computador", Monitor, "Funcionando", "12/08/2026"],
-  ["Computador 05", "Computador", Monitor, "Funcionando", "12/08/2026"],
-];
-
-const AMBIENTES_INICIAIS = [
-  {
-    id: "lab01",
-    nome: "Laboratório 01",
-    tipo: "Laboratório",
-    bloco: "Bloco A",
-    andar: 1,
-    ativo: true,
-    criado: "12/03/2025",
-    por: "João Silva",
-    comps: 12,
-    desc: "Ambiente destinado a aulas práticas de informática e desenvolvimento.",
-  },
-  {
-    id: "sala05",
-    nome: "Sala 05",
-    tipo: "Sala",
-    bloco: "Bloco A",
-    andar: 1,
-    ativo: true,
-    criado: "10/03/2025",
-    por: "Maria Souza",
-    comps: 8,
-    desc: "Sala de aula com mesas e projetor.",
-  },
-  {
-    id: "lab02",
-    nome: "Laboratório 02",
-    tipo: "Laboratório",
-    bloco: "Bloco B",
-    andar: 1,
-    ativo: true,
-    criado: "08/03/2025",
-    por: "Carlos Lima",
-    comps: 10,
-    desc: "Laboratório de redes e infraestrutura.",
-  },
-  {
-    id: "esc",
-    nome: "Escritório da Direção",
-    tipo: "Escritório",
-    bloco: "Bloco C",
-    andar: 0,
-    ativo: true,
-    criado: "05/03/2025",
-    por: "Ana Costa",
-    comps: 6,
-    desc: "Escritório administrativo da direção.",
-  },
-  {
-    id: "bib",
-    nome: "Biblioteca",
-    tipo: "Biblioteca",
-    bloco: "Bloco C",
-    andar: 0,
-    ativo: true,
-    criado: "02/03/2025",
-    por: "João Silva",
-    comps: 10,
-    desc: "Acervo, salas de estudo e computadores de consulta.",
-  },
-  {
-    id: "cor",
-    nome: "Corredor Principal",
-    tipo: "Físico",
-    bloco: "Bloco A",
-    andar: 0,
-    ativo: true,
-    criado: "28/02/2025",
-    por: "Fernanda Alves",
-    comps: 4,
-    desc: "Circulação principal do Bloco A.",
-  },
-  {
-    id: "qui",
-    nome: "Laboratório de Química",
-    tipo: "Laboratório",
-    bloco: "Bloco B",
-    andar: 2,
-    ativo: true,
-    criado: "20/02/2025",
-    por: "Rafael Mendes",
-    comps: 9,
-    desc: "Aulas práticas de química e ciências.",
-  },
-  {
-    id: "sala12",
-    nome: "Sala 12",
-    tipo: "Sala",
-    bloco: "Bloco D",
-    andar: 1,
-    ativo: true,
-    criado: "18/02/2025",
-    por: "Juliana Martins",
-    comps: 7,
-    desc: "Sala de aula convencional.",
-  },
-  {
-    id: "alm",
-    nome: "Almoxarifado",
-    tipo: "Depósito",
-    bloco: "Bloco E",
-    andar: 0,
-    ativo: false,
-    criado: "15/02/2025",
-    por: "Thiago Pereira",
-    comps: 5,
-    desc: "Estoque de materiais e equipamentos reserva.",
-  },
-];
-
-const ch = (id, env, titulo, status, data) => ({
-  id,
-  env,
-  titulo,
-  status,
-  data,
-});
-const CHAMADOS = [
-  ch("0248", "lab01", "Computador não liga", "Aberto", "09/09/2026"),
-  ch("0231", "lab01", "Projetor sem imagem", "Em andamento", "05/09/2026"),
-  ch("0217", "lab01", "Teclado com defeito", "Resolvido", "01/09/2026"),
-  ch("0209", "lab01", "Rede lenta nas bancadas", "Resolvido", "26/08/2026"),
-  ch("0198", "lab01", "Ar condicionado com ruído", "Resolvido", "19/08/2026"),
-  ch("0244", "sala05", "Lâmpada queimada", "Aberto", "08/09/2026"),
-  ch("0226", "sala05", "Cadeira quebrada", "Resolvido", "02/09/2026"),
-  ch("0240", "lab02", "Switch reiniciando", "Em andamento", "07/09/2026"),
-  ch("0233", "lab02", "Monitor sem sinal", "Aberto", "06/09/2026"),
-  ch("0211", "lab02", "Mouse sem resposta", "Resolvido", "28/08/2026"),
-  ch("0238", "esc", "Impressora sem toner", "Aberto", "07/09/2026"),
-  ch("0229", "bib", "Leitor de código travado", "Em andamento", "03/09/2026"),
-  ch("0222", "bib", "Computador de consulta lento", "Resolvido", "30/08/2026"),
-  ch("0215", "bib", "Wi-Fi instável", "Resolvido", "27/08/2026"),
-  ch("0242", "qui", "Exaustor sem funcionar", "Aberto", "08/09/2026"),
-  ch("0219", "qui", "Bancada com tomada solta", "Resolvido", "31/08/2026"),
-  ch("0236", "sala12", "Projetor sem cabo HDMI", "Aberto", "05/09/2026"),
-  ch("0205", "alm", "Porta sem fechadura", "Em andamento", "22/08/2026"),
-  ch("0201", "alm", "Estante instável", "Resolvido", "20/08/2026"),
-];
+/* ---------- Configurações visuais ---------- */
 
 const andarLabel = (n) => (n === 0 ? "Térreo" : `${n}º Andar`);
 
@@ -208,45 +46,87 @@ const ICONES_COMP = {
   Climatização: Wind,
   Outro: Package,
 };
-const STATUS_COMP = ["Funcionando", "Com problema", "Em manutenção"];
 
-function componentesDe(env, idx) {
-  return Array.from({ length: env.comps }, (_, i) => {
-    const [nome, tipo, Icon, status, manut] = POOL[i % POOL.length];
-    return {
-      nome,
-      tipo,
-      Icon,
-      manut,
-      status: env.id === "lab01" ? status : "Funcionando",
-      pat: `PAT-${String(idx * 100 + i + 1).padStart(4, "0")}`,
-    };
-  });
+function normalizarComponente(item) {
+  const componente = item?.componente || item || {};
+  return {
+    ...componente,
+    id: componente.compo_id ?? componente.id_comp ?? componente.id,
+    nome: componente.compo_nome ?? componente.nome ?? "",
+    tipo: componente.compo_tipo_nome ?? componente.compo_tipo ?? componente.tipo ?? "",
+    pat: componente.compo_patrimonio ?? componente.patrimonio ?? componente.pat ?? "—",
+    status: componente.compo_status ?? componente.status ?? "—",
+    manut: componente.compo_ultima_manutencao ?? componente.ultima_manutencao ?? componente.manut ?? "—",
+  };
 }
-
 /* ---------- Página: renderizada dentro do <Outlet /> do layout ---------- */
 
 export default function Ambientes() {
-  const [ambientes, setAmbientes] = useState(AMBIENTES_INICIAIS);
+  const [ambientes, setAmbientes] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState("");
   const [modo, setModo] = useState("grade"); // "grade" | "detalhe"
-  const [selId, setSelId] = useState("lab01");
-  const [aba, setAba] = useState("componentes");
+  const [selId, setSelId] = useState(null);
+  const [aba, setAba] = useState("visao");
   const [f, setF] = useState({
     q: "",
     tipo: "",
     bloco: "",
-    andar: "",
     status: "",
   });
   const [cf, setCf] = useState({ q: "", tipo: "", status: "" });
   const [novo, setNovo] = useState(null);
   const [edit, setEdit] = useState(null);
-  const [extras, setExtras] = useState({}); // componentes adicionados, por id de ambiente
-  const [novoComp, setNovoComp] = useState(null);
-
-  const chamadosDe = (id) => CHAMADOS.filter((c) => c.env === id);
-  const qtdDe = (a) => a.comps + (extras[a.id]?.length ?? 0);
+  const [componentes, setComponentes] = useState([]);
+  const [carregandoComponentes, setCarregandoComponentes] = useState(false);
+  const [tiposComponentes, setTiposComponentes] = useState([]);
+  const [novoComponente, setNovoComponente] = useState(null);
+  const [salvandoComponente, setSalvandoComponente] = useState(false);
+  const qtdDe = (a) => a.comps;
   const set = (k) => (v) => setF((cur) => ({ ...cur, [k]: v }));
+
+  useEffect(() => {
+    let montado = true;
+
+    async function carregarAmbientes() {
+      try {
+        const resposta = await ambienteService.listarAmbientes();
+        const dados = Array.isArray(resposta)
+          ? resposta
+          : resposta?.ambientes || resposta?.data || resposta?.ambiente || [];
+        const lista = (Array.isArray(dados) ? dados : [dados])
+          .filter(Boolean)
+          .map((item) => ({
+            ...item,
+            id: item.id_amb ?? item.amb_id ?? item.id,
+            nome: item.amb_nome ?? item.nome ?? "",
+            tipo: item.amb_tipo ?? item.tipo ?? "Outro",
+            bloco: item.amb_bloco ?? item.bloco ?? "",
+            andar: Number(item.amb_andar ?? item.andar ?? 0),
+            ativo: item.amb_status === "ativo" || item.amb_status === "ATIVO" || item.ativo === true || item.ativo === 1,
+            criado: item.amb_data_criacao ?? item.criado_em ?? item.criado ?? "—",
+            por: item.usuario?.nome ?? item.por ?? "—",
+            comps: Number(item.componentes_count ?? item.comps ?? item.componentes?.length ?? 0),
+            componentes: Array.isArray(item.componentes) ? item.componentes : [],
+            desc: item.amb_descricao ?? item.descricao ?? item.desc ?? "—",
+          }));
+        if (montado) {
+          setAmbientes(lista);
+          setSelId((atual) => atual ?? lista[0]?.id ?? null);
+        }
+      } catch (error) {
+        console.error("Erro ao carregar ambientes:", error);
+        if (montado) setErro("Não foi possível carregar os ambientes.");
+      } finally {
+        if (montado) setCarregando(false);
+      }
+    }
+
+    carregarAmbientes();
+    return () => {
+      montado = false;
+    };
+  }, []);
 
   const filtrados = useMemo(() => {
     const q = f.q.trim().toLowerCase();
@@ -256,25 +136,60 @@ export default function Ambientes() {
           [a.nome, a.bloco, a.tipo].some((s) => s.toLowerCase().includes(q))) &&
         (!f.tipo || a.tipo === f.tipo) &&
         (!f.bloco || a.bloco === f.bloco) &&
-        (f.andar === "" || String(a.andar) === f.andar) &&
         (!f.status || (f.status === "ativo") === a.ativo),
     );
   }, [ambientes, f]);
 
   const blocos = [...new Set(ambientes.map((a) => a.bloco))].sort();
-  const andares = [...new Set(ambientes.map((a) => a.andar))].sort();
-  const contTipos = Object.keys(TIPOS)
+  const tiposAmbiente = [...new Set(ambientes.map((a) => a.tipo).filter(Boolean))].sort();
+  const contTipos = tiposAmbiente
     .map((t) => [t, ambientes.filter((a) => a.tipo === t).length])
     .filter(([, n]) => n > 0)
     .sort((a, b) => b[1] - a[1]);
 
   const sel = ambientes.find((a) => a.id === selId) || filtrados[0];
-  const selIdx = ambientes.findIndex((a) => a.id === sel?.id);
-  const comps = useMemo(
-    () =>
-      sel ? [...componentesDe(sel, selIdx), ...(extras[sel.id] || [])] : [],
-    [sel, selIdx, extras],
-  );
+  useEffect(() => {
+    if (!sel?.nome) {
+      setComponentes([]);
+      return undefined;
+    }
+
+    let montado = true;
+    setCarregandoComponentes(true);
+    componenteService.buscarPorAmbiente(sel.nome)
+      .then((resposta) => {
+        const dados = Array.isArray(resposta)
+          ? resposta
+          : resposta?.componentes || resposta?.data || resposta?.componente || [];
+        if (montado) {
+          setComponentes((Array.isArray(dados) ? dados : [dados]).filter(Boolean).map(normalizarComponente));
+        }
+      })
+      .catch((error) => {
+        console.error("Erro ao carregar componentes do ambiente:", error);
+        if (montado) setComponentes([]);
+      })
+      .finally(() => montado && setCarregandoComponentes(false));
+
+    return () => {
+      montado = false;
+    };
+  }, [sel?.id, sel?.nome]);
+
+  useEffect(() => {
+    componenteTipoService.listarComponenteTipo()
+      .then((resposta) => {
+        const dados = Array.isArray(resposta)
+          ? resposta
+          : resposta?.tipos || resposta?.data || [];
+        setTiposComponentes((Array.isArray(dados) ? dados : [dados]).filter(Boolean));
+      })
+      .catch((error) => console.error("Erro ao carregar tipos de componentes:", error));
+  }, []);
+
+  const comps = componentes;
+  const tiposComponente = [...new Set(comps.map((c) => c.tipo).filter(Boolean))].sort();
+  const statusComponentes = [...new Set(comps.map((c) => c.status).filter(Boolean))].sort();
   const compsFiltrados = comps.filter(
     (c) =>
       (!cf.q || c.nome.toLowerCase().includes(cf.q.toLowerCase())) &&
@@ -284,30 +199,71 @@ export default function Ambientes() {
 
   const abrir = (id) => {
     setSelId(id);
-    setAba("componentes");
+    setAba("visao");
     setModo("detalhe");
   };
 
-  const salvarNovo = () => {
+  const salvarNovo = async () => {
     if (!novo.nome.trim()) return;
-    const id = `novo${Date.now()}`;
-    setAmbientes([
-      {
-        id,
-        nome: novo.nome.trim(),
-        tipo: novo.tipo,
-        bloco: novo.bloco,
-        andar: Number(novo.andar),
-        ativo: true,
-        criado: new Date().toLocaleDateString("pt-BR"),
-        por: "João Silva",
-        comps: 0,
-        desc: novo.desc?.trim() || "Ambiente recém-criado.",
-      },
-      ...ambientes,
-    ]);
-    setNovo(null);
-    abrir(id);
+    try {
+      const resposta = await ambienteService.cadastrarAmbiente({
+        amb_nome: novo.nome.trim(),
+        amb_tipo: novo.tipo,
+        amb_bloco: novo.bloco,
+        amb_andar: Number(novo.andar),
+        amb_descricao: novo.desc?.trim() || "",
+      });
+      const criado = resposta?.ambiente || resposta?.data || resposta;
+      const id = criado.id_amb ?? criado.amb_id ?? criado.id;
+      setAmbientes((lista) => [
+        {
+          ...criado,
+          id,
+          nome: criado.amb_nome ?? criado.nome ?? novo.nome.trim(),
+          tipo: criado.amb_tipo ?? criado.tipo ?? novo.tipo,
+          bloco: criado.amb_bloco ?? criado.bloco ?? novo.bloco,
+          andar: Number(criado.amb_andar ?? criado.andar ?? novo.andar),
+          ativo: criado.amb_status !== "inativo" && criado.amb_status !== "INATIVO",
+          comps: 0,
+          componentes: [],
+          desc: criado.amb_descricao ?? criado.descricao ?? novo.desc?.trim() ?? "—",
+        },
+        ...lista,
+      ]);
+      setNovo(null);
+      abrir(id);
+    } catch (error) {
+      console.error("Erro ao cadastrar ambiente:", error);
+      setErro("Não foi possível cadastrar o ambiente.");
+    }
+    return;
+  };
+
+  const salvarComponente = async (event) => {
+    event.preventDefault();
+    if (!novoComponente?.nome.trim() || salvandoComponente || !sel?.id) return;
+
+    try {
+      setSalvandoComponente(true);
+      await componenteService.cadastrarComponente({
+        compo_nome: novoComponente.nome.trim(),
+        compo_tipo_id: Number(novoComponente.tipoId),
+        compo_patrimonio: novoComponente.patrimonio.trim(),
+        id_amb: sel.id,
+      });
+      setNovoComponente(null);
+      setCf({ q: "", tipo: "", status: "" });
+      const resposta = await componenteService.buscarPorAmbiente(sel.nome);
+      const dados = Array.isArray(resposta)
+        ? resposta
+        : resposta?.componentes || resposta?.data || [];
+      setComponentes((Array.isArray(dados) ? dados : [dados]).filter(Boolean).map(normalizarComponente));
+    } catch (error) {
+      console.error("Erro ao cadastrar componente:", error);
+      setErro("Não foi possível cadastrar o componente.");
+    } finally {
+      setSalvandoComponente(false);
+    }
   };
 
   const abrirEdicao = () =>
@@ -321,8 +277,22 @@ export default function Ambientes() {
       desc: sel.desc,
     });
 
-  const salvarEdicao = () => {
+  const salvarEdicao = async () => {
     if (!edit.nome.trim()) return;
+    try {
+      await ambienteService.editarAmbiente(edit.id, {
+        amb_nome: edit.nome.trim(),
+        amb_tipo: edit.tipo,
+        amb_bloco: edit.bloco,
+        amb_andar: Number(edit.andar),
+        amb_status: edit.ativo,
+        amb_descricao: edit.desc.trim(),
+      });
+    } catch (error) {
+      console.error("Erro ao editar ambiente:", error);
+      setErro("Não foi possível editar o ambiente.");
+      return;
+    }
     setAmbientes(
       ambientes.map((a) =>
         a.id === edit.id
@@ -341,52 +311,6 @@ export default function Ambientes() {
     setEdit(null);
   };
 
-  const salvarComp = () => {
-    if (!novoComp.nome.trim()) return;
-    const c = {
-      id: `x${Date.now()}`,
-      nome: novoComp.nome.trim(),
-      tipo: novoComp.tipo,
-      Icon: ICONES_COMP[novoComp.tipo] || Package,
-      status: novoComp.status,
-      manut: "—",
-      pat: novoComp.pat.trim() || `PAT-${String(Date.now()).slice(-6)}`,
-    };
-    setExtras({ ...extras, [sel.id]: [...(extras[sel.id] || []), c] });
-    setCf({ q: "", tipo: "", status: "" });
-    setNovoComp(null);
-  };
-
-  const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
-const notificacoesRef = useRef(null);
-
-const notificacoes = useMemo(
-  () =>
-    CHAMADOS.filter((c) => c.status === "Aberto")
-      .slice(0, 5)
-      .map((c) => ({
-        id: c.id,
-        titulo: `Chamado #${c.id}: ${c.titulo}`,
-        tempo: c.data,
-      })),
-  [],
-);
-
-useEffect(() => {
-  if (!mostrarNotificacoes) return;
-  const onDown = (e) => {
-    if (notificacoesRef.current && !notificacoesRef.current.contains(e.target))
-      setMostrarNotificacoes(false);
-  };
-  const onKey = (e) => e.key === "Escape" && setMostrarNotificacoes(false);
-  document.addEventListener("mousedown", onDown);
-  document.addEventListener("keydown", onKey);
-  return () => {
-    document.removeEventListener("mousedown", onDown);
-    document.removeEventListener("keydown", onKey);
-  };
-}, [mostrarNotificacoes]);
-
   const Filtros = (
     <div className="ambientes-filtros">
       <label className="ambientes-busca">
@@ -401,19 +325,13 @@ useEffect(() => {
         label="Tipo"
         value={f.tipo}
         onChange={set("tipo")}
-        opts={Object.keys(TIPOS).map((t) => [t, t])}
+        opts={tiposAmbiente.map((t) => [t, t])}
       />
       <Select
         label="Bloco"
         value={f.bloco}
         onChange={set("bloco")}
         opts={blocos.map((b) => [b, b])}
-      />
-      <Select
-        label="Andar"
-        value={f.andar}
-        onChange={set("andar")}
-        opts={andares.map((a) => [String(a), andarLabel(a)])}
       />
       <Select
         label="Status"
@@ -444,46 +362,6 @@ useEffect(() => {
           </div>
 
           <div className="ambientes-titulo-acoes">
-            <div className="topbar__notifications-wrap" ref={notificacoesRef}>
-              <button
-                type="button"
-                className="topbar__icon-button"
-                aria-label={
-                  mostrarNotificacoes
-                    ? "Fechar notificações"
-                    : "Abrir notificações"
-                }
-                aria-expanded={mostrarNotificacoes}
-                onClick={() => setMostrarNotificacoes((valor) => !valor)}
-              >
-                🕭
-              </button>
-
-              {mostrarNotificacoes && (
-                <div
-                  className="topbar__notifications"
-                  role="menu"
-                  aria-label="Notificações"
-                >
-                  <div className="topbar__notifications-header">
-                    <strong>Notificações</strong>
-                    <span>{notificacoes.length}</span>
-                  </div>
-
-                  {notificacoes.map((item) => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      className="topbar__notification-item"
-                      onClick={() => setMostrarNotificacoes(false)}
-                    >
-                      <span>{item.titulo}</span>
-                      <small>{item.tempo}</small>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
             <div className="ambientes-btn-ico">
             <button
               className="ambientes-btn"
@@ -504,6 +382,9 @@ useEffect(() => {
           </div>
         </div>
 
+        {carregando && <p className="ambientes-vazio">Carregando ambientes...</p>}
+        {erro && <p className="ambientes-erro">{erro}</p>}
+
         {modo === "grade" ? (
           <div className="ambientes-grade-wrap">
             <div>
@@ -520,7 +401,6 @@ useEffect(() => {
                     key={a.id}
                     a={a}
                     qtd={qtdDe(a)}
-                    chamados={chamadosDe(a.id).length}
                     onOpen={() => abrir(a.id)}
                   />
                 ))}
@@ -560,7 +440,7 @@ useEffect(() => {
               <h3>Tipos de ambiente</h3>
               <ul className="ambientes-tipos">
                 {contTipos.map(([t, n]) => {
-                  const { cor, Icon } = TIPOS[t];
+                  const { cor, Icon } = tipoConfig(t);
                   return (
                     <li key={t}>
                       <span
@@ -598,7 +478,6 @@ useEffect(() => {
                     compacto
                     ativo={a.id === sel?.id}
                     qtd={qtdDe(a)}
-                    chamados={chamadosDe(a.id).length}
                     onOpen={() => abrir(a.id)}
                   />
                 ))}
@@ -635,8 +514,6 @@ useEffect(() => {
                     {[
                       ["visao", Eye, "Visão geral"],
                       ["componentes", Monitor, "Componentes"],
-                      ["chamados", ClipboardList, "Chamados"],
-                      ["historico", History, "Histórico"],
                     ].map(([k, Icon, nome]) => (
                       <button
                         key={k}
@@ -680,22 +557,22 @@ useEffect(() => {
                           onChange={(v) =>
                             setCf((cur) => ({ ...cur, status: v }))
                           }
-                          opts={STATUS_COMP.map((s) => [s, s])}
+                          opts={statusComponentes.map((s) => [s, s])}
                         />
 
                         <button
+                          type="button"
                           className="ambientes-btn"
-                          onClick={() =>
-                            setNovoComp({
-                              nome: "",
-                              tipo: "Computador",
-                              status: "Funcionando",
-                              pat: "",
-                            })
-                          }
+                          onClick={() => setNovoComponente({
+                            nome: "",
+                            tipoId: tiposComponentes[0]?.id_compo_tipo ?? "",
+                            patrimonio: "",
+                          })}
+                          disabled={tiposComponentes.length === 0}
                         >
                           <Plus size={16} /> Adicionar componente
                         </button>
+
                       </div>
                       <div className="ambientes-tabela-wrap">
                         <table className="ambientes-tabela">
@@ -710,12 +587,14 @@ useEffect(() => {
                             </tr>
                           </thead>
                           <tbody>
-                            {compsFiltrados.map((c) => (
+                            {compsFiltrados.map((c) => {
+                              const Icon = c.Icon || ICONES_COMP[c.tipo] || Package;
+                              return (
                               <tr key={c.id ?? c.pat}>
                                 <td>
                                   <span className="ambientes-comp-nome">
                                     <span className="ambientes-chip-ico">
-                                      <c.Icon size={16} />
+                                      <Icon size={16} />
                                     </span>
                                     {c.nome}
                                   </span>
@@ -739,13 +618,17 @@ useEffect(() => {
                                   </button>
                                 </td>
                               </tr>
-                            ))}
+                              );
+                            })}
                           </tbody>
                         </table>
-                        {compsFiltrados.length === 0 && (
+                        {carregandoComponentes && (
+                          <p className="ambientes-vazio">Carregando componentes...</p>
+                        )}
+                        {!carregandoComponentes && compsFiltrados.length === 0 && (
                           <p className="ambientes-vazio">
                             {comps.length === 0
-                              ? "Este ambiente ainda não tem componentes. Adicione o primeiro."
+                              ? "Este ambiente ainda não tem componentes cadastrados."
                               : "Nenhum componente encontrado com esses filtros."}
                           </p>
                         )}
@@ -765,31 +648,10 @@ useEffect(() => {
                       <Info l="Andar" v={andarLabel(sel.andar)} />
                       <Info l="Status" v={sel.ativo ? "Ativo" : "Inativo"} />
                       <Info l="Componentes" v={comps.length} />
-                      <Info l="Chamados" v={chamadosDe(sel.id).length} />
                       <Info l="Criado em" v={`${sel.criado} por ${sel.por}`} />
                     </div>
                   )}
 
-                  {aba === "chamados" && (
-                    <ListaChamados itens={chamadosDe(sel.id)} />
-                  )}
-
-                  {aba === "historico" && (
-                    <ul className="ambientes-hist">
-                      {[
-                        ...chamadosDe(sel.id).map((c) => ({
-                          t: `Chamado #${c.id}: ${c.titulo} (${c.status.toLowerCase()})`,
-                          d: c.data,
-                        })),
-                        { t: `Ambiente criado por ${sel.por}`, d: sel.criado },
-                      ].map((h, i) => (
-                        <li key={i}>
-                          <Calendar size={14} /> <span>{h.t}</span>
-                          <time>{h.d}</time>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
                 </section>
               )}
 
@@ -809,24 +671,6 @@ useEffect(() => {
                     </div>
                     <Info l="Observações" v={sel.desc} />
                   </section>
-                  <section className="ambientes-painel">
-                    <h3>
-                      Últimos chamados{" "}
-                      <a
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setAba("chamados");
-                        }}
-                      >
-                        Ver todos
-                      </a>
-                    </h3>
-                    <ListaChamados
-                      itens={chamadosDe(sel.id).slice(0, 3)}
-                      mini
-                    />
-                  </section>
                 </aside>
               )}
             </div>
@@ -838,6 +682,7 @@ useEffect(() => {
         <Modal titulo="Novo ambiente" onClose={() => setNovo(null)}>
           <FormAmbiente
             valor={novo}
+            tipos={tiposAmbiente}
             onChange={setNovo}
             onCancel={() => setNovo(null)}
             onSubmit={salvarNovo}
@@ -851,6 +696,7 @@ useEffect(() => {
           <FormAmbiente
             edicao
             valor={edit}
+            tipos={tiposAmbiente}
             onChange={setEdit}
             onCancel={() => setEdit(null)}
             onSubmit={salvarEdicao}
@@ -859,17 +705,19 @@ useEffect(() => {
         </Modal>
       )}
 
-      {novoComp && (
-        <Modal titulo="Adicionar componente" onClose={() => setNovoComp(null)}>
-          <FormComponente
-            valor={novoComp}
-            onChange={setNovoComp}
-            existentes={comps}
-            onCancel={() => setNovoComp(null)}
-            onSubmit={salvarComp}
+      {novoComponente && (
+        <Modal titulo="Novo componente" onClose={() => setNovoComponente(null)}>
+          <FormComponenteAmbiente
+            valor={novoComponente}
+            tipos={tiposComponentes}
+            salvando={salvandoComponente}
+            onChange={setNovoComponente}
+            onCancel={() => setNovoComponente(null)}
+            onSubmit={salvarComponente}
           />
         </Modal>
       )}
+
     </div>
   );
 }
@@ -938,7 +786,7 @@ function Select({ label, value, onChange, opts, allLabel = "Todos" }) {
 }
 
 function Thumb({ tipo, size = 72 }) {
-  const { cor, Icon } = TIPOS[tipo];
+  const { cor, Icon } = tipoConfig(tipo);
   return (
     <div
       className="ambientes-thumb"
@@ -958,14 +806,20 @@ const Tag = ({ tipo }) => (
   <span
     className="ambientes-tag"
     style={{
-      background: TIPOS[tipo].cor + "33",
-      color: TIPOS[tipo].cor,
-      borderColor: TIPOS[tipo].cor + "66",
+      background: tipoConfig(tipo).cor + "33",
+      color: tipoConfig(tipo).cor,
+      borderColor: tipoConfig(tipo).cor + "66",
     }}
   >
     {tipo}
   </span>
 );
+
+function tipoConfig(tipo = "") {
+  const cores = ["#3b82f6", "#8b5cf6", "#f59e0b", "#14b8a6", "#64748b"];
+  const indice = [...tipo].reduce((total, caractere) => total + caractere.charCodeAt(0), 0) % cores.length;
+  return { cor: cores[indice], Icon: MapPin };
+}
 const Status = ({ ativo }) => (
   <span className={`ambientes-pill ${ativo ? "ok" : "err-sol"}`}>
     {ativo ? "Ativo" : "Inativo"}
@@ -993,7 +847,7 @@ function Kpi({ Icon, cor, n, label }) {
   );
 }
 
-function CardAmbiente({ a, qtd, chamados, onOpen, compacto, ativo }) {
+function CardAmbiente({ a, qtd, onOpen, compacto, ativo }) {
   return (
     <article
       className={`ambientes-card ${compacto ? "compacto" : ""} ${ativo ? "ativo" : ""}`}
@@ -1023,10 +877,6 @@ function CardAmbiente({ a, qtd, chamados, onOpen, compacto, ativo }) {
         <span>
           <Monitor size={15} /> {qtd} {qtd === 1 ? "componente" : "componentes"}
         </span>
-        <span>
-          <ClipboardList size={15} /> {chamados}{" "}
-          {chamados === 1 ? "chamado" : "chamados"}
-        </span>
       </div>
       {!compacto && (
         <div className="ambientes-card-meta fino">
@@ -1039,26 +889,6 @@ function CardAmbiente({ a, qtd, chamados, onOpen, compacto, ativo }) {
         </div>
       )}
     </article>
-  );
-}
-
-function ListaChamados({ itens, mini }) {
-  if (itens.length === 0)
-    return <p className="ambientes-vazio">Nenhum chamado neste ambiente.</p>;
-  const cls = { Aberto: "err", "Em andamento": "warn", Resolvido: "ok" };
-  return (
-    <ul className={`ambientes-chamados ${mini ? "mini" : ""}`}>
-      {itens.map((c) => (
-        <li key={c.id}>
-          <a href="#" onClick={(e) => e.preventDefault()}>
-            #{c.id}
-          </a>
-          <span>{c.titulo}</span>
-          <span className={`ambientes-pill ${cls[c.status]}`}>{c.status}</span>
-          <time>{c.data}</time>
-        </li>
-      ))}
-    </ul>
   );
 }
 
@@ -1110,7 +940,46 @@ function Acoes({ onCancel, salvar, ok }) {
   );
 }
 
-function FormAmbiente({ valor, onChange, onCancel, onSubmit, salvar, edicao }) {
+function FormComponenteAmbiente({ valor, tipos, salvando, onChange, onCancel, onSubmit }) {
+  const up = (campo) => (event) => onChange({ ...valor, [campo]: event.target.value });
+  const ok = valor.nome.trim() && valor.tipoId;
+
+  return (
+    <form onSubmit={onSubmit}>
+      <label>
+        Nome do componente
+        <input
+          autoFocus
+          value={valor.nome}
+          onChange={up("nome")}
+          placeholder="Ex.: Computador da sala 01"
+        />
+      </label>
+      <label>
+        Tipo
+        <select value={valor.tipoId} onChange={up("tipoId")}>
+          <option value="">Selecione um tipo</option>
+          {tipos.map((tipo) => (
+            <option key={tipo.id_compo_tipo} value={tipo.id_compo_tipo}>
+              {tipo.compo_tipo}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label>
+        Patrimônio
+        <input
+          value={valor.patrimonio}
+          onChange={up("patrimonio")}
+          placeholder="Opcional"
+        />
+      </label>
+      <Acoes onCancel={onCancel} salvar={salvando ? "Salvando..." : "Cadastrar componente"} ok={ok && !salvando} />
+    </form>
+  );
+}
+
+function FormAmbiente({ valor, onChange, onCancel, onSubmit, salvar, edicao, tipos }) {
   const up = (k) => (e) => onChange({ ...valor, [k]: e.target.value });
   const ok = !!valor.nome.trim();
   return (
@@ -1132,7 +1001,7 @@ function FormAmbiente({ valor, onChange, onCancel, onSubmit, salvar, edicao }) {
       <label>
         Tipo
         <select value={valor.tipo} onChange={up("tipo")}>
-          {Object.keys(TIPOS).map((t) => (
+          {tipos.map((t) => (
             <option key={t}>{t}</option>
           ))}
         </select>
@@ -1140,23 +1009,11 @@ function FormAmbiente({ valor, onChange, onCancel, onSubmit, salvar, edicao }) {
       <div className="ambientes-linha">
         <label>
           Bloco
-          <select value={valor.bloco} onChange={up("bloco")}>
-            {["Bloco A", "Bloco B", "Bloco C", "Bloco D", "Bloco E"].map(
-              (b) => (
-                <option key={b}>{b}</option>
-              ),
-            )}
-          </select>
+          <input value={valor.bloco} onChange={up("bloco")} />
         </label>
         <label>
           Andar
-          <select value={valor.andar} onChange={up("andar")}>
-            {[0, 1, 2, 3].map((a) => (
-              <option key={a} value={a}>
-                {andarLabel(a)}
-              </option>
-            ))}
-          </select>
+          <input type="number" min="0" value={valor.andar} onChange={up("andar")} />
         </label>
       </div>
       {edicao && (
@@ -1178,66 +1035,6 @@ function FormAmbiente({ valor, onChange, onCancel, onSubmit, salvar, edicao }) {
         />
       </label>
       <Acoes onCancel={onCancel} salvar={salvar} ok={ok} />
-    </form>
-  );
-}
-
-function FormComponente({ valor, onChange, existentes, onCancel, onSubmit }) {
-  const up = (k) => (e) => onChange({ ...valor, [k]: e.target.value });
-  const dup =
-    !!valor.pat.trim() &&
-    existentes.some(
-      (c) => c.pat.toLowerCase() === valor.pat.trim().toLowerCase(),
-    );
-  const ok = !!valor.nome.trim() && !dup;
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (ok) onSubmit();
-      }}
-    >
-      <label>
-        Nome
-        <input
-          autoFocus
-          value={valor.nome}
-          onChange={up("nome")}
-          placeholder="Ex.: Computador 06"
-        />
-      </label>
-      <div className="ambientes-linha">
-        <label>
-          Tipo
-          <select value={valor.tipo} onChange={up("tipo")}>
-            {Object.keys(ICONES_COMP).map((t) => (
-              <option key={t}>{t}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Status
-          <select value={valor.status} onChange={up("status")}>
-            {STATUS_COMP.map((s) => (
-              <option key={s}>{s}</option>
-            ))}
-          </select>
-        </label>
-      </div>
-      <label>
-        Patrimônio
-        <input
-          value={valor.pat}
-          onChange={up("pat")}
-          placeholder="Deixe vazio para gerar automaticamente"
-        />
-      </label>
-      {dup && (
-        <p className="ambientes-erro">
-          Já existe um componente com esse patrimônio neste ambiente.
-        </p>
-      )}
-      <Acoes onCancel={onCancel} salvar="Adicionar componente" ok={ok} />
     </form>
   );
 }
@@ -1438,11 +1235,6 @@ min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",sys
 .ambientes-info{display:flex;flex-direction:column;gap:4px;padding:10px 0}.ambientes-info small{color:var(--mudo)}.ambientes-info span{line-height:1.4}
 .ambientes-col-dir{display:flex;flex-direction:column;gap:3px}
 .ambientes-col-dir h3{display:flex;align-items:center;gap:8px;font-size:15px;margin-bottom:8px}.ambientes-col-dir h3 a{margin-left:auto;font-size:12px;color:#5aa2ff;text-decoration:none}
-.ambientes-chamados,.ambientes-hist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
-.ambientes-chamados li{display:grid;grid-template-columns:60px 1fr auto 90px;gap:12px;align-items:center;background:var(--sup2);border-radius:8px;padding:10px 12px}
-.ambientes-chamados a{color:#5aa2ff;text-decoration:none;font-weight:600}.ambientes-chamados time,.ambientes-hist time{color:var(--mudo);font-size:12.5px;text-align:right}
-.ambientes-chamados.mini li{grid-template-columns:auto 1fr;gap:4px 10px}.ambientes-chamados.mini .ambientes-pill{justify-self:start}.ambientes-chamados.mini time{text-align:left;grid-column:2}
-.ambientes-hist li{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}.ambientes-hist span{flex:1}
 .ambientes-modal-fundo{position:fixed;inset:0;background:#000a;display:grid;place-items:center;z-index:50;padding:16px;overflow:hidden;}
 .ambientes-modal {
   --modal-bg: #ffffff;
