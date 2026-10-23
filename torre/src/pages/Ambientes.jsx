@@ -48,139 +48,6 @@ const ICONES_COMP = {
   Outro: Package,
 };
 
-const CSS = `
-  .ambientes.page--ambientes {
-    --accent: #2f6df6;
-    --panel: rgba(15, 23, 42, 0.7);
-    --border: rgba(148, 163, 184, 0.22);
-    --text: #e5edf9;
-    --text-dim: #aabbd8;
-    --text-faint: #7f8fac;
-    --surface-2: rgba(15, 23, 42, 0.28);
-  }
-
-  .ambientes-head-row {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 20px;
-    margin: 0 0 18px;
-  }
-
-  .ambientes-titulo-texto {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .ambientes-titulo-texto h1 {
-    margin: 0;
-    font-size: 28px;
-    line-height: 1.2;
-    font-weight: 700;
-    color: var(--text);
-  }
-
-  .ambientes-titulo-texto p {
-    margin: 0;
-    color: var(--text-dim);
-    font-size: 0.98rem;
-  }
-
-  .ambientes-top-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-left: auto;
-  }
-
-  .ambientes-toolbar-search {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: min(100%, 360px);
-    min-height: 46px;
-    padding: 0 14px;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    background: rgba(15, 23, 42, 0.28);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  }
-
-  .ambientes-toolbar-search input {
-    flex: 1;
-    min-width: 0;
-    border: 0;
-    background: transparent;
-    color: var(--text);
-    font-size: 0.95rem;
-    outline: none;
-  }
-
-  .ambientes-toolbar-search input::placeholder {
-    color: var(--text-faint);
-  }
-
-  .ambientes-icon-btn {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    background: rgba(15, 23, 42, 0.28);
-    color: var(--text);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  }
-
-  .ambientes-filtros {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) auto;
-    gap: 12px;
-    align-items: end;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-  }
-
-  .ambientes-filtros .custom-select {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 100%;
-    min-width: 0;
-  }
-
-  .ambientes-filtros .custom-select__label {
-    display: block;
-    margin: 0;
-    font-size: 0.85rem;
-    color: var(--text-dim);
-  }
-
-  .ambientes-filtros .custom-select__trigger {
-    min-height: 46px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: rgba(15, 23, 42, 0.28);
-    color: var(--text);
-    font-weight: 500;
-    padding: 0 14px;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  }
-
-  .ambientes-btn--filtro {
-    min-width: 180px;
-    min-height: 46px;
-    border-radius: 12px;
-    box-shadow: 0 10px 20px rgba(47, 109, 246, 0.2);
-  }
-`;
-
 function normalizarComponente(item) {
   const componente = item?.componente || item || {};
   return {
@@ -471,7 +338,7 @@ export default function Ambientes() {
       />
       <button
         type="button"
-        className="ambientes-btn ambientes-btn--filtro"
+        className="btn btn--primary"
         onClick={() =>
           setNovo({
             nome: "",
@@ -482,57 +349,48 @@ export default function Ambientes() {
           })
         }
       >
-        <Plus size={18} />
-        Novo Ambiente
+        + Novo ambiente
       </button>
     </div>
   );
 
   return (
-    <div className="ambientes page page--ambientes">
-      <style>{CSS}</style>
-
-      <div className="page-ambientes">
-        <div className="ambientes-head-row">
-          <div className="ambientes-titulo-texto">
+    <div className="page page--ambientes ambientes">
+      <header className="page__header">
+        <div>
             <h1>Ambientes</h1>
-            <p>
+            <p className="muted">
               {modo === "grade"
                 ? "Gerencie os ambientes cadastrados no sistema."
                 : "Gerencie os ambientes cadastrados no sistema e visualize seus componentes."}
             </p>
-          </div>
-
-          <div className="ambientes-top-actions">
-            <div className="ambientes-toolbar-search" aria-label="Buscar ambientes">
-              <span className="topbar__icon" aria-hidden="true">
-                âŒ•
-              </span>
-              <input
-                type="search"
-                value={f.q}
-                onChange={set("q")}
-                placeholder="Buscar por nome, bloco ou tipo..."
-                aria-label="Buscar ambientes"
-              />
-            </div>
-
-            <button
-              type="button"
-              className="ambientes-icon-btn"
-              aria-label="NotificaÃ§Ãµes"
-            >
-              ðŸ•­
-            </button>
-          </div>
         </div>
+      </header>
+
+      <div className="topbar ambientes-topbar">
+        <div className="topbar__search" aria-label="Buscar ambientes">
+          <Search size={18} aria-hidden="true" />
+          <input
+            type="search"
+            value={f.q}
+            onChange={set("q")}
+            placeholder="Buscar por nome, bloco ou tipo..."
+            aria-label="Buscar ambientes"
+          />
+        </div>
+        <div className="topbar__actions">
+          <button type="button" className="topbar__icon-button" aria-label="Notificações">
+            <span aria-hidden="true">🕭</span>
+          </button>
+        </div>
+      </div>
 
         {carregando && <p className="ambientes-vazio">Carregando ambientes...</p>}
         {erro && <p className="ambientes-erro">{erro}</p>}
 
         {modo === "grade" ? (
           <>
-          <section className="ambientes-painel ambientes-painel--filtros-topo">{Filtros}</section>
+          {Filtros}
           <div className="ambientes-grade-wrap">
             <div>
               {filtrados.length === 0 && (
@@ -541,7 +399,7 @@ export default function Ambientes() {
                   novo ambiente.
                 </p>
               )}
-              <div className="card__ambientes card__ambientes--grid">
+          <div className="card__ambientes card__ambientes--grid ambientes-grid">
                 {filtrados.map((a) => (
                   <CardAmbiente
                     key={a.id}
@@ -615,7 +473,7 @@ export default function Ambientes() {
           </>
         ) : (
           <>
-            <section className="ambientes-painel">{Filtros}</section>
+            {Filtros}
             <div className="ambientes-detalhe-wrap">
               <div className="ambientes-lista">
                 {filtrados.map((a) => (
@@ -649,7 +507,7 @@ export default function Ambientes() {
                       </p>
                       <p className="ambientes-desc">{sel.desc}</p>
                     </div>
-                    <button className="ambientes-btn-sec" onClick={abrirEdicao}>
+                    <button className="btn btn--ghost ambientes-btn-sec" onClick={abrirEdicao}>
                       <Pencil size={15} /> Editar
                     </button>
                     <button className="ambientes-icon" aria-label="Mais aÃ§Ãµes">
@@ -709,7 +567,7 @@ export default function Ambientes() {
 
                         <button
                           type="button"
-                          className="ambientes-btn"
+                          className="btn btn--primary ambientes-btn"
                           onClick={() => setNovoComponente({
                             nome: "",
                             tipoId: tiposComponentes[0]?.id_compo_tipo ?? "",
@@ -722,7 +580,7 @@ export default function Ambientes() {
 
                       </div>
                       <div className="ambientes-tabela-wrap">
-                        <table className="ambientes-tabela">
+                        <table className="table ambientes-tabela">
                           <thead>
                             <tr>
                               <th>Componente</th>
@@ -823,8 +681,8 @@ export default function Ambientes() {
             </div>
           </>
         )}
-      </div>
 
+    
       {novo && (
         <Modal titulo="Novo ambiente" onClose={() => setNovo(null)}>
           <FormAmbiente
@@ -872,6 +730,20 @@ export default function Ambientes() {
 /* ---------- PeÃ§as menores ---------- */
 
 function Select({ label, value, onChange, opts, allLabel = "Todos" }) {
+  const options = [["", allLabel], ...opts];
+  return (
+    <label className="custom-select ambientes-select">
+      <span className="custom-select__label">{label}</span>
+      <select value={value} onChange={(event) => onChange(event.target.value)} aria-label={label}>
+        {options.map(([optionValue, optionLabel]) => (
+          <option key={optionValue} value={optionValue}>
+            {optionLabel}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+/*
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   useEffect(() => {
@@ -902,7 +774,9 @@ function Select({ label, value, onChange, opts, allLabel = "Todos" }) {
         onClick={() => setOpen((o) => !o)}
       >
         <span>{atual[1]}</span>
-        <span className="custom-select__caret">â–¾</span>
+        <span className="custom-select__caret">
+          <ChevronDown size={16} aria-hidden="true" />
+        </span>
       </button>
 
       {open && (
@@ -930,6 +804,7 @@ function Select({ label, value, onChange, opts, allLabel = "Todos" }) {
       )}
     </div>
   );
+*/
 }
 
 function Thumb({ tipo, size = 72 }) {
@@ -940,7 +815,7 @@ function Thumb({ tipo, size = 72 }) {
       style={{
         width: size,
         height: size * 0.85,
-        background: `linear-gradient(135deg, ${cor}55, #0b1a33)`,
+        background: `linear-gradient(135deg, ${cor}55, var(--surface-3))`,
         color: cor,
       }}
     >
@@ -997,7 +872,7 @@ function Kpi({ Icon, cor, n, label }) {
 function CardAmbiente({ a, qtd, onOpen, compacto, ativo }) {
   return (
     <article
-      className={`ambientes-card ${compacto ? "compacto" : ""} ${ativo ? "ativo" : ""}`}
+      className={`card ambientes-card ${compacto ? "compacto" : ""} ${ativo ? "ativo" : ""}`}
       tabIndex={0}
       role="button"
       aria-label={`Abrir ${a.nome}`}
@@ -1077,10 +952,10 @@ function Modal({ titulo, onClose, children }) {
 function Acoes({ onCancel, salvar, ok }) {
   return (
     <div className="ambientes-modal-acoes">
-      <button type="button" className="ambientes-btn-sec" onClick={onCancel}>
+      <button type="button" className="btn btn--ghost ambientes-btn-sec" onClick={onCancel}>
         Cancelar
       </button>
-      <button type="submit" className="ambientes-btn" disabled={!ok}>
+      <button type="submit" className="btn btn--primary ambientes-btn" disabled={!ok}>
         {salvar}
       </button>
     </div>
