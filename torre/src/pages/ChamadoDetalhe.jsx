@@ -15,8 +15,11 @@ const STATUS_LABEL = {
 };
 
 function normalizarOcorrencia(resposta) {
-  const dados = resposta?.data ?? resposta;
-  const ocorrencia = dados?.ocorrencia || dados || {};
+  const dados = resposta?.data?.data ?? resposta?.data ?? resposta;
+  const ocorrencia = dados?.ocorrencia || dados?.data?.ocorrencia || dados || {};
+  const usuarioCriador =
+    dados?.criado_por || dados?.usuario || dados?.user || dados?.criador ||
+    ocorrencia.criado_por || ocorrencia.usuario || ocorrencia.user || ocorrencia.criador;
 
   return {
     ...ocorrencia,
@@ -26,23 +29,32 @@ function normalizarOcorrencia(resposta) {
     status: ocorrencia.ocor_status ?? ocorrencia.status,
     prioridade: ocorrencia.ocor_prioridade ?? ocorrencia.prioridade,
     descricao: ocorrencia.ocor_obs ?? ocorrencia.descricao,
+    id_user:
+      ocorrencia.id_user ??
+      ocorrencia.id_usuario ??
+      ocorrencia.user_id ??
+      ocorrencia.usuario_id ??
+      ocorrencia.ocor_id_user ??
+      ocorrencia.ocor_id_usuario ??
+      ocorrencia.id_usu ??
+      usuarioCriador?.id_user ??
+      usuarioCriador?.id_usuario ??
+      usuarioCriador?.user_id ??
+      usuarioCriador?.id,
     criadoEm: ocorrencia.criado_em ?? ocorrencia.criadoEm,
     atualizadoEm: ocorrencia.atualizado_em ?? ocorrencia.atualizadoEm,
     comentarios: ocorrencia.comentarios || [],
-    componente: dados?.componente,
-    ambiente: dados?.ambiente,
-    criador:
-      dados?.usuario ||
-      dados?.user ||
-      dados?.criador ||
-      ocorrencia.usuario ||
-      ocorrencia.user ||
-      ocorrencia.criador,
+    componente: dados?.componente || dados?.data?.componente,
+    ambiente: dados?.ambiente || dados?.data?.ambiente,
+    criador: usuarioCriador,
     criadorNome:
       dados?.user_nome ||
       dados?.usuario_nome ||
+      dados?.nome_usuario ||
       ocorrencia.user_nome ||
-      ocorrencia.usuario_nome,
+      ocorrencia.usuario_nome ||
+      ocorrencia.nome_usuario ||
+      (typeof usuarioCriador === "string" ? usuarioCriador : undefined),
   };
 }
 
@@ -52,6 +64,8 @@ function nomeCriador(chamado) {
     chamado.criador?.nome ||
     chamado.criador?.user_nome ||
     chamado.criador?.usuario_nome ||
+    chamado.criador?.nome_usuario ||
+    chamado.criador?.name ||
     (chamado.id_user ? `Usuário ${chamado.id_user}` : "Usuário")
   );
 }
@@ -135,6 +149,8 @@ export default function ChamadoDetalhe() {
             const usuarioResposta =
               respostaUsuario?.usuario ||
               respostaUsuario?.user ||
+              respostaUsuario?.data?.data?.usuario ||
+              respostaUsuario?.data?.data?.user ||
               respostaUsuario?.data?.usuario ||
               respostaUsuario?.data?.user ||
               respostaUsuario?.data ||
@@ -146,6 +162,8 @@ export default function ChamadoDetalhe() {
             chamadoCarregado.criadorNome =
               usuarioEncontrado?.user_nome ||
               usuarioEncontrado?.usuario_nome ||
+              usuarioEncontrado?.nome_usuario ||
+              usuarioEncontrado?.name ||
               usuarioEncontrado?.nome;
           } catch (error) {
             console.error("Erro ao buscar usuário criador:", error);
@@ -220,7 +238,7 @@ export default function ChamadoDetalhe() {
 
   return (
     <div className="page ticket-detail-page">
-      <Link to="/chamados" className="back-link">← Voltar para chamados</Link>
+      <Link to="/chamados" className="back-link">← Voltar para Ocorrências</Link>
 
       <header className="page__header ticket-header">
         <div>

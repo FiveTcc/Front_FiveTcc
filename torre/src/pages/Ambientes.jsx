@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Search,
   Plus,
@@ -47,6 +48,139 @@ const ICONES_COMP = {
   Outro: Package,
 };
 
+const CSS = `
+  .ambientes.page--ambientes {
+    --accent: #2f6df6;
+    --panel: rgba(15, 23, 42, 0.7);
+    --border: rgba(148, 163, 184, 0.22);
+    --text: #e5edf9;
+    --text-dim: #aabbd8;
+    --text-faint: #7f8fac;
+    --surface-2: rgba(15, 23, 42, 0.28);
+  }
+
+  .ambientes-head-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 0 0 18px;
+  }
+
+  .ambientes-titulo-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ambientes-titulo-texto h1 {
+    margin: 0;
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .ambientes-titulo-texto p {
+    margin: 0;
+    color: var(--text-dim);
+    font-size: 0.98rem;
+  }
+
+  .ambientes-top-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+  }
+
+  .ambientes-toolbar-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: min(100%, 360px);
+    min-height: 46px;
+    padding: 0 14px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.28);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .ambientes-toolbar-search input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font-size: 0.95rem;
+    outline: none;
+  }
+
+  .ambientes-toolbar-search input::placeholder {
+    color: var(--text-faint);
+  }
+
+  .ambientes-icon-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(15, 23, 42, 0.28);
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .ambientes-filtros {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: end;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .ambientes-filtros .custom-select {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .ambientes-filtros .custom-select__label {
+    display: block;
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+
+  .ambientes-filtros .custom-select__trigger {
+    min-height: 46px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(15, 23, 42, 0.28);
+    color: var(--text);
+    font-weight: 500;
+    padding: 0 14px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .ambientes-btn--filtro {
+    min-width: 180px;
+    min-height: 46px;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(47, 109, 246, 0.2);
+  }
+`;
+
 function normalizarComponente(item) {
   const componente = item?.componente || item || {};
   return {
@@ -54,14 +188,15 @@ function normalizarComponente(item) {
     id: componente.compo_id ?? componente.id_comp ?? componente.id,
     nome: componente.compo_nome ?? componente.nome ?? "",
     tipo: componente.compo_tipo_nome ?? componente.compo_tipo ?? componente.tipo ?? "",
-    pat: componente.compo_patrimonio ?? componente.patrimonio ?? componente.pat ?? "—",
-    status: componente.compo_status ?? componente.status ?? "—",
-    manut: componente.compo_ultima_manutencao ?? componente.ultima_manutencao ?? componente.manut ?? "—",
+    pat: componente.compo_patrimonio ?? componente.patrimonio ?? componente.pat ?? "â€”",
+    status: componente.compo_status ?? componente.status ?? "â€”",
+    manut: componente.compo_ultima_manutencao ?? componente.ultima_manutencao ?? componente.manut ?? "â€”",
   };
 }
-/* ---------- Página: renderizada dentro do <Outlet /> do layout ---------- */
+/* ---------- PÃ¡gina: renderizada dentro do <Outlet /> do layout ---------- */
 
 export default function Ambientes() {
+  const navigate = useNavigate();
   const [ambientes, setAmbientes] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
@@ -104,11 +239,11 @@ export default function Ambientes() {
             bloco: item.amb_bloco ?? item.bloco ?? "",
             andar: Number(item.amb_andar ?? item.andar ?? 0),
             ativo: item.amb_status === "ativo" || item.amb_status === "ATIVO" || item.ativo === true || item.ativo === 1,
-            criado: item.amb_data_criacao ?? item.criado_em ?? item.criado ?? "—",
-            por: item.usuario?.nome ?? item.por ?? "—",
+            criado: item.amb_data_criacao ?? item.criado_em ?? item.criado ?? "â€”",
+            por: item.usuario?.nome ?? item.por ?? "â€”",
             comps: Number(item.componentes_count ?? item.comps ?? item.componentes?.length ?? 0),
             componentes: Array.isArray(item.componentes) ? item.componentes : [],
-            desc: item.amb_descricao ?? item.descricao ?? item.desc ?? "—",
+            desc: item.amb_descricao ?? item.descricao ?? item.desc ?? "â€”",
           }));
         if (montado) {
           setAmbientes(lista);
@@ -116,7 +251,7 @@ export default function Ambientes() {
         }
       } catch (error) {
         console.error("Erro ao carregar ambientes:", error);
-        if (montado) setErro("Não foi possível carregar os ambientes.");
+        if (montado) setErro("NÃ£o foi possÃ­vel carregar os ambientes.");
       } finally {
         if (montado) setCarregando(false);
       }
@@ -200,7 +335,7 @@ export default function Ambientes() {
   const abrir = (id) => {
     setSelId(id);
     setAba("visao");
-    setModo("detalhe");
+    navigate(`/ambientes/${id}`);
   };
 
   const salvarNovo = async () => {
@@ -226,7 +361,7 @@ export default function Ambientes() {
           ativo: criado.amb_status !== "inativo" && criado.amb_status !== "INATIVO",
           comps: 0,
           componentes: [],
-          desc: criado.amb_descricao ?? criado.descricao ?? novo.desc?.trim() ?? "—",
+          desc: criado.amb_descricao ?? criado.descricao ?? novo.desc?.trim() ?? "â€”",
         },
         ...lista,
       ]);
@@ -234,7 +369,7 @@ export default function Ambientes() {
       abrir(id);
     } catch (error) {
       console.error("Erro ao cadastrar ambiente:", error);
-      setErro("Não foi possível cadastrar o ambiente.");
+      setErro("NÃ£o foi possÃ­vel cadastrar o ambiente.");
     }
     return;
   };
@@ -260,7 +395,7 @@ export default function Ambientes() {
       setComponentes((Array.isArray(dados) ? dados : [dados]).filter(Boolean).map(normalizarComponente));
     } catch (error) {
       console.error("Erro ao cadastrar componente:", error);
-      setErro("Não foi possível cadastrar o componente.");
+      setErro("NÃ£o foi possÃ­vel cadastrar o componente.");
     } finally {
       setSalvandoComponente(false);
     }
@@ -290,7 +425,7 @@ export default function Ambientes() {
       });
     } catch (error) {
       console.error("Erro ao editar ambiente:", error);
-      setErro("Não foi possível editar o ambiente.");
+      setErro("NÃ£o foi possÃ­vel editar o ambiente.");
       return;
     }
     setAmbientes(
@@ -312,15 +447,7 @@ export default function Ambientes() {
   };
 
   const Filtros = (
-    <div className="ambientes-filtros">
-      <label className="ambientes-busca">
-        <Search size={18} />
-        <input
-          placeholder="Buscar por nome, bloco ou tipo..."
-          value={f.q}
-          onChange={set("q")}
-        />
-      </label>
+    <div className="filters ambientes-filtros">
       <Select
         label="Tipo"
         value={f.tipo}
@@ -342,16 +469,31 @@ export default function Ambientes() {
           ["inativo", "Inativo"],
         ]}
       />
+      <button
+        type="button"
+        className="ambientes-btn ambientes-btn--filtro"
+        onClick={() =>
+          setNovo({
+            nome: "",
+            tipo: "Sala",
+            bloco: "Bloco A",
+            andar: "0",
+            desc: "",
+          })
+        }
+      >
+        <Plus size={18} />
+        Novo Ambiente
+      </button>
     </div>
   );
 
   return (
-    <div className="page page--ambientes">
+    <div className="ambientes page page--ambientes">
       <style>{CSS}</style>
 
       <div className="page-ambientes">
-        <div className="ambientes-titulo">
-          {/* <Building2 size={40} color="#3b82f6" /> */}
+        <div className="ambientes-head-row">
           <div className="ambientes-titulo-texto">
             <h1>Ambientes</h1>
             <p>
@@ -361,24 +503,27 @@ export default function Ambientes() {
             </p>
           </div>
 
-          <div className="ambientes-titulo-acoes">
-            <div className="ambientes-btn-ico">
-            <button
-              className="ambientes-btn"
-              onClick={() =>
-                setNovo({
-                  nome: "",
-                  tipo: "Sala",
-                  bloco: "Bloco A",
-                  andar: "0",
-                  desc: "",
-                })
-              }
-            >
-                <Plus size={18} />
-              Novo Ambiente
-            </button>
+          <div className="ambientes-top-actions">
+            <div className="ambientes-toolbar-search" aria-label="Buscar ambientes">
+              <span className="topbar__icon" aria-hidden="true">
+                âŒ•
+              </span>
+              <input
+                type="search"
+                value={f.q}
+                onChange={set("q")}
+                placeholder="Buscar por nome, bloco ou tipo..."
+                aria-label="Buscar ambientes"
+              />
             </div>
+
+            <button
+              type="button"
+              className="ambientes-icon-btn"
+              aria-label="NotificaÃ§Ãµes"
+            >
+              ðŸ•­
+            </button>
           </div>
         </div>
 
@@ -386,9 +531,10 @@ export default function Ambientes() {
         {erro && <p className="ambientes-erro">{erro}</p>}
 
         {modo === "grade" ? (
+          <>
+          <section className="ambientes-painel ambientes-painel--filtros-topo">{Filtros}</section>
           <div className="ambientes-grade-wrap">
             <div>
-              <section className="ambientes-painel">{Filtros}</section>
               {filtrados.length === 0 && (
                 <p className="ambientes-vazio">
                   Nenhum ambiente encontrado. Limpe os filtros ou cadastre um
@@ -433,8 +579,8 @@ export default function Ambientes() {
                 <Kpi
                   Icon={FlaskConical}
                   cor="#8b5cf6"
-                  n={ambientes.filter((a) => a.tipo === "Laboratório").length}
-                  label="Laboratórios"
+                  n={ambientes.filter((a) => a.tipo === "LaboratÃ³rio").length}
+                  label="LaboratÃ³rios"
                 />
               </div>
               <h3>Tipos de ambiente</h3>
@@ -466,6 +612,7 @@ export default function Ambientes() {
               </div>
             </aside>
           </div>
+          </>
         ) : (
           <>
             <section className="ambientes-painel">{Filtros}</section>
@@ -497,7 +644,7 @@ export default function Ambientes() {
                         <Status ativo={sel.ativo} />
                       </div>
                       <p className="ambientes-local">
-                        <MapPin size={14} /> {sel.bloco} ·{" "}
+                        <MapPin size={14} /> {sel.bloco} Â·{" "}
                         {andarLabel(sel.andar)}
                       </p>
                       <p className="ambientes-desc">{sel.desc}</p>
@@ -505,14 +652,14 @@ export default function Ambientes() {
                     <button className="ambientes-btn-sec" onClick={abrirEdicao}>
                       <Pencil size={15} /> Editar
                     </button>
-                    <button className="ambientes-icon" aria-label="Mais ações">
+                    <button className="ambientes-icon" aria-label="Mais aÃ§Ãµes">
                       <MoreVertical size={18} />
                     </button>
                   </div>
 
                   <div className="ambientes-abas" role="tablist">
                     {[
-                      ["visao", Eye, "Visão geral"],
+                      ["visao", Eye, "VisÃ£o geral"],
                       ["componentes", Monitor, "Componentes"],
                     ].map(([k, Icon, nome]) => (
                       <button
@@ -529,7 +676,7 @@ export default function Ambientes() {
 
                   {aba === "componentes" && (
                     <>
-                      <div className="ambientes-comp-filtros">
+                      <div className="filters ambientes-comp-filtros">
                         <label className="ambientes-busca">
                           <Search size={16} />
                           <input
@@ -580,10 +727,10 @@ export default function Ambientes() {
                             <tr>
                               <th>Componente</th>
                               <th>Tipo</th>
-                              <th>Patrimônio</th>
+                              <th>PatrimÃ´nio</th>
                               <th>Status</th>
-                              <th>Última manutenção</th>
-                              <th>Ações</th>
+                              <th>Ãšltima manutenÃ§Ã£o</th>
+                              <th>AÃ§Ãµes</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -612,7 +759,7 @@ export default function Ambientes() {
                                 <td>
                                   <button
                                     className="ambientes-icon"
-                                    aria-label={`Ações de ${c.nome}`}
+                                    aria-label={`AÃ§Ãµes de ${c.nome}`}
                                   >
                                     <MoreVertical size={16} />
                                   </button>
@@ -628,7 +775,7 @@ export default function Ambientes() {
                         {!carregandoComponentes && compsFiltrados.length === 0 && (
                           <p className="ambientes-vazio">
                             {comps.length === 0
-                              ? "Este ambiente ainda não tem componentes cadastrados."
+                              ? "Este ambiente ainda nÃ£o tem componentes cadastrados."
                               : "Nenhum componente encontrado com esses filtros."}
                           </p>
                         )}
@@ -659,7 +806,7 @@ export default function Ambientes() {
                 <aside className="ambientes-col-dir">
                   <section className="ambientes-painel">
                     <h3>
-                      <ClipboardList size={18} /> Informações do Ambiente
+                      <ClipboardList size={18} /> InformaÃ§Ãµes do Ambiente
                     </h3>
                     <Info l="Nome" v={sel.nome} />
                     <Info l="Tipo" v={sel.tipo} />
@@ -669,7 +816,7 @@ export default function Ambientes() {
                       <small>Status</small>
                       <Status ativo={sel.ativo} />
                     </div>
-                    <Info l="Observações" v={sel.desc} />
+                    <Info l="ObservaÃ§Ãµes" v={sel.desc} />
                   </section>
                 </aside>
               )}
@@ -700,7 +847,7 @@ export default function Ambientes() {
             onChange={setEdit}
             onCancel={() => setEdit(null)}
             onSubmit={salvarEdicao}
-            salvar="Salvar alterações"
+            salvar="Salvar alteraÃ§Ãµes"
           />
         </Modal>
       )}
@@ -722,7 +869,7 @@ export default function Ambientes() {
   );
 }
 
-/* ---------- Peças menores ---------- */
+/* ---------- PeÃ§as menores ---------- */
 
 function Select({ label, value, onChange, opts, allLabel = "Todos" }) {
   const [open, setOpen] = useState(false);
@@ -744,23 +891,23 @@ function Select({ label, value, onChange, opts, allLabel = "Todos" }) {
   const options = [["", allLabel], ...opts];
   const atual = options.find(([v]) => v === value) ?? options[0];
   return (
-    <div className="ambientes-select" ref={ref}>
-      <small>{label}</small>
+    <div className="custom-select ambientes-select" ref={ref}>
+      <small className="custom-select__label">{label}</small>
 
       <button
         type="button"
-        className={`ambientes-select__trigger ${open ? "is-open" : ""}`}
+        className={`custom-select__trigger ${open ? "is-open" : ""}`}
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
       >
         <span>{atual[1]}</span>
-        <span className="ambientes-select__caret">▾</span>
+        <span className="custom-select__caret">â–¾</span>
       </button>
 
       {open && (
         <div
-          className="ambientes-select__menu"
+          className="custom-select__menu"
           role="listbox"
           aria-label={label}
         >
@@ -770,7 +917,7 @@ function Select({ label, value, onChange, opts, allLabel = "Todos" }) {
               type="button"
               role="option"
               aria-selected={v === value}
-              className={`ambientes-select__option ${v === value ? "is-selected" : ""}`}
+              className={`custom-select__option ${v === value ? "is-selected" : ""}`}
               onClick={() => {
                 onChange(v);
                 setOpen(false);
@@ -842,7 +989,7 @@ function Kpi({ Icon, cor, n, label }) {
         <Icon size={20} />
       </span>
       <b>{n}</b>
-      <small>{label}</small>
+      <small className="custom-select__label">{label}</small>
     </div>
   );
 }
@@ -868,7 +1015,7 @@ function CardAmbiente({ a, qtd, onOpen, compacto, ativo }) {
             <Status ativo={a.ativo} />
           </div>
           <p className="ambientes-local">
-            <MapPin size={13} /> {a.bloco} · {andarLabel(a.andar)}
+            <MapPin size={13} /> {a.bloco} Â· {andarLabel(a.andar)}
           </p>
         </div>
         <MoreVertical size={16} className="ambientes-mais" />
@@ -900,7 +1047,7 @@ function Modal({ titulo, onClose, children }) {
     return () => window.removeEventListener("keydown", h);
   }, [onClose]);
 
-  // Trava a rolagem da página enquanto o modal estiver aberto
+  // Trava a rolagem da pÃ¡gina enquanto o modal estiver aberto
   useEffect(() => {
     const larguraBarra =
       window.innerWidth - document.documentElement.clientWidth;
@@ -967,7 +1114,7 @@ function FormComponenteAmbiente({ valor, tipos, salvando, onChange, onCancel, on
         </select>
       </label>
       <label>
-        Patrimônio
+        PatrimÃ´nio
         <input
           value={valor.patrimonio}
           onChange={up("patrimonio")}
@@ -995,7 +1142,7 @@ function FormAmbiente({ valor, onChange, onCancel, onSubmit, salvar, edicao, tip
           autoFocus
           value={valor.nome}
           onChange={up("nome")}
-          placeholder="Ex.: Laboratório 03"
+          placeholder="Ex.: LaboratÃ³rio 03"
         />
       </label>
       <label>
@@ -1026,7 +1173,7 @@ function FormAmbiente({ valor, onChange, onCancel, onSubmit, salvar, edicao, tip
         </label>
       )}
       <label>
-        Observações
+        ObservaÃ§Ãµes
         <textarea
           rows={3}
           value={valor.desc}
@@ -1039,357 +1186,7 @@ function FormAmbiente({ valor, onChange, onCancel, onSubmit, salvar, edicao, tip
   );
 }
 
-/* ---------- Estilos Ambientes ---------- */
 
-const CSS = `
-.ambientes{--bg:#060f1f;--sup:#0a1830;--sup2:#0d2040;--borda:#16305a;--txt:#e8eefb;--mudo:#8ea3c7;--azul:#1d7bff;
-min-height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;font-size:14px}
-.ambientes *{box-sizing:border-box}.ambientes h1,.ambientes h2,.ambientes h3,.ambientes h4,.ambientes p{margin:0}
-.ambientes button,.ambientes input,.ambientes select{font:inherit;color:inherit}
-.ambientes button{cursor:pointer}
-.ambientes :focus-visible{outline:2px solid var(--azul);outline-offset:2px}
-.ambientes-icon{background:none;border:0;padding:6px;border-radius:8px;display:grid;place-items:center;color:var(--txt)}.ambientes-icon:hover{background:var(--sup2)}
-.ambientes-busca{display:flex;align-items:center;gap:10px;background:var(--panel-soft);border:1px solid var(--border); border-color:var(--border); border-radius:10px;padding:0 14px;height:42px;flex:1;min-width:180px;color:var(--mudo); gap:10px; box-sizing: border-box;}
-.ambientes-busca input{background:transparent;border:none;outline:0;flex:1;min-width:0;color:var(--text)}
-.ambientes-busca:focus-within{border-color:var(--accent);box-shadow:0 0 0 2px var(--azul)}
-.page-ambientes{padding:1 26px 40px}
-.ambientes-titulo{display:flex;align-items:center;gap:16px;margin-bottom:12px}
-.ambientes-titulo h1{font-size:28px}.ambientes-titulo p{color:var(--mudo);margin-top:4px}.ambientes-titulo .ambientes-btn{margin-left:auto}
-.ambientes-titulo-acoes{display:flex;flex-direction:column;align-items:flex-end;gap:12px;margin-left:auto;padding-top:16px}.ambientes-titulo-acoes .topbar__notifications-wrap{position:relative}
-.ambientes-titulo-texto{display:flex;flex-direction:column;gap:4px;margin-top:-60px}.ambientes-titulo-texto h1{font-size:28px}.ambientes-titulo-texto p{color:var(--mudo);margin-top:3px}
-.ambientes-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  border: 1px solid transparent;
-  border-radius: 12px;
-  padding: 14px 18px;
-  min-height: 48px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition:
-    transform 0.12s ease,
-    background 0.15s ease,
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
-  text-decoration: none;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
-  position: static;
-  background: var(--accent);
-  color: #ffffff;
-}
-.ambientes-btn:active {
-  transform: translateY(-10px);
-}
-.ambientes-btn:hover {
-  background: #1d4fc4;
-}
-.ambientes-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-.ambientes-btn-ico {
-  padding: 10px  0;
-}
-.ambientes-btn-sec {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border-radius: 8px;
-  padding: 0 16px;
-  height: 48px;
-  cursor: pointer;
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease;
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text);
-}
-.ambientes-btn-sec:hover {
-  background: #c81d1dc9;
-}
-.ambientes-btn-sec:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-.ambientes-painel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px; box-shadow:var(--shadow-card);margin-bottom:20px;}
-.ambientes-filtros{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
-.ambientes-select {position: relative; display: flex; flex-direction: column; gap: 4px; min-width: 140px; padding: 0 2px; box-sizing: border-box; top: -10px;}
-.ambientes-select__label,.ambientes-select small {font-size: 0.85rem;color: var(--mudo);padding-left: 2px;}
-.ambientes-select select {background: var(--sup2); border: 1px solid var(--border); border-radius: 8px; padding: 0 10px; height: 42px;}
-.ambientes-select__trigger {width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border: 1px solid var(--panel-input-border); border-radius: 14px; background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(148, 163, 184, 0.02));color: var(--text);cursor: pointer; text-align: left; font: inherit; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);}
-.ambientes-select__trigger.is-open {border-color: #1d4ed8; box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.18);}
-.ambientes-select__caret {color: var(--text-dim);font-size: 0.9rem;}
-.ambientes-select__menu { position: absolute; top: calc(100% + 8px); left: 0; right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow-card); z-index: 5; overflow: hidden; padding: 8px;}
-.ambientes-select__option {display: block; width: calc(100% - 8px); margin: 2px 4px; border: 0; background: transparent; color: var(--text); text-align: left; padding: 10px 12px; font: inherit; font-weight: 500; cursor: pointer; border-radius: 10px; border-color: var(--accent) transition: background 0.12s ease, color 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;}
-.ambientes-select__option:hover {background: var(--surface-3); color: var(--text);box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.12);}
-.ambientes-select__option.is-selected {background: transparent; color: var(--text); box-shadow: none;}
-.ambientes-select__option.is-selected:hover {background: var(--surface-3); color: var(--text); box-shadow: none;}
-.ambientes-toggle{display:flex;gap:6px;margin-left:auto}
-.ambientes-toggle button{background:var(--surface-1);border:1px solid var(--border);border-radius:8px;width:40px;height:40px;display:grid;place-items:center;color:var(--mudo)}
-.ambientes-toggle .on{background:var(--azul);border-color:var(--azul);color:#fff}
-.ambientes-grade-wrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
-.ambientes-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;margin-top:16px}
-.ambientes-card{background:var(--panel);border:1px solid var(--border);border-radius:12px; box-shadow:var(--shadow-card); padding:16px;display:flex;flex-direction:column;gap:12px;cursor:pointer;transition:border-color .15s}
-.ambientes-card:hover{border-color:var(--accent)}.ambientes-card.ativo{border-color:var(--azul);box-shadow:0 0 0 1px var(--azul)}
-.ambientes-card-topo{display:flex;gap:12px;align-items:flex-start}.ambientes-card-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
-.ambientes-card h3{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ambientes-mais{color:var(--mudo);flex:none}
-.ambientes-tags{display:flex;gap:8px;flex-wrap:wrap}
-.ambientes-local{display:flex;align-items:center;gap:5px;color:var(--mudo);font-size:12.5px}
-.ambientes-card-meta{display:flex;justify-content:space-between;color:var(--mudo);border-top:1px solid var(--border);padding-top:10px}
-.ambientes-card-meta span{display:flex;align-items:center;gap:6px}.ambientes-card-meta.fino{font-size:12px;border-top:0;padding-top:0}
-.ambientes-card.compacto{padding:12px;gap:8px}.ambientes-card.compacto .ambientes-card-meta{border:0;padding:0}
-.ambientes-thumb{border-radius:8px;display:grid;place-items:center;flex:none;border:1px solid var(--border)}
-.ambientes-tag,.ambientes-pill{display:inline-block;padding:2px 10px;border-radius:6px;font-size:12px;font-weight:600;border:1px solid transparent;white-space:nowrap}
-.ambientes-pill.ok{background:#0f3d2a;color:#4ade80;border-color:#166a45}.ambientes-pill.err{background:#4a1519;color:#f87171;border-color:#7f1d24}
-.ambientes-pill.warn{background:#4a3308;color:#fbbf24;border-color:#7a5510}.ambientes-pill.err-sol{background:#dc2626;color:#fff}
-.ambientes-resumo h3{display:flex;align-items:center;gap:8px;font-size:15px;margin-bottom:14px}.ambientes-resumo h3:not(:first-child){margin-top:22px}
-.ambientes-kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.ambientes-kpi{background: linear-gradient(135deg,rgba(37, 99, 235, 0.09),rgba(37, 99, 235, 0.02));border: 1px solid var(--border);border-color: rgba(37, 99, 235, 0.35); border-radius:var(--radius-lg);padding:12px;display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:center;min-height:86px}
-.ambientes-kpi-ico{grid-row:span 2;width:38px;height:38px;border-radius:8px;display:grid;place-items:center}.ambientes-kpi b{font-size:22px}.ambientes-kpi small{color:var(--mudo);grid-column:1/-1;font-size:12px}
-.ambientes-tipos{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
-.ambientes-tipos li{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}.ambientes-tipos b{margin-left:auto}
-.ambientes-chip-ico{width:30px;height:30px;border-radius:8px;display:inline-grid;place-items:center;background:#0b2a5c;color:#5aa2ff;flex:none}
-.ambientes-dica{margin-top:20px;background: linear-gradient(135deg,rgba(37, 99, 235, 0.09),rgba(37, 99, 235, 0.02));border: 1px solid var(--border);border-color: rgba(37, 99, 235, 0.35);border-radius:var(--radius-lg);padding:14px}
-.ambientes-dica h3{display:flex;gap:8px;align-items:center;color:#5aa2ff;margin-bottom:8px}.ambientes-dica p{color:var(--mudo);font-size:14px;line-height:1.5}
-.ambientes-vazio{color:var(--mudo);padding:24px;text-align:center}
-.ambientes-detalhe-wrap{display:grid;grid-template-columns:290px minmax(0,1fr) 300px;gap:16px;margin-top:16px;align-items:start}
-.ambientes-lista{display:flex;flex-direction:column;gap:10px;max-height:calc(100vh - 260px);overflow:auto;padding:2px;scrollbar-color: #8c8c8c #f1f1f1;scrollbar-width: auto;}
-.ambientes-det-head{display:flex;gap:18px;align-items:flex-start}.ambientes-det-info{flex:1;display:flex;flex-direction:column;gap:8px}.ambientes-det-info h2{font-size:24px}
-.ambientes-desc{color:var(--txt)}
-.ambientes-abas{display:flex;gap:6px;border-bottom:1px solid var(--border);margin:18px 0 16px}
-.ambientes-abas button{display:flex;align-items:center;gap:8px;background:none;border:0;border-bottom:2px solid transparent;padding:10px 16px;color:var(--mudo);margin-bottom:-1px}
-.ambientes-abas .on{color:#5aa2ff;border-color:var(--azul)}
-.ambientes-comp-filtros{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
-.ambientes-comp-filtros .ambientes-busca{height:38px;flex:1;}.ambientes-comp-filtros .ambientes-btn{height:38px;padding:0 14px;font-size:13px}
-.ambientes-tabela-wrap{background: var(--surface);border: 1px solid var(--border);border-radius: 18px;box-shadow: var(--shadow-card);z-index: 5;overflow: hidden;padding: 8px;overflow-x:auto;overflow-y:scroll;scrollbar-color: #8c8c8c #f1f1f1;scrollbar-width: auto;height:355px;border:1px solid var(--border);border-radius:10px}
-.ambientes-tabela-wrap::-webkit-scrollbar {width: 17px;}
-/* Trilho */
-.ambientes-tabela-wrap::-webkit-scrollbar-track {background: #f1f1f1;}
-/* Polegar (parte que arrasta) */
-.ambientes-tabela-wrap::-webkit-scrollbar-thumb {background: #8c8c8c;border-radius: 4px;border: 3px solid #f1f1f1;}
-.ambientes-tabela-wrap::-webkit-scrollbar-thumb:hover {background: #6b6b6b;}
-/* Botões das setas */
-.minha-area::-webkit-scrollbar-button:single-button {height: 17px;background-color: #f1f1f1;background-repeat: no-repeat;background-position: center;background-size: 10px;}
-/* Seta para cima */
-.minha-area::-webkit-scrollbar-button:single-button:vertical:decrement {background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><polygon points='5,2 9,8 1,8' fill='%23777'/></svg>");}
-/* Seta para baixo */
-.minha-area::-webkit-scrollbar-button:single-button:vertical:increment {background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><polygon points='1,2 9,2 5,8' fill='%23777'/></svg>");}
-.ambientes-tabela {
-  --tb-border: #e2e8f0;
-  --tb-hover: #e8ecf0;
-  --tb-text: #0a0a0a;
-  --tb-muted: #64748b;
-  --tb-icon-bg: #dbeafe;
-  --tb-icon-color: #2563eb;
 
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 640px;
-  color: var(--tb-text);
-}
 
-.dark .ambientes-tabela,
-[data-theme="dark"] .ambientes-tabela {
-  --tb-border: #1e293b;
-  --tb-hover: #15294d;
-  --tb-text: #e2e8f0;
-  --tb-muted: #94a3b8;
-  --tb-icon-bg: #1e3a8a;
-  --tb-icon-color: #60a5fa;
-}
 
-.ambientes-tabela th {
-  color: var(--tb-text);
-  text-align: left;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--tb-border);
-}
-
-.ambientes-tabela td {
-  color: var(--tb-text);
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--tb-border);
-}
-
-.ambientes-tabela tbody tr:hover {
-  background: var(--tb-hover);
-}
-
-.ambientes-tabela tbody tr:hover td {
-  color: var(--tb-text);
-}
-
-/* Ícone do componente */
-.ambientes-tabela .ambientes-icone {
-  background: var(--tb-icon-bg);
-  color: var(--tb-icon-color);
-  border-radius: 8px;
-}
-.ambientes-comp-nome{display:flex;align-items:center;gap:10px}
-.ambientes-rodape-tabela{color:var(--mudo);font-size:12.5px;margin-top:10px}
-.ambientes-visao{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
-.ambientes-info{display:flex;flex-direction:column;gap:4px;padding:10px 0}.ambientes-info small{color:var(--mudo)}.ambientes-info span{line-height:1.4}
-.ambientes-col-dir{display:flex;flex-direction:column;gap:3px}
-.ambientes-col-dir h3{display:flex;align-items:center;gap:8px;font-size:15px;margin-bottom:8px}.ambientes-col-dir h3 a{margin-left:auto;font-size:12px;color:#5aa2ff;text-decoration:none}
-.ambientes-modal-fundo{position:fixed;inset:0;background:#000a;display:grid;place-items:center;z-index:50;padding:16px;overflow:hidden;}
-.ambientes-modal {
-  --modal-bg: #ffffff;
-  --modal-bg-2: #f8fafc;
-  --modal-border: #e2e8f0;
-  --modal-text: #0f172a;
-  --modal-muted: #64748b;
-  --modal-accent: #2563eb;
-  --modal-accent-text: #ffffff;
-  color-scheme: light;
-
-  background: var(--modal-bg);
-  color: var(--modal-text);
-  border: 1px solid var(--modal-border);
-  border-radius: 14px;
-  padding: 22px;
-  width: 100%;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
-}
-
-/* Tema escuro: deixe só o seletor que o seu app usa */
-.dark .ambientes-modal,
-[data-theme="dark"] .ambientes-modal {
-  --modal-bg: #0f172a;
-  --modal-bg-2: #1e293b;
-  --modal-border: #334155;
-  --modal-text: #e2e8f0;
-  --modal-muted: #94a3b8;
-  --modal-accent: #3b82f6;
-  --modal-accent-text: #ffffff;
-  color-scheme: dark;
-}
-
-.ambientes-modal-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.ambientes-modal form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.ambientes-modal label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  color: var(--modal-muted);
-  flex: 1;
-}
-
-.ambientes-modal input,
-.ambientes-modal select,
-.ambientes-modal textarea {
-  background: var(--modal-bg-2);
-  border: 1px solid var(--modal-border);
-  border-radius: 8px;
-  color: var(--modal-text);
-}
-
-.ambientes-modal input,
-.ambientes-modal select {
-  height: 40px;
-  padding: 0 12px;
-}
-
-.ambientes-modal textarea {
-  padding: 10px 12px;
-  resize: vertical;
-  min-height: 72px;
-}
-
-.ambientes-modal input::placeholder,
-.ambientes-modal textarea::placeholder {
-  color: var(--modal-muted);
-  opacity: 0.7;
-}
-
-.ambientes-modal input:focus,
-.ambientes-modal select:focus,
-.ambientes-modal textarea:focus {
-  outline: none;
-  border-color: var(--modal-accent);
-}
-
-/* Botões */
-.ambientes-modal button {
-  background: transparent;
-  color: var(--modal-text);
-  border: 1px solid var(--modal-border);
-  border-radius: 8px;
-  height: 48px;
-  padding: 0 16px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.ambientes-modal button:hover {
-  background: var(--modal-bg-2);
-}
-
-.ambientes-modal button[type="submit"] {
-  background: var(--modal-accent);
-  color: var(--modal-accent-text);
-  border-color: var(--modal-accent);
-}
-
-.ambientes-modal button[type="submit"]:hover {
-  filter: brightness(1.1);
-  background: var(--modal-accent);
-}
-
-.ambientes-modal .ambientes-btn-sec {
-  background: #dc2626;
-  border: 1px solid #dc2626;
-  color: #ffffff;
-}
-
-.ambientes-modal .ambientes-btn-sec:hover {
-  background: #b91c1ca9;
-  border: 1px solid #b91c1ca9;
-  color: #ffffff;
-}
-
-.ambientes-modal .ambientes-btn-sec:focus-visible {
-  outline: 2px solid #dc2626;
-  outline-offset: 2px;
-}
-
-/* Botão de fechar (X) */
-.ambientes-modal-head button {
-  background: transparent;
-  border: none;
-  color: var(--modal-muted);
-  height: auto;
-  padding: 4px 8px;
-  font-size: 20px;
-}
-.ambientes-erro{color:#f87171;font-size:12.5px}
-.ambientes-linha{display:flex;gap:12px}.ambientes-modal-acoes{display:flex;justify-content:flex-end;gap:10px;margin-top:6px}
-.topbar__notifications-wrap{position:relative}
-.topbar__notifications{
-  position:absolute;
-  top:calc(100% + 8px);
-  right:0;
-  z-index:20;
-}
-@media(max-width:1280px){.ambientes-detalhe-wrap{grid-template-columns:270px minmax(0,1fr)}.ambientes-col-dir{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr}}
-@media(max-width:1000px){.ambientes-grade-wrap{grid-template-columns:1fr}}
-@media(max-width:760px){.ambientes-detalhe-wrap{grid-template-columns:1fr}.ambientes-lista{max-height:none;flex-direction:row;overflow-x:auto}.ambientes-lista .ambientes-card{min-width:260px}.ambientes-col-dir{grid-template-columns:1fr}.ambientes-titulo{flex-wrap:wrap}.ambientes-titulo .ambientes-btn{margin-left:0}.ambientes-det-head{flex-wrap:wrap}}
-@media(prefers-reduced-motion:reduce){.ambientes *{transition:none!important}}
-`;

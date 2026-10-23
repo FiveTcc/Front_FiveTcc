@@ -14,6 +14,7 @@ import Relatorios from './pages/Relatorios'
 
 import PrivateRoute from "./routes/privateRouter";
 import Ambientes from './pages/Ambientes';
+import AmbientesDetalhe from './pages/AmbientesDetalhe';
 
 
 
@@ -75,6 +76,10 @@ export default function App() {
           <Route
             path="ambientes"
             element={<Ambientes />}
+          />
+          <Route
+            path="ambientes/:id"
+            element={<AmbientesDetalhe />}
           />
         
         </Route>
