@@ -36,7 +36,15 @@ import componenteTipoService from "../services/componenteTipoService";
 
 /* ---------- Configurações visuais ---------- */
 
-const andarLabel = (n) => (n === 0 ? "Térreo" : `${n}º Andar`);
+const normalizarAndar = (valor) => {
+  const numero = Number(String(valor ?? 0).toString().replace(/[^\d.-]/g, ""));
+  return Number.isFinite(numero) ? numero : 0;
+};
+
+const andarLabel = (n) => {
+  const andar = normalizarAndar(n);
+  return andar === 0 ? "Térreo" : `${andar}º Andar`;
+};
 
 const ICONES_COMP = {
   Computador: Monitor,
@@ -55,12 +63,30 @@ function normalizarComponente(item) {
     id: componente.compo_id ?? componente.id_comp ?? componente.id,
     nome: componente.compo_nome ?? componente.nome ?? "",
     tipo: componente.compo_tipo_nome ?? componente.compo_tipo ?? componente.tipo ?? "",
-    pat: componente.compo_patrimonio ?? componente.patrimonio ?? componente.pat ?? "â€”",
-    status: componente.compo_status ?? componente.status ?? "â€”",
-    manut: componente.compo_ultima_manutencao ?? componente.ultima_manutencao ?? componente.manut ?? "â€”",
+    pat: componente.compo_patrimonio ?? componente.patrimonio ?? componente.pat ?? "—",
+    status: componente.compo_status ?? componente.status ?? "—",
+    manut: componente.compo_ultima_manutencao ?? componente.ultima_manutencao ?? componente.manut ?? "—",
   };
 }
-/* ---------- PÃ¡gina: renderizada dentro do <Outlet /> do layout ---------- */
+
+function normalizarStatusAmbiente(valor) {
+  if (typeof valor === "boolean") return valor;
+  if (typeof valor === "number") return valor === 1 || valor > 0;
+  if (typeof valor === "string") {
+    const texto = valor.trim().toLowerCase();
+    if (["ativo", "active", "true", "1", "habilitado", "enabled"].includes(texto)) return true;
+    if (["inativo", "inactive", "false", "0", "desabilitado", "disabled"].includes(texto)) return false;
+    return texto.includes("ativo") || texto.includes("enabled") || texto.includes("true");
+  }
+  return false;
+}
+
+function atendeFiltroStatus(valor, filtro) {
+  if (!filtro) return true;
+  const statusAtual = normalizarStatusAmbiente(valor);
+  return (filtro === "ativo") === statusAtual;
+}
+/* ---------- Página: renderizada dentro do <Outlet /> do layout ---------- */
 
 export default function Ambientes() {
   const navigate = useNavigate();
@@ -84,8 +110,19 @@ export default function Ambientes() {
   const [tiposComponentes, setTiposComponentes] = useState([]);
   const [novoComponente, setNovoComponente] = useState(null);
   const [salvandoComponente, setSalvandoComponente] = useState(false);
-  const qtdDe = (a) => a.comps;
-  const set = (k) => (v) => setF((cur) => ({ ...cur, [k]: v }));
+  const qtdDe = (a) => Number(
+    a?.comps ??
+      a?.componentes_count ??
+      a?.quantidade_componentes ??
+      a?.qtd_componentes ??
+      a?.total_componentes ??
+      a?.componentes?.length ??
+      0,
+  );
+  const set = (k) => (v) => {
+    const valor = v && typeof v === "object" && "target" in v ? v.target.value : v;
+    setF((cur) => ({ ...cur, [k]: valor }));
+  };
 
   useEffect(() => {
     let montado = true;
@@ -104,21 +141,55 @@ export default function Ambientes() {
             nome: item.amb_nome ?? item.nome ?? "",
             tipo: item.amb_tipo ?? item.tipo ?? "Outro",
             bloco: item.amb_bloco ?? item.bloco ?? "",
-            andar: Number(item.amb_andar ?? item.andar ?? 0),
-            ativo: item.amb_status === "ativo" || item.amb_status === "ATIVO" || item.ativo === true || item.ativo === 1,
-            criado: item.amb_data_criacao ?? item.criado_em ?? item.criado ?? "â€”",
-            por: item.usuario?.nome ?? item.por ?? "â€”",
-            comps: Number(item.componentes_count ?? item.comps ?? item.componentes?.length ?? 0),
+            andar: normalizarAndar(item.amb_andar ?? item.andar ?? 0),
+            ativo: normalizarStatusAmbiente(item.amb_status ?? item.amb_ativo ?? item.status ?? item.ativo),
+            criado: item.amb_data_criacao ?? item.criado_em ?? item.criado ?? "—",
+            por: item.usuario?.nome ?? item.por ?? "—",
+            comps: Number(
+              item.componentes_count ??
+                item.comps ??
+                item.quantidade_componentes ??
+                item.qtd_componentes ??
+                item.total_componentes ??
+                (Array.isArray(item.componentes) ? item.componentes.length : 0) ??
+                0,
+            ),
             componentes: Array.isArray(item.componentes) ? item.componentes : [],
-            desc: item.amb_descricao ?? item.descricao ?? item.desc ?? "â€”",
+            desc: item.amb_descricao ?? item.descricao ?? item.desc ?? "—",
           }));
-        if (montado) {
-          setAmbientes(lista);
-          setSelId((atual) => atual ?? lista[0]?.id ?? null);
-        }
+
+        if (!montado) return;
+
+        const listaComContagem = await Promise.all(
+          lista.map(async (ambiente) => {
+            if (!ambiente.nome) return ambiente;
+
+            try {
+              const respostaComponentes = await componenteService.buscarPorAmbiente(ambiente.nome);
+              const dadosComponentes = Array.isArray(respostaComponentes)
+                ? respostaComponentes
+                : respostaComponentes?.componentes || respostaComponentes?.data || respostaComponentes?.componente || [];
+              const componentes = (Array.isArray(dadosComponentes) ? dadosComponentes : [dadosComponentes])
+                .filter(Boolean)
+                .map(normalizarComponente);
+
+              return {
+                ...ambiente,
+                comps: componentes.length,
+                componentes,
+              };
+            } catch (error) {
+              console.warn(`Não foi possível carregar contagem de componentes do ambiente ${ambiente.nome}:`, error);
+              return ambiente;
+            }
+          }),
+        );
+
+        setAmbientes(listaComContagem);
+        setSelId((atual) => atual ?? listaComContagem[0]?.id ?? null);
       } catch (error) {
         console.error("Erro ao carregar ambientes:", error);
-        if (montado) setErro("NÃ£o foi possÃ­vel carregar os ambientes.");
+        if (montado) setErro("Não foi possível carregar os ambientes.");
       } finally {
         if (montado) setCarregando(false);
       }
@@ -132,14 +203,18 @@ export default function Ambientes() {
 
   const filtrados = useMemo(() => {
     const q = f.q.trim().toLowerCase();
-    return ambientes.filter(
-      (a) =>
-        (!q ||
-          [a.nome, a.bloco, a.tipo].some((s) => s.toLowerCase().includes(q))) &&
-        (!f.tipo || a.tipo === f.tipo) &&
-        (!f.bloco || a.bloco === f.bloco) &&
-        (!f.status || (f.status === "ativo") === a.ativo),
-    );
+    return ambientes.filter((a) => {
+      const nome = String(a.nome ?? "").toLowerCase();
+      const bloco = String(a.bloco ?? "").toLowerCase();
+      const tipo = String(a.tipo ?? "").toLowerCase();
+
+      const atendeTexto = !q || [nome, bloco, tipo].some((s) => s.includes(q));
+      const atendeTipo = !f.tipo || String(a.tipo ?? "") === String(f.tipo);
+      const atendeBloco = !f.bloco || String(a.bloco ?? "") === String(f.bloco);
+      const atendeStatus = atendeFiltroStatus(a.ativo, f.status);
+
+      return atendeTexto && atendeTipo && atendeBloco && atendeStatus;
+    });
   }, [ambientes, f]);
 
   const blocos = [...new Set(ambientes.map((a) => a.bloco))].sort();
@@ -163,8 +238,15 @@ export default function Ambientes() {
         const dados = Array.isArray(resposta)
           ? resposta
           : resposta?.componentes || resposta?.data || resposta?.componente || [];
+        const lista = (Array.isArray(dados) ? dados : [dados]).filter(Boolean).map(normalizarComponente);
+
         if (montado) {
-          setComponentes((Array.isArray(dados) ? dados : [dados]).filter(Boolean).map(normalizarComponente));
+          setComponentes(lista);
+          setAmbientes((atual) =>
+            atual.map((a) =>
+              a.id === sel.id ? { ...a, comps: lista.length, componentes: lista } : a,
+            ),
+          );
         }
       })
       .catch((error) => {
@@ -190,14 +272,21 @@ export default function Ambientes() {
   }, []);
 
   const comps = componentes;
+  const totalComponentesDoAmbiente = Number(sel?.comps ?? comps.length ?? 0);
   const tiposComponente = [...new Set(comps.map((c) => c.tipo).filter(Boolean))].sort();
   const statusComponentes = [...new Set(comps.map((c) => c.status).filter(Boolean))].sort();
-  const compsFiltrados = comps.filter(
-    (c) =>
-      (!cf.q || c.nome.toLowerCase().includes(cf.q.toLowerCase())) &&
-      (!cf.tipo || c.tipo === cf.tipo) &&
-      (!cf.status || c.status === cf.status),
-  );
+  const compsFiltrados = comps.filter((c) => {
+    const nome = String(c.nome ?? "").toLowerCase();
+    const tipo = String(c.tipo ?? "").toLowerCase();
+    const status = String(c.status ?? "").toLowerCase();
+    const busca = String(cf.q ?? "").trim().toLowerCase();
+
+    const atendeBusca = !busca || nome.includes(busca) || tipo.includes(busca);
+    const atendeTipo = !cf.tipo || String(c.tipo ?? "") === String(cf.tipo);
+    const atendeStatus = !cf.status || status === String(cf.status).toLowerCase();
+
+    return atendeBusca && atendeTipo && atendeStatus;
+  });
 
   const abrir = (id) => {
     setSelId(id);
@@ -224,11 +313,11 @@ export default function Ambientes() {
           nome: criado.amb_nome ?? criado.nome ?? novo.nome.trim(),
           tipo: criado.amb_tipo ?? criado.tipo ?? novo.tipo,
           bloco: criado.amb_bloco ?? criado.bloco ?? novo.bloco,
-          andar: Number(criado.amb_andar ?? criado.andar ?? novo.andar),
-          ativo: criado.amb_status !== "inativo" && criado.amb_status !== "INATIVO",
+          andar: normalizarAndar(criado.amb_andar ?? criado.andar ?? novo.andar),
+          ativo: normalizarStatusAmbiente(criado.amb_status ?? criado.amb_ativo ?? criado.status ?? criado.ativo),
           comps: 0,
           componentes: [],
-          desc: criado.amb_descricao ?? criado.descricao ?? novo.desc?.trim() ?? "â€”",
+          desc: criado.amb_descricao ?? criado.descricao ?? novo.desc?.trim() ?? "—",
         },
         ...lista,
       ]);
@@ -236,7 +325,7 @@ export default function Ambientes() {
       abrir(id);
     } catch (error) {
       console.error("Erro ao cadastrar ambiente:", error);
-      setErro("NÃ£o foi possÃ­vel cadastrar o ambiente.");
+      setErro("Não foi possível cadastrar o ambiente.");
     }
     return;
   };
@@ -259,10 +348,16 @@ export default function Ambientes() {
       const dados = Array.isArray(resposta)
         ? resposta
         : resposta?.componentes || resposta?.data || [];
-      setComponentes((Array.isArray(dados) ? dados : [dados]).filter(Boolean).map(normalizarComponente));
+      const lista = (Array.isArray(dados) ? dados : [dados]).filter(Boolean).map(normalizarComponente);
+      setComponentes(lista);
+      setAmbientes((atual) =>
+        atual.map((a) =>
+          a.id === sel.id ? { ...a, comps: lista.length, componentes: lista } : a,
+        ),
+      );
     } catch (error) {
       console.error("Erro ao cadastrar componente:", error);
-      setErro("NÃ£o foi possÃ­vel cadastrar o componente.");
+      setErro("Não foi possível cadastrar o componente.");
     } finally {
       setSalvandoComponente(false);
     }
@@ -292,7 +387,7 @@ export default function Ambientes() {
       });
     } catch (error) {
       console.error("Erro ao editar ambiente:", error);
-      setErro("NÃ£o foi possÃ­vel editar o ambiente.");
+      setErro("Não foi possível editar o ambiente.");
       return;
     }
     setAmbientes(
@@ -303,8 +398,8 @@ export default function Ambientes() {
               nome: edit.nome.trim(),
               tipo: edit.tipo,
               bloco: edit.bloco,
-              andar: Number(edit.andar),
-              ativo: edit.ativo === "ativo",
+              andar: normalizarAndar(edit.andar),
+              ativo: normalizarStatusAmbiente(edit.ativo),
               desc: edit.desc.trim(),
             }
           : a,
@@ -437,8 +532,8 @@ export default function Ambientes() {
                 <Kpi
                   Icon={FlaskConical}
                   cor="#8b5cf6"
-                  n={ambientes.filter((a) => a.tipo === "LaboratÃ³rio").length}
-                  label="LaboratÃ³rios"
+                  n={ambientes.filter((a) => a.tipo === "Laboratório").length}
+                  label="Laboratórios"
                 />
               </div>
               <h3>Tipos de ambiente</h3>
@@ -502,7 +597,7 @@ export default function Ambientes() {
                         <Status ativo={sel.ativo} />
                       </div>
                       <p className="ambientes-local">
-                        <MapPin size={14} /> {sel.bloco} Â·{" "}
+                        <MapPin size={14} /> {sel.bloco} ·{" "}
                         {andarLabel(sel.andar)}
                       </p>
                       <p className="ambientes-desc">{sel.desc}</p>
@@ -510,14 +605,14 @@ export default function Ambientes() {
                     <button className="btn btn--ghost ambientes-btn-sec" onClick={abrirEdicao}>
                       <Pencil size={15} /> Editar
                     </button>
-                    <button className="ambientes-icon" aria-label="Mais aÃ§Ãµes">
+                    <button className="ambientes-icon" aria-label="Mais ações">
                       <MoreVertical size={18} />
                     </button>
                   </div>
 
                   <div className="ambientes-abas" role="tablist">
                     {[
-                      ["visao", Eye, "VisÃ£o geral"],
+                      ["visao", Eye, "Visão geral"],
                       ["componentes", Monitor, "Componentes"],
                     ].map(([k, Icon, nome]) => (
                       <button
@@ -585,10 +680,10 @@ export default function Ambientes() {
                             <tr>
                               <th>Componente</th>
                               <th>Tipo</th>
-                              <th>PatrimÃ´nio</th>
+                              <th>Patrimônio</th>
                               <th>Status</th>
-                              <th>Ãšltima manutenÃ§Ã£o</th>
-                              <th>AÃ§Ãµes</th>
+                              <th>Última manutenção</th>
+                              <th>Ações</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -617,7 +712,7 @@ export default function Ambientes() {
                                 <td>
                                   <button
                                     className="ambientes-icon"
-                                    aria-label={`AÃ§Ãµes de ${c.nome}`}
+                                    aria-label={`Ações de ${c.nome}`}
                                   >
                                     <MoreVertical size={16} />
                                   </button>
@@ -633,15 +728,11 @@ export default function Ambientes() {
                         {!carregandoComponentes && compsFiltrados.length === 0 && (
                           <p className="ambientes-vazio">
                             {comps.length === 0
-                              ? "Este ambiente ainda nÃ£o tem componentes cadastrados."
+                              ? "Este ambiente ainda não tem componentes cadastrados."
                               : "Nenhum componente encontrado com esses filtros."}
                           </p>
                         )}
                       </div>
-                      {/* <p className="ambientes-rodape-tabela">
-                        Mostrando {compsFiltrados.length} de {comps.length}{" "}
-                        componentes
-                      </p> */}
                     </>
                   )}
 
@@ -652,8 +743,11 @@ export default function Ambientes() {
                       <Info l="Bloco" v={sel.bloco} />
                       <Info l="Andar" v={andarLabel(sel.andar)} />
                       <Info l="Status" v={sel.ativo ? "Ativo" : "Inativo"} />
-                      <Info l="Componentes" v={comps.length} />
-                      <Info l="Criado em" v={`${sel.criado} por ${sel.por}`} />
+                      <Info l="Componentes" v={totalComponentesDoAmbiente} />
+                      <Info
+                        l="Criado em"
+                        v={sel.por ? `${formatarDataAmbiente(sel.criado)} por ${sel.por}` : formatarDataAmbiente(sel.criado)}
+                      />
                     </div>
                   )}
 
@@ -664,17 +758,18 @@ export default function Ambientes() {
                 <aside className="ambientes-col-dir">
                   <section className="ambientes-painel">
                     <h3>
-                      <ClipboardList size={18} /> InformaÃ§Ãµes do Ambiente
+                      <ClipboardList size={18} /> Informações do Ambiente
                     </h3>
                     <Info l="Nome" v={sel.nome} />
                     <Info l="Tipo" v={sel.tipo} />
                     <Info l="Bloco" v={sel.bloco} />
                     <Info l="Andar" v={andarLabel(sel.andar)} />
+                    <Info l="Componentes" v={totalComponentesDoAmbiente} />
                     <div className="ambientes-info">
                       <small>Status</small>
                       <Status ativo={sel.ativo} />
                     </div>
-                    <Info l="ObservaÃ§Ãµes" v={sel.desc} />
+                    <Info l="Observações" v={sel.desc} />
                   </section>
                 </aside>
               )}
@@ -705,7 +800,7 @@ export default function Ambientes() {
             onChange={setEdit}
             onCancel={() => setEdit(null)}
             onSubmit={salvarEdicao}
-            salvar="Salvar alteraÃ§Ãµes"
+            salvar="Salvar alterações"
           />
         </Modal>
       )}
@@ -727,7 +822,7 @@ export default function Ambientes() {
   );
 }
 
-/* ---------- PeÃ§as menores ---------- */
+
 
 function Select({ label, value, onChange, opts, allLabel = "Todos" }) {
   const options = [["", allLabel], ...opts];
@@ -743,70 +838,7 @@ function Select({ label, value, onChange, opts, allLabel = "Todos" }) {
       </select>
     </label>
   );
-/*
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-  useEffect(() => {
-    if (!open) return;
-    const onDown = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-    };
-    const onKey = (e) => e.key === "Escape" && setOpen(false);
-    document.addEventListener("mousedown", onDown);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDown);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [open]);
-
-  const options = [["", allLabel], ...opts];
-  const atual = options.find(([v]) => v === value) ?? options[0];
-  return (
-    <div className="custom-select ambientes-select" ref={ref}>
-      <small className="custom-select__label">{label}</small>
-
-      <button
-        type="button"
-        className={`custom-select__trigger ${open ? "is-open" : ""}`}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        onClick={() => setOpen((o) => !o)}
-      >
-        <span>{atual[1]}</span>
-        <span className="custom-select__caret">
-          <ChevronDown size={16} aria-hidden="true" />
-        </span>
-      </button>
-
-      {open && (
-        <div
-          className="custom-select__menu"
-          role="listbox"
-          aria-label={label}
-        >
-          {options.map(([v, l]) => (
-            <button
-              key={v}
-              type="button"
-              role="option"
-              aria-selected={v === value}
-              className={`custom-select__option ${v === value ? "is-selected" : ""}`}
-              onClick={() => {
-                onChange(v);
-                setOpen(false);
-              }}
-            >
-              {l}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-*/
 }
-
 function Thumb({ tipo, size = 72 }) {
   const { cor, Icon } = tipoConfig(tipo);
   return (
@@ -847,6 +879,20 @@ const Status = ({ ativo }) => (
     {ativo ? "Ativo" : "Inativo"}
   </span>
 );
+
+function formatarDataAmbiente(valor) {
+  if (!valor || valor === "—") return "—";
+
+  const data = new Date(valor);
+  if (Number.isNaN(data.getTime())) return String(valor);
+
+  return new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(data);
+}
+
 const Info = ({ l, v }) => (
   <div className="ambientes-info">
     <small>{l}</small>
@@ -890,7 +936,7 @@ function CardAmbiente({ a, qtd, onOpen, compacto, ativo }) {
             <Status ativo={a.ativo} />
           </div>
           <p className="ambientes-local">
-            <MapPin size={13} /> {a.bloco} Â· {andarLabel(a.andar)}
+            <MapPin size={13} /> {a.bloco} · {andarLabel(a.andar)}
           </p>
         </div>
         <MoreVertical size={16} className="ambientes-mais" />
@@ -903,11 +949,9 @@ function CardAmbiente({ a, qtd, onOpen, compacto, ativo }) {
       {!compacto && (
         <div className="ambientes-card-meta fino">
           <span>
-            <Calendar size={14} /> Criado em {a.criado}
+            <Calendar size={14} /> Criado em {formatarDataAmbiente(a.criado)}
           </span>
-          <span>
-            <User size={14} /> {a.por}
-          </span>
+          <span>{a.por}</span>
         </div>
       )}
     </article>
@@ -922,7 +966,7 @@ function Modal({ titulo, onClose, children }) {
     return () => window.removeEventListener("keydown", h);
   }, [onClose]);
 
-  // Trava a rolagem da pÃ¡gina enquanto o modal estiver aberto
+  // Trava a rolagem da página enquanto o modal estiver aberto
   useEffect(() => {
     const larguraBarra =
       window.innerWidth - document.documentElement.clientWidth;
@@ -989,7 +1033,7 @@ function FormComponenteAmbiente({ valor, tipos, salvando, onChange, onCancel, on
         </select>
       </label>
       <label>
-        PatrimÃ´nio
+        Patrimônio
         <input
           value={valor.patrimonio}
           onChange={up("patrimonio")}
@@ -1017,7 +1061,7 @@ function FormAmbiente({ valor, onChange, onCancel, onSubmit, salvar, edicao, tip
           autoFocus
           value={valor.nome}
           onChange={up("nome")}
-          placeholder="Ex.: LaboratÃ³rio 03"
+          placeholder="Ex.: Laboratório 03"
         />
       </label>
       <label>
@@ -1048,7 +1092,7 @@ function FormAmbiente({ valor, onChange, onCancel, onSubmit, salvar, edicao, tip
         </label>
       )}
       <label>
-        ObservaÃ§Ãµes
+        Observações
         <textarea
           rows={3}
           value={valor.desc}

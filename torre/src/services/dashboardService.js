@@ -4,6 +4,8 @@ import api from "./api";
 
 const dashboardService = {
 
+// Buscar dashboard
+
     async buscarDashboard(){
 
         try{

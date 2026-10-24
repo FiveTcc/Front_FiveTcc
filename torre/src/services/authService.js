@@ -1,6 +1,7 @@
 import api from "./api";
 
 const authService = {
+  // Função para fazer login
   async login(email, senha) {
     try {
       const response = await api.post("/auth/login", {
@@ -15,6 +16,7 @@ const authService = {
     }
   },
 
+  // Função para registrar um novo usuário'
   async refresh(refreshToken) {
     const response = await api.post("/auth/refresh", {
       refreshToken,
@@ -23,6 +25,7 @@ const authService = {
     return response.data;
   },
 
+  // Função para fazer logout
   async logout() {
     try {
       await api.post("/auth/logout");

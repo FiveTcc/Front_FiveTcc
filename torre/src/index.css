@@ -4528,7 +4528,7 @@ min-height:100%;background:var(--bg);color:var(--text);font-family:var(--font-bo
 .ambientes-info{display:flex;flex-direction:column;gap:4px;padding:10px 0}.ambientes-info small{color:var(--mudo)}.ambientes-info span{line-height:1.4}
 .ambientes-col-dir{display:flex;flex-direction:column;gap:3px}
 .ambientes-col-dir h3{display:flex;align-items:center;gap:8px;font-size:15px;margin-bottom:8px}.ambientes-col-dir h3 a{margin-left:auto;font-size:12px;color:#5aa2ff;text-decoration:none}
-.ambientes-modal-fundo{position:fixed;inset:0;background:#000a;display:grid;place-items:center;z-index:50;padding:16px;overflow:hidden;}
+.ambientes-modal-fundo{position:fixed;inset:0;background:#000a;display:grid;place-items:center;z-index:1200;padding:16px;overflow:hidden;}
 .ambientes-modal {
   --modal-bg: #ffffff;
   --modal-bg-2: #f8fafc;
@@ -4538,18 +4538,28 @@ min-height:100%;background:var(--bg);color:var(--text);font-family:var(--font-bo
   --modal-accent: #2563eb;
   --modal-accent-text: #ffffff;
   color-scheme: light;
+  position: relative;
+  z-index: 1;
 
   background: var(--modal-bg);
   color: var(--modal-text);
   border: 1px solid var(--modal-border);
   border-radius: 14px;
   padding: 22px;
-  width: 100%;
-  max-width: 420px;
+  width: min(100%, 420px);
+  max-height: calc(100vh - 32px);
   display: flex;
   flex-direction: column;
   gap: 14px;
   box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.ambientes-modal > h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.3;
 }
 
 /* Tema escuro: deixe sÃ³ o seletor que o seu app usa */
@@ -4575,6 +4585,7 @@ min-height:100%;background:var(--bg);color:var(--text);font-family:var(--font-bo
   display: flex;
   flex-direction: column;
   gap: 14px;
+  width: 100%;
 }
 
 .ambientes-modal label {
@@ -4583,6 +4594,8 @@ min-height:100%;background:var(--bg);color:var(--text);font-family:var(--font-bo
   gap: 6px;
   color: var(--modal-muted);
   flex: 1;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .ambientes-modal input,
@@ -4592,6 +4605,8 @@ min-height:100%;background:var(--bg);color:var(--text);font-family:var(--font-bo
   border: 1px solid var(--modal-border);
   border-radius: 8px;
   color: var(--modal-text);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .ambientes-modal input,
@@ -4605,6 +4620,13 @@ min-height:100%;background:var(--bg);color:var(--text);font-family:var(--font-bo
   resize: vertical;
   min-height: 72px;
 }
+
+.ambientes-linha {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
 
 .ambientes-modal input::placeholder,
 .ambientes-modal textarea::placeholder {
@@ -4673,7 +4695,8 @@ min-height:100%;background:var(--bg);color:var(--text);font-family:var(--font-bo
   font-size: 20px;
 }
 .ambientes-erro{color:#f87171;font-size:12.5px}
-.ambientes-linha{display:flex;gap:12px}.ambientes-modal-acoes{display:flex;justify-content:flex-end;gap:10px;margin-top:6px}
+.ambientes-modal-acoes{display:flex;justify-content:flex-end;gap:10px;margin-top:6px;flex-wrap:wrap}
+.ambientes-modal-acoes button{flex:0 0 auto;min-width:130px}
 .topbar__notifications-wrap{position:relative}
 .topbar__notifications{
   position:absolute;
@@ -4820,14 +4843,29 @@ min-height:100%;background:var(--bg);color:var(--text);font-family:var(--font-bo
   color: var(--text);
 }
 
+.page--ambientes .topbar__search {
+  border: 1.5px solid var(--accent);
+  border-radius: 18px;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+  min-height: 48px;
+}
+
 .page--ambientes .topbar__search:focus-within {
   border-color: var(--accent);
-  box-shadow: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.14);
 }
 
 .page--ambientes .topbar__search input:focus {
   outline: none;
   box-shadow: none;
+}
+
+.page--ambientes .topbar__actions .topbar__icon-button,
+.page--ambientes .topbar__actions .topbar__notifications-wrap {
+  border: 1px solid var(--border);
+  background: var(--panel-soft);
+  color: var(--text);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
 }
 
 .page--ambientes .ambientes-btn-sec:hover {
@@ -4852,18 +4890,19 @@ min-height:100%;background:var(--bg);color:var(--text);font-family:var(--font-bo
 
 .page--ambientes .ambientes-select select {
   height: 44px;
-  background: var(--panel-input);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  color: var(--text);
+  background: linear-gradient(180deg, rgba(50, 94, 200, 0.92), rgba(36, 74, 179, 0.96));
+  border: 1px solid rgba(96, 165, 250, 0.9);
+  border-radius: 12px;
+  color: #f8fbff;
   font-family: var(--font-body);
   cursor: pointer;
   outline: none;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
 }
 
 .page--ambientes .ambientes-select select:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+  border-color: rgba(147, 197, 253, 0.95);
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.25);
 }
 
 .page--ambientes .ambientes-pill.ok {
