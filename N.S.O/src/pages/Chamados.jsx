@@ -71,17 +71,18 @@ function mostrarAtualizacao(valor) {
     }
   }
 
-  const timestamp = typeof valor === "number" ? valor : new Date(valor).getTime();
+  const timestamp =
+    typeof valor === "number" ? valor : new Date(valor).getTime();
 
   return Number.isNaN(timestamp)
     ? "—"
     : new Intl.DateTimeFormat("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(timestamp);
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(timestamp);
 }
 
 export default function Chamados() {
@@ -93,6 +94,7 @@ export default function Chamados() {
   const [erro, setErro] = useState("");
   const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
   const notificacoesRef = useRef(null);
+  const [openSelect, setOpenSelect] = useState(null);
   const notificacoes = [];
 
   useEffect(() => {
@@ -188,41 +190,41 @@ export default function Chamados() {
         </div>
 
         <div className="topbar__actions">
-        <div className="topbar__notifications-wrap" ref={notificacoesRef}>
-          <button
-            type="button"
-            className="topbar__icon-button"
-            aria-label="Notificações"
-            aria-expanded={mostrarNotificacoes}
-            onClick={() => setMostrarNotificacoes((valor) => !valor)}
-          >
-            🕭
-          </button>
-
-          {mostrarNotificacoes && (
-            <div
-              className="topbar__notifications"
-              role="menu"
+          <div className="topbar__notifications-wrap" ref={notificacoesRef}>
+            <button
+              type="button"
+              className="topbar__icon-button"
               aria-label="Notificações"
+              aria-expanded={mostrarNotificacoes}
+              onClick={() => setMostrarNotificacoes((valor) => !valor)}
             >
-              <div className="topbar__notifications-header">
-                <strong>Notificações</strong>
-                <span>{notificacoes.length}</span>
-              </div>
+              🕭
+            </button>
 
-              {notificacoes.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  className="topbar__notification-item"
-                >
-                  <span>{item.titulo}</span>
-                  <small>{item.tempo}</small>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+            {mostrarNotificacoes && (
+              <div
+                className="topbar__notifications"
+                role="menu"
+                aria-label="Notificações"
+              >
+                <div className="topbar__notifications-header">
+                  <strong>Notificações</strong>
+                  <span>{notificacoes.length}</span>
+                </div>
+
+                {notificacoes.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className="topbar__notification-item"
+                  >
+                    <span>{item.titulo}</span>
+                    <small>{item.tempo}</small>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -239,35 +241,87 @@ export default function Chamados() {
           </ul>
         </div>
 
-        <label className="custom-select">
+        <div className="custom-select">
           <span className="custom-select__label">Status</span>
-          <select
-            value={filtroStatus}
-            onChange={(event) => setFiltroStatus(event.target.value)}
-            aria-label="Filtrar por status"
+          <button
+            type="button"
+            className={`custom-select__trigger ${openSelect === "status" ? "is-open" : ""}`}
+            aria-haspopup="listbox"
+            aria-expanded={openSelect === "status"}
+            onClick={() =>
+              setOpenSelect((current) =>
+                current === "status" ? null : "status",
+              )
+            }
           >
-            {Object.entries(STATUS_LABELS).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </label>
+            <span>{STATUS_LABELS[filtroStatus]}</span>
+            <span className="custom-select__caret">▾</span>
+          </button>
+          {openSelect === "status" && (
+            <div
+              className="custom-select__menu"
+              role="listbox"
+              aria-label="Filtrar por status"
+            >
+              {Object.entries(STATUS_LABELS).map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  role="option"
+                  aria-selected={filtroStatus === value}
+                  className={`custom-select__option ${filtroStatus === value ? "is-selected" : ""}`}
+                  onClick={() => {
+                    setFiltroStatus(value);
+                    setOpenSelect(null);
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
-        <label className="custom-select">
+        <div className="custom-select">
           <span className="custom-select__label">Prioridade</span>
-          <select
-            value={filtroPrioridade}
-            onChange={(event) => setFiltroPrioridade(event.target.value)}
-            aria-label="Filtrar por prioridade"
+          <button
+            type="button"
+            className={`custom-select__trigger ${openSelect === "prioridade" ? "is-open" : ""}`}
+            aria-haspopup="listbox"
+            aria-expanded={openSelect === "prioridade"}
+            onClick={() =>
+              setOpenSelect((current) =>
+                current === "prioridade" ? null : "prioridade",
+              )
+            }
           >
-            {Object.entries(PRIORIDADE_LABELS).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </label>
+            <span>{PRIORIDADE_LABELS[filtroPrioridade]}</span>
+            <span className="custom-select__caret">▾</span>
+          </button>
+          {openSelect === "prioridade" && (
+            <div
+              className="custom-select__menu"
+              role="listbox"
+              aria-label="Filtrar por status"
+            >
+              {Object.entries(PRIORIDADE_LABELS).map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  role="option"
+                  aria-selected={filtroPrioridade === value}
+                  className={`custom-select__option ${filtroPrioridade === value ? "is-selected" : ""}`}
+                  onClick={() => {
+                    setFiltroPrioridade(value);
+                    setOpenSelect(null);
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
         <Link to="/chamados/novo" className="btn btn--primary">
           + Nova ocorrência
@@ -301,10 +355,11 @@ export default function Chamados() {
               {filtrados.map((ocorrencia) => (
                 <tr key={ocorrencia.id}>
                   <td>
-                    <StatusBeacon status={ocorrencia.status} comLabel={false} />
-                    {" "}
+                    <StatusBeacon status={ocorrencia.status} comLabel={false} />{" "}
                     <span className="beacon__label">
-                      {STATUS_LABELS[ocorrencia.status] || ocorrencia.status || "—"}
+                      {STATUS_LABELS[ocorrencia.status] ||
+                        ocorrencia.status ||
+                        "—"}
                     </span>
                   </td>
                   <td>

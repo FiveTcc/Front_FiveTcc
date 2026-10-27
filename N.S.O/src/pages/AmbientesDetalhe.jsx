@@ -411,14 +411,14 @@ export default function AmbientesDetalhe() {
           <section className="card ambiente-detail-card ambiente-components-card">
             <div className="ambiente-detail-card-head">
               <div><h2>Componentes</h2><p className="muted">{componentes.length} cadastrados neste ambiente</p></div>
-              <button type="button" className="btn" onClick={() => setAdicionando((valor) => !valor)}><Plus size={16} /> Adicionar componente</button>
+              <button type="button" className="btn btn--adicionar" onClick={() => setAdicionando((valor) => !valor)}><Plus size={16} /> Adicionar componente</button>
             </div>
             {adicionando && (
               <div className="ambiente-componente-modal-fundo" onClick={() => setAdicionando(false)}>
                 <div className="ambiente-componente-modal" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
                   <div className="ambiente-componente-modal-header">
                     <div>
-                      <span className="eyebrow">Adicionar componente</span>
+                      <span className= "eyebrow">Adicionar componente</span>
                       <h3>Novo componente</h3>
                     </div>
                     <button type="button" className="ambiente-componente-modal-close" onClick={() => setAdicionando(false)} aria-label="Fechar cadastro de componente">
@@ -432,7 +432,7 @@ export default function AmbientesDetalhe() {
                       <label>Tipo<select required value={novo.tipoId} onChange={(e) => setNovo({ ...novo, tipoId: e.target.value })}><option value="">Selecione um tipo</option>{tiposDisponiveis.map((tipo) => <option key={tipo.id} value={tipo.id}>{tipo.nome}</option>)}</select></label>
                       <label>Observação<input value={novo.observacao} onChange={(e) => setNovo({ ...novo, observacao: e.target.value })} placeholder="Opcional" /></label>
                     </div>
-                    <div className="form__actions"><button type="button" className="btn btn--ghost" onClick={() => setAdicionando(false)}>Cancelar</button><button type="submit" className="btn" disabled={salvando || !tiposDisponiveis.length}>{salvando ? "Salvando..." : "Adicionar componente"}</button></div>
+                    <div className="form__actions"><button type="button" className="btn btn--cancelar" onClick={() => setAdicionando(false)}>Cancelar</button><button type="submit" className="btn btn--adicionar" disabled={salvando || !tiposDisponiveis.length}>{salvando ? "Salvando..." : "Adicionar componente"}</button></div>
                     {!tiposDisponiveis.length && <p className="muted">Cadastre um tipo de componente antes de adicioná-lo.</p>}
                   </form>
                 </div>
