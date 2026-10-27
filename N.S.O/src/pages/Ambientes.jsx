@@ -332,16 +332,21 @@ export default function Ambientes() {
 
   const salvarComponente = async (event) => {
     event.preventDefault();
-    if (!novoComponente?.nome.trim() || salvandoComponente || !sel?.id) return;
+    const nome = String(novoComponente?.nome ?? "").trim();
+    const tipoId = Number(novoComponente?.tipoId);
+    const idAmbiente = Number(sel?.id);
+
+    if (!nome || !novoComponente?.tipoId || !Number.isFinite(tipoId) || !Number.isFinite(idAmbiente) || salvandoComponente) return;
 
     try {
       setSalvandoComponente(true);
-      await componenteService.cadastrarComponente({
-        compo_nome: novoComponente.nome.trim(),
-        compo_tipo_id: Number(novoComponente.tipoId),
-        compo_patrimonio: novoComponente.patrimonio.trim(),
-        id_amb: sel.id,
-      });
+      const payload = {
+        compo_nome: nome,
+        compo_tipo_id: tipoId,
+        id_amb: idAmbiente,
+      };
+
+      await componenteService.cadastrarComponente(payload);
       setNovoComponente(null);
       setCf({ q: "", tipo: "", status: "" });
       const resposta = await componenteService.buscarPorAmbiente(sel.nome);
@@ -357,7 +362,8 @@ export default function Ambientes() {
       );
     } catch (error) {
       console.error("Erro ao cadastrar componente:", error);
-      setErro("Não foi possível cadastrar o componente.");
+      const mensagem = error?.response?.data?.message || error?.response?.data?.error || error?.message || "Não foi possível cadastrar o componente.";
+      setErro(mensagem);
     } finally {
       setSalvandoComponente(false);
     }

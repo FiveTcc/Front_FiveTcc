@@ -13,6 +13,16 @@ const ambienteService = {
     }
   },
 
+  async listarAmbienteId(id) {
+    try {
+      const response = await api.get(`/ambientes/listarAmbienteId/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar ambiente por ID:", error);
+      throw error;
+    }
+  },
+
   // Cadastrar ambiente
   async cadastrarAmbiente(dados) {
     try {
