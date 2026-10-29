@@ -112,12 +112,12 @@ export default function Ambientes() {
   const [salvandoComponente, setSalvandoComponente] = useState(false);
   const qtdDe = (a) => Number(
     a?.comps ??
-      a?.componentes_count ??
-      a?.quantidade_componentes ??
-      a?.qtd_componentes ??
-      a?.total_componentes ??
-      a?.componentes?.length ??
-      0,
+    a?.componentes_count ??
+    a?.quantidade_componentes ??
+    a?.qtd_componentes ??
+    a?.total_componentes ??
+    a?.componentes?.length ??
+    0,
   );
   const set = (k) => (v) => {
     const valor = v && typeof v === "object" && "target" in v ? v.target.value : v;
@@ -147,12 +147,12 @@ export default function Ambientes() {
             por: item.usuario?.nome ?? item.por ?? "—",
             comps: Number(
               item.componentes_count ??
-                item.comps ??
-                item.quantidade_componentes ??
-                item.qtd_componentes ??
-                item.total_componentes ??
-                (Array.isArray(item.componentes) ? item.componentes.length : 0) ??
-                0,
+              item.comps ??
+              item.quantidade_componentes ??
+              item.qtd_componentes ??
+              item.total_componentes ??
+              (Array.isArray(item.componentes) ? item.componentes.length : 0) ??
+              0,
             ),
             componentes: Array.isArray(item.componentes) ? item.componentes : [],
             desc: item.amb_descricao ?? item.descricao ?? item.desc ?? "—",
@@ -400,14 +400,14 @@ export default function Ambientes() {
       ambientes.map((a) =>
         a.id === edit.id
           ? {
-              ...a,
-              nome: edit.nome.trim(),
-              tipo: edit.tipo,
-              bloco: edit.bloco,
-              andar: normalizarAndar(edit.andar),
-              ativo: normalizarStatusAmbiente(edit.ativo),
-              desc: edit.desc.trim(),
-            }
+            ...a,
+            nome: edit.nome.trim(),
+            tipo: edit.tipo,
+            bloco: edit.bloco,
+            andar: normalizarAndar(edit.andar),
+            ativo: normalizarStatusAmbiente(edit.ativo),
+            desc: edit.desc.trim(),
+          }
           : a,
       ),
     );
@@ -422,7 +422,7 @@ export default function Ambientes() {
         onChange={set("tipo")}
         opts={tiposAmbiente.map((t) => [t, t])}
       />
-      <Select 
+      <Select
         label="Bloco"
         value={f.bloco}
         onChange={set("bloco")}
@@ -459,12 +459,12 @@ export default function Ambientes() {
     <div className="page page--ambientes ambientes">
       <header className="page__header">
         <div>
-            <h1>Ambientes</h1>
-            <p className="muted">
-              {modo === "grade"
-                ? "Gerencie os ambientes cadastrados no sistema."
-                : "Gerencie os ambientes cadastrados no sistema e visualize seus componentes."}
-            </p>
+          <h1>Ambientes</h1>
+          <p className="muted">
+            {modo === "grade"
+              ? "Gerencie os ambientes cadastrados no sistema."
+              : "Gerencie os ambientes cadastrados no sistema e visualize seus componentes."}
+          </p>
         </div>
       </header>
 
@@ -486,11 +486,11 @@ export default function Ambientes() {
         </div>
       </div>
 
-        {carregando && <p className="ambientes-vazio">Carregando ambientes...</p>}
-        {erro && <p className="ambientes-erro">{erro}</p>}
+      {carregando && <p className="ambientes-vazio">Carregando ambientes...</p>}
+      {erro && <p className="ambientes-erro">{erro}</p>}
 
-        {modo === "grade" ? (
-          <>
+      {modo === "grade" ? (
+        <>
           {Filtros}
           <div className="ambientes-grade-wrap">
             <div>
@@ -500,7 +500,7 @@ export default function Ambientes() {
                   novo ambiente.
                 </p>
               )}
-          <div className="card__ambientes card__ambientes--grid ambientes-grid">
+              <div className="card__ambientes card__ambientes--grid ambientes-grid">
                 {filtrados.map((a) => (
                   <CardAmbiente
                     key={a.id}
@@ -571,131 +571,131 @@ export default function Ambientes() {
               </div>
             </aside>
           </div>
-          </>
-        ) : (
-          <>
-            {Filtros}
-            <div className="ambientes-detalhe-wrap">
-              <div className="ambientes-lista">
-                {filtrados.map((a) => (
-                  <CardAmbiente
-                    key={a.id}
-                    a={a}
-                    compacto
-                    ativo={a.id === sel?.id}
-                    qtd={qtdDe(a)}
-                    onOpen={() => abrir(a.id)}
-                  />
-                ))}
-                {filtrados.length === 0 && (
-                  <p className="ambientes-vazio">Nenhum ambiente encontrado.</p>
-                )}
-              </div>
+        </>
+      ) : (
+        <>
+          {Filtros}
+          <div className="ambientes-detalhe-wrap">
+            <div className="ambientes-lista">
+              {filtrados.map((a) => (
+                <CardAmbiente
+                  key={a.id}
+                  a={a}
+                  compacto
+                  ativo={a.id === sel?.id}
+                  qtd={qtdDe(a)}
+                  onOpen={() => abrir(a.id)}
+                />
+              ))}
+              {filtrados.length === 0 && (
+                <p className="ambientes-vazio">Nenhum ambiente encontrado.</p>
+              )}
+            </div>
 
-              {sel && (
-                <section className="ambientes-painel ambientes-det">
-                  <div className="ambientes-det-head">
-                    <Thumb tipo={sel.tipo} size={128} />
-                    <div className="ambientes-det-info">
-                      <h2>{sel.nome}</h2>
-                      <div className="ambientes-tags">
-                        <Tag tipo={sel.tipo} />
-                        <Status ativo={sel.ativo} />
-                      </div>
-                      <p className="ambientes-local">
-                        <MapPin size={14} /> {sel.bloco} ·{" "}
-                        {andarLabel(sel.andar)}
-                      </p>
-                      <p className="ambientes-desc">{sel.desc}</p>
+            {sel && (
+              <section className="ambientes-painel ambientes-det">
+                <div className="ambientes-det-head">
+                  <Thumb tipo={sel.tipo} size={128} />
+                  <div className="ambientes-det-info">
+                    <h2>{sel.nome}</h2>
+                    <div className="ambientes-tags">
+                      <Tag tipo={sel.tipo} />
+                      <Status ativo={sel.ativo} />
                     </div>
-                    <button className="btn btn--ghost ambientes-btn-sec" onClick={abrirEdicao}>
-                      <Pencil size={15} /> Editar
-                    </button>
-                    <button className="ambientes-icon" aria-label="Mais ações">
-                      <MoreVertical size={18} />
-                    </button>
+                    <p className="ambientes-local">
+                      <MapPin size={14} /> {sel.bloco} ·{" "}
+                      {andarLabel(sel.andar)}
+                    </p>
+                    <p className="ambientes-desc">{sel.desc}</p>
                   </div>
+                  <button className="btn btn--ghost ambientes-btn-sec" onClick={abrirEdicao}>
+                    <Pencil size={15} /> Editar
+                  </button>
+                  <button className="ambientes-icon" aria-label="Mais ações">
+                    <MoreVertical size={18} />
+                  </button>
+                </div>
 
-                  <div className="ambientes-abas" role="tablist">
-                    {[
-                      ["visao", Eye, "Visão geral"],
-                      ["componentes", Monitor, "Componentes"],
-                    ].map(([k, Icon, nome]) => (
+                <div className="ambientes-abas" role="tablist">
+                  {[
+                    ["visao", Eye, "Visão geral"],
+                    ["componentes", Monitor, "Componentes"],
+                  ].map(([k, Icon, nome]) => (
+                    <button
+                      key={k}
+                      role="tab"
+                      aria-selected={aba === k}
+                      className={aba === k ? "on" : ""}
+                      onClick={() => setAba(k)}
+                    >
+                      <Icon size={17} /> {nome}
+                    </button>
+                  ))}
+                </div>
+
+                {aba === "componentes" && (
+                  <>
+                    <div className="filters ambientes-comp-filtros">
+                      <label className="ambientes-busca">
+                        <Search size={16} />
+                        <input
+                          placeholder="Buscar componentes..."
+                          value={cf.q}
+                          onChange={(e) =>
+                            setCf((cur) => ({ ...cur, q: e.target.value }))
+                          }
+                        />
+                      </label>
+
+                      <Select
+                        label="Tipo"
+                        value={cf.tipo}
+                        onChange={(v) =>
+                          setCf((cur) => ({ ...cur, tipo: v }))
+                        }
+                        opts={[...new Set(comps.map((c) => c.tipo))].map(
+                          (t) => [t, t],
+                        )}
+                      />
+                      <Select
+                        label="Status"
+                        value={cf.status}
+                        onChange={(v) =>
+                          setCf((cur) => ({ ...cur, status: v }))
+                        }
+                        opts={statusComponentes.map((s) => [s, s])}
+                      />
+
                       <button
-                        key={k}
-                        role="tab"
-                        aria-selected={aba === k}
-                        className={aba === k ? "on" : ""}
-                        onClick={() => setAba(k)}
+                        type="button"
+                        className="btn btn--primary ambientes-btn"
+                        onClick={() => setNovoComponente({
+                          nome: "",
+                          tipoId: tiposComponentes[0]?.id_compo_tipo ?? "",
+                          patrimonio: "",
+                        })}
+                        disabled={tiposComponentes.length === 0}
                       >
-                        <Icon size={17} /> {nome}
+                        <Plus size={16} /> Adicionar componente
                       </button>
-                    ))}
-                  </div>
 
-                  {aba === "componentes" && (
-                    <>
-                      <div className="filters ambientes-comp-filtros">
-                        <label className="ambientes-busca">
-                          <Search size={16} />
-                          <input
-                            placeholder="Buscar componentes..."
-                            value={cf.q}
-                            onChange={(e) =>
-                              setCf((cur) => ({ ...cur, q: e.target.value }))
-                            }
-                          />
-                        </label>
-
-                        <Select
-                          label="Tipo"
-                          value={cf.tipo}
-                          onChange={(v) =>
-                            setCf((cur) => ({ ...cur, tipo: v }))
-                          }
-                          opts={[...new Set(comps.map((c) => c.tipo))].map(
-                            (t) => [t, t],
-                          )}
-                        />
-                        <Select
-                          label="Status"
-                          value={cf.status}
-                          onChange={(v) =>
-                            setCf((cur) => ({ ...cur, status: v }))
-                          }
-                          opts={statusComponentes.map((s) => [s, s])}
-                        />
-
-                        <button
-                          type="button"
-                          className="btn btn--primary ambientes-btn"
-                          onClick={() => setNovoComponente({
-                            nome: "",
-                            tipoId: tiposComponentes[0]?.id_compo_tipo ?? "",
-                            patrimonio: "",
-                          })}
-                          disabled={tiposComponentes.length === 0}
-                        >
-                          <Plus size={16} /> Adicionar componente
-                        </button>
-
-                      </div>
-                      <div className="ambientes-tabela-wrap">
-                        <table className="table ambientes-tabela">
-                          <thead>
-                            <tr>
-                              <th>Componente</th>
-                              <th>Tipo</th>
-                              <th>Patrimônio</th>
-                              <th>Status</th>
-                              <th>Última manutenção</th>
-                              <th>Ações</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {compsFiltrados.map((c) => {
-                              const Icon = c.Icon || ICONES_COMP[c.tipo] || Package;
-                              return (
+                    </div>
+                    <div className="ambientes-tabela-wrap">
+                      <table className="table ambientes-tabela">
+                        <thead>
+                          <tr>
+                            <th>Componente</th>
+                            <th>Tipo</th>
+                            <th>Patrimônio</th>
+                            <th>Status</th>
+                            <th>Última manutenção</th>
+                            <th>Ações</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {compsFiltrados.map((c) => {
+                            const Icon = c.Icon || ICONES_COMP[c.tipo] || Package;
+                            return (
                               <tr key={c.id ?? c.pat}>
                                 <td>
                                   <span className="ambientes-comp-nome">
@@ -724,66 +724,66 @@ export default function Ambientes() {
                                   </button>
                                 </td>
                               </tr>
-                              );
-                            })}
-                          </tbody>
-                        </table>
-                        {carregandoComponentes && (
-                          <p className="ambientes-vazio">Carregando componentes...</p>
-                        )}
-                        {!carregandoComponentes && compsFiltrados.length === 0 && (
-                          <p className="ambientes-vazio">
-                            {comps.length === 0
-                              ? "Este ambiente ainda não tem componentes cadastrados."
-                              : "Nenhum componente encontrado com esses filtros."}
-                          </p>
-                        )}
-                      </div>
-                    </>
-                  )}
-
-                  {aba === "visao" && (
-                    <div className="ambientes-visao">
-                      <Info l="Nome" v={sel.nome} />
-                      <Info l="Tipo" v={sel.tipo} />
-                      <Info l="Bloco" v={sel.bloco} />
-                      <Info l="Andar" v={andarLabel(sel.andar)} />
-                      <Info l="Status" v={sel.ativo ? "Ativo" : "Inativo"} />
-                      <Info l="Componentes" v={totalComponentesDoAmbiente} />
-                      <Info
-                        l="Criado em"
-                        v={sel.por ? `${formatarDataAmbiente(sel.criado)} por ${sel.por}` : formatarDataAmbiente(sel.criado)}
-                      />
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                      {carregandoComponentes && (
+                        <p className="ambientes-vazio">Carregando componentes...</p>
+                      )}
+                      {!carregandoComponentes && compsFiltrados.length === 0 && (
+                        <p className="ambientes-vazio">
+                          {comps.length === 0
+                            ? "Este ambiente ainda não tem componentes cadastrados."
+                            : "Nenhum componente encontrado com esses filtros."}
+                        </p>
+                      )}
                     </div>
-                  )}
+                  </>
+                )}
 
-                </section>
-              )}
-
-              {sel && (
-                <aside className="ambientes-col-dir">
-                  <section className="ambientes-painel">
-                    <h3>
-                      <ClipboardList size={18} /> Informações do Ambiente
-                    </h3>
+                {aba === "visao" && (
+                  <div className="ambientes-visao">
                     <Info l="Nome" v={sel.nome} />
                     <Info l="Tipo" v={sel.tipo} />
                     <Info l="Bloco" v={sel.bloco} />
                     <Info l="Andar" v={andarLabel(sel.andar)} />
+                    <Info l="Status" v={sel.ativo ? "Ativo" : "Inativo"} />
                     <Info l="Componentes" v={totalComponentesDoAmbiente} />
-                    <div className="ambientes-info">
-                      <small>Status</small>
-                      <Status ativo={sel.ativo} />
-                    </div>
-                    <Info l="Observações" v={sel.desc} />
-                  </section>
-                </aside>
-              )}
-            </div>
-          </>
-        )}
+                    <Info
+                      l="Criado em"
+                      v={sel.por ? `${formatarDataAmbiente(sel.criado)} por ${sel.por}` : formatarDataAmbiente(sel.criado)}
+                    />
+                  </div>
+                )}
 
-    
+              </section>
+            )}
+
+            {sel && (
+              <aside className="ambientes-col-dir">
+                <section className="ambientes-painel">
+                  <h3>
+                    <ClipboardList size={18} /> Informações do Ambiente
+                  </h3>
+                  <Info l="Nome" v={sel.nome} />
+                  <Info l="Tipo" v={sel.tipo} />
+                  <Info l="Bloco" v={sel.bloco} />
+                  <Info l="Andar" v={andarLabel(sel.andar)} />
+                  <Info l="Componentes" v={totalComponentesDoAmbiente} />
+                  <div className="ambientes-info">
+                    <small>Status</small>
+                    <Status ativo={sel.ativo} />
+                  </div>
+                  <Info l="Observações" v={sel.desc} />
+                </section>
+              </aside>
+            )}
+          </div>
+        </>
+      )}
+
+
       {novo && (
         <Modal titulo="Novo ambiente" onClose={() => setNovo(null)}>
           <FormAmbiente
@@ -830,10 +830,10 @@ export default function Ambientes() {
 
 function Select({ label, value, onChange, opts, allLabel, className = "Todos" }) {
   const options = [["", allLabel], ...opts];
-   const [open, setOpen] = useState(false);
-   const ref = useRef(null);
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
 
-     useEffect(() => {
+  useEffect(() => {
     if (!open) return;
     const handleClick = (e) => {
       if (ref.current && !ref.current.contains(e.target)) setOpen(false);
@@ -851,37 +851,40 @@ function Select({ label, value, onChange, opts, allLabel, className = "Todos" })
 
   return (
     <div className={`custom-select ${className}`.trim()} ref={ref}>
-      <span className="custom-select__label is-open">{label}</span>
-      <button
-        type="button"
-        className={`custom-select__trigger ${open ? "is-open" : ""}`}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        onClick={() => setOpen((o) => !o)}
-      >
-        <span>{selectedLabel}</span>
-        <span className="custom-select__caret">▾</span>
-      </button>
+      <span className="custom-select__label">{label}</span>
 
-      {open && (
-        <div className="custom-select__menu" role="listbox" aria-label={label}>
-          {opts.map(([v, text]) => (
-            <button
-              key={v}
-              type="button"
-              role="option"
-              aria-selected={value === v}
-              className={`custom-select__option ${value === v ? "is-selected" : ""}`}
-              onClick={() => {
-                onChange({ target: { value: v } });
-                setOpen(false);
-              }}
-            >
-              {text}
-            </button>
-          ))}
-        </div>
-      )}
+      <div className="custom-select__field">
+        <button
+          type="button"
+          className={`custom-select__trigger ${open ? "is-open" : ""}`}
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          onClick={() => setOpen((o) => !o)}
+        >
+          <span>{selectedLabel}</span>
+          <span className="custom-select__caret">▾</span>
+        </button>
+
+        {open && (
+          <div className="custom-select__menu" role="listbox" aria-label={label}>
+            {opts.map(([v, text]) => (
+              <button
+                key={v}
+                type="button"
+                role="option"
+                aria-selected={value === v}
+                className={`custom-select__option ${value === v ? "is-selected" : ""}`}
+                onClick={() => {
+                  onChange({ target: { value: v } });
+                  setOpen(false);
+                }}
+              >
+                {text}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
