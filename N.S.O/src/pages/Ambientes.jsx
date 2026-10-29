@@ -422,7 +422,7 @@ export default function Ambientes() {
         onChange={set("tipo")}
         opts={tiposAmbiente.map((t) => [t, t])}
       />
-      <Select
+      <Select 
         label="Bloco"
         value={f.bloco}
         onChange={set("bloco")}
@@ -828,21 +828,61 @@ export default function Ambientes() {
   );
 }
 
-
-
-function Select({ label, value, onChange, opts, allLabel = "Todos" }) {
+function Select({ label, value, onChange, opts, allLabel, className = "Todos" }) {
   const options = [["", allLabel], ...opts];
+   const [open, setOpen] = useState(false);
+   const ref = useRef(null);
+
+     useEffect(() => {
+    if (!open) return;
+    const handleClick = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    const handleKey = (e) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [open]);
+
+  const selectedLabel = opts.find(([v]) => v === value)?.[1] ?? "Selecione";
+
   return (
-    <label className="custom-select ambientes-select">
-      <span className="custom-select__label">{label}</span>
-      <select value={value} onChange={(event) => onChange(event.target.value)} aria-label={label}>
-        {options.map(([optionValue, optionLabel]) => (
-          <option key={optionValue} value={optionValue}>
-            {optionLabel}
-          </option>
-        ))}
-      </select>
-    </label>
+    <div className={`custom-select ${className}`.trim()} ref={ref}>
+      <span className="custom-select__label is-open">{label}</span>
+      <button
+        type="button"
+        className={`custom-select__trigger ${open ? "is-open" : ""}`}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+      >
+        <span>{selectedLabel}</span>
+        <span className="custom-select__caret">▾</span>
+      </button>
+
+      {open && (
+        <div className="custom-select__menu" role="listbox" aria-label={label}>
+          {opts.map(([v, text]) => (
+            <button
+              key={v}
+              type="button"
+              role="option"
+              aria-selected={value === v}
+              className={`custom-select__option ${value === v ? "is-selected" : ""}`}
+              onClick={() => {
+                onChange({ target: { value: v } });
+                setOpen(false);
+              }}
+            >
+              {text}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 function Thumb({ tipo, size = 72 }) {
@@ -1110,8 +1150,3 @@ function FormAmbiente({ valor, onChange, onCancel, onSubmit, salvar, edicao, tip
     </form>
   );
 }
-
-
-
-
-
