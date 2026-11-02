@@ -234,7 +234,8 @@ export default function ChamadoDetalhe() {
 
   if (!chamado) return null;
 
-  const podeGerenciar = ["admin", "tecnico"].includes(usuario?.perfil);
+  // const podeGerenciar = ["admin", "tecnico"].includes(usuario?.perfil);
+  const podeGerenciar = true;
 
   return (
     <div className="page ticket-detail-page">
@@ -263,7 +264,7 @@ export default function ChamadoDetalhe() {
 
       <div className="grid-2 grid-2--asym">
         <div className="card">
-            <h2>Histórico</h2>
+            <h2>Observação do Tecnico</h2>
             <div className="ticket-history-scroll">
               <ul className="timeline">
                 <li className="timeline__item">

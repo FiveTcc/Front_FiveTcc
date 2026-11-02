@@ -354,8 +354,6 @@ export default function Perfil() {
               </label>
             </div>
 
-            <p className="profile-form__note">Formatos aceitos: JPG, PNG. Tamanho máximo: 2MB.</p>
-
             <AvatarCropper
               isOpen={mostrarCropModal}
               imageSrc={imagemOriginal}
