@@ -255,39 +255,39 @@ export default function Dashboard() {
 
           <div className="topbar__actions">
             <div className="topbar__notifications-wrap">
-              <button
-                type="button"
-                className="topbar__icon-button"
+            <button
+              type="button"
+              className="topbar__icon-button"
+              aria-label="Notificações"
+              onClick={() => setMostrarNotificacoes((valor) => !valor)}
+            >
+              🕭
+            </button>
+
+            {mostrarNotificacoes && (
+              <div
+                className="topbar__notifications"
+                role="menu"
                 aria-label="Notificações"
-                onClick={() => setMostrarNotificacoes((valor) => !valor)}
               >
-                🕭
-              </button>
-
-              {mostrarNotificacoes && (
-                <div
-                  className="topbar__notifications"
-                  role="menu"
-                  aria-label="Notificações"
-                >
-                  <div className="topbar__notifications-header">
-                    <strong>Notificações</strong>
-                    <span>{notificacoes.length}</span>
-                  </div>
-
-                  {notificacoes.map((item) => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      className="topbar__notification-item"
-                    >
-                      <span>{item.titulo}</span>
-                      <small>{item.tempo}</small>
-                    </button>
-                  ))}
+                <div className="topbar__notifications-header">
+                  <strong>Notificações</strong>
+                  <span>{notificacoes.length}</span>
                 </div>
-              )}
-            </div>
+
+                {notificacoes.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className="topbar__notification-item"
+                  >
+                    <span>{item.titulo}</span>
+                    <small>{item.tempo}</small>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           </div>
         </div>
       </div>

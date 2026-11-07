@@ -6,6 +6,7 @@ import userService from "../services/userServices";
 import { formatarData, iniciais } from "../services/utils";
 import StatusBeacon from "../components/StatusBeacon";
 import PriorityBadge from "../components/PriorityBadge";
+import CustomSelect from "../components/CustomSelect";
 
 const STATUS_LABEL = {
   aberta: "Aberta",
@@ -327,7 +328,10 @@ export default function ChamadoDetalhe() {
               <h2>Gerenciar</h2>
               <label>
                 Status
-                <select value={chamado.status} onChange={(event) => atualizarStatus(event.target.value)}>
+                <select
+                  value={chamado.status}
+                  onChange={(event) => atualizarStatus(event.target.value)}
+                >
                   {Object.entries(STATUS_LABEL).map(([valor, rotulo]) => (
                     <option key={valor} value={valor}>{rotulo}</option>
                   ))}

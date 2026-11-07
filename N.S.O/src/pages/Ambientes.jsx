@@ -1,5 +1,7 @@
 ﻿import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import CustomSelect from "../components/CustomSelect";
+// import "../styles/Ambientes.module.css";
 import {
   Search,
   Plus,
@@ -1114,12 +1116,12 @@ function FormAmbiente({ valor, onChange, onCancel, onSubmit, salvar, edicao, tip
         />
       </label>
       <label>
-        Tipo
-        <select value={valor.tipo} onChange={up("tipo")}>
-          {tipos.map((t) => (
-            <option key={t}>{t}</option>
-          ))}
-        </select>
+        <span>Tipo</span>
+        <CustomSelect
+          value={valor.tipo}
+          options={tipos}
+          onChange={(v) => up("tipo")({ target: { value: v } })}
+        />
       </label>
       <div className="ambientes-linha">
         <label>

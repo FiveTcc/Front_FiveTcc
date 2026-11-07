@@ -1106,7 +1106,7 @@ textarea {
   padding: 8px 40px 60px;
 }
 
-/* ---------- Page ---------- */
+/* ---------- Página ---------- */
 
 .page {
   display: flex;
@@ -1810,7 +1810,7 @@ textarea {
   width: max-content;
 }
 
-/* ---------- Badge (priority) ---------- */
+/* ---------- Prioridade ---------- */
 
 .badge {
   display: inline-block;
@@ -1900,6 +1900,15 @@ textarea::placeholder {
   color: var(--text-dim);
 }
 
+.custom-select__trigger-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select__trigger-wrapper .custom-select__trigger {
+  width: 100%;
+}
+
 .custom-select__trigger {
   width: 100%;
   display: flex;
@@ -1914,6 +1923,7 @@ textarea::placeholder {
     rgba(255, 255, 255, 0.02),
     rgba(148, 163, 184, 0.02)
   );
+  border: 1px solid #2a384c;
   color: var(--text);
   cursor: pointer;
   text-align: left;
@@ -4338,8 +4348,8 @@ textarea {
   cursor: pointer;
 }
 .ambientes :focus-visible {
-  outline: 2px solid var(--azul);
-  outline-offset: 2px;
+  outline: none;
+  outline-offset: 0;
 }
 .ambientes-icon {
   background: none;
@@ -4376,8 +4386,8 @@ textarea {
   color: var(--text);
 }
 .ambientes-busca:focus-within {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px var(--azul);
+  border-color: var(--panel-input-border);
+  box-shadow: none;
 }
 .page-ambientes {
   padding: 0 26px 40px;
@@ -4996,7 +5006,7 @@ textarea {
 .ambientes-tabela-wrap::-webkit-scrollbar-thumb:hover {
   background: #6b6b6b;
 }
-/* BotÃµes das setas */
+/* Botões das setas */
 .minha-area::-webkit-scrollbar-button:single-button {
   height: 17px;
   background-color: #f1f1f1;
@@ -5224,7 +5234,7 @@ textarea {
   border-color: var(--modal-accent);
 }
 
-/* BotÃµes */
+/* Botôes */
 .ambientes-modal button {
   background: transparent;
   color: var(--modal-text);
@@ -5261,7 +5271,7 @@ textarea {
   outline: 2px solid #dc2626;
   outline-offset: 2px;
 }
-/* BotÃ£o de fechar (X) */
+/* Botão de fechar (X) */
 .ambientes-modal-head button {
   background: transparent;
   border: none;
@@ -5598,9 +5608,9 @@ textarea {
 }
 
 .page--ambientes .topbar__search {
-  border: 1.5px solid var(--accent);
+  border: 1.5px solid var(--border);
   border-radius: 18px;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+  box-shadow: none;
   min-height: 48px;
 }
 
@@ -6106,4 +6116,3 @@ textarea {
     margin-left: 52px;
   }
 }
-
