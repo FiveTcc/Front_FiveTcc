@@ -39,7 +39,11 @@ import componenteTipoService from "../services/componenteTipoService";
 /* ---------- Configurações visuais ---------- */
 
 const normalizarAndar = (valor) => {
-  const numero = Number(String(valor ?? 0).toString().replace(/[^\d.-]/g, ""));
+  const numero = Number(
+    String(valor ?? 0)
+      .toString()
+      .replace(/[^\d.-]/g, ""),
+  );
   return Number.isFinite(numero) ? numero : 0;
 };
 
@@ -64,10 +68,22 @@ function normalizarComponente(item) {
     ...componente,
     id: componente.compo_id ?? componente.id_comp ?? componente.id,
     nome: componente.compo_nome ?? componente.nome ?? "",
-    tipo: componente.compo_tipo_nome ?? componente.compo_tipo ?? componente.tipo ?? "",
-    pat: componente.compo_patrimonio ?? componente.patrimonio ?? componente.pat ?? "—",
+    tipo:
+      componente.compo_tipo_nome ??
+      componente.compo_tipo ??
+      componente.tipo ??
+      "",
+    pat:
+      componente.compo_patrimonio ??
+      componente.patrimonio ??
+      componente.pat ??
+      "—",
     status: componente.compo_status ?? componente.status ?? "—",
-    manut: componente.compo_ultima_manutencao ?? componente.ultima_manutencao ?? componente.manut ?? "—",
+    manut:
+      componente.compo_ultima_manutencao ??
+      componente.ultima_manutencao ??
+      componente.manut ??
+      "—",
   };
 }
 
@@ -76,9 +92,26 @@ function normalizarStatusAmbiente(valor) {
   if (typeof valor === "number") return valor === 1 || valor > 0;
   if (typeof valor === "string") {
     const texto = valor.trim().toLowerCase();
-    if (["ativo", "active", "true", "1", "habilitado", "enabled"].includes(texto)) return true;
-    if (["inativo", "inactive", "false", "0", "desabilitado", "disabled"].includes(texto)) return false;
-    return texto.includes("ativo") || texto.includes("enabled") || texto.includes("true");
+    if (
+      ["ativo", "active", "true", "1", "habilitado", "enabled"].includes(texto)
+    )
+      return true;
+    if (
+      [
+        "inativo",
+        "inactive",
+        "false",
+        "0",
+        "desabilitado",
+        "disabled",
+      ].includes(texto)
+    )
+      return false;
+    return (
+      texto.includes("ativo") ||
+      texto.includes("enabled") ||
+      texto.includes("true")
+    );
   }
   return false;
 }
@@ -112,17 +145,19 @@ export default function Ambientes() {
   const [tiposComponentes, setTiposComponentes] = useState([]);
   const [novoComponente, setNovoComponente] = useState(null);
   const [salvandoComponente, setSalvandoComponente] = useState(false);
-  const qtdDe = (a) => Number(
-    a?.comps ??
-    a?.componentes_count ??
-    a?.quantidade_componentes ??
-    a?.qtd_componentes ??
-    a?.total_componentes ??
-    a?.componentes?.length ??
-    0,
-  );
+  const qtdDe = (a) =>
+    Number(
+      a?.comps ??
+        a?.componentes_count ??
+        a?.quantidade_componentes ??
+        a?.qtd_componentes ??
+        a?.total_componentes ??
+        a?.componentes?.length ??
+        0,
+    );
   const set = (k) => (v) => {
-    const valor = v && typeof v === "object" && "target" in v ? v.target.value : v;
+    const valor =
+      v && typeof v === "object" && "target" in v ? v.target.value : v;
     setF((cur) => ({ ...cur, [k]: valor }));
   };
 
@@ -144,19 +179,26 @@ export default function Ambientes() {
             tipo: item.amb_tipo ?? item.tipo ?? "Outro",
             bloco: item.amb_bloco ?? item.bloco ?? "",
             andar: normalizarAndar(item.amb_andar ?? item.andar ?? 0),
-            ativo: normalizarStatusAmbiente(item.amb_status ?? item.amb_ativo ?? item.status ?? item.ativo),
-            criado: item.amb_data_criacao ?? item.criado_em ?? item.criado ?? "—",
+            ativo: normalizarStatusAmbiente(
+              item.amb_status ?? item.amb_ativo ?? item.status ?? item.ativo,
+            ),
+            criado:
+              item.amb_data_criacao ?? item.criado_em ?? item.criado ?? "—",
             por: item.usuario?.nome ?? item.por ?? "—",
             comps: Number(
               item.componentes_count ??
-              item.comps ??
-              item.quantidade_componentes ??
-              item.qtd_componentes ??
-              item.total_componentes ??
-              (Array.isArray(item.componentes) ? item.componentes.length : 0) ??
-              0,
+                item.comps ??
+                item.quantidade_componentes ??
+                item.qtd_componentes ??
+                item.total_componentes ??
+                (Array.isArray(item.componentes)
+                  ? item.componentes.length
+                  : 0) ??
+                0,
             ),
-            componentes: Array.isArray(item.componentes) ? item.componentes : [],
+            componentes: Array.isArray(item.componentes)
+              ? item.componentes
+              : [],
             desc: item.amb_descricao ?? item.descricao ?? item.desc ?? "—",
           }));
 
@@ -167,11 +209,19 @@ export default function Ambientes() {
             if (!ambiente.nome) return ambiente;
 
             try {
-              const respostaComponentes = await componenteService.buscarPorAmbiente(ambiente.nome);
+              const respostaComponentes =
+                await componenteService.buscarPorAmbiente(ambiente.nome);
               const dadosComponentes = Array.isArray(respostaComponentes)
                 ? respostaComponentes
-                : respostaComponentes?.componentes || respostaComponentes?.data || respostaComponentes?.componente || [];
-              const componentes = (Array.isArray(dadosComponentes) ? dadosComponentes : [dadosComponentes])
+                : respostaComponentes?.componentes ||
+                  respostaComponentes?.data ||
+                  respostaComponentes?.componente ||
+                  [];
+              const componentes = (
+                Array.isArray(dadosComponentes)
+                  ? dadosComponentes
+                  : [dadosComponentes]
+              )
                 .filter(Boolean)
                 .map(normalizarComponente);
 
@@ -181,7 +231,10 @@ export default function Ambientes() {
                 componentes,
               };
             } catch (error) {
-              console.warn(`Não foi possível carregar contagem de componentes do ambiente ${ambiente.nome}:`, error);
+              console.warn(
+                `Não foi possível carregar contagem de componentes do ambiente ${ambiente.nome}:`,
+                error,
+              );
               return ambiente;
             }
           }),
@@ -203,6 +256,31 @@ export default function Ambientes() {
     };
   }, []);
 
+  const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
+  const notificacoesRef = useRef(null);
+
+  // troque pelos dados reais (API/contexto) quando tiver
+  const notificacoes = [
+    { id: 1, titulo: "Novo chamado aberto", tempo: "há 5 min" },
+    { id: 2, titulo: "Chamado concluído", tempo: "há 1 h" },
+  ];
+
+  // fecha ao clicar fora ou apertar Esc
+  useEffect(() => {
+    const fechar = (e) => {
+      if (e.type === "keydown" && e.key !== "Escape") return;
+      if (e.type === "mousedown" && notificacoesRef.current?.contains(e.target))
+        return;
+      setMostrarNotificacoes(false);
+    };
+    document.addEventListener("mousedown", fechar);
+    document.addEventListener("keydown", fechar);
+    return () => {
+      document.removeEventListener("mousedown", fechar);
+      document.removeEventListener("keydown", fechar);
+    };
+  }, []);
+
   const filtrados = useMemo(() => {
     const q = f.q.trim().toLowerCase();
     return ambientes.filter((a) => {
@@ -220,7 +298,9 @@ export default function Ambientes() {
   }, [ambientes, f]);
 
   const blocos = [...new Set(ambientes.map((a) => a.bloco))].sort();
-  const tiposAmbiente = [...new Set(ambientes.map((a) => a.tipo).filter(Boolean))].sort();
+  const tiposAmbiente = [
+    ...new Set(ambientes.map((a) => a.tipo).filter(Boolean)),
+  ].sort();
   const contTipos = tiposAmbiente
     .map((t) => [t, ambientes.filter((a) => a.tipo === t).length])
     .filter(([, n]) => n > 0)
@@ -235,18 +315,26 @@ export default function Ambientes() {
 
     let montado = true;
     setCarregandoComponentes(true);
-    componenteService.buscarPorAmbiente(sel.nome)
+    componenteService
+      .buscarPorAmbiente(sel.nome)
       .then((resposta) => {
         const dados = Array.isArray(resposta)
           ? resposta
-          : resposta?.componentes || resposta?.data || resposta?.componente || [];
-        const lista = (Array.isArray(dados) ? dados : [dados]).filter(Boolean).map(normalizarComponente);
+          : resposta?.componentes ||
+            resposta?.data ||
+            resposta?.componente ||
+            [];
+        const lista = (Array.isArray(dados) ? dados : [dados])
+          .filter(Boolean)
+          .map(normalizarComponente);
 
         if (montado) {
           setComponentes(lista);
           setAmbientes((atual) =>
             atual.map((a) =>
-              a.id === sel.id ? { ...a, comps: lista.length, componentes: lista } : a,
+              a.id === sel.id
+                ? { ...a, comps: lista.length, componentes: lista }
+                : a,
             ),
           );
         }
@@ -263,29 +351,41 @@ export default function Ambientes() {
   }, [sel?.id, sel?.nome]);
 
   useEffect(() => {
-    componenteTipoService.listarComponenteTipo()
+    componenteTipoService
+      .listarComponenteTipo()
       .then((resposta) => {
         const dados = Array.isArray(resposta)
           ? resposta
           : resposta?.tipos || resposta?.data || [];
-        setTiposComponentes((Array.isArray(dados) ? dados : [dados]).filter(Boolean));
+        setTiposComponentes(
+          (Array.isArray(dados) ? dados : [dados]).filter(Boolean),
+        );
       })
-      .catch((error) => console.error("Erro ao carregar tipos de componentes:", error));
+      .catch((error) =>
+        console.error("Erro ao carregar tipos de componentes:", error),
+      );
   }, []);
 
   const comps = componentes;
   const totalComponentesDoAmbiente = Number(sel?.comps ?? comps.length ?? 0);
-  const tiposComponente = [...new Set(comps.map((c) => c.tipo).filter(Boolean))].sort();
-  const statusComponentes = [...new Set(comps.map((c) => c.status).filter(Boolean))].sort();
+  const tiposComponente = [
+    ...new Set(comps.map((c) => c.tipo).filter(Boolean)),
+  ].sort();
+  const statusComponentes = [
+    ...new Set(comps.map((c) => c.status).filter(Boolean)),
+  ].sort();
   const compsFiltrados = comps.filter((c) => {
     const nome = String(c.nome ?? "").toLowerCase();
     const tipo = String(c.tipo ?? "").toLowerCase();
     const status = String(c.status ?? "").toLowerCase();
-    const busca = String(cf.q ?? "").trim().toLowerCase();
+    const busca = String(cf.q ?? "")
+      .trim()
+      .toLowerCase();
 
     const atendeBusca = !busca || nome.includes(busca) || tipo.includes(busca);
     const atendeTipo = !cf.tipo || String(c.tipo ?? "") === String(cf.tipo);
-    const atendeStatus = !cf.status || status === String(cf.status).toLowerCase();
+    const atendeStatus =
+      !cf.status || status === String(cf.status).toLowerCase();
 
     return atendeBusca && atendeTipo && atendeStatus;
   });
@@ -315,11 +415,22 @@ export default function Ambientes() {
           nome: criado.amb_nome ?? criado.nome ?? novo.nome.trim(),
           tipo: criado.amb_tipo ?? criado.tipo ?? novo.tipo,
           bloco: criado.amb_bloco ?? criado.bloco ?? novo.bloco,
-          andar: normalizarAndar(criado.amb_andar ?? criado.andar ?? novo.andar),
-          ativo: normalizarStatusAmbiente(criado.amb_status ?? criado.amb_ativo ?? criado.status ?? criado.ativo),
+          andar: normalizarAndar(
+            criado.amb_andar ?? criado.andar ?? novo.andar,
+          ),
+          ativo: normalizarStatusAmbiente(
+            criado.amb_status ??
+              criado.amb_ativo ??
+              criado.status ??
+              criado.ativo,
+          ),
           comps: 0,
           componentes: [],
-          desc: criado.amb_descricao ?? criado.descricao ?? novo.desc?.trim() ?? "—",
+          desc:
+            criado.amb_descricao ??
+            criado.descricao ??
+            novo.desc?.trim() ??
+            "—",
         },
         ...lista,
       ]);
@@ -338,7 +449,14 @@ export default function Ambientes() {
     const tipoId = Number(novoComponente?.tipoId);
     const idAmbiente = Number(sel?.id);
 
-    if (!nome || !novoComponente?.tipoId || !Number.isFinite(tipoId) || !Number.isFinite(idAmbiente) || salvandoComponente) return;
+    if (
+      !nome ||
+      !novoComponente?.tipoId ||
+      !Number.isFinite(tipoId) ||
+      !Number.isFinite(idAmbiente) ||
+      salvandoComponente
+    )
+      return;
 
     try {
       setSalvandoComponente(true);
@@ -355,16 +473,24 @@ export default function Ambientes() {
       const dados = Array.isArray(resposta)
         ? resposta
         : resposta?.componentes || resposta?.data || [];
-      const lista = (Array.isArray(dados) ? dados : [dados]).filter(Boolean).map(normalizarComponente);
+      const lista = (Array.isArray(dados) ? dados : [dados])
+        .filter(Boolean)
+        .map(normalizarComponente);
       setComponentes(lista);
       setAmbientes((atual) =>
         atual.map((a) =>
-          a.id === sel.id ? { ...a, comps: lista.length, componentes: lista } : a,
+          a.id === sel.id
+            ? { ...a, comps: lista.length, componentes: lista }
+            : a,
         ),
       );
     } catch (error) {
       console.error("Erro ao cadastrar componente:", error);
-      const mensagem = error?.response?.data?.message || error?.response?.data?.error || error?.message || "Não foi possível cadastrar o componente.";
+      const mensagem =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        error?.message ||
+        "Não foi possível cadastrar o componente.";
       setErro(mensagem);
     } finally {
       setSalvandoComponente(false);
@@ -402,14 +528,14 @@ export default function Ambientes() {
       ambientes.map((a) =>
         a.id === edit.id
           ? {
-            ...a,
-            nome: edit.nome.trim(),
-            tipo: edit.tipo,
-            bloco: edit.bloco,
-            andar: normalizarAndar(edit.andar),
-            ativo: normalizarStatusAmbiente(edit.ativo),
-            desc: edit.desc.trim(),
-          }
+              ...a,
+              nome: edit.nome.trim(),
+              tipo: edit.tipo,
+              bloco: edit.bloco,
+              andar: normalizarAndar(edit.andar),
+              ativo: normalizarStatusAmbiente(edit.ativo),
+              desc: edit.desc.trim(),
+            }
           : a,
       ),
     );
@@ -482,9 +608,40 @@ export default function Ambientes() {
           />
         </div>
         <div className="topbar__actions">
-          <button type="button" className="topbar__icon-button" aria-label="Notificações">
-            <span aria-hidden="true">🕭</span>
-          </button>
+          <div className="topbar__notifications-wrap" ref={notificacoesRef}>
+            <button
+              type="button"
+              className="topbar__icon-button"
+              aria-label="Notificações"
+              onClick={() => setMostrarNotificacoes((valor) => !valor)}
+            >
+              🕭
+            </button>
+
+            {mostrarNotificacoes && (
+              <div
+                className="topbar__notifications"
+                role="menu"
+                aria-label="Notificações"
+              >
+                <div className="topbar__notifications-header">
+                  <strong>Notificações</strong>
+                  <span>{notificacoes.length}</span>
+                </div>
+
+                {notificacoes.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className="topbar__notification-item"
+                  >
+                    <span>{item.titulo}</span>
+                    <small>{item.tempo}</small>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -605,12 +762,14 @@ export default function Ambientes() {
                       <Status ativo={sel.ativo} />
                     </div>
                     <p className="ambientes-local">
-                      <MapPin size={14} /> {sel.bloco} ·{" "}
-                      {andarLabel(sel.andar)}
+                      <MapPin size={14} /> {sel.bloco} · {andarLabel(sel.andar)}
                     </p>
                     <p className="ambientes-desc">{sel.desc}</p>
                   </div>
-                  <button className="btn btn--ghost ambientes-btn-sec" onClick={abrirEdicao}>
+                  <button
+                    className="btn btn--ghost ambientes-btn-sec"
+                    onClick={abrirEdicao}
+                  >
                     <Pencil size={15} /> Editar
                   </button>
                   <button className="ambientes-icon" aria-label="Mais ações">
@@ -652,9 +811,7 @@ export default function Ambientes() {
                       <Select
                         label="Tipo"
                         value={cf.tipo}
-                        onChange={(v) =>
-                          setCf((cur) => ({ ...cur, tipo: v }))
-                        }
+                        onChange={(v) => setCf((cur) => ({ ...cur, tipo: v }))}
                         opts={[...new Set(comps.map((c) => c.tipo))].map(
                           (t) => [t, t],
                         )}
@@ -671,16 +828,17 @@ export default function Ambientes() {
                       <button
                         type="button"
                         className="btn btn--primary ambientes-btn"
-                        onClick={() => setNovoComponente({
-                          nome: "",
-                          tipoId: tiposComponentes[0]?.id_compo_tipo ?? "",
-                          patrimonio: "",
-                        })}
+                        onClick={() =>
+                          setNovoComponente({
+                            nome: "",
+                            tipoId: tiposComponentes[0]?.id_compo_tipo ?? "",
+                            patrimonio: "",
+                          })
+                        }
                         disabled={tiposComponentes.length === 0}
                       >
                         <Plus size={16} /> Adicionar componente
                       </button>
-
                     </div>
                     <div className="ambientes-tabela-wrap">
                       <table className="table ambientes-tabela">
@@ -696,7 +854,8 @@ export default function Ambientes() {
                         </thead>
                         <tbody>
                           {compsFiltrados.map((c) => {
-                            const Icon = c.Icon || ICONES_COMP[c.tipo] || Package;
+                            const Icon =
+                              c.Icon || ICONES_COMP[c.tipo] || Package;
                             return (
                               <tr key={c.id ?? c.pat}>
                                 <td>
@@ -731,15 +890,18 @@ export default function Ambientes() {
                         </tbody>
                       </table>
                       {carregandoComponentes && (
-                        <p className="ambientes-vazio">Carregando componentes...</p>
-                      )}
-                      {!carregandoComponentes && compsFiltrados.length === 0 && (
                         <p className="ambientes-vazio">
-                          {comps.length === 0
-                            ? "Este ambiente ainda não tem componentes cadastrados."
-                            : "Nenhum componente encontrado com esses filtros."}
+                          Carregando componentes...
                         </p>
                       )}
+                      {!carregandoComponentes &&
+                        compsFiltrados.length === 0 && (
+                          <p className="ambientes-vazio">
+                            {comps.length === 0
+                              ? "Este ambiente ainda não tem componentes cadastrados."
+                              : "Nenhum componente encontrado com esses filtros."}
+                          </p>
+                        )}
                     </div>
                   </>
                 )}
@@ -754,11 +916,14 @@ export default function Ambientes() {
                     <Info l="Componentes" v={totalComponentesDoAmbiente} />
                     <Info
                       l="Criado em"
-                      v={sel.por ? `${formatarDataAmbiente(sel.criado)} por ${sel.por}` : formatarDataAmbiente(sel.criado)}
+                      v={
+                        sel.por
+                          ? `${formatarDataAmbiente(sel.criado)} por ${sel.por}`
+                          : formatarDataAmbiente(sel.criado)
+                      }
                     />
                   </div>
                 )}
-
               </section>
             )}
 
@@ -784,7 +949,6 @@ export default function Ambientes() {
           </div>
         </>
       )}
-
 
       {novo && (
         <Modal titulo="Novo ambiente" onClose={() => setNovo(null)}>
@@ -825,12 +989,18 @@ export default function Ambientes() {
           />
         </Modal>
       )}
-
     </div>
   );
 }
 
-function Select({ label, value, onChange, opts, allLabel, className = "Todos" }) {
+function Select({
+  label,
+  value,
+  onChange,
+  opts,
+  allLabel,
+  className = "Todos",
+}) {
   const options = [["", allLabel], ...opts];
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
@@ -868,7 +1038,11 @@ function Select({ label, value, onChange, opts, allLabel, className = "Todos" })
         </button>
 
         {open && (
-          <div className="custom-select__menu" role="listbox" aria-label={label}>
+          <div
+            className="custom-select__menu"
+            role="listbox"
+            aria-label={label}
+          >
             {opts.map(([v, text]) => (
               <button
                 key={v}
@@ -922,7 +1096,9 @@ const Tag = ({ tipo }) => (
 
 function tipoConfig(tipo = "") {
   const cores = ["#3b82f6", "#8b5cf6", "#f59e0b", "#14b8a6", "#64748b"];
-  const indice = [...tipo].reduce((total, caractere) => total + caractere.charCodeAt(0), 0) % cores.length;
+  const indice =
+    [...tipo].reduce((total, caractere) => total + caractere.charCodeAt(0), 0) %
+    cores.length;
   return { cor: cores[indice], Icon: MapPin };
 }
 const Status = ({ ativo }) => (
@@ -1047,18 +1223,34 @@ function Modal({ titulo, onClose, children }) {
 function Acoes({ onCancel, salvar, ok }) {
   return (
     <div className="ambientes-modal-acoes">
-      <button type="button" className="btn btn--ghost ambientes-btn-sec" onClick={onCancel}>
+      <button
+        type="button"
+        className="btn btn--ghost ambientes-btn-sec"
+        onClick={onCancel}
+      >
         Cancelar
       </button>
-      <button type="submit" className="btn btn--primary ambientes-btn" disabled={!ok}>
+      <button
+        type="submit"
+        className="btn btn--primary ambientes-btn"
+        disabled={!ok}
+      >
         {salvar}
       </button>
     </div>
   );
 }
 
-function FormComponenteAmbiente({ valor, tipos, salvando, onChange, onCancel, onSubmit }) {
-  const up = (campo) => (event) => onChange({ ...valor, [campo]: event.target.value });
+function FormComponenteAmbiente({
+  valor,
+  tipos,
+  salvando,
+  onChange,
+  onCancel,
+  onSubmit,
+}) {
+  const up = (campo) => (event) =>
+    onChange({ ...valor, [campo]: event.target.value });
   const ok = valor.nome.trim() && valor.tipoId;
 
   return (
@@ -1091,12 +1283,24 @@ function FormComponenteAmbiente({ valor, tipos, salvando, onChange, onCancel, on
           placeholder="Opcional"
         />
       </label>
-      <Acoes onCancel={onCancel} salvar={salvando ? "Salvando..." : "Cadastrar componente"} ok={ok && !salvando} />
+      <Acoes
+        onCancel={onCancel}
+        salvar={salvando ? "Salvando..." : "Cadastrar componente"}
+        ok={ok && !salvando}
+      />
     </form>
   );
 }
 
-function FormAmbiente({ valor, onChange, onCancel, onSubmit, salvar, edicao, tipos }) {
+function FormAmbiente({
+  valor,
+  onChange,
+  onCancel,
+  onSubmit,
+  salvar,
+  edicao,
+  tipos,
+}) {
   const up = (k) => (e) => onChange({ ...valor, [k]: e.target.value });
   const ok = !!valor.nome.trim();
   return (
@@ -1130,7 +1334,12 @@ function FormAmbiente({ valor, onChange, onCancel, onSubmit, salvar, edicao, tip
         </label>
         <label>
           Andar
-          <input type="number" min="0" value={valor.andar} onChange={up("andar")} />
+          <input
+            type="number"
+            min="0"
+            value={valor.andar}
+            onChange={up("andar")}
+          />
         </label>
       </div>
       {edicao && (

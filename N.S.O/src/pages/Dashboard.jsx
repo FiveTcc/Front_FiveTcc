@@ -9,7 +9,6 @@ import userService from "../services/userServices";
 import StatusBeacon from "../components/StatusBeacon";
 import PriorityBadge from "../components/PriorityBadge";
 
-
 const CORES_STATUS = {
   aberta: "#E8862E",
   "em andamento": "#2563EB",
@@ -65,7 +64,8 @@ function mostrarTempoAtualizacao(valor) {
     }
   }
 
-  const timestamp = typeof valor === "number" ? valor : new Date(valor).getTime();
+  const timestamp =
+    typeof valor === "number" ? valor : new Date(valor).getTime();
   return Number.isNaN(timestamp)
     ? "—"
     : new Intl.DateTimeFormat("pt-BR", {
@@ -134,21 +134,15 @@ export default function Dashboard() {
   const [dadosDashboard, setDadosDashboard] = useState(null);
   const [carregandoDashboard, setCarregandoDashboard] = useState(true);
 
-
-
-
   useEffect(() => {
-
     // Buscar nome do usuário
     async function buscarNome() {
       try {
         const response = await userService.buscarperfil();
         setNome(response.nome || response.user_nome || "");
-        
       } catch (err) {
         console.error(err);
       }
-
     }
 
     // Carregar dados do dashboard
@@ -187,7 +181,6 @@ export default function Dashboard() {
     buscarNome();
     carregarOcorrencias();
   }, [usuario]);
-
 
   const notificacoes = [];
 
@@ -255,39 +248,39 @@ export default function Dashboard() {
 
           <div className="topbar__actions">
             <div className="topbar__notifications-wrap">
-            <button
-              type="button"
-              className="topbar__icon-button"
-              aria-label="Notificações"
-              onClick={() => setMostrarNotificacoes((valor) => !valor)}
-            >
-              🕭
-            </button>
-
-            {mostrarNotificacoes && (
-              <div
-                className="topbar__notifications"
-                role="menu"
+              <button
+                type="button"
+                className="topbar__icon-button"
                 aria-label="Notificações"
+                onClick={() => setMostrarNotificacoes((valor) => !valor)}
               >
-                <div className="topbar__notifications-header">
-                  <strong>Notificações</strong>
-                  <span>{notificacoes.length}</span>
-                </div>
+                🕭
+              </button>
 
-                {notificacoes.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    className="topbar__notification-item"
-                  >
-                    <span>{item.titulo}</span>
-                    <small>{item.tempo}</small>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+              {mostrarNotificacoes && (
+                <div
+                  className="topbar__notifications"
+                  role="menu"
+                  aria-label="Notificações"
+                >
+                  <div className="topbar__notifications-header">
+                    <strong>Notificações</strong>
+                    <span>{notificacoes.length}</span>
+                  </div>
+
+                  {notificacoes.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className="topbar__notification-item"
+                    >
+                      <span>{item.titulo}</span>
+                      <small>{item.tempo}</small>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -332,7 +325,6 @@ export default function Dashboard() {
           <span className="stat-card__hint">desde o início</span>
         </div>
       </section>
-
 
       {/* Conteúdo principal */}
       <section className="grid-2">
