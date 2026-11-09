@@ -36,19 +36,19 @@ export default function NovoChamado() {
   }
 
   return (
-    <div className="page page--narrow">
-      <header className="page__header">
+    <div className="pagina pagina--estreito">
+      <header className="pagina__cabecalho">
         <div>
-          <span className="eyebrow">Abertura</span>
+          <span className="rotulo-superior">Abertura</span>
           <h1>Novo chamado</h1>
-          <p className="muted">
+          <p className="atenuado">
             Descreva o problema com o máximo de detalhe possível para agilizar o
             atendimento.
           </p>
         </div>
       </header>
 
-      <form className="card__novochamado form" onSubmit={handleSubmit}>
+      <form className="cartao__novochamado formulario" onSubmit={handleSubmit}>
         <label>
           Micro
           <input
@@ -60,12 +60,12 @@ export default function NovoChamado() {
           />
         </label>
 
-        <div className="form__row">
-          <div className="custom-select">
-            <span className="custom-select__label">Categoria</span>
+        <div className="formulario__linha">
+          <div className="selecao-personalizada">
+            <span className="selecao-personalizada__rotulo">Categoria</span>
             <button
               type="button"
-              className={`custom-select__trigger ${openSelect === "categoria" ? "is-open" : ""}`}
+              className={`selecao-personalizada__acionador ${openSelect === "categoria" ? "esta-aberto" : ""}`}
               onClick={() =>
                 setOpenSelect((current) =>
                   current === "categoria" ? null : "categoria",
@@ -73,15 +73,15 @@ export default function NovoChamado() {
               }
             >
               <span>{categoria}</span>
-              <span className="custom-select__caret">▾</span>
+              <span className="selecao-personalizada__seta">▾</span>
             </button>
             {openSelect === "categoria" && (
-              <div className="custom-select__menu" role="listbox" aria-label="Categoria">
+              <div className="selecao-personalizada__menu" role="listbox" aria-label="Categoria">
                 {categorias.map((option) => (
                   <button
                     key={option}
                     type="button"
-                    className={`custom-select__option ${categoria === option ? "is-selected" : ""}`}
+                    className={`selecao-personalizada__opcao ${categoria === option ? "esta-selecionado" : ""}`}
                     onClick={() => {
                       setCategoria(option);
                       setOpenSelect(null);
@@ -94,11 +94,11 @@ export default function NovoChamado() {
             )}
           </div>
 
-          <div className="custom-select">
-            <span className="custom-select__label">Prioridade</span>
+          <div className="selecao-personalizada">
+            <span className="selecao-personalizada__rotulo">Prioridade</span>
             <button
               type="button"
-              className={`custom-select__trigger ${openSelect === "prioridade" ? "is-open" : ""}`}
+              className={`selecao-personalizada__acionador ${openSelect === "prioridade" ? "esta-aberto" : ""}`}
               onClick={() =>
                 setOpenSelect((current) =>
                   current === "prioridade" ? null : "prioridade",
@@ -106,15 +106,15 @@ export default function NovoChamado() {
               }
             >
               <span>{prioridade}</span>
-              <span className="custom-select__caret">▾</span>
+              <span className="selecao-personalizada__seta">▾</span>
             </button>
             {openSelect === "prioridade" && (
-              <div className="custom-select__menu" role="listbox" aria-label="Prioridade">
+              <div className="selecao-personalizada__menu" role="listbox" aria-label="Prioridade">
                 {prioridades.map((option) => (
                   <button
                     key={option}
                     type="button"
-                    className={`custom-select__option ${prioridade === option ? "is-selected" : ""}`}
+                    className={`selecao-personalizada__opcao ${prioridade === option ? "esta-selecionado" : ""}`}
                     onClick={() => {
                       setPrioridade(option);
                       setOpenSelect(null);
@@ -147,7 +147,7 @@ export default function NovoChamado() {
           </label>
         </div>
 
-        <label className="form__description">
+        <label className="formulario__descricao">
           Descrição
           <textarea
             rows={4}
@@ -158,10 +158,10 @@ export default function NovoChamado() {
           />
         </label>
 
-        <div className="form__attachments">
+        <div className="formulario__anexos">
           <span>Anexos</span>
-          <div className="form__attachment-actions">
-            <label className="btn btn--ghost form__file-button">
+          <div className="formulario__anexo-acoes">
+            <label className="botao botao--vazado formulario__arquivo-botao">
               Enviar imagens
               <input
                 type="file"
@@ -172,7 +172,7 @@ export default function NovoChamado() {
             </label>
           </div>
           {(foto || arquivos.length > 0) && (
-            <p className="form__attachments-list">
+            <p className="formulario__anexos-lista">
               {[foto, ...arquivos]
                 .filter(Boolean)
                 .map((arquivo) => arquivo.name)
@@ -181,11 +181,11 @@ export default function NovoChamado() {
           )}
         </div>
 
-        <div className="form__actions">
-          <button type="button" className="btn btn--cancelar" onClick={() => navigate(-1)}>
+        <div className="formulario__acoes">
+          <button type="button" className="botao botao--cancelar" onClick={() => navigate(-1)}>
             Cancelar
           </button>
-          <button type="submit" className="btn btn--primary" disabled={enviando}>
+          <button type="submit" className="botao botao--principal" disabled={enviando}>
             Enviar chamado
           </button>
         </div>

@@ -174,18 +174,18 @@ export default function Chamados() {
   }, [busca, chamados, filtroPrioridade, filtroStatus]);
 
   return (
-    <div className="page page--tickets">
-      <header className="page__header">
+    <div className="pagina pagina--chamados">
+      <header className="pagina__cabecalho">
         <div>
           <h1>Ocorrências</h1>
-          <p className="muted">
+          <p className="atenuado">
             Acompanhe, filtre e priorize as ocorrências abertas.
           </p>
         </div>
       </header>
 
-      <div className="topbar">
-        <div className="topbar__search">
+      <div className="barra-superior">
+        <div className="barra-superior__busca">
           <input
             type="search"
             value={busca}
@@ -195,11 +195,11 @@ export default function Chamados() {
           />
         </div>
 
-        <div className="topbar__actions">
-          <div className="topbar__notifications-wrap" ref={notificacoesRef}>
+        <div className="barra-superior__acoes">
+          <div className="barra-superior__notificacoes-wrap" ref={notificacoesRef}>
             <button
               type="button"
-              className="topbar__icon-button"
+              className="barra-superior__icone-botao"
               aria-label="Notificações"
               aria-expanded={mostrarNotificacoes}
               onClick={() => setMostrarNotificacoes((valor) => !valor)}
@@ -209,11 +209,11 @@ export default function Chamados() {
 
             {mostrarNotificacoes && (
               <div
-                className="topbar__notifications"
+                className="barra-superior__notificacoes"
                 role="menu"
                 aria-label="Notificações"
               >
-                <div className="topbar__notifications-header">
+                <div className="barra-superior__notificacoes-cabecalho">
                   <strong>Notificações</strong>
                   <span>{notificacoes.length}</span>
                 </div>
@@ -222,7 +222,7 @@ export default function Chamados() {
                   <button
                     key={item.id}
                     type="button"
-                    className="topbar__notification-item"
+                    className="barra-superior__notificacao-item"
                   >
                     <span>{item.titulo}</span>
                     <small>{item.tempo}</small>
@@ -234,12 +234,12 @@ export default function Chamados() {
         </div>
       </div>
 
-      <div className="filters">
-        <div className="status-legend-container">
-          <h2 className="status-legend__title">Legenda de status</h2>
-          <ul className="status-legend" aria-label="Legenda de status">
+      <div className="filtros">
+        <div className="status-legenda-conteiner">
+          <h2 className="status-legenda__titulo">Legenda de status</h2>
+          <ul className="status-legenda" aria-label="Legenda de status">
             {STATUS_LEGEND.map(([value, label]) => (
-              <li key={value} className="status-legend__item">
+              <li key={value} className="status-legenda__item">
                 <StatusBeacon status={value} comLabel={false} />
                 <span>{label}</span>
               </li>
@@ -247,11 +247,11 @@ export default function Chamados() {
           </ul>
         </div>
 
-        <div className="custom-select">
-          <span className="custom-select__label">Status</span>
+        <div className="selecao-personalizada">
+          <span className="selecao-personalizada__rotulo">Status</span>
           <button
             type="button"
-            className={`custom-select__trigger ${openSelect === "status" ? "is-open" : ""}`}
+            className={`selecao-personalizada__acionador ${openSelect === "status" ? "esta-aberto" : ""}`}
             aria-haspopup="listbox"
             aria-expanded={openSelect === "status"}
             onClick={() =>
@@ -261,11 +261,11 @@ export default function Chamados() {
             }
           >
             <span>{STATUS_LABELS[filtroStatus]}</span>
-            <span className="custom-select__caret">▾</span>
+            <span className="selecao-personalizada__seta">▾</span>
           </button>
           {openSelect === "status" && (
             <div
-              className="custom-select__menu"
+              className="selecao-personalizada__menu"
               role="listbox"
               aria-label="Filtrar por status"
             >
@@ -275,7 +275,7 @@ export default function Chamados() {
                   type="button"
                   role="option"
                   aria-selected={filtroStatus === value}
-                  className={`custom-select__option ${filtroStatus === value ? "is-selected" : ""}`}
+                  className={`selecao-personalizada__opcao ${filtroStatus === value ? "esta-selecionado" : ""}`}
                   onClick={() => {
                     setFiltroStatus(value);
                     setOpenSelect(null);
@@ -288,11 +288,11 @@ export default function Chamados() {
           )}
         </div>
 
-        <div className="custom-select">
-          <span className="custom-select__label">Prioridade</span>
+        <div className="selecao-personalizada">
+          <span className="selecao-personalizada__rotulo">Prioridade</span>
           <button
             type="button"
-            className={`custom-select__trigger ${openSelect === "prioridade" ? "is-open" : ""}`}
+            className={`selecao-personalizada__acionador ${openSelect === "prioridade" ? "esta-aberto" : ""}`}
             aria-haspopup="listbox"
             aria-expanded={openSelect === "prioridade"}
             onClick={() =>
@@ -302,11 +302,11 @@ export default function Chamados() {
             }
           >
             <span>{PRIORIDADE_LABELS[filtroPrioridade]}</span>
-            <span className="custom-select__caret">▾</span>
+            <span className="selecao-personalizada__seta">▾</span>
           </button>
           {openSelect === "prioridade" && (
             <div
-              className="custom-select__menu"
+              className="selecao-personalizada__menu"
               role="listbox"
               aria-label="Filtrar por status"
             >
@@ -316,7 +316,7 @@ export default function Chamados() {
                   type="button"
                   role="option"
                   aria-selected={filtroPrioridade === value}
-                  className={`custom-select__option ${filtroPrioridade === value ? "is-selected" : ""}`}
+                  className={`selecao-personalizada__opcao ${filtroPrioridade === value ? "esta-selecionado" : ""}`}
                   onClick={() => {
                     setFiltroPrioridade(value);
                     setOpenSelect(null);
@@ -329,24 +329,24 @@ export default function Chamados() {
           )}
         </div>
 
-        <Link to="/chamados/novo" className="btn btn--primary">
+        <Link to="/chamados/novo" className="botao botao--principal">
           + Nova ocorrência
         </Link>
       </div>
 
-      <div className="card__chamados card--table">
+      <div className="cartao__chamados cartao--tabela">
         {carregando ? (
-          <div className="empty">Carregando ocorrências...</div>
+          <div className="vazio">Carregando ocorrências...</div>
         ) : erro ? (
-          <div className="empty">
+          <div className="vazio">
             <strong>{erro}</strong>
           </div>
         ) : filtrados.length === 0 ? (
-          <div className="empty">
+          <div className="vazio">
             <strong>Nenhuma ocorrência encontrada</strong>
           </div>
         ) : (
-          <table className="table">
+          <table className="tabela">
             <thead>
               <tr>
                 <th>Status</th>
@@ -362,7 +362,7 @@ export default function Chamados() {
                 <tr key={ocorrencia.id}>
                   <td>
                     <StatusBeacon status={ocorrencia.status} comLabel={false} />{" "}
-                    <span className="beacon__label">
+                    <span className="indicador__rotulo">
                       {STATUS_LABELS[ocorrencia.status] ||
                         ocorrencia.status ||
                         "—"}
@@ -371,7 +371,7 @@ export default function Chamados() {
                   <td>
                     <Link
                       to={`/chamados/${ocorrencia.id}`}
-                      className="table__code"
+                      className="tabela__codigo"
                     >
                       {ocorrencia.numero || ocorrencia.id}
                     </Link>
@@ -379,16 +379,16 @@ export default function Chamados() {
                   <td>
                     <Link
                       to={`/chamados/${ocorrencia.id}`}
-                      className="table__title"
+                      className="tabela__titulo"
                     >
                       {ocorrencia.titulo || ocorrencia.nome}
                     </Link>
                   </td>
-                  <td className="muted">{ocorrencia.categoria || "—"}</td>
+                  <td className="atenuado">{ocorrencia.categoria || "—"}</td>
                   <td>
                     <PriorityBadge prioridade={ocorrencia.prioridade} />
                   </td>
-                  <td className="muted">
+                  <td className="atenuado">
                     {mostrarAtualizacao(
                       ocorrencia.atualizadoEm || ocorrencia.updatedAt,
                     )}

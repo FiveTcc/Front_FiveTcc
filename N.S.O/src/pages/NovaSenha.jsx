@@ -65,19 +65,19 @@ export default function NovaSenha() {
   }
 
   return (
-    <div className="login recovery-page">
-      <div className="recovery-card">
-        <span className="eyebrow">Acesso seguro</span>
+    <div className="acesso recuperacao-pagina">
+      <div className="recuperacao-cartao">
+        <span className="rotulo-superior">Acesso seguro</span>
         <h1>Definir nova senha</h1>
-        <p className="muted">
+        <p className="atenuado">
           Crie uma nova senha para continuar com acesso ao sistema.
         </p>
 
         <form
-          className="recovery-form recovery-form--reset"
+          className="recuperacao-formulario recuperacao-formulario--redefinir"
           onSubmit={handleSubmit}
         >
-          <label className="recovery-field">
+          <label className="recuperacao-campo">
             <span>Nova senha</span>
             <input
               type="password"
@@ -88,7 +88,7 @@ export default function NovaSenha() {
             />
           </label>
 
-          <label className="recovery-field">
+          <label className="recuperacao-campo">
             <span>Confirmar senha</span>
             <input
               type="password"
@@ -99,19 +99,19 @@ export default function NovaSenha() {
             />
           </label>
 
-          {erro && <div className="recovery-error">{erro}</div>}
-          {sucesso && <div className="recovery-success">{sucesso}</div>}
+          {erro && <div className="recuperacao-erro">{erro}</div>}
+          {sucesso && <div className="recuperacao-sucesso">{sucesso}</div>}
 
           <button
             type="submit"
-            className="btn btn--primary recovery-form__submit"
+            className="botao botao--principal recuperacao-formulario__enviar"
             disabled={carregando}
           >
             {carregando ? "Salvando..." : "Salvar nova senha"}
           </button>
         </form>
 
-        <Link to="/login" className="recovery-back">
+        <Link to="/login" className="recuperacao-voltar">
           ← Voltar para o login
         </Link>
       </div>

@@ -1,5 +1,5 @@
 /* Organização geral dos formulários e seus controles. */
-.form {
+.formulario {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -7,22 +7,22 @@
   height: auto;
   min-height: 0;
 }
-.page--narrow > .form .form__description {
+.pagina--estreito > .formulario .formulario__descricao {
   flex: initial;
 }
-.page--narrow > .form .form__description textarea {
+.pagina--estreito > .formulario .formulario__descricao textarea {
   min-height: 265px;
 }
-.form label {
+.formulario label {
   display: flex;
   flex-direction: column;
   gap: 6px;
   font-size: 0.85rem;
   color: var(--text-dim);
 }
-.form input,
-.form select,
-.form textarea {
+.formulario input,
+.formulario select,
+.formulario textarea {
   width: 100%;
   min-height: 42px;
   background: var(--panel-input);
@@ -35,26 +35,26 @@
     border-color 0.15s ease,
     box-shadow 0.15s ease;
 }
-.form input::placeholder,
-.form select::placeholder,
-.form textarea::placeholder {
+.formulario input::placeholder,
+.formulario select::placeholder,
+.formulario textarea::placeholder {
   color: var(--text-faint);
 }
-.form input:focus,
-.form select:focus,
-.form textarea:focus {
+.formulario input:focus,
+.formulario select:focus,
+.formulario textarea:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
 }
 /* Campos apresentados em duas colunas. */
-.form__row {
+.formulario__linha {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 /* Alinhamento dos botões de ação do formulário. */
-.form__actions {
+.formulario__acoes {
   display: flex;
   position: static;
   justify-content: flex-end;
@@ -63,7 +63,7 @@
   margin-top: 6px;
   flex-shrink: 0;
 }
-.form-novo-usuarios__actions {
+.formulario-novo-usuarios__acoes {
   display: flex;
   position: static;
   justify-content: flex-end;
@@ -72,21 +72,21 @@
   margin-top: 6px;
   flex-shrink: 0;
 }
-.usuarios-new-form > .form__actions {
+.usuarios-novo-formulario > .formulario__acoes {
   margin-top: 4px;
 }
-.usuarios-new-form .btn,
-.usuarios-new-form .btn:hover,
-.usuarios-new-form .btn:active,
-.usuarios-new-form .btn:focus-visible {
+.usuarios-novo-formulario .botao,
+.usuarios-novo-formulario .botao:hover,
+.usuarios-novo-formulario .botao:active,
+.usuarios-novo-formulario .botao:focus-visible {
   transform: none;
 }
-.form__success {
+.formulario__sucesso {
   color: var(--green);
   font-size: 0.85rem;
 }
 /* Exibição de anexos selecionados e seus controles. */
-.form__attachments {
+.formulario__anexos {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -97,19 +97,19 @@
   width: 100%;
   flex-shrink: 0;
 }
-.form__attachment-actions {
+.formulario__anexo-acoes {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   align-items: center;
   margin-top: 8px;
 }
-.form__file-button {
+.formulario__arquivo-botao {
   position: relative;
   overflow: hidden;
   cursor: pointer;
 }
-.form__file-button input {
+.formulario__arquivo-botao input {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -117,7 +117,7 @@
   opacity: 0;
   cursor: pointer;
 }
-.form__attachments-list {
+.formulario__anexos-lista {
   margin: 0;
   color: var(--text-faint);
   font-size: 0.78rem;

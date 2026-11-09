@@ -123,21 +123,21 @@ export default function Componentes() {
   }
 
   return (
-    <main className="page page--componentes">
-      <header className="page__header">
+    <main className="pagina pagina--componentes">
+      <header className="pagina__cabecalho">
         <div>
           <h1>Componentes</h1>
-          <p className="muted">Gerencie cada equipamento e acompanhe em qual ambiente está instalado.</p>
+          <p className="atenuado">Gerencie cada equipamento e acompanhe em qual ambiente está instalado.</p>
         </div>
-        <button className="btn btn--primary" type="button" onClick={() => setForm({ ...FORM_VAZIO, ambienteId: ambienteInicial })}>
+        <button className="botao botao--principal" type="button" onClick={() => setForm({ ...FORM_VAZIO, ambienteId: ambienteInicial })}>
           <Plus size={18} /> Novo componente
         </button>
       </header>
 
-      {erro && <p className="form__error">{erro}</p>}
+      {erro && <p className="formulario__erro">{erro}</p>}
 
-      <section className="componentes-toolbar card">
-        <label className="componentes-search">
+      <section className="componentes-barra-ferramentas cartao">
+        <label className="componentes-busca">
           <Search size={18} />
           <input value={busca} onChange={(event) => setBusca(event.target.value)} placeholder="Buscar por nome, patrimônio ou série" />
         </label>
@@ -149,30 +149,30 @@ export default function Componentes() {
             </option>
           ))}
         </select>
-        <span className="muted">{filtrados.length} {filtrados.length === 1 ? "equipamento" : "equipamentos"}</span>
+        <span className="atenuado">{filtrados.length} {filtrados.length === 1 ? "equipamento" : "equipamentos"}</span>
       </section>
 
-      {carregando ? <p className="empty">Carregando componentes...</p> : filtrados.length === 0 ? (
-        <section className="card componentes-empty">
+      {carregando ? <p className="vazio">Carregando componentes...</p> : filtrados.length === 0 ? (
+        <section className="cartao componentes-vazio">
           <Package size={30} />
           <strong>Nenhum componente encontrado</strong>
-          <span className="muted">Cadastre um equipamento ou ajuste os filtros.</span>
+          <span className="atenuado">Cadastre um equipamento ou ajuste os filtros.</span>
         </section>
       ) : (
-        <section className="componentes-grid">
+        <section className="componentes-grade">
           {filtrados.map((item) => (
-            <article className="card componente-card" key={item.id ?? `${item.nome}-${item.patrimonio}`}>
-              <div className="componente-card__top">
-                <span className="componente-card__icon"><Monitor size={20} /></span>
-                <div className="componente-card__heading">
+            <article className="cartao componente-cartao" key={item.id ?? `${item.nome}-${item.patrimonio}`}>
+              <div className="componente-cartao__superior">
+                <span className="componente-cartao__icone"><Monitor size={20} /></span>
+                <div className="componente-cartao__heading">
                   <h2>{item.nome}</h2>
-                  <span className="muted">{item.tipo}</span>
+                  <span className="atenuado">{item.tipo}</span>
                 </div>
-                <button className="btn btn--ghost btn--sm" type="button" aria-label={`Editar ${item.nome}`} onClick={() => editar(item)}>
+                <button className="botao botao--vazado botao--pequeno" type="button" aria-label={`Editar ${item.nome}`} onClick={() => editar(item)}>
                   <Pencil size={16} />
                 </button>
               </div>
-              <dl className="componente-card__details">
+              <dl className="componente-cartao__details">
                 <div><dt>Patrimônio</dt><dd>{item.patrimonio}</dd></div>
                 <div><dt>Número de série</dt><dd>{item.numeroSerie}</dd></div>
                 <div><dt>Status</dt><dd>{item.status}</dd></div>
@@ -186,8 +186,8 @@ export default function Componentes() {
       <p className="componentes-footnote"><Link to="/ambientes">Ver ambientes</Link> para consultar os equipamentos agrupados por local.</p>
 
       {form && (
-        <div className="componentes-modal-backdrop" onMouseDown={(event) => event.target === event.currentTarget && setForm(null)}>
-          <section className="card componentes-modal" role="dialog" aria-modal="true" aria-labelledby="componente-form-title">
+        <div className="componentes-janela-fundo" onMouseDown={(event) => event.target === event.currentTarget && setForm(null)}>
+          <section className="cartao componentes-janela" role="dialog" aria-modal="true" aria-labelledby="componente-form-title">
             <h2 id="componente-form-title">{form.id ? "Editar componente" : "Novo componente"}</h2>
             <form onSubmit={salvar}>
               <label>Nome do equipamento<input autoFocus required value={form.nome} onChange={(event) => setForm({ ...form, nome: event.target.value })} placeholder="Ex.: Computador da sala 01" /></label>
@@ -195,7 +195,7 @@ export default function Componentes() {
                 <option value="">Selecione um tipo</option>
                 {tipos.map((tipo) => <option key={tipo.id_compo_tipo ?? tipo.id} value={tipo.id_compo_tipo ?? tipo.id}>{tipo.compo_tipo ?? tipo.nome}</option>)}
               </select></label>
-              <div className="componentes-form-row">
+              <div className="componentes-formulario-linha">
                 <label>Patrimônio<input value={form.patrimonio} onChange={(event) => setForm({ ...form, patrimonio: event.target.value })} placeholder="Número patrimonial" /></label>
                 <label>Número de série<input value={form.numeroSerie} onChange={(event) => setForm({ ...form, numeroSerie: event.target.value })} placeholder="Opcional" /></label>
               </div>
@@ -203,9 +203,9 @@ export default function Componentes() {
                 <option value="">Sem ambiente</option>
                 {ambientes.map((ambiente) => <option key={ambiente.id_amb ?? ambiente.id} value={ambiente.id_amb ?? ambiente.id}>{ambiente.amb_nome ?? ambiente.nome}</option>)}
               </select></label>
-              <div className="componentes-modal__actions">
-                <button className="btn btn--ghost" type="button" onClick={() => setForm(null)}>Cancelar</button>
-                <button className="btn btn--primary" type="submit" disabled={salvando}>{salvando ? "Salvando..." : "Salvar componente"}</button>
+              <div className="componentes-janela__acoes">
+                <button className="botao botao--vazado" type="button" onClick={() => setForm(null)}>Cancelar</button>
+                <button className="botao botao--principal" type="submit" disabled={salvando}>{salvando ? "Salvando..." : "Salvar componente"}</button>
               </div>
             </form>
           </section>

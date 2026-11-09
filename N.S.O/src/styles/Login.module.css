@@ -1,5 +1,5 @@
 /* Estrutura e posicionamento da tela de acesso. */
-.login {
+.acesso {
   position: relative;
   min-height: 100vh;
   display: grid;
@@ -8,7 +8,7 @@
   background: var(--bg);
 }
 
-.login__theme-toggle {
+.acesso__tema-alternancia {
   position: absolute;
   top: 24px;
   right: 24px;
@@ -26,7 +26,7 @@
 }
 
 /* Cartão principal e área ilustrativa da tela de acesso. */
-.login__panel {
+.acesso__painel {
   width: min(1180px, 94vw);
   min-height: min(720px, calc(100vh - 56px));
   display: grid;
@@ -38,7 +38,7 @@
   box-shadow: var(--shadow-card);
 }
 
-.login__visual {
+.acesso__visual {
   position: relative;
   padding: 34px 46px 28px;
   background: linear-gradient(
@@ -49,7 +49,7 @@
   border-right: 1px solid var(--border);
 }
 
-.login__brand-mark-logo {
+.acesso__marca-marca-logotipo {
   width: min(80vw, 560px);
   max-width: 100%;
   margin: 0 auto 18px;
@@ -57,43 +57,43 @@
   opacity: 0.9;
 }
 
-.login__brand-mark-logo svg {
+.acesso__marca-marca-logotipo svg {
   display: block;
   width: 100%;
   height: auto;
 }
 
-.login__hero {
+.acesso__destaque {
   margin-top: clamp(28px, 6vh, 76px);
   padding-right: 28px;
 }
 
-.login__hero h2 {
+.acesso__destaque h2 {
   font-size: clamp(2.2rem, 2.7vw, 4rem);
   line-height: 1.1;
   letter-spacing: -0.05em;
   margin: 0 0 18px;
 }
 
-.login__hero p {
+.acesso__destaque p {
   max-width: 480px;
   color: var(--text-dim);
   font-size: 1.04rem;
   line-height: 1.5;
 }
 
-.login__illustration {
+.acesso__ilustracao {
   margin-top: 34px;
   width: min(100%, 560px);
 }
 
-.login__circuit {
+.acesso__circuito {
   display: block;
   width: 100%;
   max-width: 560px;
 }
 
-.login__form-panel {
+.acesso__formulario-painel {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -101,25 +101,25 @@
   background: rgba(148, 163, 184, 0.04);
 }
 
-.login__form-panel h3 {
+.acesso__formulario-painel h3 {
   font-size: clamp(2.1rem, 2.1vw, 3rem);
   margin: 0 0 14px;
   letter-spacing: -0.05em;
 }
 
-.login__form-panel > p {
+.acesso__formulario-painel > p {
   color: var(--text-dim);
   font-size: 1rem;
   margin-bottom: 26px;
 }
 
-.login__form {
+.acesso__formulario {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 
-.login__field {
+.acesso__campo {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -134,12 +134,12 @@
     box-shadow 0.15s ease;
 }
 
-.login__field:hover {
+.acesso__campo:hover {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-dim);
 }
 
-.login__field-icon {
+.acesso__campo-icone {
   width: 22px;
   height: 22px;
   display: inline-flex;
@@ -150,7 +150,7 @@
   opacity: 0.9;
 }
 
-.login__field-icon svg {
+.acesso__campo-icone svg {
   width: 17px;
   height: 17px;
   fill: none;
@@ -160,7 +160,7 @@
   stroke-width: 1.7;
 }
 
-.login__field input {
+.acesso__campo input {
   flex: 1;
   min-width: 0;
   background: transparent;
@@ -170,15 +170,15 @@
   font-size: 1rem;
 }
 
-.login__field input::placeholder {
+.acesso__campo input::placeholder {
   color: var(--text-dim);
 }
 
-.login__field input:not(:placeholder-shown) {
+.acesso__campo input:not(:placeholder-shown) {
   color: var(--text);
 }
 
-.login__toggle-password {
+.acesso__alternancia-senha {
   border: none;
   background: transparent;
   color: var(--text-dim);
@@ -189,7 +189,7 @@
   padding: 6px;
 }
 
-.login__toggle-password svg {
+.acesso__alternancia-senha svg {
   width: 18px;
   height: 18px;
   fill: none;
@@ -199,7 +199,7 @@
   stroke-width: 1.7;
 }
 
-.login__erro {
+.acesso__erro {
   color: var(--red);
   font-size: 0.9rem;
   line-height: 0.6;
@@ -207,8 +207,8 @@
   position: static;
 }
 
-.login__submit,
-.login__secondary {
+.acesso__enviar,
+.acesso__secundario {
   width: 100%;
   min-height: 52px;
   border-radius: 12px;
@@ -216,12 +216,12 @@
   font-weight: 700;
 }
 
-.login__submit {
+.acesso__enviar {
   justify-content: center;
   gap: 10px;
 }
 
-.login__forgot-password {
+.acesso__esqueci-senha {
   align-self: center;
   padding: 2px 0;
   background: transparent;
@@ -229,17 +229,17 @@
   font-size: 0.85rem;
   text-decoration: none;
 }
-.login__forgot-password:hover {
+.acesso__esqueci-senha:hover {
   text-decoration: underline;
 }
 
-.login__secondary {
+.acesso__secundario {
   background: transparent;
   border: 1px solid var(--border);
   color: var(--text);
 }
 
-.recovery-card {
+.recuperacao-cartao {
   width: min(460px, 94vw);
   padding: 42px;
   background: linear-gradient(180deg, var(--surface), var(--surface-2));
@@ -247,25 +247,25 @@
   border-radius: 20px;
   box-shadow: var(--shadow-card);
 }
-.recovery-card h1 {
+.recuperacao-cartao h1 {
   margin-bottom: 10px;
 }
-.recovery-card > .muted {
+.recuperacao-cartao > .atenuado {
   margin-bottom: 28px;
 }
-.recovery-form {
+.recuperacao-formulario {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
-.recovery-field {
+.recuperacao-campo {
   display: flex;
   flex-direction: column;
   gap: 8px;
   font-size: 0.85rem;
   font-weight: 600;
 }
-.recovery-field input {
+.recuperacao-campo input {
   width: 100%;
   min-height: 52px;
   padding: 0 14px;
@@ -274,20 +274,20 @@
   background: var(--surface);
   color: var(--text);
 }
-.recovery-field input:focus {
+.recuperacao-campo input:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 4px rgba(43, 108, 230, 0.16);
 }
-.recovery-password-wrapper {
+.recuperacao-senha-wrap {
   position: relative;
   display: flex;
   align-items: center;
 }
-.recovery-password-wrapper input {
+.recuperacao-senha-wrap input {
   padding-right: 46px;
 }
-.recovery-toggle-password {
+.recuperacao-alternancia-senha {
   position: absolute;
   right: 10px;
   border: none;
@@ -297,24 +297,24 @@
   color: var(--text-dim);
   font-size: 1rem;
 }
-.recovery-field--with-button {
+.recuperacao-campo--com-botao {
   gap: 8px;
 }
-.recovery-form__submit {
+.recuperacao-formulario__enviar {
   width: 100%;
   min-height: 52px;
 }
-.recovery-message {
+.recuperacao-mensagem {
   padding: 14px;
   border: 1px solid rgba(22, 168, 112, 0.35);
   border-radius: 12px;
   color: var(--green);
   background: rgba(22, 168, 112, 0.08);
 }
-.recovery-form--reset {
+.recuperacao-formulario--redefinir {
   margin-top: 18px;
 }
-.recovery-success {
+.recuperacao-sucesso {
   padding: 12px 14px;
   border-radius: 18px;
   background: rgba(22, 168, 112, 0.08);
@@ -323,37 +323,37 @@
   font-size: 0.9rem;
   line-height: 1.45;
 }
-.recovery-error {
+.recuperacao-erro {
   color: var(--red);
   font-size: 0.9rem;
   line-height: 1.4;
   margin-top: -4px;
 }
-.recovery-back {
+.recuperacao-voltar {
   display: block;
   margin-top: 24px;
   color: var(--accent);
   font-size: 0.9rem;
   text-decoration: none;
 }
-.recovery-back:hover {
+.recuperacao-voltar:hover {
   text-decoration: underline;
 }
 
 /* No tema claro, usa o destaque; no escuro, usa uma cor de texto mais suave. */
-:root:not([data-theme="dark"]) .pcb-anim {
+:root:not([data-theme="dark"]) .placa-circuito-animacao {
   color: var(--accent);
 }
-:root[data-theme="dark"] .pcb-anim {
+:root[data-theme="dark"] .placa-circuito-animacao {
   color: var(--text-faint);
 }
-.pcb-anim {
+.placa-circuito-animacao {
   color: var(--text-faint);
 }
-.pcb-anim svg {
+.placa-circuito-animacao svg {
   overflow: visible;
 }
-.pcb-anim .pcb-led {
+.placa-circuito-animacao .placa-circuito-led {
   fill: currentColor;
   opacity: 0.12;
   transform-origin: center;
@@ -374,7 +374,7 @@
   }
 }
 
-.pcb-pulse {
+.placa-circuito-pulso {
   stroke: currentColor;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
@@ -387,7 +387,7 @@
   }
 }
 
-.pcb-chip-pulse {
+.placa-circuito-etiqueta-pulso {
   stroke: currentColor;
   stroke-opacity: 0.28;
   animation: pcb-chip 1.8s ease-in-out infinite;

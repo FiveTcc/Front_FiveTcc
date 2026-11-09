@@ -1,0 +1,62 @@
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f2f6fc;
+  --surface-3: #e7eef8;
+  --border: #dde5f0;
+  --text: #101826;
+  --text-dim: #5b6b80;
+  --text-faint: #718096;
+
+  --panel: #ffffff;
+  --panel-strong: #f7f9fc;
+  --panel-soft: #f4f7fb;
+  --panel-input: #f8fafc;
+  --panel-input-border: #dce5f1;
+  --panel-icon-bg: rgba(37, 99, 235, 0.08);
+  --panel-icon: #4f7af6;
+  --panel-muted: rgba(15, 23, 36, 0.03);
+
+  --accent: #2563eb;
+  --accent-dim: #dce8fe;
+  --orange: #e8862e;
+  --blue: #2563eb;
+  --green: #16a870;
+  --amber: #b9860b;
+  --red: #d42424;
+
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --radius: 12px;
+  --radius-lg: 18px;
+  --shadow-card:
+    0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 16px rgba(16, 24, 40, 0.06);
+}
+
+/* ---------- Tema escuro (sobrescritas) ---------- */
+:root[data-theme="dark"],
+html[data-theme="dark"] {
+  --bg: #09111b;
+  --surface: #101a2a;
+  --surface-2: #142033;
+  --surface-3: #18253d;
+  --border: rgba(148, 163, 184, 0.2);
+  --text: #f3f7ff;
+  --text-dim: #bccbe4;
+  --text-faint: #8ea3c2;
+
+  --panel: #101a2a;
+  --panel-strong: #152238;
+  --panel-soft: rgba(148, 163, 184, 0.08);
+  --panel-input: rgba(15, 23, 36, 0.82);
+  --panel-input-border: rgba(148, 163, 184, 0.32);
+  --panel-icon-bg: rgba(101, 140, 255, 0.18);
+  --panel-icon: #8ab4ff;
+  --panel-muted: rgba(148, 163, 184, 0.06);
+
+  --accent: #3b82f6;
+  --accent-dim: rgba(59, 130, 246, 0.18);
+  --shadow-card: 0 10px 24px rgba(2, 6, 23, 0.38);
+}

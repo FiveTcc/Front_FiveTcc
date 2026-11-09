@@ -125,19 +125,19 @@ export default function Usuarios() {
   }
 
   return (
-    <div className="page">
-      <header className="page__header">
+    <div className="pagina">
+      <header className="pagina__cabecalho">
         <div>
-          <span className="eyebrow">Administração</span>
+          <span className="rotulo-superior">Administração</span>
           <h1>Usuários </h1> 
-          <p className="muted">Pessoas com acesso à central de chamados.</p>
+          <p className="atenuado">Pessoas com acesso à central de chamados.</p>
         </div>
 
-        <div className="topbar__actions">
-          <div className="topbar__notifications-wrap">
+        <div className="barra-superior__acoes">
+          <div className="barra-superior__notificacoes-wrap">
             <button
               type="button"
-              className="topbar__icon-button"
+              className="barra-superior__icone-botao"
               aria-label="Notificações"
               onClick={() => setMostrarNotificacoes((valor) => !valor)}
             >
@@ -146,11 +146,11 @@ export default function Usuarios() {
 
             {mostrarNotificacoes && (
               <div
-                className="topbar__notifications"
+                className="barra-superior__notificacoes"
                 role="menu"
                 aria-label="Notificações"
               >
-                <div className="topbar__notifications-header">
+                <div className="barra-superior__notificacoes-cabecalho">
                   <strong>Notificações</strong>
                   <span>{notificacoes.length}</span>
                 </div>
@@ -159,7 +159,7 @@ export default function Usuarios() {
                   <button
                     key={item.id}
                     type="button"
-                    className="topbar__notification-item"
+                    className="barra-superior__notificacao-item"
                   >
                     <span>{item.titulo}</span>
                     <small>{item.tempo}</small>
@@ -171,7 +171,7 @@ export default function Usuarios() {
 
           {/* <button
             type="button"
-            className="topbar__icon-button"
+            className="barra-superior__icone-botao"
             aria-label={
               theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
             }
@@ -187,13 +187,13 @@ export default function Usuarios() {
       </header>
 
 
-      <div className="card__novousuario">
-        <div className="card__header">
+      <div className="cartao__novousuario">
+        <div className="cartao__cabecalho">
           <h2>Novo usuário</h2>
         </div>
 
-        <form className="form usuarios-new-form" onSubmit={handleSubmit} autoComplete="off">
-          <div className="form__row">
+        <form className="formulario usuarios-novo-formulario" onSubmit={handleSubmit} autoComplete="off">
+          <div className="formulario__linha">
             <label>
               Nome
               <input name="nome" value={form.nome} onChange={handleChange} placeholder="Ex.: Ana Souza" autoComplete="off" />
@@ -209,7 +209,7 @@ export default function Usuarios() {
             </label>
           </div>
 
-          <div className="form__row">
+          <div className="formulario__linha">
             <label>
               E-mail
               <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="nome@torre.edu" autoComplete="off" />
@@ -220,7 +220,7 @@ export default function Usuarios() {
             </label>
           </div>
 
-          <div className="form__row">
+          <div className="formulario__linha">
             <label>
               Telefone
               <input name="telefone" value={form.telefone} onChange={handleChange} placeholder="(11) 99999-9999" autoComplete="off" />
@@ -231,23 +231,23 @@ export default function Usuarios() {
             </label>
           </div>
 
-          {erro && <div className="login__erro">{erro}</div>}
-          {sucesso && <div className="form__success">{sucesso}</div>}
+          {erro && <div className="acesso__erro">{erro}</div>}
+          {sucesso && <div className="formulario__sucesso">{sucesso}</div>}
 
-          <div className="form-novo-usuarios__actions">
-            <button type="submit" className="btn btn--primary">Salvar usuário</button>
+          <div className="formulario-novo-usuarios__acoes">
+            <button type="submit" className="botao botao--principal">Salvar usuário</button>
           </div>
         </form>
       </div>
 
       {editId && (
-        <div className="card">
-          <div className="card__header">
+        <div className="cartao">
+          <div className="cartao__cabecalho">
             <h2>Editar dados pessoais</h2>
           </div>
 
-          <form className="form" onSubmit={handleEditSubmit}>
-            <div className="form__row">
+          <form className="formulario" onSubmit={handleEditSubmit}>
+            <div className="formulario__linha">
               <label>
                 Nome
                 <input name="nome" value={editForm.nome} onChange={handleEditChange} />
@@ -263,7 +263,7 @@ export default function Usuarios() {
               </label>
             </div>
 
-            <div className="form__row">
+            <div className="formulario__linha">
               <label>
                 E-mail
                 <input type="email" name="email" value={editForm.email} onChange={handleEditChange} />
@@ -275,23 +275,23 @@ export default function Usuarios() {
               </label>
             </div>
 
-            <div className="form__row">
+            <div className="formulario__linha">
               <label>
                 Telefone
                 <input name="telefone" value={editForm.telefone} onChange={handleEditChange} />
               </label>
             </div>
 
-            <div className="form__actions">
-              <button type="button" className="btn btn--ghost" onClick={() => { setEditId(''); setEditForm(formInicial) }}>Cancelar</button>
-              <button type="submit" className="btn btn--primary">Salvar alterações</button>
+            <div className="formulario__acoes">
+              <button type="button" className="botao botao--vazado" onClick={() => { setEditId(''); setEditForm(formInicial) }}>Cancelar</button>
+              <button type="submit" className="botao botao--principal">Salvar alterações</button>
             </div>
           </form>
         </div>
       )}
 
-      <div className="card__tabela card--table">
-        <table className="table">
+      <div className="cartao__tabela cartao--tabela">
+        <table className="tabela">
           <thead>
             <tr>
               <th></th>
@@ -304,16 +304,16 @@ export default function Usuarios() {
           <tbody>
             {usuarios.map((u) => (
               <tr key={u.id}>
-                <td><span className="avatar avatar--sm">{iniciais(u.nome)}</span></td>
-                <td className="table__title">{u.nome}</td>
-                <td className="muted">{u.email}</td>
-                <td><span className={`chip chip--${u.perfil}`}>{PERFIL_LABEL[u.perfil]}</span></td>
-                <td className="muted">{chamadosPorUsuario(u.id)}</td>
+                <td><span className="avatar avatar--pequeno">{iniciais(u.nome)}</span></td>
+                <td className="tabela__titulo">{u.nome}</td>
+                <td className="atenuado">{u.email}</td>
+                <td><span className={`etiqueta etiqueta--${u.perfil}`}>{PERFIL_LABEL[u.perfil]}</span></td>
+                <td className="atenuado">{chamadosPorUsuario(u.id)}</td>
                 <td>
-                  <button type="button" className="btn btn--ghost" onClick={() => abrirEdicao(u)}>
+                  <button type="button" className="botao botao--vazado" onClick={() => abrirEdicao(u)}>
                     Editar
                   </button>
-                  <button type="button" className="btn btn--danger" onClick={() => handleToggleAtivo(u)} style={{ marginLeft: 8 }}>
+                  <button type="button" className="botao botao--perigo" onClick={() => handleToggleAtivo(u)} style={{ marginLeft: 8 }}>
                     {u.ativo === false ? 'Ativar' : 'Inativar'}
                   </button>
                 </td>

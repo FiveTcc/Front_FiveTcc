@@ -264,13 +264,13 @@ export default function Relatorios() {
     const renderLista = (titulo, itens) => {
       if (!itens.length) return "";
       return `
-        <section class="rel-html__group">
+        <section class="relatorio-html__grupo">
           <h3>${titulo}</h3>
-          <div class="rel-html__list">
+          <div class="relatorio-html__lista">
             ${itens
               .map(
                 (item) => `
-                  <div class="rel-html__row">
+                  <div class="relatorio-html__linha">
                     <span>${item.label}</span>
                     <strong>${item.total}</strong>
                   </div>
@@ -391,8 +391,8 @@ export default function Relatorios() {
           </style>
         </head>
         <body>
-          <div class="rel-html">
-            <header class="rel-html__header">
+          <div class="relatorio-html">
+            <header class="relatorio-html__cabecalho">
               <div>
                 <h1>${PERFIL_LABEL[perfil] || "Usuário"}</h1>
                 <p>Visão consolidada dos chamados por perfil de acesso.</p>
@@ -400,11 +400,11 @@ export default function Relatorios() {
             </header>
 
 
-            <section class="rel-html__summary">
+            <section class="relatorio-html__resumo">
               ${resumo
                 .map(
                   ([label, valor]) => `
-                    <div class="rel-html__card">
+                    <div class="relatorio-html__cartao">
                       <span>${label}</span>
                       <strong>${valor}</strong>
                     </div>
@@ -413,7 +413,7 @@ export default function Relatorios() {
                 .join("")}
             </section>
 
-            <section class="rel-html__grid">
+            <section class="relatorio-html__grade">
               ${renderLista("Status", chamadosPorStatus)}
               ${renderLista("Prioridade", chamadosPorPrioridade)}
             </section>
@@ -434,21 +434,21 @@ export default function Relatorios() {
             ${
               acessos.includes("historico")
                 ? `
-              <section class="rel-html__group">
+              <section class="relatorio-html__grupo">
                 <h3>Histórico</h3>
-                <div class="rel-html__list">
+                <div class="relatorio-html__lista">
                   ${historico
                     .map((chamado) => {
                       const solicitante = usuarioMap[chamado.solicitanteId];
                       const responsavel = usuarioMap[chamado.responsavelId];
                       return `
-                        <div class="rel-html__row">
+                        <div class="relatorio-html__linha">
                           <div>
                             <strong>${chamado.numero}</strong><br />
                             <small>${chamado.titulo}</small>
                           </div>
                           <div>
-                            <span class="rel-html__status">${STATUS_LABEL[chamado.status] || chamado.status}</span>
+                            <span class="relatorio-html__status">${STATUS_LABEL[chamado.status] || chamado.status}</span>
                           </div>
                         </div>
                       `;
@@ -583,25 +583,25 @@ export default function Relatorios() {
   ];
 
   return (
-    <div className="page page--reports">
-      <header className="page__header">
+    <div className="pagina pagina--relatorios">
+      <header className="pagina__cabecalho">
         <div>
-          {/* <span className="eyebrow">Relatórios</span> */}
+          {/* <span className="rotulo-superior">Relatórios</span> */}
           <h1>{PERFIL_LABEL[perfil] || "Usuário"}</h1>
-          <p className="muted">
+          <p className="atenuado">
             Visão consolidada dos chamados por perfil de acesso.
           </p>
         </div>
 
         {mensagemExportacao && (
-          <div className="report-export__status">{mensagemExportacao}</div>
+          <div className="relatorio-exportacao__status">{mensagemExportacao}</div>
         )}
 
-        <div className="topbar__actions">
-          <div className="topbar__notifications-wrap" ref={notificacoesRef}>
+        <div className="barra-superior__acoes">
+          <div className="barra-superior__notificacoes-wrap" ref={notificacoesRef}>
             <button
               type="button"
-              className="topbar__icon-button"
+              className="barra-superior__icone-botao"
               aria-label={
                 mostrarNotificacoes
                   ? "Fechar notificações"
@@ -615,11 +615,11 @@ export default function Relatorios() {
 
             {mostrarNotificacoes && (
               <div
-                className="topbar__notifications"
+                className="barra-superior__notificacoes"
                 role="menu"
                 aria-label="Notificações"
               >
-                <div className="topbar__notifications-header">
+                <div className="barra-superior__notificacoes-cabecalho">
                   <strong>Notificações</strong>
 
                   <span>{notificacoes.length}</span>
@@ -629,7 +629,7 @@ export default function Relatorios() {
                   <button
                     key={item.id}
                     type="button"
-                    className="topbar__notification-item"
+                    className="barra-superior__notificacao-item"
                     onClick={() => setMostrarNotificacoes(false)}
                   >
                     <span>{item.titulo}</span>
@@ -642,17 +642,17 @@ export default function Relatorios() {
         </div>
 
         {acessos.includes("exportar") && (
-          <div className="report-export">
+          <div className="relatorio-exportacao">
             <button
               type="button"
-              className="btn btn--primary"
+              className="botao botao--principal"
               onClick={() => setMenuExportarAberto((ativo) => !ativo)}
             >
               Exportar
             </button>
 
             {menuExportarAberto && (
-              <div className="report-export__menu">
+              <div className="relatorio-exportacao__menu">
                 <button
                   type="button"
                   onClick={() => {
@@ -685,12 +685,12 @@ export default function Relatorios() {
           </div>
         )}
       </header>
-      <section className="report-container">
-        <section className="report-summary">
+      <section className="relatorio-conteiner">
+        <section className="relatorio-resumo">
           {metricasBase.map((item) => (
             <div
               key={item.label}
-              className={`report-summary__card ${item.destaque ? "is-featured" : ""}`}
+              className={`relatorio-resumo__cartao ${item.destaque ? "esta-destacado" : ""}`}
             >
               <span>{item.label}</span>
               <strong>{item.valor}</strong>
@@ -699,26 +699,26 @@ export default function Relatorios() {
         </section>
 
         {acessos.includes("geral") && (
-          <div className="card">
-            <div className="card__header">
+          <div className="cartao">
+            <div className="cartao__cabecalho">
               <h2>Relatório geral de ocorrências</h2>
             </div>
 
-            <div className="report-grid">
-              <div className="report-list">
+            <div className="relatorio-grade">
+              <div className="relatorio-lista">
                 <h3>Por status</h3>
                 {chamadosPorStatus.map((item) => (
-                  <div key={item.label} className="report-row">
+                  <div key={item.label} className="relatorio-linha">
                     <span>{item.label}</span>
                     <strong>{item.total}</strong>
                   </div>
                 ))}
               </div>
 
-              <div className="report-list">
+              <div className="relatorio-lista">
                 <h3>Por prioridade</h3>
                 {chamadosPorPrioridade.map((item) => (
-                  <div key={item.label} className="report-row">
+                  <div key={item.label} className="relatorio-linha">
                     <span>{item.label}</span>
                     <strong>{item.total}</strong>
                   </div>
@@ -729,13 +729,13 @@ export default function Relatorios() {
         )}
 
         {acessos.includes("periodo") && (
-          <div className="card">
-            <div className="card__header">
+          <div className="cartao">
+            <div className="cartao__cabecalho">
               <h2>Ocorrências por período</h2>
             </div>
-            <div className="report-list report-list--compact">
+            <div className="relatorio-lista relatorio-lista--compacto">
               {chamadosPorPeriodo.map((item) => (
-                <div key={item.label} className="report-row">
+                <div key={item.label} className="relatorio-linha">
                   <span>{item.label}</span>
                   <strong>{item.total}</strong>
                 </div>
@@ -745,13 +745,13 @@ export default function Relatorios() {
         )}
 
         {acessos.includes("ambiente") && (
-          <div className="card">
-            <div className="card__header">
+          <div className="cartao">
+            <div className="cartao__cabecalho">
               <h2>Ocorrências por ambiente</h2>
             </div>
-            <div className="report-list report-list--compact">
+            <div className="relatorio-lista relatorio-lista--compacto">
               {chamadosPorAmbiente.map((item) => (
-                <div key={item.label} className="report-row">
+                <div key={item.label} className="relatorio-linha">
                   <span>{item.label}</span>
                   <strong>{item.total}</strong>
                 </div>
@@ -761,13 +761,13 @@ export default function Relatorios() {
         )}
 
         {acessos.includes("prioridade") && (
-          <div className="card">
-            <div className="card__header">
+          <div className="cartao">
+            <div className="cartao__cabecalho">
               <h2>Ocorrências por prioridade</h2>
             </div>
-            <div className="report-list report-list--compact">
+            <div className="relatorio-lista relatorio-lista--compacto">
               {chamadosPorPrioridade.map((item) => (
-                <div key={item.label} className="report-row">
+                <div key={item.label} className="relatorio-linha">
                   <span>{item.label}</span>
                   <strong>{item.total}</strong>
                 </div>
@@ -777,13 +777,13 @@ export default function Relatorios() {
         )}
 
         {acessos.includes("status") && (
-          <div className="card__relatorios">
-            <div className="card__header">
+          <div className="cartao__relatorios">
+            <div className="cartao__cabecalho">
               <h2>Ocorrências por status</h2>
             </div>
-            <div className="report-list report-list--compact">
+            <div className="relatorio-lista relatorio-lista--compacto">
               {chamadosPorStatus.map((item) => (
-                <div key={item.label} className="report-row">
+                <div key={item.label} className="relatorio-linha">
                   <span>{item.label}</span>
                   <strong>{item.total}</strong>
                 </div>
@@ -793,13 +793,13 @@ export default function Relatorios() {
         )}
 
         {acessos.includes("tecnicos") && (
-          <div className="card">
-            <div className="card__header">
+          <div className="cartao">
+            <div className="cartao__cabecalho">
               <h2>Desempenho dos técnicos</h2>
             </div>
-            <div className="report-list report-list--compact">
+            <div className="relatorio-lista relatorio-lista--compacto">
               {tecnicos.map((item) => (
-                <div key={item.nome} className="report-row">
+                <div key={item.nome} className="relatorio-linha">
                   <span>{item.nome}</span>
                   <strong>{item.atendidos} chamados</strong>
                 </div>
@@ -809,13 +809,13 @@ export default function Relatorios() {
         )}
 
         {acessos.includes("usuarios") && (
-          <div className="card">
-            <div className="card__header">
+          <div className="cartao">
+            <div className="cartao__cabecalho">
               <h2>Usuários que abriram chamados</h2>
             </div>
-            <div className="report-list report-list--compact">
+            <div className="relatorio-lista relatorio-lista--compacto">
               {chamadosPorUsuario.map((item) => (
-                <div key={item.nome} className="report-row">
+                <div key={item.nome} className="relatorio-linha">
                   <span>{item.nome}</span>
                   <strong>{item.total}</strong>
                 </div>
@@ -825,29 +825,29 @@ export default function Relatorios() {
         )}
 
         {acessos.includes("proprio") && (
-          <div className="card">
-            <div className="card__header">
+          <div className="cartao">
+            <div className="cartao__cabecalho">
               <h2>Seus chamados</h2>
             </div>
-            <div className="report-grid">
-              <div className="report-list">
+            <div className="relatorio-grade">
+              <div className="relatorio-lista">
                 <h3>Resumo</h3>
-                <div className="report-row">
+                <div className="relatorio-linha">
                   <span>Pendentes</span>
                   <strong>{meusChamadosResumo.abertos}</strong>
                 </div>
-                <div className="report-row">
+                <div className="relatorio-linha">
                   <span>Em andamento</span>
                   <strong>{meusChamadosResumo.andamento}</strong>
                 </div>
-                <div className="report-row">
+                <div className="relatorio-linha">
                   <span>Concluídos</span>
                   <strong>{meusChamadosResumo.concluido}</strong>
                 </div>
               </div>
-              <div className="report-list">
+              <div className="relatorio-lista">
                 <h3>Tempo médio</h3>
-                <div className="report-metric report-metric--compact">
+                <div className="relatorio-metrica relatorio-metrica--compacto">
                   <strong>{formatarHoras(tempoMedioUsuario)}</strong>
                   <span>média do seu atendimento</span>
                 </div>
@@ -858,16 +858,16 @@ export default function Relatorios() {
       </section>
 
       {/* {acessos.includes("meus") && (
-        <div className="card">
-          <div className="card__header">
+        <div className="cartao">
+          <div className="cartao__cabecalho">
             <h2>Meus chamados</h2>
           </div>
-          <div className="report-list report-list--compact">
+          <div className="relatorio-lista relatorio-lista--compacto">
             {meusChamadosData.length ? (
               meusChamadosData.slice(0, 6).map((chamado) => (
                 <div
                   key={chamado.id}
-                  className="report-row report-row--history"
+                  className="relatorio-linha relatorio-linha--historico"
                 >
                   <div>
                     <span>{chamado.numero}</span>
@@ -879,7 +879,7 @@ export default function Relatorios() {
                 </div>
               ))
             ) : (
-              <p className="muted">
+              <p className="atenuado">
                 Ainda não há chamados vinculados ao seu usuário.
               </p>
             )}
@@ -888,16 +888,16 @@ export default function Relatorios() {
       )} */}
 
       {acessos.includes("historico") && (
-        <div className="card_historico">
-          <div className="card__header">
+        <div className="cartao_historico">
+          <div className="cartao__cabecalho">
             <h2>Histórico completo</h2>
           </div>
-          <div className="report-history">
+          <div className="relatorio-historico">
             {historico.map((chamado) => {
               const solicitante = usuarioMap[chamado.solicitanteId];
               const responsavel = usuarioMap[chamado.responsavelId];
               return (
-                <div key={chamado.id} className="report-history__item">
+                <div key={chamado.id} className="relatorio-historico__item">
                   <div>
                     <strong>{chamado.numero}</strong>
                     <span>{chamado.titulo}</span>

@@ -112,14 +112,14 @@ export default function AvatarCropper({
   }
 
   return (
-    <div className="crop-modal" role="dialog" aria-modal="true">
-      <div className="crop-modal__backdrop" onClick={onClose} />
-      <div className="crop-modal__panel">
-        <div className="crop-modal__header">
+    <div className="recorte-janela" role="dialog" aria-modal="true">
+      <div className="recorte-janela__fundo" onClick={onClose} />
+      <div className="recorte-janela__painel">
+        <div className="recorte-janela__cabecalho">
           <h4>{title}</h4>
           <button
             type="button"
-            className="crop-modal__close"
+            className="recorte-janela__fechar"
             onClick={() => {
               resetCrop();
               onClose();
@@ -129,7 +129,7 @@ export default function AvatarCropper({
           </button>
         </div>
 
-        <div className="crop-modal__crop-area">
+        <div className="recorte-janela__recorte-area">
           <Cropper
             image={imageSrc}
             crop={crop}
@@ -145,7 +145,7 @@ export default function AvatarCropper({
           />
         </div>
 
-        <div className="crop-modal__controls">
+        <div className="recorte-janela__controles">
           <label>
             <span>Zoom</span>
             <input
@@ -171,10 +171,10 @@ export default function AvatarCropper({
           </label>
         </div>
 
-        <div className="crop-modal__actions">
+        <div className="recorte-janela__acoes">
           <button
             type="button"
-            className="btn btn--ghost"
+            className="botao botao--vazado"
             onClick={() => {
               resetCrop();
               onClose();
@@ -184,7 +184,7 @@ export default function AvatarCropper({
           </button>
           <button
             type="button"
-            className="btn btn--primary"
+            className="botao botao--principal"
             onClick={handleSave}
             disabled={salvando}
           >

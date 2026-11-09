@@ -8,8 +8,8 @@ const CHIP_X_POSITIONS = [176, 192, 208, 224]
 // Desenha o circuito decorativo animado exibido na tela de autenticação.
 export default function CircuitAnimation({ className = '' }) {
   return (
-    <div className={`pcb-anim relative w-full ${className}`} aria-hidden="true">
-      <svg viewBox="0 0 400 260" fill="none" className="w-full" role="presentation">
+    <div className={`placa-circuito-animacao relativo largura-total ${className}`} aria-hidden="true">
+      <svg viewBox="0 0 400 260" fill="none" className="largura-total" role="presentation">
         {NODE_POINTS.map(([cx, cy]) => (
           <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="3.5" stroke="currentColor" strokeOpacity="0.3" />
         ))}
@@ -39,7 +39,7 @@ export default function CircuitAnimation({ className = '' }) {
             cy={cy}
             r="2.6"
             fill="currentColor"
-            className="pcb-led"
+            className="placa-circuito-led"
             style={{ animationDelay: `${i * 1.3}s` }}
           />
         ))}
@@ -66,12 +66,12 @@ export default function CircuitAnimation({ className = '' }) {
           <text x="200" y="136" textAnchor="middle" fill="currentColor" fillOpacity="0.9" fontSize="15" fontWeight="700" letterSpacing="2.5">
             N.O.S
           </text>
-          <rect x="160" y="92" width="80" height="76" rx="10" stroke="currentColor" strokeWidth="1.4" className="pcb-chip-pulse" />
+          <rect x="160" y="92" width="80" height="76" rx="10" stroke="currentColor" strokeWidth="1.4" className="placa-circuito-etiqueta-pulso" />
         </g>
 
         <g stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.85">
           {TRACE_IDS.map((id, i) => (
-            <use key={id} href={`#${id}`} className="pcb-pulse" style={{ animationDelay: `${i * 0.85}s` }} />
+            <use key={id} href={`#${id}`} className="placa-circuito-pulso" style={{ animationDelay: `${i * 0.85}s` }} />
           ))}
         </g>
       </svg>

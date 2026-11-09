@@ -129,39 +129,39 @@ export default function Login() {
   }
 
   return (
-    <div className="login">
+    <div className="acesso">
       <button
         type="button"
-        className="login__theme-toggle"
+        className="acesso__tema-alternancia"
         onClick={toggleTheme}
         aria-label="Alternar tema"
       >
         {theme === "dark" ? "☀" : "☾"}
       </button>
 
-      <div className="login__panel">
-        <div className="login__visual">
+      <div className="acesso__painel">
+        <div className="acesso__visual">
 
-          <div className="login__hero">
+          <div className="acesso__destaque">
             <h2>Abra chamados em segundos.</h2>
             <p>
               Registre e acompanhe suas ocorrências de forma simples e
               transparente.
             </p>
 
-            <div className="login__illustration" aria-hidden="true">
-              <CircuitAnimation className="login__circuit" />
+            <div className="acesso__ilustracao" aria-hidden="true">
+              <CircuitAnimation className="acesso__circuito" />
             </div>
           </div>
         </div>
 
-        <div className="login__form-panel">
+        <div className="acesso__formulario-painel">
           <h3>Bem-vindo!</h3>
           <p>Entre com suas credenciais para acessar seus chamados.</p>
 
-          <form className="login__form" onSubmit={handleSubmit}>
-            <div className="login__field login__field--icon">
-              <span className="login__field-icon" aria-hidden="true">
+          <form className="acesso__formulario" onSubmit={handleSubmit}>
+            <div className="acesso__campo acesso__campo--icone">
+              <span className="acesso__campo-icone" aria-hidden="true">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <rect x="3" y="5" width="18" height="14" rx="2" />
                   <path d="m3 7 9 6 9-6" />
@@ -178,8 +178,8 @@ export default function Login() {
               />
             </div>
 
-            <div className="login__field login__field--icon login__field--password">
-              <span className="login__field-icon" aria-hidden="true">
+            <div className="acesso__campo acesso__campo--icone acesso__campo--senha">
+              <span className="acesso__campo-icone" aria-hidden="true">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <rect x="5" y="10" width="14" height="10" rx="2" />
                   <path d="M8 10V7a4 4 0 0 1 8 0v3" />
@@ -196,7 +196,7 @@ export default function Login() {
               />
               <button
                 type="button"
-                className="login__toggle-password"
+                className="acesso__alternancia-senha"
                 aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
                 aria-pressed={mostrarSenha}
                 onClick={() => setMostrarSenha((value) => !value)}
@@ -222,13 +222,13 @@ export default function Login() {
             )}
 
             <button type="submit"
-              className="btn btn--primary login__submit"
+              className="botao botao--principal acesso__enviar"
               disabled={carregando}
             >
               {carregando ? "Entrando..." : "Entrar"} <span aria-hidden="true">→</span>
             </button>
 
-            <Link to="/recuperar-senha" className="login__forgot-password">
+            <Link to="/recuperar-senha" className="acesso__esqueci-senha">
               Recuperar senha
             </Link>
           </form>

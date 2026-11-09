@@ -49,31 +49,31 @@ export default function CustomSelect({ value, options, onChange, id }) {
  
   // Exibe o seletor e, quando aberto, as opções disponíveis.
   return (
-    <div className="cselect" ref={rootRef}>
+    <div className="selecao-personalizada" ref={rootRef}>
       <button
         type="button"
         id={id}
-        className="cselect__trigger"
+        className="selecao-personalizada__acionador"
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={toggle}
         onKeyDown={onKeyDown}
       >
         <span>{value}</span>
-        <span className="cselect__caret" aria-hidden="true" />
+        <span className="selecao-personalizada__seta" aria-hidden="true" />
       </button>
  
       {open && (
-        <ul className="cselect__menu" role="listbox">
+        <ul className="selecao-personalizada__menu" role="listbox">
           {options.map((opt, i) => (
             <li
               key={opt}
               role="option"
               aria-selected={opt === value}
               className={
-                "cselect__option" +
-                (opt === value ? " is-selected" : "") +
-                (i === active ? " is-active" : "")
+                "selecao-personalizada__opcao" +
+                (opt === value ? " esta-selecionado" : "") +
+                (i === active ? " esta-ativo" : "")
               }
               onMouseEnter={() => setActive(i)}
               onClick={() => choose(opt)}

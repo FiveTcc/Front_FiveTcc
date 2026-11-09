@@ -371,49 +371,49 @@ export default function AmbientesDetalhe() {
     } finally { setSalvando(false); }
   }
 
-  if (carregando) return <div className="page"><div className="empty">Carregando ambiente...</div></div>;
-  if (!ambiente) return <div className="page"><div className="empty"><strong>{erro || "Ambiente não encontrado."}</strong><p><Link to="/ambientes">Voltar para ambientes</Link></p></div></div>;
+  if (carregando) return <div className="pagina"><div className="vazio">Carregando ambiente...</div></div>;
+  if (!ambiente) return <div className="pagina"><div className="vazio"><strong>{erro || "Ambiente não encontrado."}</strong><p><Link to="/ambientes">Voltar para ambientes</Link></p></div></div>;
 
   return (
-    <div className="page ticket-detail-page ambiente-detail-page">
-      <Link to="/ambientes" className="back-link"><ArrowLeft size={16} /> Voltar para Ambientes</Link>
-      <header className="page__header ticket-header">
+    <div className="pagina chamado-detalhe-pagina ambiente-detalhe-pagina">
+      <Link to="/ambientes" className="voltar-ligacao"><ArrowLeft size={16} /> Voltar para Ambientes</Link>
+      <header className="pagina__cabecalho chamado-cabecalho">
         <div>
-          <span className="eyebrow"><Building2 size={14} /> {ambiente.tipo} · {ambiente.bloco}</span>
+          <span className="rotulo-superior"><Building2 size={14} /> {ambiente.tipo} · {ambiente.bloco}</span>
           <h1>{ambiente.nome}</h1>
-          <p className="muted">Detalhes do ambiente e componentes cadastrados.</p>
+          <p className="atenuado">Detalhes do ambiente e componentes cadastrados.</p>
         </div>
-        <div className="ticket-header__badges">
-          <span className={`ambiente-status ${String(ambiente.status).toLowerCase() === "inativo" ? "is-inactive" : ""}`}>{String(ambiente.status).toLowerCase() === "inativo" ? "Inativo" : "Ativo"}</span>
+        <div className="chamado-cabecalho__etiquetas">
+          <span className={`ambiente-status ${String(ambiente.status).toLowerCase() === "inativo" ? "esta-inativo" : ""}`}>{String(ambiente.status).toLowerCase() === "inativo" ? "Inativo" : "Ativo"}</span>
         </div>
       </header>
 
-      {erro && <p className="form__error">{erro}</p>}
-      {aviso && <p className="ambiente-detail-success">{aviso}</p>}
+      {erro && <p className="formulario__erro">{erro}</p>}
+      {aviso && <p className="ambiente-detalhe-sucesso">{aviso}</p>}
 
-      <div className="grid-2 grid-2--asym ambiente-detail-grid">
+      <div className="grade-2 grade-2--assimetrico ambiente-detalhe-grade">
         <div>
-          <section className="card ambiente-detail-card">
-            <div className="ambiente-detail-card-head">
-              <div><h2>Informações do ambiente</h2><p className="muted">Localização e descrição</p></div>
-              {!editando && <button className="btn btn--ghost" type="button" onClick={() => setEditando(true)}><Pencil size={15} /> Editar</button>}
+          <section className="cartao ambiente-detalhe-cartao">
+            <div className="ambiente-detalhe-cartao-cabecalho">
+              <div><h2>Informações do ambiente</h2><p className="atenuado">Localização e descrição</p></div>
+              {!editando && <button className="botao botao--vazado" type="button" onClick={() => setEditando(true)}><Pencil size={15} /> Editar</button>}
             </div>
             {editando ? (
-              <form className="form ambiente-detail-form" onSubmit={salvarAmbiente}>
+              <form className="formulario ambiente-detalhe-formulario" onSubmit={salvarAmbiente}>
                 <label>Nome<input required value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} /></label>
-                <div className="form__row">
+                <div className="formulario__linha">
                   <label>Tipo<input value={form.tipo} onChange={(e) => setForm({ ...form, tipo: e.target.value })} /></label>
                   <label>Status<select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select></label>
                 </div>
-                <div className="form__row">
+                <div className="formulario__linha">
                   <label>Bloco<input value={form.bloco} onChange={(e) => setForm({ ...form, bloco: e.target.value })} /></label>
                   <label>Andar<input type="number" min="0" value={form.andar} onChange={(e) => setForm({ ...form, andar: e.target.value })} /></label>
                 </div>
                 <label>Descrição<textarea rows="3" value={form.descricao} onChange={(e) => setForm({ ...form, descricao: e.target.value })} /></label>
-                <div className="form__actions"><button type="button" className="btn btn--ghost" onClick={() => setEditando(false)}><X size={15} /> Cancelar</button><button type="submit" className="btn" disabled={salvando}><Save size={15} /> {salvando ? "Salvando..." : "Salvar alterações"}</button></div>
+                <div className="formulario__acoes"><button type="button" className="botao botao--vazado" onClick={() => setEditando(false)}><X size={15} /> Cancelar</button><button type="submit" className="botao" disabled={salvando}><Save size={15} /> {salvando ? "Salvando..." : "Salvar alterações"}</button></div>
               </form>
             ) : (
-              <div className="ambiente-detail-info">
+              <div className="ambiente-detalhe-informacao">
                 <p><MapPin size={16} /><span><small>Localização</small><strong>{textoOuPadrao(ambiente.bloco, "—")} · {andarTexto}</strong></span></p>
                 <p><Building2 size={16} /><span><small>Tipo</small><strong>{textoOuPadrao(ambiente.tipo, "Outro")}</strong></span></p>
                 <p><Building2 size={16} /><span><small>Status</small><strong>{statusAmbienteTexto}</strong></span></p>
@@ -422,72 +422,72 @@ export default function AmbientesDetalhe() {
             )}
           </section>
 
-          <section className="card ambiente-detail-card ambiente-components-card">
-            <div className="ambiente-detail-card-head">
-              <div><h2>Componentes</h2><p className="muted">{componentes.length} cadastrados neste ambiente</p></div>
-              <button type="button" className="btn btn--adicionar" onClick={() => setAdicionando((valor) => !valor)}><Plus size={16} /> Adicionar componente</button>
+          <section className="cartao ambiente-detalhe-cartao ambiente-componentes-cartao">
+            <div className="ambiente-detalhe-cartao-cabecalho">
+              <div><h2>Componentes</h2><p className="atenuado">{componentes.length} cadastrados neste ambiente</p></div>
+              <button type="button" className="botao botao--adicionar" onClick={() => setAdicionando((valor) => !valor)}><Plus size={16} /> Adicionar componente</button>
             </div>
             {adicionando && (
-              <div className="ambiente-componente-modal-fundo" onClick={() => setAdicionando(false)}>
-                <div className="ambiente-componente-modal" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
-                  <div className="ambiente-componente-modal-header">
+              <div className="ambiente-componente-janela-fundo" onClick={() => setAdicionando(false)}>
+                <div className="ambiente-componente-janela" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
+                  <div className="ambiente-componente-janela-cabecalho">
                     <div>
-                      <span className= "eyebrow">Adicionar componente</span>
+                      <span className= "rotulo-superior">Adicionar componente</span>
                       <h3>Novo componente</h3>
                     </div>
-                    <button type="button" className="ambiente-componente-modal-close" onClick={() => setAdicionando(false)} aria-label="Fechar cadastro de componente">
+                    <button type="button" className="ambiente-componente-janela-fechar" onClick={() => setAdicionando(false)} aria-label="Fechar cadastro de componente">
                       <X size={18} />
                     </button>
                   </div>
 
-                  <form className="form ambiente-add-form" onSubmit={adicionarComponente}>
+                  <form className="formulario ambiente-adicionar-formulario" onSubmit={adicionarComponente}>
                     <label>Nome do componente<input ref={inputNomeComponenteRef} required value={novo.nome} onChange={(e) => setNovo({ ...novo, nome: e.target.value })} placeholder="Ex.: Computador da sala" /></label>
-                    <div className="form__row">
+                    <div className="formulario__linha">
                       <label>Tipo<select required value={novo.tipoId} onChange={(e) => setNovo({ ...novo, tipoId: e.target.value })}><option value="">Selecione um tipo</option>{tiposDisponiveis.map((tipo) => <option key={tipo.id} value={tipo.id}>{tipo.nome}</option>)}</select></label>
                       <label>Observação<input value={novo.observacao} onChange={(e) => setNovo({ ...novo, observacao: e.target.value })} placeholder="Opcional" /></label>
                     </div>
-                    <div className="form__actions"><button type="button" className="btn btn--cancelar" onClick={() => setAdicionando(false)}>Cancelar</button><button type="submit" className="btn btn--adicionar" disabled={salvando || !tiposDisponiveis.length}>{salvando ? "Salvando..." : "Adicionar componente"}</button></div>
-                    {!tiposDisponiveis.length && <p className="muted">Cadastre um tipo de componente antes de adicioná-lo.</p>}
+                    <div className="formulario__acoes"><button type="button" className="botao botao--cancelar" onClick={() => setAdicionando(false)}>Cancelar</button><button type="submit" className="botao botao--adicionar" disabled={salvando || !tiposDisponiveis.length}>{salvando ? "Salvando..." : "Adicionar componente"}</button></div>
+                    {!tiposDisponiveis.length && <p className="atenuado">Cadastre um tipo de componente antes de adicioná-lo.</p>}
                   </form>
                 </div>
               </div>
             )}
             {componentes.length ? (
-              <div className="ambiente-components-list">{componentes.map((componente, index) => (
-                <button type="button" className="ambiente-component-row" key={componente.id ?? componente.nome} onClick={() => setComponenteSelecionado(componentesOriginais[index] ?? componente)}>
-                  <div className="ambiente-component-icon"><Building2 size={18} /></div>
-                  <div className="ambiente-component-main">
+              <div className="ambiente-componentes-lista">{componentes.map((componente, index) => (
+                <button type="button" className="ambiente-componente-linha" key={componente.id ?? componente.nome} onClick={() => setComponenteSelecionado(componentesOriginais[index] ?? componente)}>
+                  <div className="ambiente-componente-icone"><Building2 size={18} /></div>
+                  <div className="ambiente-componente-principal">
                     <strong>{componente.nome}</strong>
                     <span>{componente.tipo} · {pegarValorPorChaves(componente, ["observacao", "obs", "obser", "compo_observacao", "descricao", "compo_patrimonio", "patrimonio"]) || "Sem observação"}</span>
                   </div>
-                  <span className="ambiente-component-status">{componente.status}</span>
+                  <span className="ambiente-componente-status">{componente.status}</span>
                 </button>
               ))}</div>
-            ) : <div className="empty ambiente-components-empty">Este ambiente ainda não tem componentes cadastrados.</div>}
+            ) : <div className="vazio ambiente-componentes-vazio">Este ambiente ainda não tem componentes cadastrados.</div>}
           </section>
         </div>
         <aside>
-          <section className="card ambiente-detail-summary">
-            <div className="ambiente-summary-header">
-              <div className="ambiente-summary-icon"><Building2 size={18} /></div>
+          <section className="cartao ambiente-detalhe-resumo">
+            <div className="ambiente-resumo-cabecalho">
+              <div className="ambiente-resumo-icone"><Building2 size={18} /></div>
               <div>
                 <h2>Resumo do ambiente</h2>
-                <p className="muted">Visão geral rápida</p>
+                <p className="atenuado">Visão geral rápida</p>
               </div>
             </div>
 
-            <div className="ambiente-summary-list">
-              <div className="ambiente-summary-item">
+            <div className="ambiente-resumo-lista">
+              <div className="ambiente-resumo-item">
                 <span>Status</span>
-                <strong className={String(ambiente.status).toLowerCase() === "inativo" ? "is-inactive" : "is-active"}>
+                <strong className={String(ambiente.status).toLowerCase() === "inativo" ? "esta-inativo" : "esta-ativo"}>
                   {String(ambiente.status).toLowerCase() === "inativo" ? "Inativo" : "Ativo"}
                 </strong>
               </div>
-              <div className="ambiente-summary-item">
+              <div className="ambiente-resumo-item">
                 <span>Componentes</span>
                 <strong>{componentes.length}</strong>
               </div>
-              <div className="ambiente-summary-item">
+              <div className="ambiente-resumo-item">
                 <span>Andar</span>
                 <strong>{ambiente.andar === 0 ? "Térreo" : `${ambiente.andar}º`}</strong>
               </div>
@@ -497,36 +497,36 @@ export default function AmbientesDetalhe() {
       </div>
 
       {componenteSelecionado && (
-        <div className="ambiente-componente-modal-fundo" onClick={() => setComponenteSelecionado(null)}>
-          <div className="ambiente-componente-modal" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
-            <div className="ambiente-componente-modal-header">
+        <div className="ambiente-componente-janela-fundo" onClick={() => setComponenteSelecionado(null)}>
+          <div className="ambiente-componente-janela" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
+            <div className="ambiente-componente-janela-cabecalho">
               <div>
-                <span className="eyebrow">Detalhes do componente</span>
+                <span className="rotulo-superior">Detalhes do componente</span>
                 <h3>{componenteSelecionado.nome}</h3>
               </div>
-              <button type="button" className="ambiente-componente-modal-close" onClick={() => setComponenteSelecionado(null)} aria-label="Fechar detalhes">
+              <button type="button" className="ambiente-componente-janela-fechar" onClick={() => setComponenteSelecionado(null)} aria-label="Fechar detalhes">
                 <X size={18} />
               </button>
             </div>
 
-            <div className="ambiente-componente-modal-grid">
+            <div className="ambiente-componente-janela-grade">
               {camposDetalheComponente.length ? (
                 camposDetalheComponente.map((campo) => (
-                  <div key={campo.key} className="ambiente-componente-field ambiente-componente-field--full">
+                  <div key={campo.key} className="ambiente-componente-campo ambiente-componente-campo--total">
                     <span>{campo.label}</span>
                     <strong>{textoOuPadrao(campo.value, "—")}</strong>
                   </div>
                 ))
               ) : (
-                <div className="ambiente-componente-field ambiente-componente-field--full">
+                <div className="ambiente-componente-campo ambiente-componente-campo--total">
                   <span>Informações</span>
                   <strong>Nenhuma informação disponível para este componente.</strong>
                 </div>
               )}
             </div>
 
-            <div className="ambiente-componente-modal-actions">
-              <button type="button" className="btn btn--ghost" onClick={() => setComponenteSelecionado(null)}>Fechar</button>
+            <div className="ambiente-componente-janela-acoes">
+              <button type="button" className="botao botao--vazado" onClick={() => setComponenteSelecionado(null)}>Fechar</button>
             </div>
           </div>
         </div>
