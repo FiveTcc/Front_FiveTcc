@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
 
-// Permite definir uma senha nova usando o token recebido por e-mail.
 export default function NovaSenha() {
   const navigate = useNavigate();
 
@@ -15,7 +14,6 @@ export default function NovaSenha() {
   const [sucesso, setSucesso] = useState("");
   const [carregando, setCarregando] = useState(false);
 
-  // Valida os campos e envia o pedido de redefinição à API.
   async function handleSubmit(event) {
     event.preventDefault();
 

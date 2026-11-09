@@ -36,9 +36,8 @@ import ambienteService from "../services/ambienteService";
 import componenteService from "../services/componeteService";
 import componenteTipoService from "../services/componenteTipoService";
 
-/* ---------- Formatação e configuração visual ---------- */
+/* ---------- Configurações visuais ---------- */
 
-// Converte o andar recebido da API para um número consistente.
 const normalizarAndar = (valor) => {
   const numero = Number(
     String(valor ?? 0)
@@ -48,13 +47,11 @@ const normalizarAndar = (valor) => {
   return Number.isFinite(numero) ? numero : 0;
 };
 
-// Exibe o térreo com nome próprio e os demais andares em formato ordinal.
 const andarLabel = (n) => {
   const andar = normalizarAndar(n);
   return andar === 0 ? "Térreo" : `${andar}º Andar`;
 };
 
-// Relaciona cada tipo de componente ao ícone usado nos cartões.
 const ICONES_COMP = {
   Computador: Monitor,
   Impressora: Printer,
@@ -65,7 +62,6 @@ const ICONES_COMP = {
   Outro: Package,
 };
 
-// Adapta os campos do componente para os cartões e filtros da página.
 function normalizarComponente(item) {
   const componente = item?.componente || item || {};
   return {
@@ -91,7 +87,6 @@ function normalizarComponente(item) {
   };
 }
 
-// Interpreta formatos booleanos e textuais de status enviados pela API.
 function normalizarStatusAmbiente(valor) {
   if (typeof valor === "boolean") return valor;
   if (typeof valor === "number") return valor === 1 || valor > 0;
@@ -121,7 +116,6 @@ function normalizarStatusAmbiente(valor) {
   return false;
 }
 
-// Verifica se o status do ambiente corresponde ao filtro selecionado.
 function atendeFiltroStatus(valor, filtro) {
   if (!filtro) return true;
   const statusAtual = normalizarStatusAmbiente(valor);
@@ -151,7 +145,6 @@ export default function Ambientes() {
   const [tiposComponentes, setTiposComponentes] = useState([]);
   const [novoComponente, setNovoComponente] = useState(null);
   const [salvandoComponente, setSalvandoComponente] = useState(false);
-  // Obtém a quantidade de componentes a partir dos formatos conhecidos.
   const qtdDe = (a) =>
     Number(
       a?.comps ??
@@ -162,14 +155,12 @@ export default function Ambientes() {
         a?.componentes?.length ??
         0,
     );
-  // Cria atualizadores de filtro que aceitam eventos ou valores diretos.
   const set = (k) => (v) => {
     const valor =
       v && typeof v === "object" && "target" in v ? v.target.value : v;
     setF((cur) => ({ ...cur, [k]: valor }));
   };
 
-  // Carrega os ambientes e complementa cada um com seus componentes.
   useEffect(() => {
     let montado = true;
 
@@ -275,7 +266,6 @@ export default function Ambientes() {
   ];
 
   // fecha ao clicar fora ou apertar Esc
-  // Sincroniza os detalhes do ambiente selecionado com a lista carregada.
   useEffect(() => {
     const fechar = (e) => {
       if (e.type === "keydown" && e.key !== "Escape") return;
@@ -317,7 +307,6 @@ export default function Ambientes() {
     .sort((a, b) => b[1] - a[1]);
 
   const sel = ambientes.find((a) => a.id === selId) || filtrados[0];
-  // Atualiza os dados auxiliares quando o ambiente selecionado muda.
   useEffect(() => {
     if (!sel?.nome) {
       setComponentes([]);
@@ -361,7 +350,6 @@ export default function Ambientes() {
     };
   }, [sel?.id, sel?.nome]);
 
-  // Atualiza a lista de tipos disponíveis para cadastro de componentes.
   useEffect(() => {
     componenteTipoService
       .listarComponenteTipo()
@@ -1005,7 +993,6 @@ export default function Ambientes() {
   );
 }
 
-// Renderiza um seletor com abertura, seleção e navegação controladas.
 function Select({
   label,
   value,
@@ -1077,7 +1064,6 @@ function Select({
     </div>
   );
 }
-// Escolhe o ícone e o estilo correspondentes ao tipo do ambiente.
 function Thumb({ tipo, size = 72 }) {
   const { cor, Icon } = tipoConfig(tipo);
   return (
@@ -1095,7 +1081,6 @@ function Thumb({ tipo, size = 72 }) {
   );
 }
 
-// Exibe uma etiqueta visual para o tipo do ambiente.
 const Tag = ({ tipo }) => (
   <span
     className="ambientes-tag"
@@ -1109,7 +1094,6 @@ const Tag = ({ tipo }) => (
   </span>
 );
 
-// Retorna as cores e o ícone apropriados para cada tipo de ambiente.
 function tipoConfig(tipo = "") {
   const cores = ["#3b82f6", "#8b5cf6", "#f59e0b", "#14b8a6", "#64748b"];
   const indice =
@@ -1117,14 +1101,12 @@ function tipoConfig(tipo = "") {
     cores.length;
   return { cor: cores[indice], Icon: MapPin };
 }
-// Mostra o estado ativo ou inativo do ambiente.
 const Status = ({ ativo }) => (
   <span className={`ambientes-pill ${ativo ? "ok" : "err-sol"}`}>
     {ativo ? "Ativo" : "Inativo"}
   </span>
 );
 
-// Formata a data de criação de um ambiente ou retorna um valor padrão.
 function formatarDataAmbiente(valor) {
   if (!valor || valor === "—") return "—";
 
@@ -1138,7 +1120,6 @@ function formatarDataAmbiente(valor) {
   }).format(data);
 }
 
-// Apresenta um rótulo e seu valor como um item informativo.
 const Info = ({ l, v }) => (
   <div className="ambientes-info">
     <small>{l}</small>
@@ -1146,7 +1127,6 @@ const Info = ({ l, v }) => (
   </div>
 );
 
-// Apresenta um indicador resumido com ícone, valor e legenda.
 function Kpi({ Icon, cor, n, label }) {
   return (
     <div className="ambientes-kpi">
@@ -1162,7 +1142,6 @@ function Kpi({ Icon, cor, n, label }) {
   );
 }
 
-// Exibe o resumo de um ambiente e permite abrir sua página de detalhe.
 function CardAmbiente({ a, qtd, onOpen, compacto, ativo }) {
   return (
     <article
@@ -1206,10 +1185,8 @@ function CardAmbiente({ a, qtd, onOpen, compacto, ativo }) {
   );
 }
 
-// Fornece a estrutura comum dos diálogos da página de ambientes.
 function Modal({ titulo, onClose, children }) {
   // Fecha com ESC
-  // Fecha o diálogo por clique externo ou pela tecla Escape.
   useEffect(() => {
     const h = (e) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", h);
@@ -1217,7 +1194,6 @@ function Modal({ titulo, onClose, children }) {
   }, [onClose]);
 
   // Trava a rolagem da página enquanto o modal estiver aberto
-  // Impede a rolagem da página enquanto o diálogo está aberto.
   useEffect(() => {
     const larguraBarra =
       window.innerWidth - document.documentElement.clientWidth;
@@ -1244,7 +1220,6 @@ function Modal({ titulo, onClose, children }) {
   );
 }
 
-// Agrupa os botões de cancelar e confirmar dos formulários.
 function Acoes({ onCancel, salvar, ok }) {
   return (
     <div className="ambientes-modal-acoes">
@@ -1266,7 +1241,6 @@ function Acoes({ onCancel, salvar, ok }) {
   );
 }
 
-// Formulário para cadastrar um componente diretamente no ambiente.
 function FormComponenteAmbiente({
   valor,
   tipos,
@@ -1318,7 +1292,6 @@ function FormComponenteAmbiente({
   );
 }
 
-// Formulário compartilhado para cadastrar e editar ambientes.
 function FormAmbiente({
   valor,
   onChange,

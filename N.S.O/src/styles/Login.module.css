@@ -1,4 +1,3 @@
-/* Estrutura e posicionamento da tela de acesso. */
 .login {
   position: relative;
   min-height: 100vh;
@@ -25,7 +24,6 @@
   box-shadow: var(--shadow-card);
 }
 
-/* Cartão principal e área ilustrativa da tela de acesso. */
 .login__panel {
   width: min(1180px, 94vw);
   min-height: min(720px, calc(100vh - 56px));
@@ -340,7 +338,7 @@
   text-decoration: underline;
 }
 
-/* No tema claro, usa o destaque; no escuro, usa uma cor de texto mais suave. */
+/* light theme: use accent (blue); dark theme: use muted text color */
 :root:not([data-theme="dark"]) .pcb-anim {
   color: var(--accent);
 }

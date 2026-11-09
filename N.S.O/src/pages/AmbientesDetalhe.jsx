@@ -5,7 +5,6 @@ import ambienteService from "../services/ambienteService";
 import componenteService from "../services/componeteService";
 import componenteTipoService from "../services/componenteTipoService";
 
-// Extrai listas de diferentes formatos de resposta da API.
 function listaDe(resposta, chaves = []) {
   const candidatos = [
     resposta,
@@ -51,19 +50,16 @@ function listaDe(resposta, chaves = []) {
   return [];
 }
 
-// Garante um texto legível quando o valor recebido está vazio.
 function textoOuPadrao(valor, padrao = "—") {
   if (valor === null || valor === undefined || valor === "") return padrao;
   return String(valor);
 }
 
-// Converte as representações de status da API para os rótulos da tela.
 function statusParaTexto(valor) {
   const texto = textoOuPadrao(valor, "ativo").toLowerCase();
   return ["inativo", "false", "0", "desativado", "disabled"].includes(texto) ? "Inativo" : "Ativo";
 }
 
-// Uniformiza os campos do ambiente para uso na página de detalhe.
 function normalizarAmbiente(item) {
   const ambiente = item?.ambiente || item || {};
   const status = ambiente.amb_status ?? ambiente.status ?? ambiente.ativo ?? ambiente.amb_ativo ?? "ativo";
@@ -80,7 +76,6 @@ function normalizarAmbiente(item) {
   };
 }
 
-// Retorna o primeiro campo preenchido entre os nomes possíveis.
 function pegarValorPorChaves(objeto, chaves) {
   for (const chave of chaves) {
     const valor = objeto?.[chave];
@@ -91,7 +86,6 @@ function pegarValorPorChaves(objeto, chaves) {
   return "";
 }
 
-// Converte valores simples, listas e objetos em texto para exibição.
 function valorExibivel(valor) {
   if (Array.isArray(valor)) {
     const itens = valor
@@ -111,7 +105,6 @@ function valorExibivel(valor) {
   return String(valor).trim();
 }
 
-// Procura recursivamente um campo usando nomes alternativos conhecidos.
 function pegarValorRecursivo(objeto, aliases) {
   const aliasesLower = aliases.map((alias) => alias.toLowerCase().replace(/[^a-z0-9]/g, ""));
   const fila = [objeto];
@@ -142,7 +135,6 @@ function pegarValorRecursivo(objeto, aliases) {
   return "";
 }
 
-// Adapta as variações dos dados de componente ao formato da tela.
 function normalizarComponente(item) {
   const componente = item?.componente || item || {};
   const tipo = componente.compo_tipo ?? componente.tipo ?? componente.componenteTipo ?? componente.compoTipo ?? {};
@@ -186,7 +178,6 @@ function normalizarComponente(item) {
   };
 }
 
-// Exibe e permite editar o ambiente e seus componentes associados.
 export default function AmbientesDetalhe() {
   const { id } = useParams();
   const [ambiente, setAmbiente] = useState(null);
@@ -204,7 +195,6 @@ export default function AmbientesDetalhe() {
   const [componenteSelecionado, setComponenteSelecionado] = useState(null);
   const inputNomeComponenteRef = useRef(null);
 
-  // Busca os componentes ligados ao ambiente e normaliza os dados recebidos.
   async function carregarComponentes(nome) {
     const resposta = await componenteService.buscarPorAmbiente(nome);
     const lista = listaDe(resposta, ["componentes", "componente", "data", "items"]);
@@ -219,7 +209,6 @@ export default function AmbientesDetalhe() {
     setComponentes(componentesNormalizados);
   }
 
-  // Carrega o ambiente, os tipos de componente e a lista de equipamentos.
   useEffect(() => {
     let ativo = true;
     async function carregar() {
@@ -316,7 +305,6 @@ export default function AmbientesDetalhe() {
     { key: "compo_observacao", label: "Observação", value: observacaoComponente || "—" },
   ];
 
-  // Valida e persiste as alterações feitas nos dados do ambiente.
   async function salvarAmbiente(event) {
     event.preventDefault();
     setSalvando(true); setErro(""); setAviso("");
@@ -332,14 +320,12 @@ export default function AmbientesDetalhe() {
     } finally { setSalvando(false); }
   }
 
-  // Move o foco para o campo de nome ao abrir o formulário de componente.
   useEffect(() => {
     if (adicionando) {
       setTimeout(() => inputNomeComponenteRef.current?.focus(), 50);
     }
   }, [adicionando]);
 
-  // Registra um novo componente e atualiza os dados exibidos no ambiente.
   async function adicionarComponente(event) {
     event.preventDefault();
     const nome = String(novo.nome ?? "").trim();
@@ -534,4 +520,5 @@ export default function AmbientesDetalhe() {
     </div>
   );
 }
+
 

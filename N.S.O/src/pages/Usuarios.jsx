@@ -13,7 +13,6 @@ const formInicial = {
   cargo: '',
 }
 
-// Exibe os usuários e os formulários administrativos disponíveis nesta tela.
 export default function Usuarios() {
   const { usuario: usuarioLogado, atualizarSessao } = useAuth()
   const [usuarios] = useState([])
@@ -27,10 +26,8 @@ export default function Usuarios() {
   const [notificacoes] = useState([])
   // const [theme, setTheme] = useState('light')
 
-  // Conta os chamados relacionados ao usuário informado.
   const chamadosPorUsuario = (id) => chamados.filter((c) => c.responsavelId === id || c.solicitanteId === id).length
 
-  // Atualiza os campos do novo usuário e remove mensagens antigas.
   function handleChange(event) {
     const { name, value } = event.target
     setForm((prev) => ({ ...prev, [name]: value }))
@@ -38,7 +35,6 @@ export default function Usuarios() {
     if (sucesso) setSucesso('')
   }
 
-  // Valida o formulário e informa se a criação pode ser concluída.
   function handleSubmit(event) {
     event.preventDefault()
     const resultado = { ok: false, erro: 'Conecte esta tela à API para criar usuários.' }
@@ -54,7 +50,6 @@ export default function Usuarios() {
     setSucesso(`Usuário criado com sucesso: ${resultado.usuario.nome}.`)
   }
 
-  // Carrega os dados do usuário selecionado no formulário de edição.
   function abrirEdicao(usuario) {
     setEditId(usuario.id)
     setEditForm({
@@ -69,7 +64,6 @@ export default function Usuarios() {
     setSucesso('')
   }
 
-  // Atualiza os campos em edição e limpa mensagens anteriores.
   function handleEditChange(event) {
     const { name, value } = event.target
     setEditForm((prev) => ({ ...prev, [name]: value }))
@@ -77,7 +71,6 @@ export default function Usuarios() {
     if (sucesso) setSucesso('')
   }
 
-  // Envia as alterações do usuário e sincroniza a sessão se necessário.
   function handleEditSubmit(event) {
     event.preventDefault()
     const resultado = { ok: false, erro: 'Conecte esta tela à API para editar usuários.' }
@@ -109,7 +102,6 @@ export default function Usuarios() {
     setSucesso(`Dados de ${resultado.usuario.nome} atualizados com sucesso.`)
   }
 
-  // Solicita a ativação ou inativação do usuário selecionado.
   function handleToggleAtivo(usuario) {
     const resultado = { ok: false, erro: 'Conecte esta tela à API para alterar o status do usuário.' }
 

@@ -1,4 +1,3 @@
-// Rótulos em português usados para apresentar os códigos retornados pela API.
 export const STATUS_LABEL = {
   aberto: 'Aberto',
   em_andamento: 'Em andamento',
@@ -13,7 +12,6 @@ export const PRIORIDADE_LABEL = {
   critica: 'Crítica',
 }
 
-// Formata uma data e hora no padrão brasileiro.
 export function formatarData(timestamp) {
   return new Date(timestamp).toLocaleDateString('pt-BR', {
     day: '2-digit',
@@ -24,7 +22,6 @@ export function formatarData(timestamp) {
   })
 }
 
-// Converte a diferença entre a data e o momento atual em um texto curto.
 export function tempoRelativo(timestamp) {
   const diffMs = Date.now() - timestamp
   const diffH = Math.round(diffMs / 3600000)
@@ -34,7 +31,6 @@ export function tempoRelativo(timestamp) {
   return `há ${diffD}d`
 }
 
-// Gera as iniciais para uso em avatares sem foto.
 export function iniciais(nome) {
   if (!nome) return '?'
   const partes = nome.trim().split(' ')

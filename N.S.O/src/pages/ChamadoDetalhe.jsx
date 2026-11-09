@@ -15,7 +15,6 @@ const STATUS_LABEL = {
   cancelada: "Cancelada",
 };
 
-// Unifica variações de resposta da API em um único formato de ocorrência.
 function normalizarOcorrencia(resposta) {
   const dados = resposta?.data?.data ?? resposta?.data ?? resposta;
   const ocorrencia = dados?.ocorrencia || dados?.data?.ocorrencia || dados || {};
@@ -60,7 +59,6 @@ function normalizarOcorrencia(resposta) {
   };
 }
 
-// Obtém o nome do autor usando os diferentes campos possíveis da API.
 function nomeCriador(chamado) {
   return (
     chamado.criadorNome ||
@@ -73,12 +71,10 @@ function nomeCriador(chamado) {
   );
 }
 
-// Retorna o nome do usuário ou um rótulo padrão quando não há dados.
 function nomeUsuario(usuario) {
   return usuario?.nome || usuario?.user_nome || usuario?.usuario_nome || "Usuário";
 }
 
-// Exibe os dados, comentários e ações disponíveis para uma ocorrência.
 export default function ChamadoDetalhe() {
   const { id } = useParams();
   const { usuario } = useAuth();
@@ -91,7 +87,6 @@ export default function ChamadoDetalhe() {
   const [salvando, setSalvando] = useState(false);
   const nomeLogado = nomePerfil || nomeUsuario(usuario);
 
-  // Busca nome e foto do usuário para identificar os comentários.
   useEffect(() => {
     let montado = true;
 
@@ -131,7 +126,6 @@ export default function ChamadoDetalhe() {
     };
   }, []);
 
-  // Carrega a ocorrência e complementa os dados do usuário que a criou.
   useEffect(() => {
     let montado = true;
 
@@ -194,7 +188,6 @@ export default function ChamadoDetalhe() {
     };
   }, [id]);
 
-  // Persiste o novo status e atualiza os dados exibidos na tela.
   async function atualizarStatus(novoStatus) {
     try {
       await ocorrenciaService.alterarStatus(chamado.id, novoStatus);
@@ -205,7 +198,6 @@ export default function ChamadoDetalhe() {
     }
   }
 
-  // Envia um comentário e atualiza a conversa da ocorrência.
   async function enviarComentario(event) {
     event.preventDefault();
     if (!comentario.trim()) return;

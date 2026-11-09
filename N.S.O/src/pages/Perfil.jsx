@@ -8,7 +8,6 @@ import userService from "../services/userServices";
 
 const PERFIL_LABEL = { admin: 'Administrador',  tecnico: 'Técnico', funcionario: 'Funcionário' };
 
-// Converte a imagem recortada em arquivo para envio multipart à API.
 function dataUrlParaArquivo(dataUrl, nomeArquivo = "perfil.jpg") {
   const divisao = dataUrl.split(",");
   const mimeMatch = divisao[0].match(/:(.*?);/);
@@ -23,7 +22,6 @@ function dataUrlParaArquivo(dataUrl, nomeArquivo = "perfil.jpg") {
   return new File([array], nomeArquivo, { type: mime });
 }
 
-// Permite consultar e editar os dados pessoais e a foto do usuário.
 export default function Perfil() {
   const { usuario, logout } = useAuth();
 
@@ -40,7 +38,6 @@ export default function Perfil() {
   const [mostrarCropModal, setMostrarCropModal] = useState(false);
   const [imagemOriginal, setImagemOriginal] = useState("");
 
-  // Recupera o tema salvo ou usa a preferência definida no navegador.
   function getInitialTheme() {
   try {
     const savedTheme = localStorage.getItem("theme");
@@ -62,7 +59,6 @@ export default function Perfil() {
 
   const notificacoes = [];
 
- // Sincroniza o tema selecionado com a página e com o armazenamento local.
  useEffect(() => {
   try {
     document.documentElement.setAttribute("data-theme", theme);
@@ -73,7 +69,6 @@ export default function Perfil() {
   }
 }, [theme]);
 
- // Fecha as notificações ao clicar fora do respectivo painel.
  useEffect(() => {
     function handleClickFora(event) {
       if (
@@ -90,7 +85,6 @@ export default function Perfil() {
     };
   }, []);
   
-  // Busca os dados do perfil e preenche o formulário de edição.
   useEffect(() => {
     async function carregarPerfil() {
       try {
@@ -121,7 +115,6 @@ export default function Perfil() {
   }, []);
 
 
-  // Atualiza o campo alterado e limpa mensagens anteriores.
   function handlePerfilChange(event) {
     const { name, value } = event.target;
     setPerfilForm((prev) => ({ ...prev, [name]: value }));
@@ -129,7 +122,6 @@ export default function Perfil() {
     if (perfilSucesso) setPerfilSucesso("");
   }
 
-  // Lê a imagem escolhida e abre a ferramenta de recorte.
   function handleFotoPerfilChange(event) {
     const arquivo = event.target.files?.[0];
     if (!arquivo) return;
@@ -143,7 +135,6 @@ export default function Perfil() {
     event.target.value = "";
   }
 
-  // Envia a imagem recortada e atualiza a foto exibida no perfil.
   async function handleSalvarFotoPerfil(imagemCortada) {
     if (!imagemCortada) {
       setPerfilErro("Selecione uma imagem antes de salvar.");
@@ -183,7 +174,6 @@ export default function Perfil() {
     }
   }
 
-  // Envia os dados editados e apresenta o resultado da atualização.
   async function handleSalvarPerfil(event) {
     event.preventDefault();
 

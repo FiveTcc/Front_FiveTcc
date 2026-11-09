@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-// Apresenta o formulário para registrar uma nova ocorrência.
 export default function NovoChamado() {
   const { usuario } = useAuth();
   const navigate = useNavigate();
@@ -26,7 +25,6 @@ export default function NovoChamado() {
     critica: "Crítica",
   };
 
-  // Valida os campos obrigatórios antes de iniciar o envio do formulário.
   function handleSubmit(e) {
     e.preventDefault();
     if (!micro.trim() || !descricao.trim()) return;

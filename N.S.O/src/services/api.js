@@ -25,7 +25,6 @@ api.interceptors.request.use(
 let atualizandoToken = false;
 let filaRefresh = [];
 
-// Reaproveita o resultado da renovação para todas as requisições que aguardam.
 function processarFila(error, token = null) {
   filaRefresh.forEach((promessa) => {
     if (error) {
@@ -60,7 +59,6 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // Evita várias renovações simultâneas e repete cada requisição com o novo token.
     if (atualizandoToken) {
       return new Promise((resolve, reject) => {
         filaRefresh.push({

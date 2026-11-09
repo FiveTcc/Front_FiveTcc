@@ -13,7 +13,6 @@ const ambienteService = {
     }
   },
 
-  // Busca os dados de um ambiente específico.
   async listarAmbienteId(id) {
     try {
       const response = await api.get(`/ambientes/listarAmbienteId/${id}`);

@@ -23,7 +23,7 @@ export default function App() {
   return (
     <Routes>
 
-      {/* Páginas acessíveis sem autenticação. */}
+      {/* Rotas públicas */}
       <Route path="/login" element={<Login />} />
       <Route path="/nova-senha" element={<NovaSenha />} />
       <Route
@@ -31,7 +31,7 @@ export default function App() {
         element={<RecuperarSenha />}
       />
 
-      {/* Exige uma sessão válida para acessar as páginas internas. */}
+      {/* Rotas protegidas */}
       <Route element={<PrivateRoute />}>
 
         <Route path="/" element={<Layout />}>
@@ -86,7 +86,7 @@ export default function App() {
 
       </Route>
 
-      {/* Redireciona caminhos desconhecidos para a entrada do sistema. */}
+      {/* Rota inexistente */}
       <Route
         path="*"
         element={<Navigate to="/" replace />}

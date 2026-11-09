@@ -1,4 +1,3 @@
-/* Estilos específicos das telas de ambientes e seus componentes. */
 .ambientes {
   --sup: var(--surface);
   --sup2: var(--surface-3);
@@ -747,7 +746,7 @@
 .ambientes-tabela tbody tr:hover td {
   color: var(--tb-text);
 }
-/* Ícone do componente */
+/* Icone do componente */
 .ambientes-tabela .ambientes-icone {
   background: var(--tb-icon-bg);
   color: var(--tb-icon-color);
@@ -841,7 +840,7 @@
   line-height: 1.3;
 }
 
-/* Tema escuro: deixe só o seletor que o aplicativo utiliza. */
+/* Tema escuro: deixe sÃ³ o seletor que o seu app usa */
 .dark .ambientes-modal,
 [data-theme="dark"] .ambientes-modal {
   --modal-bg: #0f172a;

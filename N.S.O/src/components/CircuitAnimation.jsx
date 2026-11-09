@@ -1,11 +1,9 @@
-// Coordenadas dos pontos luminosos e das trilhas usadas na ilustração.
 const NODE_POINTS = [[26, 26], [374, 26], [26, 234], [374, 234]]
 const LED_POINTS = [[96, 44], [300, 44], [70, 219], [330, 219]]
 const TRACE_IDS = ['tr1', 'tr2', 'tr3', 'tr4', 'tr5', 'tr6', 'tr7']
 const CHIP_Y_POSITIONS = [110, 124, 138, 152]
 const CHIP_X_POSITIONS = [176, 192, 208, 224]
 
-// Desenha o circuito decorativo animado exibido na tela de autenticação.
 export default function CircuitAnimation({ className = '' }) {
   return (
     <div className={`pcb-anim relative w-full ${className}`} aria-hidden="true">

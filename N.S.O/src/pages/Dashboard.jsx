@@ -23,7 +23,6 @@ const STATUS_LABELS = {
   cancelada: "Cancelada",
 };
 
-// Uniformiza o status recebido da API para relacioná-lo aos rótulos e cores.
 function normalizarStatus(valor) {
   return String(valor ?? "")
     .trim()
@@ -33,7 +32,6 @@ function normalizarStatus(valor) {
     .replace(/_/g, " ");
 }
 
-// Adapta uma ocorrência da API aos campos consumidos pelo painel.
 function normalizarOcorrencia(item) {
   const ocorrencia = item?.ocorrencia || item || {};
   const componente = item?.componente || {};
@@ -52,7 +50,6 @@ function normalizarOcorrencia(item) {
   };
 }
 
-// Formata a hora da última atualização para exibição no painel.
 function mostrarTempoAtualizacao(valor) {
   if (!valor) return "—";
 
@@ -77,7 +74,6 @@ function mostrarTempoAtualizacao(valor) {
       }).format(timestamp);
 }
 
-// Desenha o gráfico de rosca proporcional à quantidade de ocorrências por status.
 function Donut({ dados, total }) {
   const raio = 54;
   const circunferencia = 2 * Math.PI * raio;
@@ -125,7 +121,6 @@ function Donut({ dados, total }) {
   );
 }
 
-// Reúne os indicadores, gráficos e ocorrências recentes do sistema.
 export default function Dashboard() {
   const { usuario } = useAuth();
   const [nome, setNome] = useState("");
@@ -139,7 +134,6 @@ export default function Dashboard() {
   const [dadosDashboard, setDadosDashboard] = useState(null);
   const [carregandoDashboard, setCarregandoDashboard] = useState(true);
 
-  // Carrega o nome do usuário, os indicadores e a lista de ocorrências.
   useEffect(() => {
     // Buscar nome do usuário
     async function buscarNome() {
