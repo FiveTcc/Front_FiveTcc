@@ -2,6 +2,7 @@ const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
 const USER_KEY = "usuario";
 
+// Centraliza a leitura, gravação e remoção dos dados da sessão no navegador.
 export const authStorage = {
   getAccessToken() {
     return localStorage.getItem(ACCESS_TOKEN_KEY);

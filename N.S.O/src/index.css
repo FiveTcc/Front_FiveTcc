@@ -35,7 +35,7 @@
     0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 16px rgba(16, 24, 40, 0.06);
 }
 
-/* ---------- Theme: Dark (overrides) ---------- */
+/* ---------- Tema escuro (sobrescritas) ---------- */
 :root[data-theme="dark"],
 html[data-theme="dark"] {
   --bg: #09111b;
@@ -156,7 +156,7 @@ textarea {
   padding: 24px;
 }
 
-/* logo da tela de */
+/* Logo da tela de acesso. */
 .loading-screen__logo-wrap {
   position: relative;
   display: grid;
@@ -335,7 +335,7 @@ textarea {
   text-decoration: underline;
 }
 
-/* ---------- Buttons ---------- */
+/* ---------- Botões ---------- */
 
 .btn {
   display: inline-flex;
@@ -425,7 +425,7 @@ textarea {
   cursor: not-allowed;
 }
 
-/* ---------- Shell / Sidebar ---------- */
+/* ---------- Estrutura / menu lateral ---------- */
 
 .shell {
   display: grid;
@@ -1381,7 +1381,7 @@ textarea {
   margin-bottom: 4px;
 }
 
-/* ---------- Stat cards ---------- */
+/* ---------- Cartões de estatísticas ---------- */
 
 .stat-grid {
   display: grid;
@@ -1437,7 +1437,7 @@ textarea {
   color: var(--red);
 }
 
-/* ---------- Cards / grid ---------- */
+/* ---------- Cartões / grade ---------- */
 
 .grid-2 {
   display: grid;
@@ -1586,7 +1586,7 @@ textarea {
   overflow: hidden;
 }
 
-/* ---------- Donut ---------- */
+/* ---------- Gráfico de rosca ---------- */
 
 .donut-row {
   display: flex;
@@ -1640,7 +1640,7 @@ textarea {
   flex-shrink: 0;
 }
 
-/* ---------- Recent list ---------- */
+/* ---------- Lista recente ---------- */
 
 .recent-list {
   list-style: none;
@@ -1689,7 +1689,7 @@ textarea {
   white-space: nowrap;
 }
 
-/* ---------- Beacon (status) ---------- */
+/* ---------- Indicador de status ---------- */
 
 .beacon {
   display: inline-flex;
@@ -1790,7 +1790,7 @@ textarea {
   gap: 7px;
 }
 
-/* Mesma altura para selects e botão */
+/* Mantém a mesma altura nos seletores e no botão. */
 .custom-select__trigger,
 .filters .btn {
   height: 44px;
@@ -1860,7 +1860,7 @@ textarea {
   background: rgba(37, 99, 235, 0.08);
 }
 
-/* ---------- Filters ---------- */
+/* ---------- Filtros ---------- */
 
 .filters {
   display: flex;
@@ -1998,7 +1998,7 @@ textarea {
   font-family: inherit;
 }
 
-/* ---------- Table ---------- */
+/* ---------- Tabelas ---------- */
 
 .table {
   width: 100%;
@@ -2040,7 +2040,7 @@ textarea {
   color: var(--accent);
 }
 
-/* ensure a subtle divider appears above the table when inside a card--table */
+/* Exibe uma divisória discreta entre o cartão e a tabela. */
 .card.card--table .table thead th {
   border-top: 1px solid var(--border);
 }
@@ -2180,7 +2180,7 @@ textarea {
   overflow-wrap: anywhere;
 }
 
-/* ---------- Ticket detail ---------- */
+/* ---------- Detalhes da ocorrência ---------- */
 
 .back-link {
   color: var(--text-dim);
@@ -2238,7 +2238,7 @@ textarea {
   font-size: 0.9rem;
 }
 
-/* ---------- Timeline ---------- */
+/* ---------- Linha do tempo ---------- */
 
 .timeline {
   list-style: none;
@@ -2626,7 +2626,7 @@ textarea {
   text-decoration: underline;
 }
 
-/* light theme: use accent (blue); dark theme: use muted text color */
+/* No tema claro, usa o destaque; no escuro, usa uma cor de texto mais suave. */
 :root:not([data-theme="dark"]) .pcb-anim {
   color: var(--accent);
 }
@@ -2690,7 +2690,7 @@ textarea {
   }
 }
 
-/* ---------- Responsive ---------- */
+/* ---------- Responsividade ---------- */
 
 @media (max-width: 980px) {
   .shell {
@@ -2823,7 +2823,7 @@ textarea {
   }
 }
 
-/* ---------- Profile page layout ---------- */
+/* ---------- Layout da página de perfil ---------- */
 .profile-page-header {
   display: flex;
   gap: 18px;
@@ -3174,13 +3174,13 @@ textarea {
   }
 }
 
-/* end profile styles */
+/* Fim dos estilos do perfil. */
 
-/* Ensure select visually follows the active theme even when disabled */
+/* Mantém o seletor no tema ativo, mesmo quando desabilitado. */
 .field-block select {
   width: 100%;
   padding: 10px 12px;
-  padding-right: 12px; /* keep space when arrow removed */
+  padding-right: 12px; /* Mantém o espaço quando a seta é removida. */
   border-radius: 10px;
   border: 1px solid var(--panel-input-border);
   background: linear-gradient(
@@ -3220,7 +3220,7 @@ textarea {
   opacity: 1;
 }
 
-/* Filtros da tela de ocorrencias */
+/* Filtros da tela de ocorrências. */
 .page--tickets .custom-select {
   min-width: 0;
 }
@@ -3659,7 +3659,7 @@ textarea {
   }
 }
 
-/* Acabamento da tela de detalhe da ocorrência */
+/* Ajustes visuais da tela de detalhes da ocorrência. */
 .ticket-detail-page {
   gap: 20px;
 }
@@ -3813,7 +3813,7 @@ textarea {
   }
 }
 
-/* Sidebar vertical no celular */
+/* Menu lateral vertical em telas pequenas. */
 @media (max-width: 700px) {
   .sidebar {
     position: fixed;
@@ -3939,7 +3939,7 @@ textarea {
   }
 }
 
-/* Acabamento da tela de chamados em telas pequenas */
+/* Ajustes da tela de chamados em telas pequenas. */
 @media (max-width: 700px) {
   .page--tickets {
     width: 100%;
@@ -4024,7 +4024,7 @@ textarea {
   }
 }
 
-/* Menu recolhível no celular */
+/* Menu recolhível em telas pequenas. */
 .sidebar-toggle {
   display: none;
 }
@@ -4115,7 +4115,7 @@ textarea {
   }
 }
 
-/* Sidebar no fluxo normal do layout mobile, sem ficar fixo na tela */
+/* Menu lateral no fluxo normal do layout móvel, sem ficar fixo na tela. */
 @media (max-width: 700px) {
   .shell {
     display: grid;
@@ -4156,7 +4156,7 @@ textarea {
   }
 }
 
-/* Ordem final do menu recolhível: prevalece sobre os ajustes anteriores */
+/* Ordem final do menu recolhível, prevalecendo sobre os ajustes anteriores. */
 @media (max-width: 700px) {
   .shell {
     grid-template-columns: 0 minmax(0, 1fr);
@@ -5062,7 +5062,7 @@ textarea {
 .ambientes-tabela tbody tr:hover td {
   color: var(--tb-text);
 }
-/* Icone do componente */
+/* Ícone do componente */
 .ambientes-tabela .ambientes-icone {
   background: var(--tb-icon-bg);
   color: var(--tb-icon-color);
@@ -5156,7 +5156,7 @@ textarea {
   line-height: 1.3;
 }
 
-/* Tema escuro: deixe sÃ³ o seletor que o seu app usa */
+/* Tema escuro: mantém apenas o seletor utilizado pelo aplicativo. */
 .dark .ambientes-modal,
 [data-theme="dark"] .ambientes-modal {
   --modal-bg: #0f172a;
@@ -5234,7 +5234,7 @@ textarea {
   border-color: var(--modal-accent);
 }
 
-/* Botôes */
+/* Botões */
 .ambientes-modal button {
   background: transparent;
   color: var(--modal-text);

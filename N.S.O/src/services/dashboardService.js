@@ -4,7 +4,7 @@ import api from "./api";
 
 const dashboardService = {
 
-// Buscar dashboard
+// Busca os indicadores consolidados exibidos no painel principal.
 
     async buscarDashboard(){
 

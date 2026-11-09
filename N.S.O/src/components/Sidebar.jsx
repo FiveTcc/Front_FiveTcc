@@ -81,6 +81,7 @@ const ICONS = {
   ),
 };
 
+// Recupera o tema salvo ou consulta a preferência do sistema operacional.
 function getInitialTheme() {
   try {
     const savedTheme = localStorage.getItem("theme");
@@ -99,10 +100,12 @@ function getInitialTheme() {
   }
 }
 
+// Aplica a classe visual correspondente ao estado da rota.
 function getNavLinkClassName({ isActive }) {
   return `sidebar__link${isActive ? " is-active" : ""}`;
 }
 
+// Renderiza a navegação, os dados do usuário e os controles do menu lateral.
 export default function Sidebar() {
   const { usuario, logout } = useAuth();
   const [menuAberto, setMenuAberto] = useState(false);
@@ -116,6 +119,7 @@ export default function Sidebar() {
     funcionario: "Funcionário",
   };
 
+  // Busca os dados atualizados do perfil para exibição no menu.
   useEffect(() => {
     async function buscarNome() {
       try {
@@ -135,15 +139,17 @@ export default function Sidebar() {
 
   const [theme, setTheme] = useState(getInitialTheme);
 
+  // Aplica o tema selecionado e o salva para as próximas visitas.
   useEffect(() => {
     try {
       document.documentElement.setAttribute("data-theme", theme);
       localStorage.setItem("theme", theme);
     } catch {
-      // ignore
+      // A aplicação continua funcionando mesmo sem acesso ao armazenamento local.
     }
   }, [theme]);
 
+  // Alterna entre as aparências clara e escura.
   function toggleTheme() {
     setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
   }

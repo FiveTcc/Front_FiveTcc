@@ -17,11 +17,13 @@ export function AuthProvider({ children }) {
 
   const autenticado = !!usuario;
 
+  // Autentica o usuário, salva os tokens e atualiza o estado global da sessão.
   async function login(email, senha) {
     try {
       const responseData = await authService.login(email, senha);
       const data = responseData?.data ?? responseData;
 
+      // Aceita os formatos de resposta usados pelas diferentes versões da API.
       const accessToken =
         data?.accessToken ??
         data?.token ??
@@ -80,6 +82,7 @@ export function AuthProvider({ children }) {
     }
   }
 
+  // Encerra a sessão na API e remove os dados locais mesmo se houver falha.
   async function logout() {
     try {
       await authService.logout();
@@ -91,6 +94,7 @@ export function AuthProvider({ children }) {
     }
   }
 
+  // Restaura a sessão salva antes de liberar o acesso às rotas privadas.
   useEffect(() => {
     try {
       const token = authStorage.getAccessToken();

@@ -1,3 +1,4 @@
+/* Estrutura e acionador do seletor personalizado. */
 .cselect {
   position: relative;
   display: block;
@@ -23,6 +24,7 @@
   text-align: left;
 }
  
+/* Destaque do seletor quando está focado ou aberto na tela de ambientes. */
 .ambientes .cselect__trigger:focus-visible,
 .ambientes .cselect__trigger[aria-expanded="true"] {
   outline: none;
@@ -30,6 +32,7 @@
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
 }
  
+/* Indicador que sinaliza a abertura e o fechamento da lista. */
 .cselect__caret {
   width: 0;
   height: 0;
@@ -43,6 +46,7 @@
   transform: rotate(180deg);
 }
  
+/* Lista suspensa e opções disponíveis para seleção. */
 .cselect__menu {
   position: absolute;
   z-index: 50;

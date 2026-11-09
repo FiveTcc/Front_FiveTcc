@@ -2,12 +2,14 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
 
+// Solicita à API o envio das instruções de recuperação para o e-mail informado.
 export default function RecuperarSenha() {
   const [email, setEmail] = useState("");
   const [enviado, setEnviado] = useState(false);
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState("");
 
+  // Valida o endereço e trata o resultado do pedido de recuperação.
   async function handleSubmit(event) {
     event.preventDefault();
 

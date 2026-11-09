@@ -1,3 +1,4 @@
+/* Organização geral dos formulários e seus controles. */
 .form {
   display: flex;
   flex-direction: column;
@@ -46,11 +47,13 @@
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
 }
+/* Campos apresentados em duas colunas. */
 .form__row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
+/* Alinhamento dos botões de ação do formulário. */
 .form__actions {
   display: flex;
   position: static;
@@ -82,6 +85,7 @@
   color: var(--green);
   font-size: 0.85rem;
 }
+/* Exibição de anexos selecionados e seus controles. */
 .form__attachments {
   display: flex;
   flex-direction: column;

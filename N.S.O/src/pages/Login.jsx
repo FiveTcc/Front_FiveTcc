@@ -5,6 +5,7 @@ import CircuitAnimation from "../components/CircuitAnimation";
 import LoadingScreen from "../components/LoadingScreen";
 
 
+// Autentica o usuário, mantém a preferência visual e abre o painel após o acesso.
 export default function Login() {
 
   const navigate = useNavigate();
@@ -34,16 +35,18 @@ export default function Login() {
 
   const [focused, setFocused] = useState(false);
 
+  // Aplica o tema escolhido e o guarda para as próximas visitas.
   useEffect(() => {
     try {
       document.documentElement.setAttribute("data-theme", theme);
       localStorage.setItem("theme", theme);
     } catch {
-      // ignore
+      // A aplicação continua funcionando mesmo sem acesso ao armazenamento local.
     }
   }, [theme]);
 
 
+  // Valida as credenciais, inicia a sessão e encaminha para o painel.
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -116,6 +119,7 @@ export default function Login() {
     }
   }
 
+  // Alterna entre os temas claro e escuro.
   function toggleTheme() {
     setTheme((t) => (t === "dark" ? "light" : "dark"));
   }

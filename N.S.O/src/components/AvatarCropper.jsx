@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import Cropper from "react-easy-crop";
 
+// Permite ajustar, girar e salvar uma imagem quadrada para o perfil.
 export default function AvatarCropper({
   isOpen,
   imageSrc,
@@ -15,10 +16,12 @@ export default function AvatarCropper({
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [salvando, setSalvando] = useState(false);
 
+  // Guarda a área final do recorte para processá-la ao salvar.
   const onCropComplete = useCallback((_, pixels) => {
     setCroppedAreaPixels(pixels);
   }, []);
 
+  // Desenha a área selecionada em um canvas e gera a imagem final.
   const getCroppedImageUrl = useCallback(async () => {
     if (!imageSrc || !croppedAreaPixels) {
       return null;
@@ -47,6 +50,7 @@ export default function AvatarCropper({
           return;
         }
 
+        // Gera uma imagem quadrada padronizada para manter o avatar consistente.
         ctx.clearRect(0, 0, outputSize, outputSize);
 
         const radians = (rotation * Math.PI) / 180;
@@ -76,6 +80,7 @@ export default function AvatarCropper({
     });
   }, [croppedAreaPixels, imageSrc, rotation]);
 
+  // Gera o recorte, encaminha a imagem e controla o estado de salvamento.
   const handleSave = useCallback(async () => {
     if (!imageSrc || !croppedAreaPixels) {
       return;
@@ -94,6 +99,7 @@ export default function AvatarCropper({
     }
   }, [croppedAreaPixels, getCroppedImageUrl, imageSrc, onSave]);
 
+  // Restaura a posição, o zoom e a rotação iniciais do editor.
   const resetCrop = () => {
     setCrop({ x: 0, y: 0 });
     setZoom(1);

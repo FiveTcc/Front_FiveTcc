@@ -1,3 +1,4 @@
+// Apresenta a animação enquanto a aplicação aguarda uma operação.
 export default function LoadingScreen() {
   return (
     <div className="loading-screen" aria-live="polite" aria-busy="true">

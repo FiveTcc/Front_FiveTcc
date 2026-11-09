@@ -5,6 +5,7 @@ import App from './App.jsx'
 import { AuthProvider } from './contexts/AuthContext.jsx'
 import './index.css'
 
+// Monta o aplicativo com navegação e autenticação disponíveis em todas as telas.
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>

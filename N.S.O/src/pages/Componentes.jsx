@@ -5,6 +5,7 @@ import componenteService from "../services/componeteService";
 import ambienteService from "../services/ambienteService";
 import componenteTipoService from "../services/componenteTipoService";
 
+// Localiza uma lista em diferentes estruturas de resposta da API.
 function listaDe(resposta, chaves) {
   if (Array.isArray(resposta)) return resposta;
   for (const chave of chaves) {
@@ -15,6 +16,7 @@ function listaDe(resposta, chaves) {
   return [];
 }
 
+// Padroniza os dados do componente e do ambiente associado.
 function normalizar(item) {
   const componente = item?.componente || item || {};
   const ambiente = item?.ambiente || {};
@@ -34,6 +36,7 @@ function normalizar(item) {
 
 const FORM_VAZIO = { nome: "", tipoId: "", patrimonio: "", numeroSerie: "", ambienteId: "" };
 
+// Lista, filtra e permite cadastrar ou editar os componentes do sistema.
 export default function Componentes() {
   const [searchParams] = useSearchParams();
   const ambienteInicial = searchParams.get("ambiente") || "";
@@ -47,6 +50,7 @@ export default function Componentes() {
   const [form, setForm] = useState(null);
   const [salvando, setSalvando] = useState(false);
 
+  // Carrega componentes, ambientes e tipos para preencher a tela e o formulário.
   async function carregar() {
     setCarregando(true);
     setErro("");
@@ -69,6 +73,7 @@ export default function Componentes() {
 
   useEffect(() => { carregar(); }, []);
 
+  // Aplica os filtros de texto e de ambiente sem alterar a lista original.
   const filtrados = useMemo(() => {
     const termo = busca.trim().toLowerCase();
     return componentes.filter((item) =>
@@ -78,6 +83,7 @@ export default function Componentes() {
     );
   }, [componentes, busca, filtroAmbiente]);
 
+  // Valida e envia os dados do componente novo ou editado.
   async function salvar(event) {
     event.preventDefault();
     if (!form?.nome.trim() || !form.tipoId || salvando) return;
@@ -104,6 +110,7 @@ export default function Componentes() {
     }
   }
 
+  // Preenche o formulário com os dados do componente selecionado.
   function editar(item) {
     setForm({
       id: item.id,

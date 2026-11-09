@@ -30,6 +30,7 @@ const PERMISSOES = {
 };
 
 
+// Converte um intervalo em milissegundos para horas ou dias.
 function formatarHoras(valor) {
   if (!Number.isFinite(valor) || valor <= 0) return "0h";
   const horas = valor / 60 / 60 / 1000;
@@ -38,6 +39,7 @@ function formatarHoras(valor) {
   return `${dias.toFixed(1)}d`;
 }
 
+// Calcula o tempo médio entre abertura e atualização dos chamados concluídos.
 function calcularMediaHoras(chamados) {
   const resolvidos = chamados.filter((chamado) =>
     ["resolvido", "fechado"].includes(chamado.status),
@@ -54,6 +56,7 @@ function calcularMediaHoras(chamados) {
   return totalHoras / resolvidos.length;
 }
 
+// Apresenta indicadores e históricos conforme o perfil de acesso do usuário.
 export default function Relatorios() {
   const { usuario } = useAuth();
   const perfil = usuario?.perfil || "usuario";
@@ -65,6 +68,7 @@ export default function Relatorios() {
 
   const notificacoes = [];
 
+  // Fecha as notificações ao clicar fora do painel.
   useEffect(() => {
     function handleClickFora(event) {
       if (
@@ -82,6 +86,7 @@ export default function Relatorios() {
     };
   }, []);
 
+  // Restringe a lista aos chamados visíveis para o perfil atual.
   const chamados = [];
   const chamadosVisiveis = useMemo(() => {
     if (perfil !== "usuario") return chamados;
@@ -94,6 +99,7 @@ export default function Relatorios() {
     [usuarios],
   );
 
+  // Agrupa os chamados por período, ambiente, prioridade e status.
   const chamadosPorPeriodo = useMemo(() => {
     const agora = Date.now();
     const intervalo = {
@@ -143,6 +149,7 @@ export default function Relatorios() {
     [chamadosVisiveis],
   );
 
+  // Resume o volume de atendimento e as resoluções por técnico.
   const tecnicos = useMemo(() => {
     return usuarios
       .filter(
@@ -170,6 +177,7 @@ export default function Relatorios() {
       .sort((a, b) => b.atendidos - a.atendidos);
   }, [chamadosVisiveis, usuarios]);
 
+  // Conta e ordena os chamados abertos por cada usuário.
   const chamadosPorUsuario = useMemo(
     () =>
       usuarios
@@ -186,6 +194,7 @@ export default function Relatorios() {
 
   const mediaAtendimentoMs = calcularMediaHoras(chamadosVisiveis);
 
+  // Separa os registros mais recentes para compor o histórico da tela.
   const historico = useMemo(
     () =>
       [...chamadosVisiveis]
@@ -232,6 +241,7 @@ export default function Relatorios() {
 
   const tempoMedioUsuario = calcularMediaHoras(meusChamadosData);
 
+  // Monta uma página HTML autônoma com os indicadores e agrupamentos atuais.
   function gerarHtmlRelatorio() {
     const resumo = [
       ["Total", chamadosVisiveis.length],
@@ -250,6 +260,7 @@ export default function Relatorios() {
       ["Tempo médio", formatarHoras(mediaAtendimentoMs)],
     ];
 
+    // Cria a seção de itens de cada agrupamento no relatório exportado.
     const renderLista = (titulo, itens) => {
       if (!itens.length) return "";
       return `
@@ -454,6 +465,7 @@ export default function Relatorios() {
     `;
   }
 
+  // Gera e baixa os dados no formato solicitado pelo usuário.
   function exportarRelatorio(tipo = "csv") {
     const dadosExportacao = {
       perfil,

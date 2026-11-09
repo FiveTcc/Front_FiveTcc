@@ -24,6 +24,7 @@ const STATUS_LEGEND = Object.entries(STATUS_LABELS).filter(
   ([value]) => value !== "todos",
 );
 
+// Padroniza textos da API para comparar estados sem diferenças de acento ou caixa.
 function normalizarValor(valor) {
   return String(valor ?? "")
     .trim()
@@ -33,6 +34,7 @@ function normalizarValor(valor) {
     .replace(/_/g, " ");
 }
 
+// Converte o formato da API para os campos usados na lista de ocorrências.
 function normalizarOcorrencia(item) {
   const ocorrencia = item?.ocorrencia || item || {};
   const componente = item?.componente || {};
@@ -57,6 +59,7 @@ function normalizarOcorrencia(item) {
   };
 }
 
+// Apresenta a data da última atualização no formato brasileiro.
 function mostrarAtualizacao(valor) {
   if (!valor) return "—";
 
@@ -85,6 +88,7 @@ function mostrarAtualizacao(valor) {
       }).format(timestamp);
 }
 
+// Lista ocorrências com busca, filtros e acesso às respectivas páginas de detalhe.
 export default function Chamados() {
   const [chamados, setChamados] = useState([]);
   const [busca, setBusca] = useState("");
@@ -97,6 +101,7 @@ export default function Chamados() {
   const [openSelect, setOpenSelect] = useState(null);
   const notificacoes = [];
 
+  // Carrega e normaliza as ocorrências assim que a página é aberta.
   useEffect(() => {
     let montado = true;
 
@@ -132,6 +137,7 @@ export default function Chamados() {
     };
   }, []);
 
+  // Fecha o painel de notificações quando o usuário clica fora dele.
   useEffect(() => {
     function fecharAoClicarFora(event) {
       if (

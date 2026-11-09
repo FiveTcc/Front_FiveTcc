@@ -15,16 +15,19 @@ export default function CustomSelect({ value, options, onChange, id }) {
     return () => document.removeEventListener("mousedown", close);
   }, []);
  
+  // Abre ou fecha a lista e posiciona o foco na opção selecionada.
   const toggle = () => {
     setOpen((o) => !o);
     setActive(Math.max(0, options.indexOf(value)));
   };
  
+  // Notifica a tela sobre a opção escolhida e fecha a lista.
   const choose = (opt) => {
     onChange(opt);
     setOpen(false);
   };
  
+  // Permite navegar e selecionar opções pelo teclado.
   const onKeyDown = (e) => {
     if (e.key === "Escape") return setOpen(false);
     if (!open && (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ")) {
@@ -44,6 +47,7 @@ export default function CustomSelect({ value, options, onChange, id }) {
     }
   };
  
+  // Exibe o seletor e, quando aberto, as opções disponíveis.
   return (
     <div className="cselect" ref={rootRef}>
       <button
