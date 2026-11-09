@@ -234,11 +234,11 @@ export default function ChamadoDetalhe() {
   }
 
   if (carregando) {
-    return <div className="pagina"><div className="vazio">Carregando ocorrência...</div></div>;
+    return <div className="page"><div className="empty">Carregando ocorrência...</div></div>;
   }
 
   if (erro && !chamado) {
-    return <div className="pagina"><div className="vazio"><strong>{erro}</strong></div></div>;
+    return <div className="page"><div className="empty"><strong>{erro}</strong></div></div>;
   }
 
   if (!chamado) return null;
@@ -247,45 +247,45 @@ export default function ChamadoDetalhe() {
   const podeGerenciar = true;
 
   return (
-    <div className="pagina chamado-detalhe-pagina">
-      <Link to="/chamados" className="voltar-ligacao">← Voltar para Ocorrências</Link>
+    <div className="page ticket-detail-page">
+      <Link to="/chamados" className="back-link">← Voltar para Ocorrências</Link>
 
-      <header className="pagina__cabecalho chamado-cabecalho">
+      <header className="page__header ticket-header">
         <div>
-          <span className="rotulo-superior">
+          <span className="eyebrow">
             #{chamado.numero} · {chamado.componente?.compo_nome || "Ocorrência"}
           </span>
           <h1>{chamado.titulo}</h1>
-          <p className="atenuado">Detalhes e histórico da ocorrência.</p>
+          <p className="muted">Detalhes e histórico da ocorrência.</p>
         </div>
-        <div className="chamado-cabecalho__etiquetas">
+        <div className="ticket-header__badges">
           <StatusBeacon status={chamado.status} />
           <PriorityBadge prioridade={chamado.prioridade} />
         </div>
       </header>
 
-      {erro && <p className="formulario__erro">{erro}</p>}
+      {erro && <p className="form__error">{erro}</p>}
 
-      <div className="cartao">
+      <div className="card">
             <h2>Observações</h2>
-            <p className="chamado-descricao">{chamado.descricao || "—"}</p>
+            <p className="ticket-desc">{chamado.descricao || "—"}</p>
           </div>
 
-      <div className="grade-2 grade-2--assimetrico">
-        <div className="cartao">
+      <div className="grid-2 grid-2--asym">
+        <div className="card">
             <h2>Observação do Tecnico</h2>
-            <div className="chamado-historico-rolagem">
-              <ul className="linha-tempo">
-                <li className="linha-tempo__item">
-                  <span className="linha-tempo__ponto" />
+            <div className="ticket-history-scroll">
+              <ul className="timeline">
+                <li className="timeline__item">
+                  <span className="timeline__dot" />
                   <div>
                     <strong>{nomeCriador(chamado)}</strong> abriu a ocorrência
                     <time> {formatarData(chamado.criadoEm)}</time>
                   </div>
                 </li>
                 {chamado.comentarios.map((item, index) => (
-                  <li key={index} className="linha-tempo__item">
-                    <span className="linha-tempo__ponto" />
+                  <li key={index} className="timeline__item">
+                    <span className="timeline__dot" />
                     <div>
                       <strong>{item.autor || nomeLogado}</strong>
                       <p>{item.texto || item.ocor_obs}</p>
@@ -296,16 +296,16 @@ export default function ChamadoDetalhe() {
               </ul>
             </div>
 
-            <form className="comentario-formulario" onSubmit={enviarComentario}>
+            <form className="comment-form" onSubmit={enviarComentario}>
               {fotoPerfil ? (
                 <img
-                  className="avatar avatar--pequeno"
+                  className="avatar avatar--sm"
                   src={fotoPerfil}
                   alt={`Foto de ${nomeLogado}`}
                   style={{ objectFit: "cover" }}
                 />
               ) : (
-                <span className="avatar avatar--pequeno">{iniciais(nomeLogado)}</span>
+                <span className="avatar avatar--sm">{iniciais(nomeLogado)}</span>
               )}
               <input
                 type="text"
@@ -313,16 +313,16 @@ export default function ChamadoDetalhe() {
                 value={comentario}
                 onChange={(event) => setComentario(event.target.value)}
               />
-              <button type="submit" className="botao botao--principal botao--pequeno" disabled={salvando}>
+              <button type="submit" className="btn btn--primary btn--sm" disabled={salvando}>
                 {salvando ? "Enviando..." : "Enviar"}
               </button>
             </form>
           </div>
 
         <aside>
-          <div className="cartao">
+          <div className="card">
             <h2>Detalhes</h2>
-            <dl className="detalhe-lista">
+            <dl className="detail-list">
               <div><dt>Criado por</dt><dd>{nomeCriador(chamado)}</dd></div>
               <div><dt>Componente</dt><dd>{chamado.componente?.compo_nome || "—"}</dd></div>
               <div><dt>Ambiente</dt><dd>{chamado.ambiente?.amb_nome || "—"}</dd></div>
@@ -332,7 +332,7 @@ export default function ChamadoDetalhe() {
           </div>
 
           {podeGerenciar && (
-            <div className="cartao">
+            <div className="card">
               <h2>Gerenciar</h2>
               <label>
                 Status

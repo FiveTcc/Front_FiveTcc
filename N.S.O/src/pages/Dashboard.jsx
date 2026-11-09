@@ -84,7 +84,7 @@ function Donut({ dados, total }) {
   let acumulado = 0;
 
   return (
-    <svg viewBox="0 0 140 140" className="grafico-rosca">
+    <svg viewBox="0 0 140 140" className="donut">
       <circle
         cx="70"
         cy="70"
@@ -115,10 +115,10 @@ function Donut({ dados, total }) {
           />
         );
       })}
-      <text x="70" y="66" textAnchor="middle" className="grafico-rosca__total">
+      <text x="70" y="66" textAnchor="middle" className="donut__total">
         {total}
       </text>
-      <text x="70" y="84" textAnchor="middle" className="grafico-rosca__legenda">
+      <text x="70" y="84" textAnchor="middle" className="donut__legenda">
         chamados
       </text>
     </svg>
@@ -225,21 +225,21 @@ export default function Dashboard() {
   }, [chamados, busca]);
 
   return (
-    <div className="pagina pagina--painel">
-      <div className="pagina__superior">
+    <div className="page page--dashboard">
+      <div className="page__top">
         {/* Barra superior */}
-        <header className="pagina__cabecalho">
+        <header className="page__header">
           <div>
             <h1>Olá, {(nome || usuario.nome)?.toLowerCase()} </h1>
-            <p className="atenuado">
+            <p className="muted">
               Visão geral dos chamados sob monitoramento agora.
             </p>
           </div>
         </header>
 
-        <div className="barra-superior">
-          <div className="barra-superior__busca">
-            <span className="barra-superior__icone" aria-hidden="true">
+        <div className="topbar">
+          <div className="topbar__search">
+            <span className="topbar__icon" aria-hidden="true">
               ⌕
             </span>
 
@@ -252,11 +252,11 @@ export default function Dashboard() {
             />
           </div>
 
-          <div className="barra-superior__acoes">
-            <div className="barra-superior__notificacoes-wrap">
+          <div className="topbar__actions">
+            <div className="topbar__notifications-wrap">
               <button
                 type="button"
-                className="barra-superior__icone-botao"
+                className="topbar__icon-button"
                 aria-label="Notificações"
                 onClick={() => setMostrarNotificacoes((valor) => !valor)}
               >
@@ -265,11 +265,11 @@ export default function Dashboard() {
 
               {mostrarNotificacoes && (
                 <div
-                  className="barra-superior__notificacoes"
+                  className="topbar__notifications"
                   role="menu"
                   aria-label="Notificações"
                 >
-                  <div className="barra-superior__notificacoes-cabecalho">
+                  <div className="topbar__notifications-header">
                     <strong>Notificações</strong>
                     <span>{notificacoes.length}</span>
                   </div>
@@ -278,7 +278,7 @@ export default function Dashboard() {
                     <button
                       key={item.id}
                       type="button"
-                      className="barra-superior__notificacao-item"
+                      className="topbar__notification-item"
                     >
                       <span>{item.titulo}</span>
                       <small>{item.tempo}</small>
@@ -291,64 +291,64 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="painel__acoes">
-        <Link to="/chamados/novo" className="botao botao--principal">
+      <div className="dashboard__actions">
+        <Link to="/chamados/novo" className="btn btn--primary">
           + Novo chamado
         </Link>
       </div>
 
       {/* Estatísticas */}
-      <section className="indicador-grade">
-        <div className="indicador-cartao">
-          <span className="indicador-cartao__rotulo">Em aberto</span>
-          <span className="indicador-cartao__valor">
+      <section className="stat-grid">
+        <div className="stat-card">
+          <span className="stat-card__label">Em aberto</span>
+          <span className="stat-card__value">
             {dadosDashboard?.ocorrenciasAbertas ?? 0}
           </span>
-          <span className="indicador-cartao__dica">aguardando ação</span>
+          <span className="stat-card__hint">aguardando ação</span>
         </div>
 
-        <div className="indicador-cartao indicador-cartao--alerta">
-          <span className="indicador-cartao__rotulo">Críticos ativos</span>
-          <span className="indicador-cartao__valor">
+        <div className="stat-card stat-card--alert">
+          <span className="stat-card__label">Críticos ativos</span>
+          <span className="stat-card__value">
             {dadosDashboard?.ocorrenciasCriticas ?? 0}
           </span>
-          <span className="indicador-cartao__dica">prioridade máxima</span>
+          <span className="stat-card__hint">prioridade máxima</span>
         </div>
 
-        <div className="indicador-cartao">
-          <span className="indicador-cartao__rotulo">Resolvidos</span>
-          <span className="indicador-cartao__valor">
+        <div className="stat-card">
+          <span className="stat-card__label">Resolvidos</span>
+          <span className="stat-card__value">
             {dadosDashboard?.ocorrenciasResolvidas ?? 0}
           </span>
-          <span className="indicador-cartao__dica">este período</span>
+          <span className="stat-card__hint">este período</span>
         </div>
 
-        <div className="indicador-cartao">
-          <span className="indicador-cartao__rotulo">Total no sistema</span>
-          <span className="indicador-cartao__valor">
+        <div className="stat-card">
+          <span className="stat-card__label">Total no sistema</span>
+          <span className="stat-card__value">
             {dadosDashboard?.ocorrenciasTotal ?? 0}
           </span>
-          <span className="indicador-cartao__dica">desde o início</span>
+          <span className="stat-card__hint">desde o início</span>
         </div>
       </section>
 
       {/* Conteúdo principal */}
-      <section className="grade-2">
+      <section className="grid-2">
         {/* Distribuição por status */}
-        <div className="cartao__status">
+        <div className="card__status">
           <h2>Distribuição por status</h2>
 
-          <div className="grafico-rosca-linha">
+          <div className="donut-row">
             <Donut
               dados={Object.entries(contagem)}
               total={chamados.length || 0}
             />
 
-            <ul className="grafico-rosca-legenda">
+            <ul className="donut-legend">
               {Object.entries(contagem).map(([status, qtd]) => (
                 <li key={status}>
                   <span
-                    className="grafico-rosca-legenda__ponto"
+                    className="donut-legend__dot"
                     style={{
                       background: CORES_STATUS[status],
                     }}
@@ -364,30 +364,30 @@ export default function Dashboard() {
         </div>
 
         {/* Atividade recente */}
-        <div className="cartao__atividade">
-          <div className="cartao__cabecalho">
+        <div className="card__atividade">
+          <div className="card__header">
             <h2>Atividade recente</h2>
 
-            <Link to="/chamados" className="ligacao">
+            <Link to="/chamados" className="link">
               ver todos
             </Link>
           </div>
 
-          <ul className="recente-lista">
+          <ul className="recent-list">
             {recentes.map((c) => (
               <li key={c.id}>
-                <Link to={`/chamados/${c.id}`} className="recente-item">
+                <Link to={`/chamados/${c.id}`} className="recent-item">
                   <StatusBeacon status={c.status} comLabel={false} />
 
-                  <div className="recente-item__corpo">
-                    <span className="recente-item__codigo">{c.numero}</span>
+                  <div className="recent-item__body">
+                    <span className="recent-item__code">{c.numero}</span>
 
-                    <span className="recente-item__titulo">{c.titulo}</span>
+                    <span className="recent-item__title">{c.titulo}</span>
                   </div>
 
                   <PriorityBadge prioridade={c.prioridade} />
 
-                  <span className="recente-item__tempo">
+                  <span className="recent-item__time">
                     {mostrarTempoAtualizacao(c.atualizadoEm)}
                   </span>
                 </Link>
@@ -395,7 +395,7 @@ export default function Dashboard() {
             ))}
 
             {!recentes.length && (
-              <li className="atenuado">Nenhum chamado encontrado.</li>
+              <li className="muted">Nenhum chamado encontrado.</li>
             )}
           </ul>
         </div>

@@ -41,23 +41,23 @@ export default function RecuperarSenha() {
   }
 
   return (
-    <div className="acesso recuperacao-pagina">
-      <div className="recuperacao-cartao">
-        <span className="rotulo-superior">Acesso seguro</span>
+    <div className="login recovery-page">
+      <div className="recovery-card">
+        <span className="eyebrow">Acesso seguro</span>
         <h1>Recuperar senha</h1>
-        <p className="atenuado">
+        <p className="muted">
           Informe seu e-mail e enviaremos as instruções para redefinir sua
           senha.
         </p>
 
         {enviado ? (
-          <div className="recuperacao-mensagem" role="status">
+          <div className="recovery-message" role="status">
             Se o e-mail estiver cadastrado, você receberá as instruções em
             instantes.
           </div>
         ) : (
-          <form className="recuperacao-formulario" onSubmit={handleSubmit}>
-            <label className="recuperacao-campo">
+          <form className="recovery-form" onSubmit={handleSubmit}>
+            <label className="recovery-field">
               <span>E-mail corporativo</span>
 
               <input
@@ -69,11 +69,11 @@ export default function RecuperarSenha() {
               />
             </label>
 
-            {erro && <div className="recuperacao-erro">{erro}</div>}
+            {erro && <div className="recovery-error">{erro}</div>}
 
             <button
               type="submit"
-              className="botao botao--principal recuperacao-formulario__enviar"
+              className="btn btn--primary recovery-form__submit"
               disabled={carregando}
             >
               {carregando ? "Enviando..." : "Enviar"}
@@ -81,7 +81,7 @@ export default function RecuperarSenha() {
           </form>
         )}
 
-        <Link to="/login" className="recuperacao-voltar">
+        <Link to="/login" className="recovery-back">
           ← Voltar para o login
         </Link>
       </div>

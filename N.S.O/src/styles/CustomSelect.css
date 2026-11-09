@@ -1,5 +1,5 @@
 /* Estrutura e acionador do seletor personalizado. */
-.selecao-personalizada {
+.cselect {
   position: relative;
   display: block;
   background: #1b2636;
@@ -7,7 +7,7 @@
   border-radius: 12px;
 }
  
-.selecao-personalizada__acionador {
+.cselect__trigger {
   width: 100%;
   display: flex;
   align-items: center;
@@ -25,15 +25,15 @@
 }
  
 /* Destaque do seletor quando está focado ou aberto na tela de ambientes. */
-.ambientes .selecao-personalizada__acionador:focus-visible,
-.ambientes .selecao-personalizada__acionador[aria-expanded="true"] {
+.ambientes .cselect__trigger:focus-visible,
+.ambientes .cselect__trigger[aria-expanded="true"] {
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
 }
  
 /* Indicador que sinaliza a abertura e o fechamento da lista. */
-.selecao-personalizada__seta {
+.cselect__caret {
   width: 0;
   height: 0;
   border-left: 4px solid transparent;
@@ -42,12 +42,12 @@
   transition: transform 0.15s ease;
 }
  
-.selecao-personalizada__acionador[aria-expanded="true"] .selecao-personalizada__seta {
+.cselect__trigger[aria-expanded="true"] .cselect__caret {
   transform: rotate(180deg);
 }
  
 /* Lista suspensa e opções disponíveis para seleção. */
-.selecao-personalizada__menu {
+.cselect__menu {
   position: absolute;
   z-index: 50;
   top: calc(100% + 8px);
@@ -64,7 +64,7 @@
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
  
-.selecao-personalizada__opcao {
+.cselect__option {
   padding: 12px 14px;
   font-weight: 600;
   color: #f1f5f9;
@@ -72,10 +72,10 @@
   cursor: pointer;
 }
  
-.selecao-personalizada__opcao.esta-ativo {
+.cselect__option.is-active {
   background: rgba(148, 163, 184, 0.12);
 }
-
-.selecao-personalizada__opcao.esta-selecionado {
+ 
+.cselect__option.is-selected {
   background: rgba(59, 130, 246, 0.18);
 }

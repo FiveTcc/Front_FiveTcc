@@ -65,19 +65,19 @@ export default function NovaSenha() {
   }
 
   return (
-    <div className="acesso recuperacao-pagina">
-      <div className="recuperacao-cartao">
-        <span className="rotulo-superior">Acesso seguro</span>
+    <div className="login recovery-page">
+      <div className="recovery-card">
+        <span className="eyebrow">Acesso seguro</span>
         <h1>Definir nova senha</h1>
-        <p className="atenuado">
+        <p className="muted">
           Crie uma nova senha para continuar com acesso ao sistema.
         </p>
 
         <form
-          className="recuperacao-formulario recuperacao-formulario--redefinir"
+          className="recovery-form recovery-form--reset"
           onSubmit={handleSubmit}
         >
-          <label className="recuperacao-campo">
+          <label className="recovery-field">
             <span>Nova senha</span>
             <input
               type="password"
@@ -88,7 +88,7 @@ export default function NovaSenha() {
             />
           </label>
 
-          <label className="recuperacao-campo">
+          <label className="recovery-field">
             <span>Confirmar senha</span>
             <input
               type="password"
@@ -99,19 +99,19 @@ export default function NovaSenha() {
             />
           </label>
 
-          {erro && <div className="recuperacao-erro">{erro}</div>}
-          {sucesso && <div className="recuperacao-sucesso">{sucesso}</div>}
+          {erro && <div className="recovery-error">{erro}</div>}
+          {sucesso && <div className="recovery-success">{sucesso}</div>}
 
           <button
             type="submit"
-            className="botao botao--principal recuperacao-formulario__enviar"
+            className="btn btn--primary recovery-form__submit"
             disabled={carregando}
           >
             {carregando ? "Salvando..." : "Salvar nova senha"}
           </button>
         </form>
 
-        <Link to="/login" className="recuperacao-voltar">
+        <Link to="/login" className="recovery-back">
           ← Voltar para o login
         </Link>
       </div>

@@ -10,9 +10,14 @@ import NovoChamado from './pages/NovoChamado'
 import Usuarios from './pages/Usuarios'
 import Perfil from './pages/Perfil'
 import Relatorios from './pages/Relatorios'
+
+
 import PrivateRoute from "./routes/privateRouter";
 import Ambientes from './pages/Ambientes';
 import AmbientesDetalhe from './pages/AmbientesDetalhe';
+
+
+
 
 export default function App() {
   return (

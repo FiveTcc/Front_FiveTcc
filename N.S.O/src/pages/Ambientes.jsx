@@ -555,7 +555,7 @@ export default function Ambientes() {
   };
 
   const Filtros = (
-    <div className="filtros ambientes-filtros">
+    <div className="filters ambientes-filtros">
       <Select
         label="Tipo"
         value={f.tipo}
@@ -579,7 +579,7 @@ export default function Ambientes() {
       />
       <button
         type="button"
-        className="botao botao--principal"
+        className="btn btn--primary"
         onClick={() =>
           setNovo({
             nome: "",
@@ -596,11 +596,11 @@ export default function Ambientes() {
   );
 
   return (
-    <div className="pagina pagina--ambientes ambientes">
-      <header className="pagina__cabecalho">
+    <div className="page page--ambientes ambientes">
+      <header className="page__header">
         <div>
           <h1>Ambientes</h1>
-          <p className="atenuado">
+          <p className="muted">
             {modo === "grade"
               ? "Gerencie os ambientes cadastrados no sistema."
               : "Gerencie os ambientes cadastrados no sistema e visualize seus componentes."}
@@ -608,8 +608,8 @@ export default function Ambientes() {
         </div>
       </header>
 
-      <div className="barra-superior ambientes-barra-superior">
-        <div className="barra-superior__busca" aria-label="Buscar ambientes">
+      <div className="topbar ambientes-topbar">
+        <div className="topbar__search" aria-label="Buscar ambientes">
           <Search size={18} aria-hidden="true" />
           <input
             type="search"
@@ -619,11 +619,11 @@ export default function Ambientes() {
             aria-label="Buscar ambientes"
           />
         </div>
-        <div className="barra-superior__acoes">
-          <div className="barra-superior__notificacoes-wrap" ref={notificacoesRef}>
+        <div className="topbar__actions">
+          <div className="topbar__notifications-wrap" ref={notificacoesRef}>
             <button
               type="button"
-              className="barra-superior__icone-botao"
+              className="topbar__icon-button"
               aria-label="Notificações"
               onClick={() => setMostrarNotificacoes((valor) => !valor)}
             >
@@ -632,11 +632,11 @@ export default function Ambientes() {
 
             {mostrarNotificacoes && (
               <div
-                className="barra-superior__notificacoes"
+                className="topbar__notifications"
                 role="menu"
                 aria-label="Notificações"
               >
-                <div className="barra-superior__notificacoes-cabecalho">
+                <div className="topbar__notifications-header">
                   <strong>Notificações</strong>
                   <span>{notificacoes.length}</span>
                 </div>
@@ -645,7 +645,7 @@ export default function Ambientes() {
                   <button
                     key={item.id}
                     type="button"
-                    className="barra-superior__notificacao-item"
+                    className="topbar__notification-item"
                   >
                     <span>{item.titulo}</span>
                     <small>{item.tempo}</small>
@@ -671,7 +671,7 @@ export default function Ambientes() {
                   novo ambiente.
                 </p>
               )}
-              <div className="cartao__ambientes cartao__ambientes--grade ambientes-grade">
+              <div className="card__ambientes card__ambientes--grid ambientes-grid">
                 {filtrados.map((a) => (
                   <CardAmbiente
                     key={a.id}
@@ -687,7 +687,7 @@ export default function Ambientes() {
               <h3>
                 <ClipboardList size={18} /> Resumo dos ambientes
               </h3>
-              <div className="ambientes-indicadores-chave">
+              <div className="ambientes-kpis">
                 <Kpi
                   Icon={Building2}
                   cor="#3b82f6"
@@ -720,7 +720,7 @@ export default function Ambientes() {
                   return (
                     <li key={t}>
                       <span
-                        className="ambientes-etiqueta-icone"
+                        className="ambientes-chip-ico"
                         style={{ background: cor + "33", color: cor }}
                       >
                         <Icon size={16} />
@@ -764,10 +764,10 @@ export default function Ambientes() {
             </div>
 
             {sel && (
-              <section className="ambientes-painel ambientes-detalhe">
-                <div className="ambientes-detalhe-cabecalho">
+              <section className="ambientes-painel ambientes-det">
+                <div className="ambientes-det-head">
                   <Thumb tipo={sel.tipo} size={128} />
-                  <div className="ambientes-detalhe-informacao">
+                  <div className="ambientes-det-info">
                     <h2>{sel.nome}</h2>
                     <div className="ambientes-tags">
                       <Tag tipo={sel.tipo} />
@@ -776,15 +776,15 @@ export default function Ambientes() {
                     <p className="ambientes-local">
                       <MapPin size={14} /> {sel.bloco} · {andarLabel(sel.andar)}
                     </p>
-                    <p className="ambientes-descricao">{sel.desc}</p>
+                    <p className="ambientes-desc">{sel.desc}</p>
                   </div>
                   <button
-                    className="botao botao--vazado ambientes-botao-sec"
+                    className="btn btn--ghost ambientes-btn-sec"
                     onClick={abrirEdicao}
                   >
                     <Pencil size={15} /> Editar
                   </button>
-                  <button className="ambientes-icone" aria-label="Mais ações">
+                  <button className="ambientes-icon" aria-label="Mais ações">
                     <MoreVertical size={18} />
                   </button>
                 </div>
@@ -798,7 +798,7 @@ export default function Ambientes() {
                       key={k}
                       role="tab"
                       aria-selected={aba === k}
-                      className={aba === k ? "ativo" : ""}
+                      className={aba === k ? "on" : ""}
                       onClick={() => setAba(k)}
                     >
                       <Icon size={17} /> {nome}
@@ -808,7 +808,7 @@ export default function Ambientes() {
 
                 {aba === "componentes" && (
                   <>
-                    <div className="filtros ambientes-componente-filtros">
+                    <div className="filters ambientes-comp-filtros">
                       <label className="ambientes-busca">
                         <Search size={16} />
                         <input
@@ -839,7 +839,7 @@ export default function Ambientes() {
 
                       <button
                         type="button"
-                        className="botao botao--principal ambientes-botao"
+                        className="btn btn--primary ambientes-btn"
                         onClick={() =>
                           setNovoComponente({
                             nome: "",
@@ -853,7 +853,7 @@ export default function Ambientes() {
                       </button>
                     </div>
                     <div className="ambientes-tabela-wrap">
-                      <table className="tabela ambientes-tabela">
+                      <table className="table ambientes-tabela">
                         <thead>
                           <tr>
                             <th>Componente</th>
@@ -871,8 +871,8 @@ export default function Ambientes() {
                             return (
                               <tr key={c.id ?? c.pat}>
                                 <td>
-                                  <span className="ambientes-componente-nome">
-                                    <span className="ambientes-etiqueta-icone">
+                                  <span className="ambientes-comp-nome">
+                                    <span className="ambientes-chip-ico">
                                       <Icon size={16} />
                                     </span>
                                     {c.nome}
@@ -882,7 +882,7 @@ export default function Ambientes() {
                                 <td>{c.pat}</td>
                                 <td>
                                   <span
-                                    className={`ambientes-etiqueta ${c.status === "Funcionando" ? "ok" : c.status === "Com problema" ? "erro" : "aviso"}`}
+                                    className={`ambientes-pill ${c.status === "Funcionando" ? "ok" : c.status === "Com problema" ? "err" : "warn"}`}
                                   >
                                     {c.status}
                                   </span>
@@ -890,7 +890,7 @@ export default function Ambientes() {
                                 <td>{c.manut}</td>
                                 <td>
                                   <button
-                                    className="ambientes-icone"
+                                    className="ambientes-icon"
                                     aria-label={`Ações de ${c.nome}`}
                                   >
                                     <MoreVertical size={16} />
@@ -940,7 +940,7 @@ export default function Ambientes() {
             )}
 
             {sel && (
-              <aside className="ambientes-coluna-direita">
+              <aside className="ambientes-col-dir">
                 <section className="ambientes-painel">
                   <h3>
                     <ClipboardList size={18} /> Informações do Ambiente
@@ -950,7 +950,7 @@ export default function Ambientes() {
                   <Info l="Bloco" v={sel.bloco} />
                   <Info l="Andar" v={andarLabel(sel.andar)} />
                   <Info l="Componentes" v={totalComponentesDoAmbiente} />
-                  <div className="ambientes-informacao">
+                  <div className="ambientes-info">
                     <small>Status</small>
                     <Status ativo={sel.ativo} />
                   </div>
@@ -1035,24 +1035,24 @@ function Select({
   const selectedLabel = opts.find(([v]) => v === value)?.[1] ?? "Selecione";
 
   return (
-    <div className={`selecao-personalizada ${className}`.trim()} ref={ref}>
-      <span className="selecao-personalizada__rotulo">{label}</span>
+    <div className={`custom-select ${className}`.trim()} ref={ref}>
+      <span className="custom-select__label">{label}</span>
 
-      <div className="selecao-personalizada__campo">
+      <div className="custom-select__field">
         <button
           type="button"
-          className={`selecao-personalizada__acionador ${open ? "esta-aberto" : ""}`}
+          className={`custom-select__trigger ${open ? "is-open" : ""}`}
           aria-haspopup="listbox"
           aria-expanded={open}
           onClick={() => setOpen((o) => !o)}
         >
           <span>{selectedLabel}</span>
-          <span className="selecao-personalizada__seta">▾</span>
+          <span className="custom-select__caret">▾</span>
         </button>
 
         {open && (
           <div
-            className="selecao-personalizada__menu"
+            className="custom-select__menu"
             role="listbox"
             aria-label={label}
           >
@@ -1062,7 +1062,7 @@ function Select({
                 type="button"
                 role="option"
                 aria-selected={value === v}
-                className={`selecao-personalizada__opcao ${value === v ? "esta-selecionado" : ""}`}
+                className={`custom-select__option ${value === v ? "is-selected" : ""}`}
                 onClick={() => {
                   onChange({ target: { value: v } });
                   setOpen(false);
@@ -1082,7 +1082,7 @@ function Thumb({ tipo, size = 72 }) {
   const { cor, Icon } = tipoConfig(tipo);
   return (
     <div
-      className="ambientes-miniatura"
+      className="ambientes-thumb"
       style={{
         width: size,
         height: size * 0.85,
@@ -1098,7 +1098,7 @@ function Thumb({ tipo, size = 72 }) {
 // Exibe uma etiqueta visual para o tipo do ambiente.
 const Tag = ({ tipo }) => (
   <span
-    className="ambientes-etiqueta"
+    className="ambientes-tag"
     style={{
       background: tipoConfig(tipo).cor + "33",
       color: tipoConfig(tipo).cor,
@@ -1119,7 +1119,7 @@ function tipoConfig(tipo = "") {
 }
 // Mostra o estado ativo ou inativo do ambiente.
 const Status = ({ ativo }) => (
-  <span className={`ambientes-etiqueta ${ativo ? "ok" : "erro-sol"}`}>
+  <span className={`ambientes-pill ${ativo ? "ok" : "err-sol"}`}>
     {ativo ? "Ativo" : "Inativo"}
   </span>
 );
@@ -1140,7 +1140,7 @@ function formatarDataAmbiente(valor) {
 
 // Apresenta um rótulo e seu valor como um item informativo.
 const Info = ({ l, v }) => (
-  <div className="ambientes-informacao">
+  <div className="ambientes-info">
     <small>{l}</small>
     <span>{v}</span>
   </div>
@@ -1149,15 +1149,15 @@ const Info = ({ l, v }) => (
 // Apresenta um indicador resumido com ícone, valor e legenda.
 function Kpi({ Icon, cor, n, label }) {
   return (
-    <div className="ambientes-indicador-chave">
+    <div className="ambientes-kpi">
       <span
-        className="ambientes-indicador-chave-icone"
+        className="ambientes-kpi-ico"
         style={{ background: cor + "26", color: cor }}
       >
         <Icon size={20} />
       </span>
       <b>{n}</b>
-      <small className="selecao-personalizada__rotulo">{label}</small>
+      <small className="custom-select__label">{label}</small>
     </div>
   );
 }
@@ -1166,7 +1166,7 @@ function Kpi({ Icon, cor, n, label }) {
 function CardAmbiente({ a, qtd, onOpen, compacto, ativo }) {
   return (
     <article
-      className={`cartao ambientes-cartao ${compacto ? "compacto" : ""} ${ativo ? "ativo" : ""}`}
+      className={`card ambientes-card ${compacto ? "compacto" : ""} ${ativo ? "ativo" : ""}`}
       tabIndex={0}
       role="button"
       aria-label={`Abrir ${a.nome}`}
@@ -1175,9 +1175,9 @@ function CardAmbiente({ a, qtd, onOpen, compacto, ativo }) {
         (e.key === "Enter" || e.key === " ") && (e.preventDefault(), onOpen())
       }
     >
-      <div className="ambientes-cartao-topo">
+      <div className="ambientes-card-topo">
         <Thumb tipo={a.tipo} size={compacto ? 72 : 76} />
-        <div className="ambientes-cartao-informacao">
+        <div className="ambientes-card-info">
           <h3>{a.nome}</h3>
           <div className="ambientes-tags">
             <Tag tipo={a.tipo} />
@@ -1189,13 +1189,13 @@ function CardAmbiente({ a, qtd, onOpen, compacto, ativo }) {
         </div>
         <MoreVertical size={16} className="ambientes-mais" />
       </div>
-      <div className="ambientes-cartao-meta">
+      <div className="ambientes-card-meta">
         <span>
           <Monitor size={15} /> {qtd} {qtd === 1 ? "componente" : "componentes"}
         </span>
       </div>
       {!compacto && (
-        <div className="ambientes-cartao-meta fino">
+        <div className="ambientes-card-meta fino">
           <span>
             <Calendar size={14} /> Criado em {formatarDataAmbiente(a.criado)}
           </span>
@@ -1235,8 +1235,8 @@ function Modal({ titulo, onClose, children }) {
   }, []);
 
   return (
-    <div className="ambientes-janela-fundo" onClick={onClose}>
-      <div className="ambientes-janela" onClick={(e) => e.stopPropagation()}>
+    <div className="ambientes-modal-fundo" onClick={onClose}>
+      <div className="ambientes-modal" onClick={(e) => e.stopPropagation()}>
         <h3>{titulo}</h3>
         {children}
       </div>
@@ -1247,17 +1247,17 @@ function Modal({ titulo, onClose, children }) {
 // Agrupa os botões de cancelar e confirmar dos formulários.
 function Acoes({ onCancel, salvar, ok }) {
   return (
-    <div className="ambientes-janela-acoes">
+    <div className="ambientes-modal-acoes">
       <button
         type="button"
-        className="botao botao--vazado ambientes-botao-sec"
+        className="btn btn--ghost ambientes-btn-sec"
         onClick={onCancel}
       >
         Cancelar
       </button>
       <button
         type="submit"
-        className="botao botao--principal ambientes-botao"
+        className="btn btn--primary ambientes-btn"
         disabled={!ok}
       >
         {salvar}

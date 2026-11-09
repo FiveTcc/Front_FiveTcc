@@ -102,7 +102,7 @@ function getInitialTheme() {
 
 // Aplica a classe visual correspondente ao estado da rota.
 function getNavLinkClassName({ isActive }) {
-  return `barra-lateral__ligacao${isActive ? " esta-ativo" : ""}`;
+  return `sidebar__link${isActive ? " is-active" : ""}`;
 }
 
 // Renderiza a navegação, os dados do usuário e os controles do menu lateral.
@@ -158,7 +158,7 @@ export default function Sidebar() {
     <>
       <button
         type="button"
-        className={`barra-lateral-alternancia${menuAberto ? " esta-aberto" : ""}`}
+        className={`sidebar-toggle${menuAberto ? " is-open" : ""}`}
         onClick={() => setMenuAberto((aberto) => !aberto)}
         aria-label={menuAberto ? "Esconder menu" : "Mostrar menu"}
         aria-expanded={menuAberto}
@@ -168,16 +168,16 @@ export default function Sidebar() {
         <span />
       </button>
 
-    <aside className={`barra-lateral${menuAberto ? " barra-lateral--aberto" : ""}`}>
-      <div className="barra-lateral__marca">
-        <img src={logoNOS} alt="Logo N.O.S." className="barra-lateral__marca-logotipo" />
+    <aside className={`sidebar${menuAberto ? " sidebar--open" : ""}`}>
+      <div className="sidebar__brand">
+        <img src={logoNOS} alt="Logo N.O.S." className="sidebar__brand-logo" />
         <div>
           <strong>N.O.S.</strong>
           <small>New Occurrence System</small>
         </div>
       </div>
 
-      <nav className="barra-lateral__navegacao">
+      <nav className="sidebar__nav">
         <NavLink to="/painel" className={getNavLinkClassName}>
           {ICONS.painel}
           DashBoard
@@ -211,13 +211,13 @@ export default function Sidebar() {
         </NavLink>
       </nav>
 
-      <div className="barra-lateral__rodape">
-        <div className="barra-lateral__usuario">
+      <div className="sidebar__footer">
+        <div className="sidebar__user">
           {FotoPerfil ? (
             <img
               src={FotoPerfil}
               alt="Foto de perfil"
-              className="barra-lateral__avatar"
+              className="sidebar__avatar"
             />
           ) : (
             <span className="avatar">
@@ -235,8 +235,8 @@ export default function Sidebar() {
           </div>
         </div>
 
-        <div className="barra-lateral__acoes">
-          <button className="botao botao--vazado botao--pequeno" onClick={logout}>
+        <div className="sidebar__actions">
+          <button className="btn btn--ghost btn--sm" onClick={logout}>
             Sair
           </button>
         </div>
