@@ -38,13 +38,39 @@ export function AuthProvider({ children }) {
         data?.data?.refresh_token ??
         null;
 
-      const usuarioLogado =
+      const usuarioResposta =
         data?.usuario ??
         data?.user ??
         data?.userData ??
-        data?.data?.usuario ??
-        data?.data?.user ??
-        { email };
+        null;
+
+      // Lê os dados do payload do JWT
+      let dadosToken = {};
+
+      if (accessToken) {
+        try {
+          const payload = accessToken.split(".")[1];
+          const payloadBase64 = payload
+            .replace(/-/g, "+")
+            .replace(/_/g, "/");
+
+          dadosToken = JSON.parse(atob(payloadBase64));
+        } catch (error) {
+          console.error("Erro ao interpretar token:", error);
+        }
+      }
+
+      const usuarioLogado = {
+        ...dadosToken,
+        ...(usuarioResposta ?? {}),
+        email: usuarioResposta?.email ?? dadosToken.email ?? email,
+        id_user: usuarioResposta?.id_user ?? dadosToken.sub,
+        role: usuarioResposta?.role ?? dadosToken.role,
+        user_tipo:
+          usuarioResposta?.user_tipo ??
+          usuarioResposta?.role ??
+          dadosToken.role,
+      };
 
       if (accessToken || refreshToken || usuarioLogado) {
         authStorage.salvar(
@@ -90,14 +116,29 @@ export function AuthProvider({ children }) {
       setUsuario(null);
     }
   }
-
   useEffect(() => {
     try {
       const token = authStorage.getAccessToken();
       const usuarioSalvo = authStorage.getUsuario();
 
       if (token && usuarioSalvo) {
-        setUsuario(usuarioSalvo);
+        const payload = token.split(".")[1];
+        const dadosToken = JSON.parse(
+          atob(payload.replace(/-/g, "+").replace(/_/g, "/"))
+        );
+
+        const usuarioAtualizado = {
+          ...dadosToken,
+          ...usuarioSalvo,
+          id_user: usuarioSalvo.id_user ?? dadosToken.sub,
+          role: usuarioSalvo.role ?? dadosToken.role,
+          user_tipo:
+            usuarioSalvo.user_tipo ??
+            usuarioSalvo.role ??
+            dadosToken.role,
+        };
+
+        setUsuario(usuarioAtualizado);
       }
     } catch (error) {
       console.error("Erro ao carregar sessão:", error);

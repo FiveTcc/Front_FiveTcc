@@ -1128,44 +1128,52 @@ textarea {
   gap: 20px;
   padding-top: 0px;
 }
+
+
+/* ---------- Relatórios ---------- */
+
 .page--reports {
+  display: flex;
+  flex-direction: column;
   gap: 20px;
+  width: 100%;
+  min-width: 0;
 }
+
 .page--narrow {
   width: min(100%, 1180px);
   max-width: 1180px;
   margin: 8px auto 0;
 }
 
+/* Indicadores à esquerda e conteúdo à direita */
 .report-container {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: 175px minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
   width: 100%;
+  min-width: 0;
 }
 
 .report-summary {
   display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
+  grid-template-columns: 1fr;
+  align-content: start;
   gap: 12px;
-  margin-left: auto;
-  width: 15%;
+  width: 100%;
+  margin: 0;
 }
 
 .report-summary__card {
-  background: linear-gradient(
-    135deg,
-    rgba(37, 99, 235, 0.09),
-    rgba(37, 99, 235, 0.02)
-  );
-  border: 1px solid var(--border);
-  border-color: rgba(37, 99, 235, 0.35);
-  border-radius: 16px;
-  padding: 18px 16px;
-  box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 18px 16px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.09), rgba(37, 99, 235, 0.02));
+  border: 1px solid rgba(37, 99, 235, 0.35);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
 }
 
 .report-summary__card span {
@@ -1182,18 +1190,86 @@ textarea {
 }
 
 .report-summary__card.is-featured {
-  background: linear-gradient(
-    135deg,
-    rgba(37, 99, 235, 0.09),
-    rgba(37, 99, 235, 0.02)
-  );
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.09), rgba(37, 99, 235, 0.02));
   border-color: rgba(37, 99, 235, 0.35);
 }
 
-.report-grid {
+/* Coluna direita: agrupamento, filtros e três cards */
+.report-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+}
+
+.report-content > .card {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Filtros */
+.report-filters {
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.report-filters__grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
+}
+
+.report-filters__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.report-filters__field span {
+  color: #c8d5e8;
+  font-size: 0.9rem;
+}
+
+.report-filters__field input,
+.report-filters__field select {
+  width: 100%;
+  min-height: 48px;
+  box-sizing: border-box;
+  padding: 0 14px;
+  color: #e8f0ff;
+  background: #1b2739;
+  border: 1px solid #344258;
+  border-radius: 16px;
+  outline: none;
+  font: inherit;
+}
+
+.report-filters__field input:focus,
+.report-filters__field select:focus {
+  border-color: #397ff0;
+  box-shadow: 0 0 0 3px rgba(57, 127, 240, 0.14);
+}
+
+.report-filters__field select option {
+  color: #e8f0ff;
+  background: #1b2739;
+}
+
+.report-filters__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+/* Exportação */
+.report-export__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .report-export {
@@ -1205,27 +1281,27 @@ textarea {
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  min-width: 180px;
+  z-index: 20;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 180px;
   padding: 8px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 14px;
   box-shadow: var(--shadow-card);
-  z-index: 20;
 }
 
 .report-export__menu button {
-  border: 0;
-  background: transparent;
-  border-radius: 10px;
   padding: 10px 12px;
-  text-align: left;
   color: var(--text);
-  cursor: pointer;
+  text-align: left;
   font: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 .report-export__menu button:hover {
@@ -1235,12 +1311,19 @@ textarea {
 .report-export__status {
   margin-left: auto;
   padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(34, 197, 94, 0.12);
   color: var(--text);
+  background: rgba(34, 197, 94, 0.12);
   border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 999px;
   font-size: 0.8rem;
   white-space: nowrap;
+}
+
+/* Listas e métricas */
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .report-list {
@@ -1251,8 +1334,8 @@ textarea {
 }
 
 .report-list h3 {
-  font-size: 0.93rem;
   margin-bottom: 4px;
+  font-size: 0.93rem;
 }
 
 .report-list--compact {
@@ -1265,9 +1348,9 @@ textarea {
   justify-content: space-between;
   gap: 12px;
   padding: 10px 12px;
+  background: var(--surface-2);
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: var(--surface-2);
 }
 
 .report-row span {
@@ -1300,21 +1383,113 @@ textarea {
   flex-direction: column;
   gap: 6px;
   padding: 18px 16px;
+  background: linear-gradient(135deg, rgba(22, 168, 112, 0.08), rgba(16, 24, 40, 0.01));
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: linear-gradient(
-    135deg,
-    rgba(22, 168, 112, 0.08),
-    rgba(16, 24, 40, 0.01)
-  );
 }
+
 .report-metric strong {
   font-size: 2rem;
   font-family: var(--font-display);
 }
+
 .report-metric span {
   color: var(--text-dim);
   font-size: 0.8rem;
+}
+
+/* Três cards de indicadores adicionais */
+.report-extra-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+.report-extra-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+}
+
+.report-extra-card__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 42px;
+  margin-bottom: 16px;
+}
+
+.report-extra-card__header h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.report-extra-card__icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  font-size: 19px;
+}
+
+.report-extra-card__icon--blue {
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.18);
+}
+
+.report-extra-card__icon--purple {
+  color: #a78bfa;
+  background: rgba(139, 92, 246, 0.18);
+}
+
+.report-extra-card__icon--green {
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.18);
+}
+
+.report-extra-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  margin-top: 8px;
+  padding: 12px;
+  color: var(--text-dim);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.report-extra-row span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.report-extra-row strong {
+  flex-shrink: 0;
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+
+/* Histórico de ocorrências */
+.card_historico {
+  width: 100%;
+  min-width: 0;
 }
 
 .report-history {
@@ -1326,12 +1501,12 @@ textarea {
 .report-history__item {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 0.9fr) auto;
-  gap: 12px;
   align-items: center;
+  gap: 12px;
   padding: 12px 14px;
+  background: var(--surface-2);
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: var(--surface-2);
 }
 
 .report-history__item > div {
@@ -1352,9 +1527,53 @@ textarea {
   font-size: 0.76rem;
 }
 
-@media (max-width: 960px) {
+/* Cabeçalho */
+.page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+  padding-top: 2px;
+}
+
+.page__header h1 {
+  margin-bottom: 4px;
+}
+
+.report-history__actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+/* Responsividade */
+@media (max-width: 1100px) {
+  .report-container {
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .report-filters__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .report-extra-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .report-container {
+    grid-template-columns: 1fr;
+  }
+
   .report-summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .report-extra-grid {
+    grid-template-columns: 1fr;
   }
 
   .report-grid,
@@ -1363,23 +1582,30 @@ textarea {
   }
 }
 
-@media (max-width: 640px) {
-  .report-summary {
+@media (max-width: 480px) {
+  .report-summary,
+  .report-filters__grid {
     grid-template-columns: 1fr;
+  }
+
+  .report-filters__actions {
+    flex-direction: column-reverse;
+  }
+
+  .report-filters__actions button {
+    width: 100%;
+  }
+
+  .page__header {
+    gap: 16px;
+  }
+
+  .report-export__actions {
+    width: 100%;
+    justify-content: space-between;
   }
 }
 
-.page__header {
-  display: flex;
-  align-items: flex;
-  justify-content: space-between;
-  gap: 40px;
-  flex-wrap: wrap;
-  padding-top: 2px;
-}
-.page__header h1 {
-  margin-bottom: 4px;
-}
 
 /* ---------- Stat cards ---------- */
 

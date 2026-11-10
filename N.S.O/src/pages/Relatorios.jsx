@@ -1,572 +1,288 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import {
   PRIORIDADE_LABEL,
   STATUS_LABEL,
   formatarData,
 } from "../services/utils";
+import relatorioService from "../services/relatorioService";
 
 const PERFIL_LABEL = {
   admin: "Administrador",
+  administrador: "Administrador",
   tecnico: "Técnico",
-  usuario: "Usuário",
 };
 
-const PERMISSOES = {
-  admin: [
-    "geral",
-    "periodo",
-    "ambiente",
-    "prioridade",
-    "status",
-    "tecnicos",
-    "tempo",
-    "usuarios",
-    "historico",
-    "exportar",
-  ],
-  tecnico: ["proprio", "pendentes", "andamento", "concluidos", "tempo"],
-  usuario: ["meus", "abertos", "status", "historico"],
-};
-
-
-function formatarHoras(valor) {
-  if (!Number.isFinite(valor) || valor <= 0) return "0h";
-  const horas = valor / 60 / 60 / 1000;
-  if (horas < 24) return `${horas.toFixed(1)}h`;
-  const dias = horas / 24;
-  return `${dias.toFixed(1)}d`;
+function rotuloStatus(status) {
+  return STATUS_LABEL?.[status] || status || "Não informado";
 }
 
-function calcularMediaHoras(chamados) {
-  const resolvidos = chamados.filter((chamado) =>
-    ["resolvido", "fechado"].includes(chamado.status),
-  );
-  if (!resolvidos.length) return 0;
+function rotuloPrioridade(prioridade) {
+  return PRIORIDADE_LABEL?.[prioridade] || prioridade || "Não informada";
+}
 
-  const totalHoras = resolvidos.reduce((acumulado, chamado) => {
-    const tempo =
-      Number(chamado.atualizadoEm || chamado.criadoEm) -
-      Number(chamado.criadoEm);
-    return acumulado + tempo;
-  }, 0);
+function formatarTempoMedio(horas) {
+  if (horas === null || horas === undefined || !Number.isFinite(Number(horas))) {
+    return "—";
+  }
 
-  return totalHoras / resolvidos.length;
+  const valor = Number(horas);
+  if (valor < 24) return `${valor.toFixed(1)}h`;
+  return `${(valor / 24).toFixed(1)}d`;
+}
+
+function dataOrdenacao(valor) {
+  if (!valor) return 0;
+  const timestamp = new Date(valor).getTime();
+  return Number.isFinite(timestamp) ? timestamp : 0;
 }
 
 export default function Relatorios() {
   const { usuario } = useAuth();
-  const perfil = usuario?.perfil || "usuario";
-  const acessos = PERMISSOES[perfil] || PERMISSOES.usuario;
-  const [menuExportarAberto, setMenuExportarAberto] = useState(false);
-  const [mensagemExportacao, setMensagemExportacao] = useState("");
-  const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
-  const notificacoesRef = useRef(null);
+  const perfil = usuario?.role || usuario?.perfil || usuario?.user_tipo || "tecnico";
+  const ehAdmin = ["admin", "administrador"].includes(perfil);
 
-  const notificacoes = [];
+  const [dadosRelatorio, setDadosRelatorio] = useState(null);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState("");
+  const [menuExportarAberto, setMenuExportarAberto] = useState(false);
+  const [exportando, setExportando] = useState(false);
+  const [mensagemExportacao, setMensagemExportacao] = useState("");
+  const [filtros, setFiltros] = useState({
+    data_inicial: "",
+    data_final: "",
+    status: "",
+    prioridade: "",
+    ambiente: "",
+    tecnico: "",
+  });
+  const [filtrosAplicados, setFiltrosAplicados] = useState({});
+  const [mostrarHistoricoCompleto, setMostrarHistoricoCompleto] =
+    useState(false);
 
   useEffect(() => {
-    function handleClickFora(event) {
-      if (
-        notificacoesRef.current &&
-        !notificacoesRef.current.contains(event.target)
-      ) {
-        setMostrarNotificacoes(false);
+    let ativo = true;
+
+    async function carregarRelatorios() {
+      try {
+        setCarregando(true);
+        setErro("");
+
+        const resposta = await relatorioService.gerarRelatorio();
+        if (ativo) setDadosRelatorio(resposta);
+      } catch (error) {
+        console.error("Erro ao carregar relatórios:", error);
+        if (ativo) setErro("Não foi possível carregar os relatórios.");
+      } finally {
+        if (ativo) setCarregando(false);
       }
     }
 
-    document.addEventListener("mousedown", handleClickFora);
-
+    carregarRelatorios();
     return () => {
-      document.removeEventListener("mousedown", handleClickFora);
+      ativo = false;
     };
   }, []);
 
-  const chamados = [];
-  const chamadosVisiveis = useMemo(() => {
-    if (perfil !== "usuario") return chamados;
-    return chamados.filter((chamado) => chamado.solicitanteId === usuario?.id);
-  }, [chamados, perfil, usuario?.id]);
-  const usuarios = [];
+  async function pesquisarComFiltros(event) {
+    event?.preventDefault();
 
-  const usuarioMap = useMemo(
-    () => Object.fromEntries(usuarios.map((item) => [item.id, item])),
-    [usuarios],
-  );
+    const filtrosAplicados = Object.fromEntries(
+      Object.entries(filtros).filter(([, valor]) => valor !== ""),
+    );
 
-  const chamadosPorPeriodo = useMemo(() => {
-    const agora = Date.now();
-    const intervalo = {
-      "7 dias": 7 * 24 * 60 * 60 * 1000,
-      "30 dias": 30 * 24 * 60 * 60 * 1000,
-      "90 dias": 90 * 24 * 60 * 60 * 1000,
-    };
+    try {
+      setCarregando(true);
+      setErro("");
+      const resposta = await relatorioService.gerarRelatorio(filtrosAplicados);
+      setFiltrosAplicados(filtrosAplicados);
+      setDadosRelatorio(resposta);
+    } catch (error) {
+      console.error("Erro ao aplicar filtros do relatório:", error);
+      setErro("Não foi possível pesquisar com os filtros informados.");
+    } finally {
+      setCarregando(false);
+    }
+  }
 
-    return Object.entries(intervalo).map(([label, valor]) => ({
-      label,
-      total: chamadosVisiveis.filter(
-        (chamado) => agora - Number(chamado.criadoEm) <= valor,
-      ).length,
-    }));
-  }, [chamadosVisiveis]);
+  async function limparFiltros() {
+    setFiltros({
+      data_inicial: "",
+      data_final: "",
+      status: "",
+      prioridade: "",
+      ambiente: "",
+      tecnico: "",
+    });
+    setFiltrosAplicados({});
 
-  const chamadosPorAmbiente = useMemo(
-    () =>
-      Object.entries(
-        chamadosVisiveis.reduce((acumulado, chamado) => {
-          const chave = chamado.categoria || "Outros";
-          acumulado[chave] = (acumulado[chave] || 0) + 1;
-          return acumulado;
-        }, {}),
-      ).map(([label, total]) => ({ label, total })),
-    [chamadosVisiveis],
-  );
+    try {
+      setCarregando(true);
+      setErro("");
+      const resposta = await relatorioService.gerarRelatorio();
+      setDadosRelatorio(resposta);
+    } catch (error) {
+      console.error("Erro ao limpar filtros do relatório:", error);
+      setErro("Não foi possível atualizar o relatório.");
+    } finally {
+      setCarregando(false);
+    }
+  }
 
-  const chamadosPorPrioridade = useMemo(
-    () =>
-      Object.entries(PRIORIDADE_LABEL).map(([valor, label]) => ({
-        label,
-        total: chamadosVisiveis.filter(
-          (chamado) => chamado.prioridade === valor,
-        ).length,
-      })),
-    [chamadosVisiveis],
-  );
-
-  const chamadosPorStatus = useMemo(
-    () =>
-      Object.entries(STATUS_LABEL).map(([valor, label]) => ({
-        label,
-        total: chamadosVisiveis.filter((chamado) => chamado.status === valor)
-          .length,
-      })),
-    [chamadosVisiveis],
-  );
-
-  const tecnicos = useMemo(() => {
-    return usuarios
-      .filter(
-        (usuarioAtual) =>
-          usuarioAtual.perfil === "tecnico" || usuarioAtual.perfil === "admin",
-      )
-      .map((usuarioAtual) => {
-        const atendidos = chamadosVisiveis.filter(
-          (chamado) => chamado.responsavelId === usuarioAtual.id,
-        );
-        const resolvidos = atendidos.filter((chamado) =>
-          ["resolvido", "fechado"].includes(chamado.status),
-        ).length;
-        const emAndamento = atendidos.filter(
-          (chamado) => chamado.status === "em_andamento",
-        ).length;
-
-        return {
-          nome: usuarioAtual.nome,
-          atendidos: atendidos.length,
-          resolvidos,
-          emAndamento,
-        };
-      })
-      .sort((a, b) => b.atendidos - a.atendidos);
-  }, [chamadosVisiveis, usuarios]);
-
-  const chamadosPorUsuario = useMemo(
-    () =>
-      usuarios
-        .map((usuarioAtual) => ({
-          nome: usuarioAtual.nome,
-          total: chamadosVisiveis.filter(
-            (chamado) => chamado.solicitanteId === usuarioAtual.id,
-          ).length,
-        }))
-        .filter((item) => item.total > 0)
-        .sort((a, b) => b.total - a.total),
-    [chamadosVisiveis, usuarios],
-  );
-
-  const mediaAtendimentoMs = calcularMediaHoras(chamadosVisiveis);
-
-  const historico = useMemo(
-    () =>
-      [...chamadosVisiveis]
-        .sort(
-          (a, b) =>
-            Number(b.atualizadoEm || b.criadoEm) -
-            Number(a.atualizadoEm || a.criadoEm),
-        )
-        .slice(0, 8),
-    [chamadosVisiveis],
-  );
-
-  const meusChamados = useMemo(
-    () =>
-      chamadosVisiveis.filter(
-        (chamado) =>
-          chamado.solicitanteId === usuario?.id ||
-          chamado.responsavelId === usuario?.id,
-      ),
-    [chamadosVisiveis, usuario?.id],
-  );
-
-  const meusChamadosData = meusChamados.length
-    ? meusChamados
-        .slice()
-        .sort(
-          (a, b) =>
-            Number(b.atualizadoEm || b.criadoEm) -
-            Number(a.atualizadoEm || a.criadoEm),
-        )
-    : [];
-
-  const meusChamadosResumo = {
-    abertos: meusChamadosData.filter((chamado) =>
-      ["aberto", "aguardando"].includes(chamado.status),
-    ).length,
-    andamento: meusChamadosData.filter(
-      (chamado) => chamado.status === "em_andamento",
-    ).length,
-    concluido: meusChamadosData.filter((chamado) =>
-      ["resolvido", "fechado"].includes(chamado.status),
-    ).length,
+  // A API já entrega as ocorrências filtradas conforme o perfil autenticado.
+  const linhas = dadosRelatorio?.linhas || [];
+  const resumo = dadosRelatorio?.resumo || {
+    total: 0,
+    abertas: 0,
+    emAndamento: 0,
+    concluidas: 0,
+    canceladas: 0,
+    tempoMedioHoras: null,
   };
 
-  const tempoMedioUsuario = calcularMediaHoras(meusChamadosData);
+  const opcoesFiltros = dadosRelatorio?.opcoesFiltros || {
+    ambientes: [],
+    tecnicos: [],
+  };
 
-  function gerarHtmlRelatorio() {
-    const resumo = [
-      ["Total", chamadosVisiveis.length],
-      [
-        "Abertos",
-        chamadosVisiveis.filter((item) =>
-          ["aberto", "em_andamento", "aguardando"].includes(item.status),
-        ).length,
-      ],
-      [
-        "Resolvidos",
-        chamadosVisiveis.filter((item) =>
-          ["resolvido", "fechado"].includes(item.status),
-        ).length,
-      ],
-      ["Tempo médio", formatarHoras(mediaAtendimentoMs)],
-    ];
+  // =========================================================
+// DADOS PREPARADOS PARA OS INDICADORES
+// =========================================================
 
-    const renderLista = (titulo, itens) => {
-      if (!itens.length) return "";
-      return `
-        <section class="rel-html__group">
-          <h3>${titulo}</h3>
-          <div class="rel-html__list">
-            ${itens
-              .map(
-                (item) => `
-                  <div class="rel-html__row">
-                    <span>${item.label}</span>
-                    <strong>${item.total}</strong>
-                  </div>
-                `,
-              )
-              .join("")}
-          </div>
-        </section>
-      `;
-    };
+// Padroniza os dados recebidos da API.
+const chamadosVisiveis = useMemo(() => {
+  return linhas.map((linha) => ({
+    id: linha.id,
+    categoria: linha.ambiente || "Não informado",
+    componente: linha.componente || "Não informado",
+    responsavelNome: linha.tecnico_responsavel || "Não atribuído",
+  }));
+}, [linhas]);
 
-    return `
-      <!DOCTYPE html>
-      <html lang="pt-BR">
-        <head>
-          <meta charset="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>Relatório ${PERFIL_LABEL[perfil] || "Usuário"}</title>
-          <style>
-            :root {
-              --bg: #f4f7fb;
-              --surface: #ffffff;
-              --surface-2: #edf3ff;
-              --text: #152033;
-              --muted: #5e6a82;
-              --border: #dfe7f2;
-              --primary: #3b82f6;
-              --shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
-            }
-            * { box-sizing: border-box; }
-            body {
-              margin: 0;
-              background: var(--bg);
-              color: var(--text);
-              font-family: Arial, Helvetica, sans-serif;
-              padding: 32px;
-            }
-            .rel-html { max-width: 1100px; margin: 0 auto; }
-            .rel-html__header {
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              gap: 16px;
-              margin-bottom: 24px;
-            }
-            .rel-html__header h1 {
-              margin: 0 0 8px;
-              font-size: 2rem;
-            }
-            .rel-html__header p {
-              margin: 0;
-              color: var(--muted);
-            }
-            .rel-html__summary {
-              display: grid;
-              grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-              gap: 16px;
-              margin-bottom: 24px;
-            }
-            .rel-html__card {
-              background: var(--surface);
-              border: 1px solid var(--border);
-              border-radius: 18px;
-              box-shadow: var(--shadow);
-              padding: 18px 20px;
-            }
-            .rel-html__card span {
-              display: block;
-              color: var(--muted);
-              font-size: 0.8rem;
-              margin-bottom: 8px;
-            }
-            .rel-html__card strong {
-              font-size: 1.8rem;
-            }
-            .rel-html__grid {
-              display: grid;
-              grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-              gap: 20px;
-              margin-bottom: 20px;
-            }
-            .rel-html__group {
-              background: var(--surface);
-              border: 1px solid var(--border);
-              border-radius: 18px;
-              box-shadow: var(--shadow);
-              padding: 20px;
-            }
-            .rel-html__group h3 {
-              margin: 0 0 16px;
-              font-size: 1.1rem;
-            }
-            .rel-html__list {
-              display: flex;
-              flex-direction: column;
-              gap: 10px;
-            }
-            .rel-html__row {
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              gap: 12px;
-              padding: 10px 12px;
-              border-radius: 10px;
-              background: var(--surface-2);
-            }
-            .rel-html__row small {
-              color: var(--muted);
-            }
-            .rel-html__status {
-              display: inline-block;
-              padding: 4px 10px;
-              border-radius: 999px;
-              background: rgba(59,130,246,0.12);
-              color: var(--primary);
-              font-weight: 700;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="rel-html">
-            <header class="rel-html__header">
-              <div>
-                <h1>${PERFIL_LABEL[perfil] || "Usuário"}</h1>
-                <p>Visão consolidada dos chamados por perfil de acesso.</p>
-              </div>
-            </header>
+// Agrupa as ocorrências por técnico responsável.
+
+const tecnicos = useMemo(() => {
+  const agrupados = {};
+
+  chamadosVisiveis.forEach((chamado) => {
+    const responsaveis = chamado.responsavelNome
+      .split(",")
+      .map((nome) => nome.trim())
+      .filter(
+        (nome) => nome && nome !== "Não atribuído"
+      );
+
+    responsaveis.forEach((nome) => {
+      agrupados[nome] = (agrupados[nome] || 0) + 1;
+    });
+  });
+
+  return Object.entries(agrupados)
+    .map(([nome, atendidos]) => ({
+      nome,
+      atendidos,
+    }))
+    .sort((a, b) => b.atendidos - a.atendidos);
+}, [chamadosVisiveis]);
 
 
-            <section class="rel-html__summary">
-              ${resumo
-                .map(
-                  ([label, valor]) => `
-                    <div class="rel-html__card">
-                      <span>${label}</span>
-                      <strong>${valor}</strong>
-                    </div>
-                  `,
-                )
-                .join("")}
-            </section>
+  // Ocorrências agrupadas por ambiente.
+  const ocorrenciasPorAmbiente = useMemo(() => {
+    const agrupados = {};
 
-            <section class="rel-html__grid">
-              ${renderLista("Status", chamadosPorStatus)}
-              ${renderLista("Prioridade", chamadosPorPrioridade)}
-            </section>
+    chamadosVisiveis.forEach((chamado) => {
+      const nome = chamado.categoria || "Não informado";
+      agrupados[nome] = (agrupados[nome] || 0) + 1;
+    });
 
-            ${acessos.includes("periodo") ? renderLista("Ocorrências por período", chamadosPorPeriodo) : ""}
-            ${acessos.includes("ambiente") ? renderLista("Ocorrências por ambiente", chamadosPorAmbiente) : ""}
-            ${
-              acessos.includes("usuarios")
-                ? renderLista(
-                    "Usuários",
-                    chamadosPorUsuario.map((item) => ({
-                      label: item.nome,
-                      total: item.total,
-                    })),
-                  )
-                : ""
-            }
-            ${
-              acessos.includes("historico")
-                ? `
-              <section class="rel-html__group">
-                <h3>Histórico</h3>
-                <div class="rel-html__list">
-                  ${historico
-                    .map((chamado) => {
-                      const solicitante = usuarioMap[chamado.solicitanteId];
-                      const responsavel = usuarioMap[chamado.responsavelId];
-                      return `
-                        <div class="rel-html__row">
-                          <div>
-                            <strong>${chamado.numero}</strong><br />
-                            <small>${chamado.titulo}</small>
-                          </div>
-                          <div>
-                            <span class="rel-html__status">${STATUS_LABEL[chamado.status] || chamado.status}</span>
-                          </div>
-                        </div>
-                      `;
-                    })
-                    .join("")}
-                </div>
-              </section>
-            `
-                : ""
-            }
-          </div>
-        </body>
-      </html>
-    `;
+    return Object.entries(agrupados)
+      .map(([nome, total]) => ({ nome, total }))
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 5);
+  }, [chamadosVisiveis]);
+
+  // Componentes que apresentam mais ocorrências.
+  const componentesComFalha = useMemo(() => {
+    const agrupados = {};
+
+    chamadosVisiveis.forEach((chamado) => {
+      const nome = chamado.componente || "Não informado";
+      agrupados[nome] = (agrupados[nome] || 0) + 1;
+    });
+
+    return Object.entries(agrupados)
+      .map(([nome, total]) => ({ nome, total }))
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 5);
+  }, [chamadosVisiveis]);
+
+  // Técnicos com maior quantidade de ocorrências atribuídas.
+  const tecnicosComMaisOcorrencias = useMemo(() => {
+    return tecnicos.slice(0, 5).map((tecnico) => ({
+      nome: tecnico.nome,
+      total: tecnico.atendidos,
+    }));
+  }, [tecnicos]);
+
+  // O frontend não reaplica regras de acesso nem filtra ocorrências por usuário.
+  // Apenas prepara os registros recebidos para apresentação.
+  const historico = useMemo(
+    () =>
+      [...linhas].sort(
+        (a, b) =>
+          dataOrdenacao(b.encerrado_em || b.criado_em) -
+          dataOrdenacao(a.encerrado_em || a.criado_em),
+      ),
+    [linhas],
+  );
+
+  const historicoExibido = mostrarHistoricoCompleto
+    ? historico
+    : historico.slice(0, 5);
+
+  const chamadosPorPrioridade = useMemo(() => {
+    const totais = new Map();
+
+    linhas.forEach((linha) => {
+      const prioridade = linha.prioridade || "Não informada";
+      totais.set(prioridade, (totais.get(prioridade) || 0) + 1);
+    });
+
+    return Array.from(totais, ([valor, total]) => ({
+      label: rotuloPrioridade(valor),
+      total,
+    })).sort((a, b) => b.total - a.total);
+  }, [linhas]);
+
+  const agrupamento = dadosRelatorio?.agrupamento;
+
+  async function exportarRelatorio(formato) {
+    try {
+      setExportando(true);
+      setMensagemExportacao("");
+
+      // O backend aplica novamente as restrições do usuário autenticado.
+      await relatorioService.exportarRelatorio(filtrosAplicados, formato);
+      setMensagemExportacao("Relatório exportado com sucesso!");
+      setMenuExportarAberto(false);
+    } catch (error) {
+      console.error("Erro ao exportar relatório:", error);
+      setMensagemExportacao("Erro ao exportar relatório.");
+    } finally {
+      setExportando(false);
+      window.setTimeout(() => setMensagemExportacao(""), 3000);
+    }
   }
 
-  function exportarRelatorio(tipo = "csv") {
-    const dadosExportacao = {
-      perfil,
-      geradoEm: new Date().toISOString(),
-      resumo: {
-        total: chamadosVisiveis.length,
-        abertos: chamadosVisiveis.filter((item) =>
-          ["aberto", "em_andamento", "aguardando"].includes(item.status),
-        ).length,
-        resolvidos: chamadosVisiveis.filter((item) =>
-          ["resolvido", "fechado"].includes(item.status),
-        ).length,
-      },
-      periodo: acessos.includes("periodo") ? chamadosPorPeriodo : [],
-      ambiente: acessos.includes("ambiente") ? chamadosPorAmbiente : [],
-      prioridade: acessos.includes("prioridade") ? chamadosPorPrioridade : [],
-      status: acessos.includes("status") ? chamadosPorStatus : [],
-      tecnicos: acessos.includes("tecnicos") ? tecnicos : [],
-      usuarios: acessos.includes("usuarios") ? chamadosPorUsuario : [],
-      historico: acessos.includes("historico") ? historico : [],
-    };
-
-    const baixar = (conteudo, nomeArquivo, mimeType) => {
-      const blob = new Blob([conteudo], { type: mimeType });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = nomeArquivo;
-      link.rel = "noopener";
-      link.style.display = "none";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setMensagemExportacao(`Arquivo exportado: ${nomeArquivo}`);
-      window.setTimeout(() => setMensagemExportacao(""), 2500);
-      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    };
-
-    if (tipo === "json") {
-      baixar(
-        JSON.stringify(dadosExportacao, null, 2),
-        `relatorio-${perfil}.json`,
-        "application/json;charset=utf-8;",
-      );
-      return;
-    }
-
-    if (["word", "ppt", "pdf", "html"].includes(tipo)) {
-      baixar(
-        gerarHtmlRelatorio(),
-        `relatorio-${perfil}.html`,
-        "text/html;charset=utf-8;",
-      );
-      return;
-    }
-
-    const linhas = [];
-    const cabecalho = ["Categoria", "Descrição"];
-    linhas.push(cabecalho.join(","));
-
-    if (acessos.includes("geral")) {
-      linhas.push(
-        ["Total de chamados", dadosExportacao.resumo.total].join(","),
-      );
-      linhas.push(["Abertos", dadosExportacao.resumo.abertos].join(","));
-      linhas.push(["Resolvidos", dadosExportacao.resumo.resolvidos].join(","));
-    }
-
-    if (acessos.includes("periodo")) {
-      dadosExportacao.periodo.forEach((item) =>
-        linhas.push(["Período", `${item.label}: ${item.total}`].join(",")),
-      );
-    }
-
-    if (acessos.includes("ambiente")) {
-      dadosExportacao.ambiente.forEach((item) =>
-        linhas.push(["Ambiente", `${item.label}: ${item.total}`].join(",")),
-      );
-    }
-
-    if (acessos.includes("prioridade")) {
-      dadosExportacao.prioridade.forEach((item) =>
-        linhas.push(["Prioridade", `${item.label}: ${item.total}`].join(",")),
-      );
-    }
-
-    if (acessos.includes("status")) {
-      dadosExportacao.status.forEach((item) =>
-        linhas.push(["Status", `${item.label}: ${item.total}`].join(",")),
-      );
-    }
-
-    const csv = linhas.join("\n");
-    baixar(csv, `relatorio-${perfil}.csv`, "text/csv;charset=utf-8;");
-  }
-
-  const metricasBase = [
-    { label: "Total", valor: chamadosVisiveis.length, destaque: true },
+  const metricas = [
+    { label: "Total de ocorrências", valor: resumo.total ?? 0, destaque: true },
+    { label: "Abertas", valor: resumo.abertas ?? 0 },
+    { label: "Em andamento", valor: resumo.emAndamento ?? 0 },
+    { label: "Concluídas", valor: resumo.concluidas ?? 0 },
+    { label: "Canceladas", valor: resumo.canceladas ?? 0 },
     {
-      label: "Abertos",
-      valor: chamadosVisiveis.filter((item) =>
-        ["aberto", "em_andamento", "aguardando"].includes(item.status),
-      ).length,
-    },
-    {
-      label: "Resolvidos",
-      valor: chamadosVisiveis.filter((item) =>
-        ["resolvido", "fechado"].includes(item.status),
-      ).length,
-    },
-    {
-      label: "Tempo médio dos chamados",
-      valor: formatarHoras(mediaAtendimentoMs),
+      label: "Tempo médio de atendimento",
+      valor: formatarTempoMedio(resumo.tempoMedioHoras),
     },
   ];
 
@@ -574,344 +290,308 @@ export default function Relatorios() {
     <div className="page page--reports">
       <header className="page__header">
         <div>
-          {/* <span className="eyebrow">Relatórios</span> */}
-          <h1>{PERFIL_LABEL[perfil] || "Usuário"}</h1>
+          <h1>{PERFIL_LABEL[perfil] || "Relatórios"}</h1>
           <p className="muted">
-            Visão consolidada dos chamados por perfil de acesso.
+            {ehAdmin
+              ? "Visão consolidada das ocorrências do sistema."
+              : "Visão das ocorrências disponibilizadas para seu perfil."}
           </p>
         </div>
 
-        {mensagemExportacao && (
-          <div className="report-export__status">{mensagemExportacao}</div>
-        )}
+        <div className="report-export__actions">
+          {mensagemExportacao && (
+            <div className="report-export__status" role="status">
+              {mensagemExportacao}
+            </div>
+          )}
 
-        <div className="topbar__actions">
-          <div className="topbar__notifications-wrap" ref={notificacoesRef}>
-            <button
-              type="button"
-              className="topbar__icon-button"
-              aria-label={
-                mostrarNotificacoes
-                  ? "Fechar notificações"
-                  : "Abrir notificações"
-              }
-              aria-expanded={mostrarNotificacoes}
-              onClick={() => setMostrarNotificacoes((valor) => !valor)}
-            >
-              🕭
-            </button>
-
-            {mostrarNotificacoes && (
-              <div
-                className="topbar__notifications"
-                role="menu"
-                aria-label="Notificações"
-              >
-                <div className="topbar__notifications-header">
-                  <strong>Notificações</strong>
-
-                  <span>{notificacoes.length}</span>
-                </div>
-
-                {notificacoes.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    className="topbar__notification-item"
-                    onClick={() => setMostrarNotificacoes(false)}
-                  >
-                    <span>{item.titulo}</span>
-                    <small>{item.tempo}</small>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {acessos.includes("exportar") && (
           <div className="report-export">
             <button
               type="button"
               className="btn btn--primary"
-              onClick={() => setMenuExportarAberto((ativo) => !ativo)}
+              disabled={exportando}
+              onClick={() => setMenuExportarAberto((aberto) => !aberto)}
             >
-              Exportar
+              {exportando ? "Exportando..." : "Exportar"}
             </button>
 
             {menuExportarAberto && (
               <div className="report-export__menu">
                 <button
                   type="button"
-                  onClick={() => {
-                    exportarRelatorio("Excel");
-                    setMenuExportarAberto(false);
-                  }}
+                  disabled={exportando}
+                  onClick={() => exportarRelatorio("xlsx")}
                 >
                   Excel
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
-                    exportarRelatorio("word");
-                    setMenuExportarAberto(false);
-                  }}
-                >
-                  Word
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    exportarRelatorio("pdf");
-                    setMenuExportarAberto(false);
-                  }}
+                  disabled={exportando}
+                  onClick={() => exportarRelatorio("pdf")}
                 >
                   PDF
                 </button>
               </div>
             )}
           </div>
-        )}
+        </div>
       </header>
-      <section className="report-container">
-        <section className="report-summary">
-          {metricasBase.map((item) => (
-            <div
-              key={item.label}
-              className={`report-summary__card ${item.destaque ? "is-featured" : ""}`}
-            >
-              <span>{item.label}</span>
-              <strong>{item.valor}</strong>
-            </div>
-          ))}
-        </section>
 
-        {acessos.includes("geral") && (
-          <div className="card">
-            <div className="card__header">
-              <h2>Relatório geral de ocorrências</h2>
-            </div>
+      {carregando && <p className="muted">Carregando relatórios...</p>}
+      {erro && <p className="muted" role="alert">{erro}</p>}
 
-            <div className="report-grid">
-              <div className="report-list">
-                <h3>Por status</h3>
-                {chamadosPorStatus.map((item) => (
-                  <div key={item.label} className="report-row">
-                    <span>{item.label}</span>
-                    <strong>{item.total}</strong>
-                  </div>
-                ))}
-              </div>
-
-              <div className="report-list">
-                <h3>Por prioridade</h3>
-                {chamadosPorPrioridade.map((item) => (
-                  <div key={item.label} className="report-row">
-                    <span>{item.label}</span>
-                    <strong>{item.total}</strong>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {acessos.includes("periodo") && (
-          <div className="card">
-            <div className="card__header">
-              <h2>Ocorrências por período</h2>
-            </div>
-            <div className="report-list report-list--compact">
-              {chamadosPorPeriodo.map((item) => (
-                <div key={item.label} className="report-row">
-                  <span>{item.label}</span>
-                  <strong>{item.total}</strong>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {acessos.includes("ambiente") && (
-          <div className="card">
-            <div className="card__header">
-              <h2>Ocorrências por ambiente</h2>
-            </div>
-            <div className="report-list report-list--compact">
-              {chamadosPorAmbiente.map((item) => (
-                <div key={item.label} className="report-row">
-                  <span>{item.label}</span>
-                  <strong>{item.total}</strong>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {acessos.includes("prioridade") && (
-          <div className="card">
-            <div className="card__header">
-              <h2>Ocorrências por prioridade</h2>
-            </div>
-            <div className="report-list report-list--compact">
-              {chamadosPorPrioridade.map((item) => (
-                <div key={item.label} className="report-row">
-                  <span>{item.label}</span>
-                  <strong>{item.total}</strong>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {acessos.includes("status") && (
-          <div className="card__relatorios">
-            <div className="card__header">
-              <h2>Ocorrências por status</h2>
-            </div>
-            <div className="report-list report-list--compact">
-              {chamadosPorStatus.map((item) => (
-                <div key={item.label} className="report-row">
-                  <span>{item.label}</span>
-                  <strong>{item.total}</strong>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {acessos.includes("tecnicos") && (
-          <div className="card">
-            <div className="card__header">
-              <h2>Desempenho dos técnicos</h2>
-            </div>
-            <div className="report-list report-list--compact">
-              {tecnicos.map((item) => (
-                <div key={item.nome} className="report-row">
-                  <span>{item.nome}</span>
-                  <strong>{item.atendidos} chamados</strong>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {acessos.includes("usuarios") && (
-          <div className="card">
-            <div className="card__header">
-              <h2>Usuários que abriram chamados</h2>
-            </div>
-            <div className="report-list report-list--compact">
-              {chamadosPorUsuario.map((item) => (
-                <div key={item.nome} className="report-row">
-                  <span>{item.nome}</span>
-                  <strong>{item.total}</strong>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {acessos.includes("proprio") && (
-          <div className="card">
-            <div className="card__header">
-              <h2>Seus chamados</h2>
-            </div>
-            <div className="report-grid">
-              <div className="report-list">
-                <h3>Resumo</h3>
-                <div className="report-row">
-                  <span>Pendentes</span>
-                  <strong>{meusChamadosResumo.abertos}</strong>
-                </div>
-                <div className="report-row">
-                  <span>Em andamento</span>
-                  <strong>{meusChamadosResumo.andamento}</strong>
-                </div>
-                <div className="report-row">
-                  <span>Concluídos</span>
-                  <strong>{meusChamadosResumo.concluido}</strong>
-                </div>
-              </div>
-              <div className="report-list">
-                <h3>Tempo médio</h3>
-                <div className="report-metric report-metric--compact">
-                  <strong>{formatarHoras(tempoMedioUsuario)}</strong>
-                  <span>média do seu atendimento</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* {acessos.includes("meus") && (
-        <div className="card">
-          <div className="card__header">
-            <h2>Meus chamados</h2>
-          </div>
-          <div className="report-list report-list--compact">
-            {meusChamadosData.length ? (
-              meusChamadosData.slice(0, 6).map((chamado) => (
+      {!carregando && !erro && (
+        <>
+          <section className="report-container">
+            <section className="report-summary">
+              {metricas.map((item) => (
                 <div
-                  key={chamado.id}
-                  className="report-row report-row--history"
+                  key={item.label}
+                  className={`report-summary__card ${item.destaque ? "is-featured" : ""}`}
                 >
-                  <div>
-                    <span>{chamado.numero}</span>
-                    <small>{chamado.titulo}</small>
-                  </div>
-                  <strong>
-                    {STATUS_LABEL[chamado.status] || chamado.status}
-                  </strong>
+                  <span>{item.label}</span>
+                  <strong>{item.valor}</strong>
                 </div>
-              ))
+              ))}
+            </section>
+
+            <div className="report-content">
+              {ehAdmin && agrupamento && (
+              <div className="card">
+                <div className="card__header">
+                  <h2>Ocorrências agrupadas</h2>
+                </div>
+                <div className="report-list">
+                  {agrupamento.map((item, indice) => {
+                    const nome =
+                      item.tecnico ||
+                      item.ambiente ||
+                      item.status ||
+                      item.prioridade ||
+                      item.data ||
+                      `Grupo ${indice + 1}`;
+                    return (
+                      <div key={`${nome}-${indice}`} className="report-row">
+                        <span>{rotuloStatus(nome)}</span>
+                        <strong>{Number(item.total) || 0}</strong>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            <section className="card report-filters">
+              <div className="card__header">
+                <div>
+                  <h2>Filtrar relatório</h2>
+                  <p className="muted">Refine os resultados pelos filtros disponíveis.</p>
+                </div>
+              </div>
+
+              <form onSubmit={pesquisarComFiltros}>
+                <div className="report-filters__grid">
+                  <label className="report-filters__field">
+                    <span>Data inicial</span>
+                    <input
+                      type="date"
+                      value={filtros.data_inicial}
+                      onChange={(event) => setFiltros((atual) => ({ ...atual, data_inicial: event.target.value }))}
+                    />
+                  </label>
+
+                  <label className="report-filters__field">
+                    <span>Data final</span>
+                    <input
+                      type="date"
+                      value={filtros.data_final}
+                      min={filtros.data_inicial || undefined}
+                      onChange={(event) => setFiltros((atual) => ({ ...atual, data_final: event.target.value }))}
+                    />
+                  </label>
+
+                  <label className="report-filters__field">
+                    <span>Status</span>
+                    <select
+                      value={filtros.status}
+                      onChange={(event) => setFiltros((atual) => ({ ...atual, status: event.target.value }))}
+                    >
+                      <option value="">Todos os status</option>
+                      <option value="aberta">Aberta</option>
+                      <option value="em andamento">Em andamento</option>
+                      <option value="concluida">Concluída</option>
+                      <option value="cancelada">Cancelada</option>
+                    </select>
+                  </label>
+
+                  <label className="report-filters__field">
+                    <span>Prioridade</span>
+                    <select
+                      value={filtros.prioridade}
+                      onChange={(event) => setFiltros((atual) => ({ ...atual, prioridade: event.target.value }))}
+                    >
+                      <option value="">Todas as prioridades</option>
+                      <option value="baixa">Baixa</option>
+                      <option value="media">Média</option>
+                      <option value="alta">Alta</option>
+                      <option value="critica">Crítica</option>
+                    </select>
+                  </label>
+
+                  <label className="report-filters__field">
+                    <span>Ambiente</span>
+                    <select
+                      value={filtros.ambiente}
+                      onChange={(event) => setFiltros((atual) => ({ ...atual, ambiente: event.target.value }))}
+                    >
+                      <option value="">Todos os ambientes</option>
+                      {opcoesFiltros.ambientes?.map((ambiente) => (
+                        <option key={ambiente.id} value={ambiente.id}>{ambiente.nome}</option>
+                      ))}
+                    </select>
+                  </label>
+
+                  {ehAdmin && (
+                    <label className="report-filters__field">
+                      <span>Técnico</span>
+                      <select
+                        value={filtros.tecnico}
+                        onChange={(event) => setFiltros((atual) => ({ ...atual, tecnico: event.target.value }))}
+                      >
+                        <option value="">Todos os técnicos</option>
+                        {opcoesFiltros.tecnicos?.map((tecnico) => (
+                          <option key={tecnico.id} value={tecnico.id}>{tecnico.nome}</option>
+                        ))}
+                      </select>
+                    </label>
+                  )}
+                </div>
+
+                <div className="report-filters__actions">
+                  <button type="button" className="btn btn--secondary" onClick={limparFiltros} disabled={carregando}>
+                    Limpar filtros
+                  </button>
+                  <button type="submit" className="btn btn--primary" disabled={carregando}>
+                    {carregando ? "Pesquisando..." : "Pesquisar"}
+                  </button>
+                </div>
+              </form>
+            </section>
+
+            {/* Indicadores adicionais dos relatórios */}
+            <section className="report-extra-grid">
+
+            {/* Ocorrências por ambiente */}
+            <div className="report-extra-card">
+              <div className="report-extra-card__header">
+                <span className="report-extra-card__icon report-extra-card__icon--blue">
+                  <i className="bi bi-building"></i>
+                </span>
+                <h3>Ambientes com mais ocorrências</h3>
+              </div>
+
+              {ocorrenciasPorAmbiente.map((item) => (
+                <div className="report-extra-row" key={item.nome}>
+                  <span>{item.nome}</span>
+                  <strong>{item.total}</strong>
+                </div>
+              ))}
+            </div>
+
+            {/* Componentes com mais falhas */}
+            <div className="report-extra-card">
+              <div className="report-extra-card__header">
+                <span className="report-extra-card__icon report-extra-card__icon--purple">
+                  <i className="bi bi-puzzle"></i>
+                </span>
+                <h3>Componentes com mais falhas</h3>
+              </div>
+
+              {componentesComFalha.map((item) => (
+                <div className="report-extra-row" key={item.nome}>
+                  <span>{item.nome}</span>
+                  <strong>{item.total}</strong>
+                </div>
+              ))}
+            </div>
+
+            {/* Técnicos com mais ocorrências */}
+            <div className="report-extra-card">
+              <div className="report-extra-card__header">
+                <span className="report-extra-card__icon report-extra-card__icon--green">
+                  <i className="bi bi-people"></i>
+                </span>
+                <h3>Técnicos com mais ocorrências</h3>
+              </div>
+
+              {tecnicosComMaisOcorrencias.map((item) => (
+                <div className="report-extra-row" key={item.nome}>
+                  <span>{item.nome}</span>
+                  <strong>{item.total}</strong>
+                </div>
+              ))}
+            </div>
+
+            </section>
+            </div>
+          </section>
+
+          <div className="card_historico">
+            <div className="card__header">
+              <h2>Histórico de ocorrências</h2>
+            </div>
+
+            {historicoExibido.length > 0 ? (
+              <>
+                <div className="report-history">
+                  {historicoExibido.map((linha) => (
+                    <div key={linha.id} className="report-history__item">
+                      <div>
+                        <strong>#{linha.id}</strong>
+                        <span>{linha.nome || "Sem descrição"}</span>
+                      </div>
+
+                      <div>
+                        <small>Solicitante: {linha.criado_por || "—"}</small>
+                        <small>
+                          Responsável:{" "}
+                          {linha.tecnico_responsavel || "Não atribuído"}
+                        </small>
+                      </div>
+
+                      <div>
+                        <small>{rotuloStatus(linha.status)}</small>
+                        <small>{linha.ambiente || "Sem ambiente"}</small>
+                      </div>
+
+                      <time>
+                        {linha.criado_em
+                          ? formatarData(dataOrdenacao(linha.criado_em))
+                          : "—"}
+                      </time>
+                    </div>
+                  ))}
+                </div>
+
+                {historico.length > 5 && (
+                  <div className="report-history__actions">
+                    <button
+                      type="button"
+                      className="btn btn--secondary"
+                      onClick={() =>
+                        setMostrarHistoricoCompleto((atual) => !atual)
+                      }
+                    >
+                      {mostrarHistoricoCompleto ? "Ver menos" : "Ver mais"}
+                    </button>
+                  </div>
+                )}
+              </>
             ) : (
-              <p className="muted">
-                Ainda não há chamados vinculados ao seu usuário.
-              </p>
+              <p className="muted">Nenhuma ocorrência encontrada.</p>
             )}
           </div>
-        </div>
-      )} */}
-
-      {acessos.includes("historico") && (
-        <div className="card_historico">
-          <div className="card__header">
-            <h2>Histórico completo</h2>
-          </div>
-          <div className="report-history">
-            {historico.map((chamado) => {
-              const solicitante = usuarioMap[chamado.solicitanteId];
-              const responsavel = usuarioMap[chamado.responsavelId];
-              return (
-                <div key={chamado.id} className="report-history__item">
-                  <div>
-                    <strong>{chamado.numero}</strong>
-                    <span>{chamado.titulo}</span>
-                  </div>
-                  <div>
-                    <small>Solicitante: {solicitante?.nome || "—"}</small>
-                    <small>
-                      Responsável: {responsavel?.nome || "Não atribuído"}
-                    </small>
-                  </div>
-                  <div>
-                    <small>
-                      {STATUS_LABEL[chamado.status] || chamado.status}
-                    </small>
-                    <small>{chamado.categoria}</small>
-                  </div>
-                  <time>
-                    {formatarData(
-                      Number(chamado.atualizadoEm || chamado.criadoEm),
-                    )}
-                  </time>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        </>
       )}
     </div>
   );
