@@ -5,54 +5,19 @@ import ambienteService from "../services/ambienteService";
 import componenteService from "../services/componeteService";
 import componenteTipoService from "../services/componenteTipoService";
 
-function listaDe(resposta, chaves = []) {
-  const candidatos = [
-    resposta,
-    resposta?.data,
-    resposta?.data?.data,
-    resposta?.resultado,
-    resposta?.result,
-    resposta?.payload,
-  ];
+function normalizarLista(resposta, chave = "ambientes") {
+  const dados = resposta?.data ?? resposta?.resultado ?? resposta?.result ?? resposta?.payload ?? resposta;
 
-  for (const candidato of candidatos) {
-    if (Array.isArray(candidato)) return candidato;
-
-    if (candidato && typeof candidato === "object") {
-      for (const chave of chaves) {
-        const valor = candidato[chave];
-        if (Array.isArray(valor)) return valor;
-        if (valor && typeof valor === "object") {
-          const nested = Array.isArray(valor.data)
-            ? valor.data
-            : Array.isArray(valor.result)
-              ? valor.result
-              : Array.isArray(valor.items)
-                ? valor.items
-                : Array.isArray(valor.ambientes)
-                  ? valor.ambientes
-                  : Array.isArray(valor.componente)
-                    ? valor.componente
-                    : Array.isArray(valor.componentes)
-                      ? valor.componentes
-                      : null;
-
-          if (nested) return nested;
-          return [valor];
-        }
-      }
-
-      const primeiroArray = Object.values(candidato).find((valor) => Array.isArray(valor));
-      if (primeiroArray) return primeiroArray;
-    }
-  }
+  if (Array.isArray(dados)) return dados;
+  if (dados && Array.isArray(dados[chave])) return dados[chave];
+  if (dados && Array.isArray(dados.ambiente)) return dados.ambiente;
 
   return [];
 }
 
 function textoOuPadrao(valor, padrao = "—") {
   if (valor === null || valor === undefined || valor === "") return padrao;
-  return String(valor);
+  return String(valor).trim();
 }
 
 function statusParaTexto(valor) {
@@ -62,119 +27,28 @@ function statusParaTexto(valor) {
 
 function normalizarAmbiente(item) {
   const ambiente = item?.ambiente || item || {};
-  const status = ambiente.amb_status ?? ambiente.status ?? ambiente.ativo ?? ambiente.amb_ativo ?? "ativo";
 
   return {
-    ...ambiente,
-    id: ambiente.id_amb ?? ambiente.amb_id ?? ambiente.id,
+    id: ambiente.id_amb ?? ambiente.id ?? ambiente.amb_id,
     nome: textoOuPadrao(ambiente.amb_nome ?? ambiente.nome, "Ambiente"),
     tipo: textoOuPadrao(ambiente.amb_tipo ?? ambiente.tipo, "Outro"),
     bloco: textoOuPadrao(ambiente.amb_bloco ?? ambiente.bloco, "—"),
     andar: Number(ambiente.amb_andar ?? ambiente.andar ?? 0),
-    descricao: textoOuPadrao(ambiente.amb_descricao ?? ambiente.descricao, "Nenhuma descrição informada."),
-    status: typeof status === "boolean" ? (status ? "ativo" : "inativo") : String(status).toLowerCase(),
+    descricao: textoOuPadrao(ambiente.amb_obs ?? ambiente.amb_descricao ?? ambiente.descricao, "Nenhuma descrição informada."),
+    status: textoOuPadrao(ambiente.amb_status ?? ambiente.status ?? "ativo").toLowerCase(),
   };
-}
-
-function pegarValorPorChaves(objeto, chaves) {
-  for (const chave of chaves) {
-    const valor = objeto?.[chave];
-    if (valor !== null && valor !== undefined && String(valor).trim() !== "") {
-      return valor;
-    }
-  }
-  return "";
-}
-
-function valorExibivel(valor) {
-  if (Array.isArray(valor)) {
-    const itens = valor
-      .map((item) => valorExibivel(item))
-      .filter((item) => item && String(item).trim() !== "");
-    return itens.join(", ");
-  }
-
-  if (valor && typeof valor === "object") {
-    const itens = Object.values(valor)
-      .map((item) => valorExibivel(item))
-      .filter((item) => item && String(item).trim() !== "");
-    return itens.join(", ");
-  }
-
-  if (valor === null || valor === undefined || valor === "") return "";
-  return String(valor).trim();
-}
-
-function pegarValorRecursivo(objeto, aliases) {
-  const aliasesLower = aliases.map((alias) => alias.toLowerCase().replace(/[^a-z0-9]/g, ""));
-  const fila = [objeto];
-
-  while (fila.length) {
-    const atual = fila.pop();
-    if (!atual || typeof atual !== "object") continue;
-
-    for (const [chave, valor] of Object.entries(atual)) {
-      const chaveLower = String(chave).toLowerCase().replace(/[^a-z0-9]/g, "");
-      const match = aliasesLower.some((alias) =>
-        chaveLower === alias ||
-        chaveLower.includes(alias) ||
-        alias.includes(chaveLower)
-      );
-
-      if (match) {
-        const resultado = valorExibivel(valor);
-        if (resultado) return resultado;
-      }
-
-      if (valor && typeof valor === "object") {
-        fila.push(valor);
-      }
-    }
-  }
-
-  return "";
 }
 
 function normalizarComponente(item) {
   const componente = item?.componente || item || {};
-  const tipo = componente.compo_tipo ?? componente.tipo ?? componente.componenteTipo ?? componente.compoTipo ?? {};
-  const tipoNome = componente.compo_tipo_nome ?? tipo.compo_tipo ?? tipo.nome ?? tipo.tipo ?? componente.tipo ?? "—";
-  const patrimonio = pegarValorRecursivo(componente, [
-    "compo_patrimonio",
-    "patrimonio",
-    "numero_patrimonio",
-    "pat",
-    "compo_observacao",
-    "observacao",
-    "obs",
-    "obser",
-    "compo_obs",
-    "descricao",
-  ]);
-  const observacao = pegarValorRecursivo(componente, [
-    "compo_obs",
-    "compo_observacao",
-    "observacao",
-    "obs",
-    "obser",
-    "obs_componente",
-    "descricao",
-    "compo_patrimonio",
-    "patrimonio",
-  ]);
-  const status = componente.compo_status ?? componente.status ?? componente.estado ?? componente.compoEstado ?? "—";
-  const numeroSerie = componente.compo_numero_serie ?? componente.numero_serie ?? componente.numeroSerie ?? "—";
 
   return {
-    ...componente,
-    id: componente.id_compo ?? componente.compo_id ?? componente.id_comp ?? componente.id,
-    nome: pegarValorPorChaves(componente, ["compo_nome", "nome", "nome_componente"]) || "Componente",
-    tipo: tipoNome,
-    patrimonio: patrimonio || "—",
-    observacao: observacao || "—",
-    numeroSerie,
-    status,
-    manutencao: componente.compo_ultima_manutencao ?? componente.ultima_manutencao ?? "—",
+    id: componente.id_comp ?? componente.id_compo ?? componente.id,
+    nome: textoOuPadrao(componente.compo_nome ?? componente.nome, "Componente"),
+    tipo: textoOuPadrao(componente.compo_tipo ?? componente.tipo, "Outro"),
+    observacao: textoOuPadrao(componente.compo_obs ?? componente.obs ?? componente.observacao, "—"),
+    patrimonio: textoOuPadrao(componente.compo_patrimonio ?? componente.patrimonio, "—"),
+    status: textoOuPadrao(componente.compo_status ?? componente.status, "—"),
   };
 }
 
@@ -187,7 +61,22 @@ export default function AmbientesDetalhe() {
   const [editando, setEditando] = useState(false);
   const [adicionando, setAdicionando] = useState(false);
   const [form, setForm] = useState({ nome: "", tipo: "", bloco: "", andar: 0, descricao: "", status: "ativo" });
-  const [novo, setNovo] = useState({ nome: "", tipoId: "", observacao: "" });
+  const TIPOS_COMPONENTE_PADRAO = [
+  "Computador",
+  "Notebook",
+  "Monitor",
+  "Impressora",
+  "Projetor",
+  "Teclado",
+  "Mouse",
+  "Roteador",
+  "Switch",
+  "Webcam",
+  "Scanner",
+  "Caixa de som",
+];
+
+const [novo, setNovo] = useState({ nome: "", tipoId: "", tipoTexto: "", observacao: "" });
   const [carregando, setCarregando] = useState(true);
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState("");
@@ -197,7 +86,7 @@ export default function AmbientesDetalhe() {
 
   async function carregarComponentes(nome) {
     const resposta = await componenteService.buscarPorAmbiente(nome);
-    const lista = listaDe(resposta, ["componentes", "componente", "data", "items"]);
+    const lista = normalizarLista(resposta, "componentes");
     const componentesBrutos = (Array.isArray(lista) ? lista : [lista])
       .filter(Boolean)
       .map((item) => item?.componente || item)
@@ -219,14 +108,14 @@ export default function AmbientesDetalhe() {
           componenteTipoService.listarComponenteTipo(),
         ]);
 
-        const listaAmbientes = listaDe(resAmbientes, ["ambientes", "ambiente", "data", "result", "items"]);
+        const listaAmbientes = normalizarLista(resAmbientes, "ambientes");
         let encontrado = listaAmbientes
           .map(normalizarAmbiente)
           .find((item) => String(item.id) === String(id));
 
         if (!encontrado) {
           const respostaDetalhe = await ambienteService.listarAmbienteId(id).catch(() => null);
-          const listaDetalhe = listaDe(respostaDetalhe, ["ambiente", "ambientes", "data", "result", "items"]);
+          const listaDetalhe = normalizarLista(respostaDetalhe, "ambientes");
           encontrado = listaDetalhe
             .map(normalizarAmbiente)
             .find((item) => String(item.id) === String(id));
@@ -238,12 +127,17 @@ export default function AmbientesDetalhe() {
 
         if (!encontrado) throw new Error("Ambiente não encontrado.");
 
-        const listaTipos = listaDe(resTipos, ["tipos", "componenteTipos", "componente_tipo", "data", "items"]);
+        const listaTipos = normalizarLista(resTipos, "tipos");
         if (!ativo) return;
         setAmbiente(encontrado);
         setForm({ nome: encontrado.nome, tipo: encontrado.tipo, bloco: encontrado.bloco === "—" ? "" : encontrado.bloco, andar: encontrado.andar, descricao: encontrado.descricao, status: String(encontrado.status).toLowerCase() === "inativo" ? "inativo" : "ativo" });
         setTipos(listaTipos);
-        setNovo((atual) => ({ ...atual, tipoId: listaTipos[0]?.id_compo_tipo ?? listaTipos[0]?.id ?? listaTipos[0]?.compo_tipo_id ?? "" }));
+        const primeiroTipo = listaTipos[0];
+        setNovo((atual) => ({
+          ...atual,
+          tipoId: primeiroTipo?.id_compo_tipo ?? primeiroTipo?.id ?? primeiroTipo?.compo_tipo_id ?? "",
+          tipoTexto: primeiroTipo?.compo_tipo ?? primeiroTipo?.nome ?? "",
+        }));
         await carregarComponentes(encontrado.nome);
       } catch (error) {
         console.error("Erro ao carregar detalhe do ambiente:", error);
@@ -264,45 +158,11 @@ export default function AmbientesDetalhe() {
   const statusAmbienteTexto = statusParaTexto(ambiente?.status);
   const andarTexto = ambiente?.andar === 0 ? "Térreo" : `${ambiente?.andar ?? 0}º andar`;
   const componenteDetalhe = componenteSelecionado?.componente || componenteSelecionado || {};
-  const nomeComponente = pegarValorRecursivo(componenteDetalhe, ["compo_nome", "nome", "nome_componente"]) || "Componente";
-  const observacaoComponente =
-    pegarValorRecursivo(componenteDetalhe, [
-      "compo_obs",
-      "compo_observacao",
-      "observacao",
-      "obs",
-      "obser",
-      "obs_componente",
-      "descricao",
-      "comentario",
-      "comentarios",
-      "compo_patrimonio",
-      "patrimonio",
-    ]) ||
-    pegarValorPorChaves(componenteDetalhe, [
-      "compo_obs",
-      "obs",
-      "observacao",
-      "obs_componente",
-      "descricao",
-      "comentario",
-      "observacao_componente",
-      "compo_observacao",
-    ]) ||
-    pegarValorPorChaves(componenteDetalhe?.componente || {}, [
-      "compo_obs",
-      "obs",
-      "observacao",
-      "obs_componente",
-      "descricao",
-      "comentario",
-      "observacao_componente",
-      "compo_observacao",
-    ]);
-  const imagemComponente = componenteDetalhe.compo_imagem ?? componenteDetalhe.imagem ?? componenteDetalhe.imagem_url ?? componenteDetalhe.image_url ?? componenteDetalhe.foto ?? componenteDetalhe.foto_url ?? componenteDetalhe.img ?? componenteDetalhe.image ?? "";
+  const nomeComponente = componenteDetalhe?.compo_nome ?? componenteDetalhe?.nome ?? "Componente";
+  const observacaoComponente = componenteDetalhe?.compo_obs ?? componenteDetalhe?.obs ?? componenteDetalhe?.observacao ?? "—";
   const camposDetalheComponente = [
-    { key: "compo_nome", label: "Nome", value: nomeComponente || "—" },
-    { key: "compo_observacao", label: "Observação", value: observacaoComponente || "—" },
+    { key: "compo_nome", label: "Nome", value: textoOuPadrao(nomeComponente, "—") },
+    { key: "compo_obs", label: "Observação", value: textoOuPadrao(observacaoComponente, "—") },
   ];
 
   async function salvarAmbiente(event) {
@@ -310,10 +170,22 @@ export default function AmbientesDetalhe() {
     setSalvando(true); setErro(""); setAviso("");
     try {
       await ambienteService.editarAmbiente(ambiente.id, {
-        amb_nome: form.nome.trim(), amb_tipo: form.tipo, amb_bloco: form.bloco.trim(),
-        amb_andar: Number(form.andar), amb_descricao: form.descricao.trim(), amb_status: form.status,
+        amb_nome: form.nome.trim(),
+        amb_tipo: form.tipo,
+        amb_bloco: form.bloco.trim(),
+        amb_andar: Number(form.andar),
+        amb_obs: form.descricao.trim(),
+        amb_status: form.status,
       });
-      setAmbiente((atual) => ({ ...atual, nome: form.nome.trim(), tipo: form.tipo, bloco: form.bloco.trim() || "—", andar: Number(form.andar), descricao: form.descricao.trim(), status: form.status }));
+      setAmbiente((atual) => ({
+        ...atual,
+        nome: form.nome.trim(),
+        tipo: form.tipo,
+        bloco: form.bloco.trim() || "—",
+        andar: Number(form.andar),
+        descricao: form.descricao.trim(),
+        status: form.status,
+      }));
       setEditando(false); setAviso("Alterações do ambiente salvas.");
     } catch (error) {
       console.error("Erro ao editar ambiente:", error); setErro("Não foi possível salvar as alterações do ambiente.");
@@ -329,26 +201,59 @@ export default function AmbientesDetalhe() {
   async function adicionarComponente(event) {
     event.preventDefault();
     const nome = String(novo.nome ?? "").trim();
-    const tipoId = Number(novo.tipoId);
+    const tipoTexto = String(novo.tipoTexto ?? "").trim();
     const idAmbiente = Number(ambiente?.id);
 
-    if (!nome || !novo.tipoId || !Number.isFinite(tipoId) || !Number.isFinite(idAmbiente)) {
+    if (!nome || !tipoTexto || !Number.isFinite(idAmbiente)) {
       setErro("Preencha nome, tipo e ambiente antes de salvar.");
       return;
     }
 
-    const payload = {
-      compo_nome: nome,
-      compo_obs: novo.observacao.trim(),
-      compo_tipo_id: tipoId,
-      id_amb: idAmbiente,
-    };
-
     setSalvando(true); setErro(""); setAviso("");
     try {
+      let tipoId = Number(novo.tipoId || 0);
+      if (!Number.isFinite(tipoId) || tipoId <= 0) {
+        const tipoEncontrado = tipos.find((tipo) => {
+          const nomeTipo = String(tipo.compo_tipo ?? tipo.nome ?? "").trim().toLowerCase();
+          return nomeTipo === tipoTexto.toLowerCase();
+        });
+        tipoId = Number(tipoEncontrado?.id_compo_tipo ?? tipoEncontrado?.id ?? tipoEncontrado?.compo_tipo_id ?? 0);
+      }
+
+      if (!Number.isFinite(tipoId) || tipoId <= 0) {
+        try {
+          const tipoCriado = await componenteTipoService.cadastrarComponenteTipo({
+            compo_tipo: tipoTexto,
+          });
+          tipoId = Number(
+            tipoCriado?.id_compo_tipo ??
+              tipoCriado?.id ??
+              tipoCriado?.data?.id_compo_tipo ??
+              tipoCriado?.data?.id ??
+              0,
+          );
+        } catch (error) {
+          console.warn("Tipo de componente não pôde ser criado; segue com valor digitado.", error);
+        }
+      }
+
+      const payload = {
+        compo_nome: nome,
+        compo_obs: novo.observacao.trim(),
+        id_amb: idAmbiente,
+        ...(Number.isFinite(tipoId) && tipoId > 0 ? { compo_tipo_id: tipoId } : {}),
+        ...(tipoTexto ? { compo_tipo: tipoTexto } : {}),
+      };
+
       await componenteService.cadastrarComponente(payload);
       await carregarComponentes(ambiente.nome);
-      setNovo({ nome: "", tipoId: tiposDisponiveis[0]?.id ?? "", observacao: "" });
+      const primeiroTipo = tiposDisponiveis[0];
+      setNovo({
+        nome: "",
+        tipoId: primeiroTipo?.id ?? "",
+        tipoTexto: primeiroTipo?.nome ?? "",
+        observacao: "",
+      });
       setAdicionando(false); setAviso("Componente cadastrado com sucesso.");
     } catch (error) {
       console.error("Erro ao adicionar componente:", error);
@@ -429,11 +334,38 @@ export default function AmbientesDetalhe() {
                   <form className="form ambiente-add-form" onSubmit={adicionarComponente}>
                     <label>Nome do componente<input ref={inputNomeComponenteRef} required value={novo.nome} onChange={(e) => setNovo({ ...novo, nome: e.target.value })} placeholder="Ex.: Computador da sala" /></label>
                     <div className="form__row">
-                      <label>Tipo<select required value={novo.tipoId} onChange={(e) => setNovo({ ...novo, tipoId: e.target.value })}><option value="">Selecione um tipo</option>{tiposDisponiveis.map((tipo) => <option key={tipo.id} value={tipo.id}>{tipo.nome}</option>)}</select></label>
+                      <label>
+                        Tipo
+                        <input
+                          type="text"
+                          list="tiposComponenteDetalhe"
+                          value={novo.tipoTexto ?? ""}
+                          onChange={(e) => {
+                            const valor = e.target.value;
+                            const tipoEncontrado = tipos.find((tipo) => {
+                              const nomeTipo = String(tipo.compo_tipo ?? tipo.nome ?? "").trim().toLowerCase();
+                              return nomeTipo === valor.trim().toLowerCase();
+                            });
+
+                            setNovo({
+                              ...novo,
+                              tipoTexto: valor,
+                              tipoId: tipoEncontrado
+                                ? String(tipoEncontrado.id_compo_tipo ?? tipoEncontrado.id ?? tipoEncontrado.compo_tipo_id)
+                                : novo.tipoId,
+                            });
+                          }}
+                          placeholder="Selecione ou digite um tipo"
+                        />
+                        <datalist id="tiposComponenteDetalhe">
+                          {(tiposDisponiveis.length ? tiposDisponiveis : TIPOS_COMPONENTE_PADRAO.map((nome) => ({ id: nome, nome }))).map((tipo) => (
+                            <option key={tipo.id ?? tipo.nome} value={tipo.nome} />
+                          ))}
+                        </datalist>
+                      </label>
                       <label>Observação<input value={novo.observacao} onChange={(e) => setNovo({ ...novo, observacao: e.target.value })} placeholder="Opcional" /></label>
                     </div>
-                    <div className="form__actions"><button type="button" className="btn btn--cancelar" onClick={() => setAdicionando(false)}>Cancelar</button><button type="submit" className="btn btn--adicionar" disabled={salvando || !tiposDisponiveis.length}>{salvando ? "Salvando..." : "Adicionar componente"}</button></div>
-                    {!tiposDisponiveis.length && <p className="muted">Cadastre um tipo de componente antes de adicioná-lo.</p>}
+                    <div className="form__actions"><button type="button" className="btn btn--cancelar" onClick={() => setAdicionando(false)}>Cancelar</button><button type="submit" className="btn btn--adicionar" disabled={salvando}>{salvando ? "Salvando..." : "Adicionar componente"}</button></div>
                   </form>
                 </div>
               </div>
@@ -444,7 +376,7 @@ export default function AmbientesDetalhe() {
                   <div className="ambiente-component-icon"><Building2 size={18} /></div>
                   <div className="ambiente-component-main">
                     <strong>{componente.nome}</strong>
-                    <span>{componente.tipo} · {pegarValorPorChaves(componente, ["observacao", "obs", "obser", "compo_observacao", "descricao", "compo_patrimonio", "patrimonio"]) || "Sem observação"}</span>
+                    <span>{componente.tipo} · {textoOuPadrao(componente.observacao, "Sem observação")}</span>
                   </div>
                   <span className="ambiente-component-status">{componente.status}</span>
                 </button>

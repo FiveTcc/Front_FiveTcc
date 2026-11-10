@@ -1,7 +1,6 @@
 ﻿import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomSelect from "../components/CustomSelect";
-// import "../styles/Ambientes.module.css";
 import {
   Search,
   Plus,
@@ -38,6 +37,15 @@ import componenteTipoService from "../services/componenteTipoService";
 
 /* ---------- Configurações visuais ---------- */
 
+const tiposAmbiente = [
+  "Laboratório",
+  "Sala de aula",
+  "Biblioteca",
+  "Secretaria",
+  "Auditório",
+  "Sala dos professores",
+];
+
 const normalizarAndar = (valor) => {
   const numero = Number(
     String(valor ?? 0)
@@ -64,26 +72,15 @@ const ICONES_COMP = {
 
 function normalizarComponente(item) {
   const componente = item?.componente || item || {};
+
   return {
     ...componente,
-    id: componente.compo_id ?? componente.id_comp ?? componente.id,
-    nome: componente.compo_nome ?? componente.nome ?? "",
-    tipo:
-      componente.compo_tipo_nome ??
-      componente.compo_tipo ??
-      componente.tipo ??
-      "",
-    pat:
-      componente.compo_patrimonio ??
-      componente.patrimonio ??
-      componente.pat ??
-      "—",
+    id: componente.id_comp ?? componente.id_compo ?? componente.id,
+    nome: componente.compo_nome ?? componente.nome ?? "Componente",
+    tipo: componente.compo_tipo ?? componente.tipo ?? "Outro",
+    pat: componente.compo_patrimonio ?? componente.patrimonio ?? componente.pat ?? "—",
     status: componente.compo_status ?? componente.status ?? "—",
-    manut:
-      componente.compo_ultima_manutencao ??
-      componente.ultima_manutencao ??
-      componente.manut ??
-      "—",
+    manut: componente.compo_ultima_manutencao ?? componente.ultima_manutencao ?? componente.manut ?? "—",
   };
 }
 
@@ -92,34 +89,57 @@ function normalizarStatusAmbiente(valor) {
   if (typeof valor === "number") return valor === 1 || valor > 0;
   if (typeof valor === "string") {
     const texto = valor.trim().toLowerCase();
-    if (
-      ["ativo", "active", "true", "1", "habilitado", "enabled"].includes(texto)
-    )
-      return true;
-    if (
-      [
-        "inativo",
-        "inactive",
-        "false",
-        "0",
-        "desabilitado",
-        "disabled",
-      ].includes(texto)
-    )
-      return false;
-    return (
-      texto.includes("ativo") ||
-      texto.includes("enabled") ||
-      texto.includes("true")
-    );
+    return !["inativo", "false", "0", "desabilitado", "disabled"].includes(texto);
   }
-  return false;
+  return true;
+}
+
+function normalizarTipoParaApi(valor) {
+  return String(valor ?? "sala")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "_")
+    .replace(/[^a-z0-9_]/g, "");
+}
+
+function normalizarBlocoParaApi(valor) {
+  return String(valor ?? "A")
+    .trim()
+    .replace(/^bloco\s*/i, "")
+    .replace(/\s+/g, " ")
+    .slice(0, 10);
+}
+
+function normalizarAndarParaApi(valor) {
+  return String(valor ?? "0").trim();
 }
 
 function atendeFiltroStatus(valor, filtro) {
   if (!filtro) return true;
   const statusAtual = normalizarStatusAmbiente(valor);
   return (filtro === "ativo") === statusAtual;
+}
+
+function normalizarAmbiente(item) {
+  const ambiente = item?.ambiente || item || {};
+  const status = ambiente.amb_status ?? ambiente.status ?? "ativo";
+
+  return {
+    ...ambiente,
+    id: ambiente.id_amb ?? ambiente.amb_id ?? ambiente.id,
+    nome: ambiente.amb_nome ?? ambiente.nome ?? "Ambiente",
+    tipo: ambiente.amb_tipo ?? ambiente.tipo ?? "Outro",
+    bloco: ambiente.amb_bloco ?? ambiente.bloco ?? "—",
+    andar: Number(ambiente.amb_andar ?? ambiente.andar ?? 0),
+    ativo: normalizarStatusAmbiente(status),
+    desc: ambiente.amb_obs ?? ambiente.amb_descricao ?? ambiente.descricao ?? "—",
+    criado: ambiente.amb_data_criacao ?? ambiente.criado_em ?? ambiente.criado ?? "—",
+    por: ambiente.por ?? ambiente.usuario?.nome ?? "—",
+    comps: Number(ambiente.componentes_count ?? ambiente.comps ?? ambiente.quantidade_componentes ?? ambiente.qtd_componentes ?? ambiente.total_componentes ?? (Array.isArray(ambiente.componentes) ? ambiente.componentes.length : 0) ?? 0),
+    componentes: Array.isArray(ambiente.componentes) ? ambiente.componentes : [],
+  };
 }
 /* ---------- Página: renderizada dentro do <Outlet /> do layout ---------- */
 
@@ -128,7 +148,18 @@ export default function Ambientes() {
   const [ambientes, setAmbientes] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
+  const [mensagemSucesso, setMensagemSucesso] = useState("");
   const [modo, setModo] = useState("grade"); // "grade" | "detalhe"
+
+  useEffect(() => {
+    if (!mensagemSucesso) return undefined;
+
+    const timer = setTimeout(() => {
+      setMensagemSucesso("");
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, [mensagemSucesso]);
   const [selId, setSelId] = useState(null);
   const [aba, setAba] = useState("visao");
   const [f, setF] = useState({
@@ -172,35 +203,7 @@ export default function Ambientes() {
           : resposta?.ambientes || resposta?.data || resposta?.ambiente || [];
         const lista = (Array.isArray(dados) ? dados : [dados])
           .filter(Boolean)
-          .map((item) => ({
-            ...item,
-            id: item.id_amb ?? item.amb_id ?? item.id,
-            nome: item.amb_nome ?? item.nome ?? "",
-            tipo: item.amb_tipo ?? item.tipo ?? "Outro",
-            bloco: item.amb_bloco ?? item.bloco ?? "",
-            andar: normalizarAndar(item.amb_andar ?? item.andar ?? 0),
-            ativo: normalizarStatusAmbiente(
-              item.amb_status ?? item.amb_ativo ?? item.status ?? item.ativo,
-            ),
-            criado:
-              item.amb_data_criacao ?? item.criado_em ?? item.criado ?? "—",
-            por: item.usuario?.nome ?? item.por ?? "—",
-            comps: Number(
-              item.componentes_count ??
-                item.comps ??
-                item.quantidade_componentes ??
-                item.qtd_componentes ??
-                item.total_componentes ??
-                (Array.isArray(item.componentes)
-                  ? item.componentes.length
-                  : 0) ??
-                0,
-            ),
-            componentes: Array.isArray(item.componentes)
-              ? item.componentes
-              : [],
-            desc: item.amb_descricao ?? item.descricao ?? item.desc ?? "—",
-          }));
+          .map(normalizarAmbiente);
 
         if (!montado) return;
 
@@ -298,10 +301,13 @@ export default function Ambientes() {
   }, [ambientes, f]);
 
   const blocos = [...new Set(ambientes.map((a) => a.bloco))].sort();
-  const tiposAmbiente = [
+  const tiposAmbienteCadastrados = [
     ...new Set(ambientes.map((a) => a.tipo).filter(Boolean)),
   ].sort();
-  const contTipos = tiposAmbiente
+  const tiposDisponiveisParaCadastro = tiposAmbienteCadastrados.length
+    ? tiposAmbienteCadastrados
+    : tiposAmbiente;
+  const contTipos = tiposAmbienteCadastrados
     .map((t) => [t, ambientes.filter((a) => a.tipo === t).length])
     .filter(([, n]) => n > 0)
     .sort((a, b) => b[1] - a[1]);
@@ -399,45 +405,49 @@ export default function Ambientes() {
   const salvarNovo = async () => {
     if (!novo.nome.trim()) return;
     try {
-      const resposta = await ambienteService.cadastrarAmbiente({
-        amb_nome: novo.nome.trim(),
-        amb_tipo: novo.tipo,
-        amb_bloco: novo.bloco,
-        amb_andar: Number(novo.andar),
-        amb_descricao: novo.desc?.trim() || "",
-      });
+      const payload = {
+        amb_nome: String(novo.nome).trim(),
+        amb_tipo: normalizarTipoParaApi(novo.tipo || "sala"),
+        amb_bloco: normalizarBlocoParaApi(novo.bloco || "A"),
+        amb_andar: normalizarAndarParaApi(novo.andar || "0"),
+        amb_obs: String(novo.desc ?? "").trim(),
+      };
+
+      const resposta = await ambienteService.cadastrarAmbiente(payload);
       const criado = resposta?.ambiente || resposta?.data || resposta;
       const id = criado.id_amb ?? criado.amb_id ?? criado.id;
+      const ambienteCriado = normalizarAmbiente({
+        ...criado,
+        amb_nome: criado?.amb_nome ?? criado?.nome ?? payload.amb_nome,
+        amb_tipo: criado?.amb_tipo ?? criado?.tipo ?? payload.amb_tipo,
+        amb_bloco: criado?.amb_bloco ?? criado?.bloco ?? payload.amb_bloco,
+        amb_andar: criado?.amb_andar ?? criado?.andar ?? payload.amb_andar,
+        amb_status: criado?.amb_status ?? criado?.status ?? "ativo",
+        amb_obs: criado?.amb_obs ?? criado?.amb_descricao ?? criado?.descricao ?? payload.amb_obs,
+      });
+
       setAmbientes((lista) => [
         {
-          ...criado,
+          ...ambienteCriado,
           id,
-          nome: criado.amb_nome ?? criado.nome ?? novo.nome.trim(),
-          tipo: criado.amb_tipo ?? criado.tipo ?? novo.tipo,
-          bloco: criado.amb_bloco ?? criado.bloco ?? novo.bloco,
-          andar: normalizarAndar(
-            criado.amb_andar ?? criado.andar ?? novo.andar,
-          ),
-          ativo: normalizarStatusAmbiente(
-            criado.amb_status ??
-              criado.amb_ativo ??
-              criado.status ??
-              criado.ativo,
-          ),
+          nome: ambienteCriado.nome,
+          tipo: ambienteCriado.tipo,
+          bloco: ambienteCriado.bloco,
+          andar: Number(ambienteCriado.andar ?? 0),
+          ativo: ambienteCriado.ativo,
+          desc: ambienteCriado.desc,
           comps: 0,
           componentes: [],
-          desc:
-            criado.amb_descricao ??
-            criado.descricao ??
-            novo.desc?.trim() ??
-            "—",
         },
         ...lista,
       ]);
+      setErro("");
+      setMensagemSucesso("Ambiente cadastrado com sucesso.");
       setNovo(null);
-      abrir(id);
+      setSelId(id);
     } catch (error) {
       console.error("Erro ao cadastrar ambiente:", error);
+      setMensagemSucesso("");
       setErro("Não foi possível cadastrar o ambiente.");
     }
     return;
@@ -512,12 +522,12 @@ export default function Ambientes() {
     if (!edit.nome.trim()) return;
     try {
       await ambienteService.editarAmbiente(edit.id, {
-        amb_nome: edit.nome.trim(),
-        amb_tipo: edit.tipo,
-        amb_bloco: edit.bloco,
-        amb_andar: Number(edit.andar),
-        amb_status: edit.ativo,
-        amb_descricao: edit.desc.trim(),
+        amb_nome: String(edit.nome).trim(),
+        amb_tipo: normalizarTipoParaApi(edit.tipo || "sala"),
+        amb_bloco: normalizarBlocoParaApi(edit.bloco || "A"),
+        amb_andar: normalizarAndarParaApi(edit.andar || "0"),
+        amb_status: String(edit.ativo ?? "ativo").trim().toLowerCase(),
+        amb_obs: String(edit.desc ?? "").trim(),
       });
     } catch (error) {
       console.error("Erro ao editar ambiente:", error);
@@ -548,13 +558,15 @@ export default function Ambientes() {
         label="Tipo"
         value={f.tipo}
         onChange={set("tipo")}
-        opts={tiposAmbiente.map((t) => [t, t])}
+        opts={tiposAmbienteCadastrados.map((t) => [t, t])}
+        allLabel="Todos"
       />
       <Select
         label="Bloco"
         value={f.bloco}
         onChange={set("bloco")}
         opts={blocos.map((b) => [b, b])}
+        allLabel="Todos"
       />
       <Select
         label="Status"
@@ -564,6 +576,7 @@ export default function Ambientes() {
           ["ativo", "Ativo"],
           ["inativo", "Inativo"],
         ]}
+        allLabel="Todos"
       />
       <button
         type="button"
@@ -571,8 +584,8 @@ export default function Ambientes() {
         onClick={() =>
           setNovo({
             nome: "",
-            tipo: "Sala",
-            bloco: "Bloco A",
+            tipo: tiposDisponiveisParaCadastro[0] || "Sala",
+            bloco: "A",
             andar: "0",
             desc: "",
           })
@@ -647,6 +660,9 @@ export default function Ambientes() {
 
       {carregando && <p className="ambientes-vazio">Carregando ambientes...</p>}
       {erro && <p className="ambientes-erro">{erro}</p>}
+      {mensagemSucesso && (
+        <p className="ambientes-sucesso">{mensagemSucesso}</p>
+      )}
 
       {modo === "grade" ? (
         <>
@@ -693,12 +709,6 @@ export default function Ambientes() {
                   cor="#ef4444"
                   n={ambientes.filter((a) => !a.ativo).length}
                   label="Inativos"
-                />
-                <Kpi
-                  Icon={FlaskConical}
-                  cor="#8b5cf6"
-                  n={ambientes.filter((a) => a.tipo === "Laboratório").length}
-                  label="Laboratórios"
                 />
               </div>
               <h3>Tipos de ambiente</h3>
@@ -998,7 +1008,7 @@ function Select({
   value,
   onChange,
   opts,
-  allLabel,
+  allLabel = "Todos",
   className = "Todos",
 }) {
   const options = [["", allLabel], ...opts];
@@ -1019,7 +1029,9 @@ function Select({
     };
   }, [open]);
 
-  const selectedLabel = opts.find(([v]) => v === value)?.[1] ?? "Selecione";
+  const selectedLabel = value
+    ? opts.find(([v]) => v === value)?.[1] ?? allLabel
+    : allLabel;
 
   return (
     <div className={`custom-select ${className}`.trim()} ref={ref}>
@@ -1043,9 +1055,9 @@ function Select({
             role="listbox"
             aria-label={label}
           >
-            {opts.map(([v, text]) => (
+            {options.map(([v, text]) => (
               <button
-                key={v}
+                key={v || "todos"}
                 type="button"
                 role="option"
                 aria-selected={value === v}
@@ -1303,6 +1315,8 @@ function FormAmbiente({
 }) {
   const up = (k) => (e) => onChange({ ...valor, [k]: e.target.value });
   const ok = !!valor.nome.trim();
+  const opcoesTipo = tipos.length ? tipos : tiposAmbiente;
+
   return (
     <form
       onSubmit={(e) => {
@@ -1321,11 +1335,18 @@ function FormAmbiente({
       </label>
       <label>
         <span>Tipo</span>
-        <CustomSelect
-          value={valor.tipo}
-          options={tipos}
-          onChange={(v) => up("tipo")({ target: { value: v } })}
+        <input
+          type="text"
+          list="tiposAmbiente"
+          value={valor.tipo || ""}
+          onChange={up("tipo")}
+          placeholder="Selecione ou digite um tipo"
         />
+        <datalist id="tiposAmbiente">
+          {opcoesTipo.map((item) => (
+            <option key={item} value={item} />
+          ))}
+        </datalist>
       </label>
       <div className="ambientes-linha">
         <label>

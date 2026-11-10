@@ -166,7 +166,7 @@ export default function Sidebar() {
       <div className="sidebar__brand">
         <img src={logoNOS} alt="Logo N.O.S." className="sidebar__brand-logo" />
         <div>
-          <strong>N.O.S.</strong>
+          <strong>N.O.S</strong>
           <small>New Occurrence System</small>
         </div>
       </div>
