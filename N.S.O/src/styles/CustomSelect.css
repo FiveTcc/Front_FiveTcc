@@ -26,7 +26,7 @@
 .ambientes .cselect__trigger:focus-visible,
 .ambientes .cselect__trigger[aria-expanded="true"] {
   outline: none;
-  border-color: #3b82f6;
+  border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
 }
  
@@ -70,8 +70,4 @@
  
 .cselect__option.is-active {
   background: rgba(148, 163, 184, 0.12);
-}
- 
-.cselect__option.is-selected {
-  background: rgba(59, 130, 246, 0.18);
 }

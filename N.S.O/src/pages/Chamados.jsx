@@ -180,6 +180,9 @@ export default function Chamados() {
 
       <div className="topbar">
         <div className="topbar__search">
+          <span className="topbar__icon" aria-hidden="true">
+              ⌕
+            </span>
           <input
             type="search"
             value={busca}

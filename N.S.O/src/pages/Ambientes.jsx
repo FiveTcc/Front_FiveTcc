@@ -611,7 +611,10 @@ export default function Ambientes() {
 
       <div className="topbar ambientes-topbar">
         <div className="topbar__search" aria-label="Buscar ambientes">
-          <Search size={18} aria-hidden="true" />
+          {/* <Search size={18} aria-hidden="true" /> */}
+          <span className="topbar__icon" aria-hidden="true">
+              ⌕
+          </span>
           <input
             type="search"
             value={f.q}
@@ -625,6 +628,7 @@ export default function Ambientes() {
             <button
               type="button"
               className="topbar__icon-button"
+              aria-expanded={mostrarNotificacoes}
               aria-label="Notificações"
               onClick={() => setMostrarNotificacoes((valor) => !valor)}
             >
