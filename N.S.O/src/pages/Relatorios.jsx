@@ -146,44 +146,44 @@ export default function Relatorios() {
   };
 
   // =========================================================
-// DADOS PREPARADOS PARA OS INDICADORES
-// =========================================================
+  // DADOS PREPARADOS PARA OS INDICADORES
+  // =========================================================
 
-// Padroniza os dados recebidos da API.
-const chamadosVisiveis = useMemo(() => {
-  return linhas.map((linha) => ({
-    id: linha.id,
-    categoria: linha.ambiente || "Não informado",
-    componente: linha.componente || "Não informado",
-    responsavelNome: linha.tecnico_responsavel || "Não atribuído",
-  }));
-}, [linhas]);
+  // Padroniza os dados recebidos da API.
+  const chamadosVisiveis = useMemo(() => {
+    return linhas.map((linha) => ({
+      id: linha.id,
+      categoria: linha.ambiente || "Não informado",
+      componente: linha.componente || "Não informado",
+      responsavelNome: linha.tecnico_responsavel || "Não atribuído",
+    }));
+  }, [linhas]);
 
-// Agrupa as ocorrências por técnico responsável.
+  // Agrupa as ocorrências por técnico responsável.
 
-const tecnicos = useMemo(() => {
-  const agrupados = {};
+  const tecnicos = useMemo(() => {
+    const agrupados = {};
 
-  chamadosVisiveis.forEach((chamado) => {
-    const responsaveis = chamado.responsavelNome
-      .split(",")
-      .map((nome) => nome.trim())
-      .filter(
-        (nome) => nome && nome !== "Não atribuído"
-      );
+    chamadosVisiveis.forEach((chamado) => {
+      const responsaveis = chamado.responsavelNome
+        .split(",")
+        .map((nome) => nome.trim())
+        .filter(
+          (nome) => nome && nome !== "Não atribuído"
+        );
 
-    responsaveis.forEach((nome) => {
-      agrupados[nome] = (agrupados[nome] || 0) + 1;
+      responsaveis.forEach((nome) => {
+        agrupados[nome] = (agrupados[nome] || 0) + 1;
+      });
     });
-  });
 
-  return Object.entries(agrupados)
-    .map(([nome, atendidos]) => ({
-      nome,
-      atendidos,
-    }))
-    .sort((a, b) => b.atendidos - a.atendidos);
-}, [chamadosVisiveis]);
+    return Object.entries(agrupados)
+      .map(([nome, atendidos]) => ({
+        nome,
+        atendidos,
+      }))
+      .sort((a, b) => b.atendidos - a.atendidos);
+  }, [chamadosVisiveis]);
 
 
   // Ocorrências agrupadas por ambiente.
@@ -229,12 +229,11 @@ const tecnicos = useMemo(() => {
   const historico = useMemo(
     () =>
       [...linhas].sort(
-        (a, b) =>
-          dataOrdenacao(b.encerrado_em || b.criado_em) -
-          dataOrdenacao(a.encerrado_em || a.criado_em),
+        (a, b) => Number(b.id) - Number(a.id)
       ),
-    [linhas],
+    [linhas]
   );
+
 
   const historicoExibido = mostrarHistoricoCompleto
     ? historico
@@ -357,182 +356,189 @@ const tecnicos = useMemo(() => {
 
             <div className="report-content">
               {ehAdmin && agrupamento && (
-              <div className="card">
+                <div className="card">
+                  <div className="card__header">
+                    <h2>Ocorrências agrupadas</h2>
+                  </div>
+                  <div className="report-list">
+                    {agrupamento.map((item, indice) => {
+                      const nome =
+                        item.tecnico ||
+                        item.ambiente ||
+                        item.status ||
+                        item.prioridade ||
+                        item.data ||
+                        `Grupo ${indice + 1}`;
+                      return (
+                        <div key={`${nome}-${indice}`} className="report-row">
+                          <span>{rotuloStatus(nome)}</span>
+                          <strong>{Number(item.total) || 0}</strong>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              <section className="card report-filters">
                 <div className="card__header">
-                  <h2>Ocorrências agrupadas</h2>
+                  <div>
+                    <h2>Filtrar relatório</h2>
+                    <p className="muted">Refine os resultados pelos filtros disponíveis.</p>
+                  </div>
                 </div>
-                <div className="report-list">
-                  {agrupamento.map((item, indice) => {
-                    const nome =
-                      item.tecnico ||
-                      item.ambiente ||
-                      item.status ||
-                      item.prioridade ||
-                      item.data ||
-                      `Grupo ${indice + 1}`;
-                    return (
-                      <div key={`${nome}-${indice}`} className="report-row">
-                        <span>{rotuloStatus(nome)}</span>
-                        <strong>{Number(item.total) || 0}</strong>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
 
-            <section className="card report-filters">
-              <div className="card__header">
-                <div>
-                  <h2>Filtrar relatório</h2>
-                  <p className="muted">Refine os resultados pelos filtros disponíveis.</p>
-                </div>
-              </div>
-
-              <form onSubmit={pesquisarComFiltros}>
-                <div className="report-filters__grid">
-                  <label className="report-filters__field">
-                    <span>Data inicial</span>
-                    <input
-                      type="date"
-                      value={filtros.data_inicial}
-                      onChange={(event) => setFiltros((atual) => ({ ...atual, data_inicial: event.target.value }))}
-                    />
-                  </label>
-
-                  <label className="report-filters__field">
-                    <span>Data final</span>
-                    <input
-                      type="date"
-                      value={filtros.data_final}
-                      min={filtros.data_inicial || undefined}
-                      onChange={(event) => setFiltros((atual) => ({ ...atual, data_final: event.target.value }))}
-                    />
-                  </label>
-
-                  <label className="report-filters__field">
-                    <span>Status</span>
-                    <select
-                      value={filtros.status}
-                      onChange={(event) => setFiltros((atual) => ({ ...atual, status: event.target.value }))}
-                    >
-                      <option value="">Todos os status</option>
-                      <option value="aberta">Aberta</option>
-                      <option value="em andamento">Em andamento</option>
-                      <option value="concluida">Concluída</option>
-                      <option value="cancelada">Cancelada</option>
-                    </select>
-                  </label>
-
-                  <label className="report-filters__field">
-                    <span>Prioridade</span>
-                    <select
-                      value={filtros.prioridade}
-                      onChange={(event) => setFiltros((atual) => ({ ...atual, prioridade: event.target.value }))}
-                    >
-                      <option value="">Todas as prioridades</option>
-                      <option value="baixa">Baixa</option>
-                      <option value="media">Média</option>
-                      <option value="alta">Alta</option>
-                      <option value="critica">Crítica</option>
-                    </select>
-                  </label>
-
-                  <label className="report-filters__field">
-                    <span>Ambiente</span>
-                    <select
-                      value={filtros.ambiente}
-                      onChange={(event) => setFiltros((atual) => ({ ...atual, ambiente: event.target.value }))}
-                    >
-                      <option value="">Todos os ambientes</option>
-                      {opcoesFiltros.ambientes?.map((ambiente) => (
-                        <option key={ambiente.id} value={ambiente.id}>{ambiente.nome}</option>
-                      ))}
-                    </select>
-                  </label>
-
-                  {ehAdmin && (
+                <form onSubmit={pesquisarComFiltros}>
+                  <div className="report-filters__grid">
                     <label className="report-filters__field">
-                      <span>Técnico</span>
+                      <span>Data inicial</span>
+                      <input
+                        type="date"
+                        value={filtros.data_inicial}
+                        onChange={(event) => setFiltros((atual) => ({ ...atual, data_inicial: event.target.value }))}
+                      />
+                    </label>
+
+                    <label className="report-filters__field">
+                      <span>Data final</span>
+                      <input
+                        type="date"
+                        value={filtros.data_final}
+                        min={filtros.data_inicial || undefined}
+                        onChange={(event) => setFiltros((atual) => ({ ...atual, data_final: event.target.value }))}
+                      />
+                    </label>
+
+                    <label className="report-filters__field">
+                      <span>Status</span>
                       <select
-                        value={filtros.tecnico}
-                        onChange={(event) => setFiltros((atual) => ({ ...atual, tecnico: event.target.value }))}
+                        value={filtros.status}
+                        onChange={(event) => setFiltros((atual) => ({ ...atual, status: event.target.value }))}
                       >
-                        <option value="">Todos os técnicos</option>
-                        {opcoesFiltros.tecnicos?.map((tecnico) => (
-                          <option key={tecnico.id} value={tecnico.id}>{tecnico.nome}</option>
+                        <option value="">Todos os status</option>
+                        <option value="aberta">Aberta</option>
+                        <option value="em andamento">Em andamento</option>
+                        <option value="concluida">Concluída</option>
+                        <option value="cancelada">Cancelada</option>
+                      </select>
+                    </label>
+
+                    <label className="report-filters__field">
+                      <span>Prioridade</span>
+                      <select
+                        value={filtros.prioridade}
+                        onChange={(event) => setFiltros((atual) => ({ ...atual, prioridade: event.target.value }))}
+                      >
+                        <option value="">Todas as prioridades</option>
+                        <option value="baixa">Baixa</option>
+                        <option value="media">Média</option>
+                        <option value="alta">Alta</option>
+                        <option value="critica">Crítica</option>
+                      </select>
+                    </label>
+
+                    <label className="report-filters__field">
+                      <span>Ambiente</span>
+                      <select
+                        value={filtros.ambiente}
+                        onChange={(event) => setFiltros((atual) => ({ ...atual, ambiente: event.target.value }))}
+                      >
+                        <option value="">Todos os ambientes</option>
+                        {opcoesFiltros.ambientes?.map((ambiente) => (
+                          <option key={ambiente.id} value={ambiente.id}>{ambiente.nome}</option>
                         ))}
                       </select>
                     </label>
-                  )}
+
+                    {ehAdmin && (
+                      <label className="report-filters__field">
+                        <span>Técnico</span>
+                        <select
+                          value={filtros.tecnico}
+                          onChange={(event) => setFiltros((atual) => ({ ...atual, tecnico: event.target.value }))}
+                        >
+                          <option value="">Todos os técnicos</option>
+                          {opcoesFiltros.tecnicos?.map((tecnico) => (
+                            <option key={tecnico.id} value={tecnico.id}>{tecnico.nome}</option>
+                          ))}
+                        </select>
+                      </label>
+                    )}
+                  </div>
+
+                  <div className="report-filters__actions">
+                    <button type="button" className="btn btn--secondary" onClick={limparFiltros} disabled={carregando}>
+                      Limpar filtros
+                    </button>
+                    <button type="submit" className="btn btn--primary" disabled={carregando}>
+                      {carregando ? "Pesquisando..." : "Pesquisar"}
+                    </button>
+                  </div>
+                </form>
+              </section>
+
+              {/* Indicadores adicionais dos relatórios */}
+              <section className="report-extra-grid">
+
+                {/* Ocorrências por ambiente */}
+                <div className="report-extra-card">
+                  <div className="report-extra-card__header">
+                    <span className="report-extra-card__icon report-extra-card__icon--blue">
+                      <i className="bi bi-building"></i>
+                    </span>
+                    <h3>Ambientes com mais ocorrências</h3>
+                  </div>
+
+                  {ocorrenciasPorAmbiente.map((item) => (
+                    <div className="report-extra-row" key={item.nome}>
+                      <span>{item.nome}</span>
+                      <strong>{item.total}</strong>
+                    </div>
+                  ))}
                 </div>
 
-                <div className="report-filters__actions">
-                  <button type="button" className="btn btn--secondary" onClick={limparFiltros} disabled={carregando}>
-                    Limpar filtros
-                  </button>
-                  <button type="submit" className="btn btn--primary" disabled={carregando}>
-                    {carregando ? "Pesquisando..." : "Pesquisar"}
-                  </button>
+                {/* Componentes com mais falhas */}
+                <div className="report-extra-card">
+                  <div className="report-extra-card__header">
+                    <span className="report-extra-card__icon report-extra-card__icon--purple">
+                      <i className="bi bi-puzzle"></i>
+                    </span>
+                    <h3>Componentes com mais falhas</h3>
+                  </div>
+
+                  {componentesComFalha.map((item) => (
+                    <div className="report-extra-row" key={item.nome}>
+                      <span>{item.nome}</span>
+                      <strong>{item.total}</strong>
+                    </div>
+                  ))}
                 </div>
-              </form>
-            </section>
 
-            {/* Indicadores adicionais dos relatórios */}
-            <section className="report-extra-grid">
+                {/* Técnicos com mais ocorrências - somente administrador */}
+                {ehAdmin && (
+                  <div className="report-extra-card">
+                    <div className="report-extra-card__header">
+                      <span className="report-extra-card__icon report-extra-card__icon--green">
+                        <i className="bi bi-people"></i>
+                      </span>
 
-            {/* Ocorrências por ambiente */}
-            <div className="report-extra-card">
-              <div className="report-extra-card__header">
-                <span className="report-extra-card__icon report-extra-card__icon--blue">
-                  <i className="bi bi-building"></i>
-                </span>
-                <h3>Ambientes com mais ocorrências</h3>
-              </div>
+                      <h3>Técnicos com mais ocorrências</h3>
+                    </div>
 
-              {ocorrenciasPorAmbiente.map((item) => (
-                <div className="report-extra-row" key={item.nome}>
-                  <span>{item.nome}</span>
-                  <strong>{item.total}</strong>
-                </div>
-              ))}
-            </div>
+                    {tecnicosComMaisOcorrencias.length > 0 ? (
+                      tecnicosComMaisOcorrencias.map((item) => (
+                        <div className="report-extra-row" key={item.nome}>
+                          <span>{item.nome}</span>
+                          <strong>{item.total}</strong>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="muted">Nenhuma ocorrência atribuída.</p>
+                    )}
+                  </div>
+                )}
 
-            {/* Componentes com mais falhas */}
-            <div className="report-extra-card">
-              <div className="report-extra-card__header">
-                <span className="report-extra-card__icon report-extra-card__icon--purple">
-                  <i className="bi bi-puzzle"></i>
-                </span>
-                <h3>Componentes com mais falhas</h3>
-              </div>
-
-              {componentesComFalha.map((item) => (
-                <div className="report-extra-row" key={item.nome}>
-                  <span>{item.nome}</span>
-                  <strong>{item.total}</strong>
-                </div>
-              ))}
-            </div>
-
-            {/* Técnicos com mais ocorrências */}
-            <div className="report-extra-card">
-              <div className="report-extra-card__header">
-                <span className="report-extra-card__icon report-extra-card__icon--green">
-                  <i className="bi bi-people"></i>
-                </span>
-                <h3>Técnicos com mais ocorrências</h3>
-              </div>
-
-              {tecnicosComMaisOcorrencias.map((item) => (
-                <div className="report-extra-row" key={item.nome}>
-                  <span>{item.nome}</span>
-                  <strong>{item.total}</strong>
-                </div>
-              ))}
-            </div>
-
-            </section>
+              </section>
             </div>
           </section>
 
