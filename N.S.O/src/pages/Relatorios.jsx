@@ -5,6 +5,7 @@ import {
   STATUS_LABEL,
   formatarData,
 } from "../services/utils";
+import CustomSelect from "../components/CustomSelect";
 import relatorioService from "../services/relatorioService";
 
 const PERFIL_LABEL = {
@@ -411,57 +412,71 @@ export default function Relatorios() {
 
                     <label className="report-filters__field">
                       <span>Status</span>
-                      <select
+                      <CustomSelect
+                        id="report-status"
+                        label="Status"
                         value={filtros.status}
-                        onChange={(event) => setFiltros((atual) => ({ ...atual, status: event.target.value }))}
-                      >
-                        <option value="">Todos os status</option>
-                        <option value="aberta">Aberta</option>
-                        <option value="em andamento">Em andamento</option>
-                        <option value="concluida">Concluída</option>
-                        <option value="cancelada">Cancelada</option>
-                      </select>
+                        options={[
+                          { value: "", label: "Todos os status" },
+                          { value: "aberta", label: "Aberta" },
+                          { value: "em andamento", label: "Em andamento" },
+                          { value: "concluida", label: "Concluída" },
+                          { value: "cancelada", label: "Cancelada" },
+                        ]}
+                        onChange={(value) => setFiltros((atual) => ({ ...atual, status: value }))}
+                      />
                     </label>
 
                     <label className="report-filters__field">
                       <span>Prioridade</span>
-                      <select
+                      <CustomSelect
+                        id="report-priority"
+                        label="Prioridade"
                         value={filtros.prioridade}
-                        onChange={(event) => setFiltros((atual) => ({ ...atual, prioridade: event.target.value }))}
-                      >
-                        <option value="">Todas as prioridades</option>
-                        <option value="baixa">Baixa</option>
-                        <option value="media">Média</option>
-                        <option value="alta">Alta</option>
-                        <option value="critica">Crítica</option>
-                      </select>
+                        options={[
+                          { value: "", label: "Todas as prioridades" },
+                          { value: "baixa", label: "Baixa" },
+                          { value: "media", label: "Média" },
+                          { value: "alta", label: "Alta" },
+                          { value: "critica", label: "Crítica" },
+                        ]}
+                        onChange={(value) => setFiltros((atual) => ({ ...atual, prioridade: value }))}
+                      />
                     </label>
 
                     <label className="report-filters__field">
                       <span>Ambiente</span>
-                      <select
+                      <CustomSelect
+                        id="report-environment"
+                        label="Ambiente"
                         value={filtros.ambiente}
-                        onChange={(event) => setFiltros((atual) => ({ ...atual, ambiente: event.target.value }))}
-                      >
-                        <option value="">Todos os ambientes</option>
-                        {opcoesFiltros.ambientes?.map((ambiente) => (
-                          <option key={ambiente.id} value={ambiente.id}>{ambiente.nome}</option>
-                        ))}
-                      </select>
+                        options={[
+                          { value: "", label: "Todos os ambientes" },
+                          ...(opcoesFiltros.ambientes || []).map((ambiente) => ({
+                            value: String(ambiente.id),
+                            label: ambiente.nome,
+                          })),
+                        ]}
+                        onChange={(value) => setFiltros((atual) => ({ ...atual, ambiente: value }))}
+                      />
                     </label>
 
                     {ehAdmin && (
                       <label className="report-filters__field">
                         <span>Técnico</span>
-                        <select
+                        <CustomSelect
+                          id="report-technician"
+                          label="Técnico"
                           value={filtros.tecnico}
-                          onChange={(event) => setFiltros((atual) => ({ ...atual, tecnico: event.target.value }))}
-                        >
-                          <option value="">Todos os técnicos</option>
-                          {opcoesFiltros.tecnicos?.map((tecnico) => (
-                            <option key={tecnico.id} value={tecnico.id}>{tecnico.nome}</option>
-                          ))}
-                        </select>
+                          options={[
+                            { value: "", label: "Todos os técnicos" },
+                            ...(opcoesFiltros.tecnicos || []).map((tecnico) => ({
+                              value: String(tecnico.id),
+                              label: tecnico.nome,
+                            })),
+                          ]}
+                          onChange={(value) => setFiltros((atual) => ({ ...atual, tecnico: value }))}
+                        />
                       </label>
                     )}
                   </div>

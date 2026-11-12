@@ -390,6 +390,13 @@ textarea {
 .btn--primary:hover {
   background: #1d4fc4;
 }
+.btn--secondary {
+  background: #2c4a7a;
+  color: var(--text);
+}
+.btn--secondary:hover {
+  border-color: var(--accent);
+}
 .btn--cancelar {
   background: var(--red);
   color: #ffffff;
@@ -1231,34 +1238,79 @@ textarea {
   min-width: 0;
 }
 
-.report-filters__field span {
-  color: #c8d5e8;
+.report-filters__field > span {
+  color: var(--text-dim);
   font-size: 0.9rem;
 }
 
-.report-filters__field input,
-.report-filters__field select {
+.report-filters__field input {
   width: 100%;
   min-height: 48px;
   box-sizing: border-box;
   padding: 0 14px;
-  color: #e8f0ff;
-  background: #1b2739;
-  border: 1px solid #344258;
+  color: var(--text);
+  background: var(--panel-input);
+  border: 1px solid var(--panel-input-border);
   border-radius: 16px;
   outline: none;
   font: inherit;
 }
 
-.report-filters__field input:focus,
-.report-filters__field select:focus {
-  border-color: #397ff0;
-  box-shadow: 0 0 0 3px rgba(57, 127, 240, 0.14);
+.report-filters__field input[type="date"] {
+  color-scheme: light;
 }
 
-.report-filters__field select option {
-  color: #e8f0ff;
-  background: #1b2739;
+:root[data-theme="dark"] .report-filters__field input[type="date"] {
+  color-scheme: dark;
+}
+
+.report-filters__field input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+.report-filters .cselect {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+.report-filters .cselect__trigger {
+  min-height: 48px;
+  color: var(--text);
+  background: var(--panel-input);
+  border-color: var(--panel-input-border);
+  border-radius: 16px;
+}
+
+.report-filters .cselect__trigger:focus-visible,
+.report-filters .cselect__trigger[aria-expanded="true"] {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+.report-filters .cselect__menu {
+  color: var(--text);
+  background: var(--panel);
+  border-color: var(--border);
+  border-radius: 18px;
+  padding: 10px;
+  box-shadow: var(--shadow-card);
+}
+
+.report-filters .cselect__option {
+  padding: 10px 12px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.report-filters .cselect__option.is-active,
+.report-filters .cselect__option:hover {
+  background: var(--surface-3);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--border);
 }
 
 .report-filters__actions {
@@ -1266,6 +1318,17 @@ textarea {
   justify-content: flex-end;
   gap: 12px;
   margin-top: 18px;
+}
+
+.report-filters__actions .btn--secondary {
+  color: var(--text);
+  background: var(--panel-soft);
+  border-color: var(--border);
+}
+
+.report-filters__actions .btn--secondary:hover:not(:disabled) {
+  background: var(--surface-2);
+  border-color: var(--accent);
 }
 
 /* Exportação */
@@ -3893,6 +3956,9 @@ textarea {
 }
 
 .ticket-detail-page > .back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   width: fit-content;
   padding: 8px 12px;
   border-radius: 10px;
@@ -5621,11 +5687,17 @@ textarea {
   box-shadow: var(--shadow-card);
 }
 .ambientes .ambientes-toolbar-search,
-.ambientes .ambientes-icon-btn,
-.ambientes .ambientes-filtros .custom-select__trigger {
+.ambientes .ambientes-icon-btn {
   background: var(--panel-soft);
   border-color: var(--border);
   color: var(--text);
+}
+
+.ambientes .ambientes-filtros .custom-select__trigger {
+  background: var(--panel-input);
+  border-color: var(--panel-input-border);
+  color: var(--text);
+  box-shadow: none;
 }
 
 .ambientes .ambientes-toolbar-search:focus-within,
@@ -5701,14 +5773,6 @@ textarea {
 .page--ambientes .ambientes-btn-sec {
   min-height: 44px;
   height: 44px;
-}
-
-.page--ambientes .topbar__notification-item:hover {
-  background: var(--surface-2);
-}
-
-.page--ambientes .topbar__notification-item small {
-  color: var(--text-dim);
 }
 
 @media (max-width: 700px) {
@@ -5823,13 +5887,13 @@ textarea {
 }
 .ambientes-filtros .custom-select__trigger {
   min-height: 46px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--panel-input-border);
   border-radius: 12px;
-  background: rgba(15, 23, 42, 0.28);
+  background: var(--panel-input);
   color: var(--text);
   font-weight: 500;
   padding: 0 14px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  box-shadow: none;
 }
 .ambientes-btn--filtro {
   min-width: 0;
@@ -6154,6 +6218,35 @@ textarea {
   background: var(--panel-input);
   color: var(--text);
 }
+.ambiente-detail-form .cselect--form {
+  width: 100%;
+  border: 0;
+}
+.ambiente-detail-form .cselect--form .cselect__trigger {
+  min-height: 44px;
+  padding: 10px 12px;
+  background: var(--panel-input);
+  border: 1px solid var(--panel-input-border);
+  border-radius: 10px;
+}
+.ambiente-detail-form .cselect--form .cselect__trigger:focus-visible,
+.ambiente-detail-form .cselect--form .cselect__trigger[aria-expanded="true"] {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+.ambiente-detail-form .cselect--form .cselect__menu {
+  color: var(--text);
+  background: var(--panel);
+  border-color: var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+}
+.ambiente-detail-form .cselect--form .cselect__option.is-active,
+.ambiente-detail-form .cselect--form .cselect__option:hover {
+  background: var(--surface-3);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
 .ambiente-detail-form textarea {
   resize: vertical;
 }
@@ -6162,6 +6255,12 @@ textarea {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+}
+.ambiente-detail-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
 }
 .ambiente-detail-form .form__actions,
 .ambiente-add-form .form__actions {

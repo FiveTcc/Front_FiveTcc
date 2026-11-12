@@ -24,7 +24,6 @@ export default function Usuarios() {
   const [sucesso, setSucesso] = useState('')
   const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false)
   const [notificacoes] = useState([])
-  // const [theme, setTheme] = useState('light')
 
   const chamadosPorUsuario = (id) => chamados.filter((c) => c.responsavelId === id || c.solicitanteId === id).length
 

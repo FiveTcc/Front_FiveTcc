@@ -1,10 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import "../styles/CustomSelect.css";
  
-export default function CustomSelect({ value, options, onChange, id }) {
+export default function CustomSelect({
+  value,
+  options,
+  onChange,
+  id,
+  label,
+  className = "",
+}) {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const rootRef = useRef(null);
+  const optionValue = (option) =>
+    typeof option === "string" ? option : option.value;
+  const optionLabel = (option) =>
+    typeof option === "string" ? option : option.label;
  
   // fecha ao clicar fora
   useEffect(() => {
@@ -17,7 +28,7 @@ export default function CustomSelect({ value, options, onChange, id }) {
  
   const toggle = () => {
     setOpen((o) => !o);
-    setActive(Math.max(0, options.indexOf(value)));
+    setActive(Math.max(0, options.findIndex((option) => optionValue(option) === value)));
   };
  
   const choose = (opt) => {
@@ -25,6 +36,10 @@ export default function CustomSelect({ value, options, onChange, id }) {
     setOpen(false);
   };
  
+  const selectedOption = options.find(
+    (option) => optionValue(option) === value,
+  );
+
   const onKeyDown = (e) => {
     if (e.key === "Escape") return setOpen(false);
     if (!open && (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ")) {
@@ -45,36 +60,37 @@ export default function CustomSelect({ value, options, onChange, id }) {
   };
  
   return (
-    <div className="cselect" ref={rootRef}>
+    <div className={`cselect ${className}`.trim()} ref={rootRef}>
       <button
         type="button"
         id={id}
         className="cselect__trigger"
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-label={label}
         onClick={toggle}
         onKeyDown={onKeyDown}
       >
-        <span>{value}</span>
+        <span>{selectedOption ? optionLabel(selectedOption) : value}</span>
         <span className="cselect__caret" aria-hidden="true" />
       </button>
  
       {open && (
-        <ul className="cselect__menu" role="listbox">
+        <ul className="cselect__menu" role="listbox" aria-label={label}>
           {options.map((opt, i) => (
             <li
-              key={opt}
+              key={optionValue(opt)}
               role="option"
-              aria-selected={opt === value}
+              aria-selected={optionValue(opt) === value}
               className={
                 "cselect__option" +
-                (opt === value ? " is-selected" : "") +
+                (optionValue(opt) === value ? " is-selected" : "") +
                 (i === active ? " is-active" : "")
               }
               onMouseEnter={() => setActive(i)}
-              onClick={() => choose(opt)}
+              onClick={() => choose(optionValue(opt))}
             >
-              {opt}
+              {optionLabel(opt)}
             </li>
           ))}
         </ul>

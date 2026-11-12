@@ -70,8 +70,8 @@
   color: var(--text);
 }
 .ambientes-busca:focus-within {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px var(--accent-dim);
+  border-color: var(--panel-input-border);
+  box-shadow: none;
 }
 .page-ambientes {
   padding: 0 26px 40px;
@@ -1077,11 +1077,17 @@
   box-shadow: var(--shadow-card);
 }
 .ambientes .ambientes-toolbar-search,
-.ambientes .ambientes-icon-btn,
-.ambientes .ambientes-filtros .custom-select__trigger {
+.ambientes .ambientes-icon-btn {
   background: var(--panel-soft);
   border-color: var(--border);
   color: var(--text);
+}
+
+.ambientes .ambientes-filtros .custom-select__trigger {
+  background: var(--panel-input);
+  border-color: var(--panel-input-border);
+  color: var(--text);
+  box-shadow: none;
 }
 
 .ambientes .ambientes-toolbar-search:focus-within,
@@ -1271,49 +1277,26 @@
 }
 .ambientes-filtros .custom-select__trigger {
   min-height: 46px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--panel-input-border);
   border-radius: 12px;
-  background: rgba(15, 23, 42, 0.28);
+  background: var(--panel-input);
   color: var(--text);
   font-weight: 500;
   padding: 0 14px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  box-shadow: none;
 }
 .ambientes-btn--filtro {
   min-width: 0;
 }
 
 /* Padronização final após os estilos legados da tela. */
-.page--ambientes .ambientes-toolbar-search,
-.page--ambientes .ambientes-icon-btn {
-  background: var(--panel-soft);
-  border-color: var(--border);
-  color: var(--text);
+
+.page--ambientes .topbar__notification-item:hover {
+  background: var(--surface-2);
 }
 
-.page--ambientes .topbar__search {
-  border: 1.5px solid var(--border);
-  border-radius: 18px;
-  box-shadow: none;
-  min-height: 48px;
-}
-
-.page--ambientes .topbar__search:focus-within {
-  border-color: var(--border);
-  box-shadow: none;
-}
-
-.page--ambientes .topbar__search input:focus {
-  outline: none;
-  box-shadow: none;
-}
-
-.page--ambientes .topbar__actions .topbar__icon-button,
-.page--ambientes .topbar__actions .topbar__notifications-wrap {
-  border: 1px solid var(--border);
-  background: var(--panel-soft);
-  color: var(--text);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+.page--ambientes .topbar__notification-item small {
+  color: var(--text-dim);
 }
 
 .page--ambientes .ambientes-btn-sec:hover {
@@ -1625,6 +1608,35 @@
   background: var(--panel-input);
   color: var(--text);
 }
+.ambiente-detail-form .cselect--form {
+  width: 100%;
+  border: 0;
+}
+.ambiente-detail-form .cselect--form .cselect__trigger {
+  min-height: 44px;
+  padding: 10px 12px;
+  background: var(--panel-input);
+  border: 1px solid var(--panel-input-border);
+  border-radius: 10px;
+}
+.ambiente-detail-form .cselect--form .cselect__trigger:focus-visible,
+.ambiente-detail-form .cselect--form .cselect__trigger[aria-expanded="true"] {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+.ambiente-detail-form .cselect--form .cselect__menu {
+  color: var(--text);
+  background: var(--panel);
+  border-color: var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+}
+.ambiente-detail-form .cselect--form .cselect__option.is-active,
+.ambiente-detail-form .cselect--form .cselect__option:hover {
+  background: var(--surface-3);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
 .ambiente-detail-form textarea {
   resize: vertical;
 }
@@ -1633,6 +1645,12 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+}
+.ambiente-detail-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
 }
 .ambiente-detail-form .form__actions,
 .ambiente-add-form .form__actions {

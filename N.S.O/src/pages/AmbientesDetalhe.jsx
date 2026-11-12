@@ -4,6 +4,7 @@ import { ArrowLeft, Building2, MapPin, Pencil, Plus, Save, X } from "lucide-reac
 import ambienteService from "../services/ambienteService";
 import componenteService from "../services/componeteService";
 import componenteTipoService from "../services/componenteTipoService";
+import CustomSelect from "../components/CustomSelect";
 
 function normalizarLista(resposta, chave = "ambientes") {
   const dados = resposta?.data ?? resposta?.resultado ?? resposta?.result ?? resposta?.payload ?? resposta;
@@ -294,14 +295,27 @@ const [novo, setNovo] = useState({ nome: "", tipoId: "", tipoTexto: "", observac
                 <label>Nome<input required value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} /></label>
                 <div className="form__row">
                   <label>Tipo<input value={form.tipo} onChange={(e) => setForm({ ...form, tipo: e.target.value })} /></label>
-                  <label>Status<select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select></label>
+                  <div className="ambiente-detail-form__field">
+                    <label htmlFor="ambiente-status">Status</label>
+                    <CustomSelect
+                      id="ambiente-status"
+                      label="Status"
+                      className="cselect--form"
+                      value={form.status}
+                      options={[
+                        { value: "ativo", label: "Ativo" },
+                        { value: "inativo", label: "Inativo" },
+                      ]}
+                      onChange={(value) => setForm((atual) => ({ ...atual, status: value }))}
+                    />
+                  </div>
                 </div>
                 <div className="form__row">
                   <label>Bloco<input value={form.bloco} onChange={(e) => setForm({ ...form, bloco: e.target.value })} /></label>
                   <label>Andar<input type="number" min="0" value={form.andar} onChange={(e) => setForm({ ...form, andar: e.target.value })} /></label>
                 </div>
                 <label>Descrição<textarea rows="3" value={form.descricao} onChange={(e) => setForm({ ...form, descricao: e.target.value })} /></label>
-                <div className="form__actions"><button type="button" className="btn btn--ghost" onClick={() => setEditando(false)}><X size={15} /> Cancelar</button><button type="submit" className="btn" disabled={salvando}><Save size={15} /> {salvando ? "Salvando..." : "Salvar alterações"}</button></div>
+                <div className="form__actions"><button type="button" className="btn btn--ghost" onClick={() => setEditando(false)}>Cancelar</button><button type="submit" className="btn btn--primary" disabled={salvando}>{salvando ? "Salvando..." : "Salvar alterações"}</button></div>
               </form>
             ) : (
               <div className="ambiente-detail-info">
