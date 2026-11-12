@@ -1,54 +1,124 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import ocorrenciaService from "../services/ocorrenciaService";
 
 export default function NovoChamado() {
-  const { usuario } = useAuth();
   const navigate = useNavigate();
+
+  // Dados da ocorrência
   const [micro, setMicro] = useState("");
   const [descricao, setDescricao] = useState("");
-  const categorias = ["Hardware", "Software", "Rede", "Acesso e Permissões", "Outros"];
-  const prioridades = ["Baixa", "Média", "Alta", "Crítica"];
-  const [categoria, setCategoria] = useState(categorias[0]);
-  const [local, setLocal] = useState("");
-  const [dataOcorrencia, setDataOcorrencia] = useState("");
+  const [categoria, setCategoria] = useState("Hardware");
   const [prioridade, setPrioridade] = useState("Selecione");
-  const [foto, setFoto] = useState(null);
-  const [arquivos, setArquivos] = useState([]);
+
+  // Relacionamentos com o banco
+  const [componenteId, setComponenteId] = useState("");
+  const [ambienteId, setAmbienteId] = useState("");
+
+  // Controle da tela
   const [enviando, setEnviando] = useState(false);
   const [openSelect, setOpenSelect] = useState(null);
 
-  const prioridadeLabels = {
-    baixa: "Baixa",
-    media: "Média",
-    alta: "Alta",
-    critica: "Crítica",
-  };
+  const categorias = [
+    "Hardware",
+    "Software",
+    "Rede",
+    "Acesso e Permissões",
+    "Outros",
+  ];
 
-  function handleSubmit(e) {
+  const prioridades = [
+    "Baixa",
+    "Média",
+    "Alta",
+    "Crítica",
+  ];
+
+  // Converter valores para o padrão da API
+  function normalizar(valor) {
+    return valor
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, "_");
+  }
+
+  // Enviar formulário
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (!micro.trim() || !descricao.trim()) return;
-    setEnviando(true);
-    setEnviando(false);
-    window.alert("Conecte esta tela à API para enviar um chamado.");
+
+    if (
+      !micro.trim() ||
+      !descricao.trim() ||
+      !componenteId ||
+      !ambienteId ||
+      prioridade === "Selecione"
+    ) {
+      window.alert("Preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    try {
+      setEnviando(true);
+
+      const dados = {
+        ocor_nome: micro.trim(),
+        ocor_tipo: normalizar(categoria),
+        ocor_prioridade: normalizar(prioridade),
+        ocor_obs: descricao.trim(),
+        componente_id: Number(componenteId),
+        ambiente_id: Number(ambienteId),
+      };
+
+      console.log("Dados enviados:", dados);
+
+      const response =
+        await ocorrenciaService.abrirOcorrencia(dados);
+
+      console.log("Ocorrência criada:", response);
+
+      window.alert("Chamado criado com sucesso!");
+
+      navigate("/chamados");
+
+    } catch (error) {
+      console.error("Erro ao criar chamado:", error);
+
+      window.alert(
+        error.response?.data?.message ||
+        "Não foi possível criar o chamado."
+      );
+
+    } finally {
+      setEnviando(false);
+    }
   }
 
   return (
     <div className="page page--narrow">
+
       <header className="page__header">
         <div>
           <span className="eyebrow">Abertura</span>
           <h1>Novo chamado</h1>
+
           <p className="muted">
-            Descreva o problema com o máximo de detalhe possível para agilizar o
-            atendimento.
+            Descreva o problema com o máximo de detalhe
+            possível para agilizar o atendimento.
           </p>
         </div>
       </header>
 
-      <form className="card__novochamado form" onSubmit={handleSubmit}>
+      <form
+        className="card__novochamado form"
+        onSubmit={handleSubmit}
+      >
+
+        {/* Nome da ocorrência */}
         <label>
-          Micro
+          Micro / Equipamento
+
           <input
             type="text"
             value={micro}
@@ -58,28 +128,42 @@ export default function NovoChamado() {
           />
         </label>
 
+        {/* Categoria e prioridade */}
         <div className="form__row">
+
           <div className="custom-select">
-            <span className="custom-select__label">Categoria</span>
+            <span className="custom-select__label">
+              Categoria
+            </span>
+
             <button
               type="button"
-              className={`custom-select__trigger ${openSelect === "categoria" ? "is-open" : ""}`}
+              className={`custom-select__trigger ${
+                openSelect === "categoria" ? "is-open" : ""
+              }`}
               onClick={() =>
                 setOpenSelect((current) =>
-                  current === "categoria" ? null : "categoria",
+                  current === "categoria" ? null : "categoria"
                 )
               }
             >
               <span>{categoria}</span>
               <span className="custom-select__caret">▾</span>
             </button>
+
             {openSelect === "categoria" && (
-              <div className="custom-select__menu" role="listbox" aria-label="Categoria">
+              <div
+                className="custom-select__menu"
+                role="listbox"
+                aria-label="Categoria"
+              >
                 {categorias.map((option) => (
                   <button
                     key={option}
                     type="button"
-                    className={`custom-select__option ${categoria === option ? "is-selected" : ""}`}
+                    className={`custom-select__option ${
+                      categoria === option ? "is-selected" : ""
+                    }`}
                     onClick={() => {
                       setCategoria(option);
                       setOpenSelect(null);
@@ -93,26 +177,38 @@ export default function NovoChamado() {
           </div>
 
           <div className="custom-select">
-            <span className="custom-select__label">Prioridade</span>
+            <span className="custom-select__label">
+              Prioridade
+            </span>
+
             <button
               type="button"
-              className={`custom-select__trigger ${openSelect === "prioridade" ? "is-open" : ""}`}
+              className={`custom-select__trigger ${
+                openSelect === "prioridade" ? "is-open" : ""
+              }`}
               onClick={() =>
                 setOpenSelect((current) =>
-                  current === "prioridade" ? null : "prioridade",
+                  current === "prioridade" ? null : "prioridade"
                 )
               }
             >
               <span>{prioridade}</span>
               <span className="custom-select__caret">▾</span>
             </button>
+
             {openSelect === "prioridade" && (
-              <div className="custom-select__menu" role="listbox" aria-label="Prioridade">
+              <div
+                className="custom-select__menu"
+                role="listbox"
+                aria-label="Prioridade"
+              >
                 {prioridades.map((option) => (
                   <button
                     key={option}
                     type="button"
-                    className={`custom-select__option ${prioridade === option ? "is-selected" : ""}`}
+                    className={`custom-select__option ${
+                      prioridade === option ? "is-selected" : ""
+                    }`}
                     onClick={() => {
                       setPrioridade(option);
                       setOpenSelect(null);
@@ -125,28 +221,43 @@ export default function NovoChamado() {
             )}
           </div>
 
-          <label>
-            Local
-            <input
-              type="text"
-              value={local}
-              onChange={(e) => setLocal(e.target.value)}
-              placeholder="Ex.: Sala 12, Bloco B"
-            />
-          </label>
-
-          <label>
-            Data da ocorrência
-            <input
-              type="date"
-              value={dataOcorrencia}
-              onChange={(e) => setDataOcorrencia(e.target.value)}
-            />
-          </label>
         </div>
 
+        {/* IDs do banco */}
+        <div className="form__row">
+
+          <label>
+            ID do componente
+
+            <input
+              type="number"
+              min="1"
+              value={componenteId}
+              onChange={(e) => setComponenteId(e.target.value)}
+              placeholder="Ex.: 6"
+              required
+            />
+          </label>
+
+          <label>
+            ID do ambiente
+
+            <input
+              type="number"
+              min="1"
+              value={ambienteId}
+              onChange={(e) => setAmbienteId(e.target.value)}
+              placeholder="Ex.: 1"
+              required
+            />
+          </label>
+
+        </div>
+
+        {/* Descrição */}
         <label className="form__description">
           Descrição
+
           <textarea
             rows={4}
             value={descricao}
@@ -156,37 +267,28 @@ export default function NovoChamado() {
           />
         </label>
 
-        <div className="form__attachments">
-          <span>Anexos</span>
-          <div className="form__attachment-actions">
-            <label className="btn btn--ghost form__file-button">
-              Enviar imagens
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={(e) => setArquivos(Array.from(e.target.files || []))}
-              />
-            </label>
-          </div>
-          {(foto || arquivos.length > 0) && (
-            <p className="form__attachments-list">
-              {[foto, ...arquivos]
-                .filter(Boolean)
-                .map((arquivo) => arquivo.name)
-                .join(", ")}
-            </p>
-          )}
-        </div>
-
+        {/* Ações */}
         <div className="form__actions">
-          <button type="button" className="btn btn--cancelar" onClick={() => navigate(-1)}>
+
+          <button
+            type="button"
+            className="btn btn--cancelar"
+            onClick={() => navigate(-1)}
+            disabled={enviando}
+          >
             Cancelar
           </button>
-          <button type="submit" className="btn btn--primary" disabled={enviando}>
-            Enviar chamado
+
+          <button
+            type="submit"
+            className="btn btn--primary"
+            disabled={enviando}
+          >
+            {enviando ? "Enviando..." : "Enviar chamado"}
           </button>
+
         </div>
+
       </form>
     </div>
   );
