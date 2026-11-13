@@ -169,64 +169,66 @@ export default function Chamados() {
 
   return (
     <div className="page page--tickets">
-      <header className="page__header">
-        <div>
-          <h1>Ocorrências</h1>
-          <p className="muted">
-            Acompanhe, filtre e priorize as ocorrências abertas.
-          </p>
-        </div>
-      </header>
+      <div className="page__top">
+        <header className="page__header">
+          <div>
+            <h1>Ocorrências</h1>
+            <p className="muted">
+              Acompanhe, filtre e priorize as ocorrências abertas.
+            </p>
+          </div>
+        </header>
 
-      <div className="topbar">
-        <div className="topbar__search">
-          <span className="topbar__icon" aria-hidden="true">
+        <div className="topbar">
+          <div className="topbar__search">
+            <span className="topbar__icon" aria-hidden="true">
               ⌕
             </span>
-          <input
-            type="search"
-            value={busca}
-            onChange={(event) => setBusca(event.target.value)}
-            placeholder="Pesquisar ocorrências..."
-            aria-label="Pesquisar ocorrências"
-          />
-        </div>
+            <input
+              type="search"
+              value={busca}
+              onChange={(event) => setBusca(event.target.value)}
+              placeholder="Pesquisar ocorrências..."
+              aria-label="Pesquisar ocorrências"
+            />
+          </div>
 
-        <div className="topbar__actions">
-          <div className="topbar__notifications-wrap" ref={notificacoesRef}>
-            <button
-              type="button"
-              className="topbar__icon-button"
-              aria-label="Notificações"
-              aria-expanded={mostrarNotificacoes}
-              onClick={() => setMostrarNotificacoes((valor) => !valor)}
-            >
-              🕭
-            </button>
-
-            {mostrarNotificacoes && (
-              <div
-                className="topbar__notifications"
-                role="menu"
+          <div className="topbar__actions">
+            <div className="topbar__notifications-wrap" ref={notificacoesRef}>
+              <button
+                type="button"
+                className="topbar__icon-button"
                 aria-label="Notificações"
+                aria-expanded={mostrarNotificacoes}
+                onClick={() => setMostrarNotificacoes((valor) => !valor)}
               >
-                <div className="topbar__notifications-header">
-                  <strong>Notificações</strong>
-                  <span>{notificacoes.length}</span>
-                </div>
+                🕭
+              </button>
 
-                {notificacoes.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    className="topbar__notification-item"
-                  >
-                    <span>{item.titulo}</span>
-                    <small>{item.tempo}</small>
-                  </button>
-                ))}
-              </div>
-            )}
+              {mostrarNotificacoes && (
+                <div
+                  className="topbar__notifications"
+                  role="menu"
+                  aria-label="Notificações"
+                >
+                  <div className="topbar__notifications-header">
+                    <strong>Notificações</strong>
+                    <span>{notificacoes.length}</span>
+                  </div>
+
+                  {notificacoes.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className="topbar__notification-item"
+                    >
+                      <span>{item.titulo}</span>
+                      <small>{item.tempo}</small>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

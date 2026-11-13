@@ -1418,6 +1418,21 @@
   margin: 0;
   padding: 14px;
   gap: 8px;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.page--ambientes .ambientes-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(37, 99, 235, 0.55);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15);
+}
+
+.page--ambientes .ambientes-card:focus-visible {
+  outline: 2px solid rgba(37, 99, 235, 0.55);
+  outline-offset: 3px;
 }
 
 .page--ambientes .ambientes-lista {
@@ -1817,4 +1832,26 @@
   .ambiente-component-status {
     margin-left: 52px;
   }
+}
+.filters .custom-select__trigger,
+.filters .ambientes-busca,
+.report-filters .cselect__trigger,
+.report-filters__field input,
+.componentes-toolbar .componentes-search,
+.componentes-toolbar select {
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+    border: 2px solid var(--panel-input-border);
+}
+
+.filters .custom-select__trigger:hover,
+.filters select:hover,
+.filters .ambientes-busca:hover,
+.report-filters .cselect__trigger:hover,
+.report-filters__field input:hover,
+.componentes-toolbar .componentes-search:hover,
+.componentes-toolbar select:hover {
+  border-color: rgba(0, 81, 255, 0.671);
+  box-shadow: 0 0 0 3px var(--accent-dim);
 }

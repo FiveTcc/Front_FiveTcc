@@ -598,66 +598,67 @@ export default function Ambientes() {
 
   return (
     <div className="page page--ambientes ambientes">
-      <header className="page__header">
-        <div>
-          <h1>Ambientes</h1>
-          <p className="muted">
-            {modo === "grade"
-              ? "Gerencie os ambientes cadastrados no sistema."
-              : "Gerencie os ambientes cadastrados no sistema e visualize seus componentes."}
-          </p>
-        </div>
-      </header>
+      <div className="page__top">
+        <header className="page__header">
+          <div>
+            <h1>Ambientes</h1>
+            <p className="muted">
+              {modo === "grade"
+                ? "Gerencie os ambientes cadastrados no sistema."
+                : "Gerencie os ambientes cadastrados no sistema e visualize seus componentes."}
+            </p>
+          </div>
+        </header>
 
-      <div className="topbar ambientes-topbar">
-        <div className="topbar__search" aria-label="Buscar ambientes">
-          {/* <Search size={18} aria-hidden="true" /> */}
-          <span className="topbar__icon" aria-hidden="true">
+        <div className="topbar ambientes-topbar">
+          <div className="topbar__search" aria-label="Buscar ambientes">
+            <span className="topbar__icon" aria-hidden="true">
               ⌕
-          </span>
-          <input
-            type="search"
-            value={f.q}
-            onChange={set("q")}
-            placeholder="Buscar por nome, bloco ou tipo..."
-            aria-label="Buscar ambientes"
-          />
-        </div>
-        <div className="topbar__actions">
-          <div className="topbar__notifications-wrap" ref={notificacoesRef}>
-            <button
-              type="button"
-              className="topbar__icon-button"
-              aria-expanded={mostrarNotificacoes}
-              aria-label="Notificações"
-              onClick={() => setMostrarNotificacoes((valor) => !valor)}
-            >
-              🕭
-            </button>
-
-            {mostrarNotificacoes && (
-              <div
-                className="topbar__notifications"
-                role="menu"
+            </span>
+            <input
+              type="search"
+              value={f.q}
+              onChange={set("q")}
+              placeholder="Buscar por nome, bloco ou tipo..."
+              aria-label="Buscar ambientes"
+            />
+          </div>
+          <div className="topbar__actions">
+            <div className="topbar__notifications-wrap" ref={notificacoesRef}>
+              <button
+                type="button"
+                className="topbar__icon-button"
+                aria-expanded={mostrarNotificacoes}
                 aria-label="Notificações"
+                onClick={() => setMostrarNotificacoes((valor) => !valor)}
               >
-                <div className="topbar__notifications-header">
-                  <strong>Notificações</strong>
-                  <span>{notificacoes.length}</span>
-                </div>
+                🕭
+              </button>
 
-                {notificacoes.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    className="topbar__notification-item"
-                  >
-                    <span>{item.titulo}</span>
-                    <small>{item.tempo}</small>
-                  </button>
-                ))}
-              </div>
-            )}
+              {mostrarNotificacoes && (
+                <div
+                  className="topbar__notifications"
+                  role="menu"
+                  aria-label="Notificações"
+                >
+                  <div className="topbar__notifications-header">
+                    <strong>Notificações</strong>
+                    <span>{notificacoes.length}</span>
+                  </div>
+
+                  {notificacoes.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className="topbar__notification-item"
+                    >
+                      <span>{item.titulo}</span>
+                      <small>{item.tempo}</small>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -781,7 +782,7 @@ export default function Ambientes() {
                     <p className="ambientes-desc">{sel.desc}</p>
                   </div>
                   <button
-                    className="btn btn--ghost ambientes-btn-sec"
+                    className="btn btn--ghost "
                     onClick={abrirEdicao}
                   >
                     <Pencil size={15} /> Editar
