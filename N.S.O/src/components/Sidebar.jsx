@@ -148,6 +148,10 @@ export default function Sidebar() {
     setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
   }
 
+  function fecharMenu() {
+    setMenuAberto(false);
+  }
+
   return (
     <>
       <button
@@ -156,13 +160,23 @@ export default function Sidebar() {
         onClick={() => setMenuAberto((aberto) => !aberto)}
         aria-label={menuAberto ? "Esconder menu" : "Mostrar menu"}
         aria-expanded={menuAberto}
+        aria-controls="sidebar-navigation"
       >
         <span />
         <span />
         <span />
       </button>
 
-    <aside className={`sidebar${menuAberto ? " sidebar--open" : ""}`}>
+      {menuAberto && (
+        <button
+          type="button"
+          className="sidebar-backdrop"
+          onClick={fecharMenu}
+          aria-label="Fechar menu"
+        />
+      )}
+
+    <aside id="sidebar-navigation" className={`sidebar${menuAberto ? " sidebar--open" : ""}`}>
       <div className="sidebar__brand">
         <img src={logoNOS} alt="Logo N.O.S." className="sidebar__brand-logo" />
         <div>
@@ -171,7 +185,7 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <nav className="sidebar__nav">
+      <nav className="sidebar__nav" onClick={fecharMenu}>
         <NavLink to="/painel" className={getNavLinkClassName}>
           {ICONS.painel}
           DashBoard

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import {
   PRIORIDADE_LABEL,
@@ -47,6 +47,7 @@ export default function Relatorios() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
   const [menuExportarAberto, setMenuExportarAberto] = useState(false);
+  const menuExportarRef = useRef(null);
   const [exportando, setExportando] = useState(false);
   const [mensagemExportacao, setMensagemExportacao] = useState("");
   const [filtros, setFiltros] = useState({
@@ -60,6 +61,23 @@ export default function Relatorios() {
   const [filtrosAplicados, setFiltrosAplicados] = useState({});
   const [mostrarHistoricoCompleto, setMostrarHistoricoCompleto] =
     useState(false);
+
+  useEffect(() => {
+    if (!menuExportarAberto) return;
+
+    function fecharAoClicarFora(event) {
+      if (
+        menuExportarRef.current &&
+        !menuExportarRef.current.contains(event.target)
+      ) {
+        setMenuExportarAberto(false);
+      }
+    }
+
+    document.addEventListener("mousedown", fecharAoClicarFora);
+    return () =>
+      document.removeEventListener("mousedown", fecharAoClicarFora);
+  }, [menuExportarAberto]);
 
   useEffect(() => {
     let ativo = true;
@@ -305,7 +323,7 @@ export default function Relatorios() {
             </div>
           )}
 
-          <div className="report-export">
+          <div className="report-export" ref={menuExportarRef}>
             <button
               type="button"
               className="btn btn--primary"
