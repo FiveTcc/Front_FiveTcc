@@ -1,13 +1,22 @@
+/* ==========================================================================
+   01. VARIÁVEIS E TEMAS
+   ========================================================================== */
+
+/* ---------- Tema claro (padrão) ---------- */
 :root {
+  /* Fundos e superfícies */
   --bg: #ffffff;
   --surface: #ffffff;
   --surface-2: #f2f6fc;
   --surface-3: #e7eef8;
   --border: #dde5f0;
+
+  /* Textos */
   --text: #101826;
   --text-dim: #5b6b80;
   --text-faint: #718096;
 
+  /* Painéis e campos */
   --panel: #ffffff;
   --panel-strong: #f7f9fc;
   --panel-soft: #f4f7fb;
@@ -17,6 +26,7 @@
   --panel-icon: #4f7af6;
   --panel-muted: rgba(15, 23, 36, 0.03);
 
+  /* Cores de destaque e status */
   --accent: #2563eb;
   --accent-dim: #dce8fe;
   --orange: #e8862e;
@@ -25,17 +35,19 @@
   --amber: #b9860b;
   --red: #d42424;
 
+  /* Fontes */
   --font-display: "Space Grotesk", "Inter", sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
+  /* Formas e sombras */
   --radius: 12px;
   --radius-lg: 18px;
   --shadow-card:
     0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 16px rgba(16, 24, 40, 0.06);
 }
 
-/* ---------- Theme: Dark (overrides) ---------- */
+/* ---------- Tema escuro (sobrescreve as variáveis acima) ---------- */
 :root[data-theme="dark"],
 html[data-theme="dark"] {
   --bg: #09111b;
@@ -61,6 +73,11 @@ html[data-theme="dark"] {
   --shadow-card: 0 10px 24px rgba(2, 6, 23, 0.38);
 }
 
+
+/* ==========================================================================
+   02. RESET E ESTILOS BASE
+   ========================================================================== */
+
 * {
   box-sizing: border-box;
 }
@@ -69,6 +86,7 @@ html {
   scrollbar-gutter: stable;
 }
 
+/* Quando um modal de ambientes está aberto, remove a reserva da barra de rolagem */
 html:has(.ambientes-modal-fundo) {
   scrollbar-gutter: auto;
 }
@@ -89,6 +107,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* ---------- Títulos ---------- */
 h1,
 h2,
 h3 {
@@ -114,6 +133,7 @@ a {
   color: inherit;
 }
 
+/* ---------- Autopreenchimento do navegador (Chrome/Safari) ---------- */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -123,6 +143,7 @@ input:-webkit-autofill:active {
   transition: background-color 9999s ease-in-out 0s;
 }
 
+/* ---------- Campos herdam fonte e cor ---------- */
 button,
 input,
 select,
@@ -132,11 +153,13 @@ textarea {
   color: inherit;
 }
 
+/* ---------- Foco visível: sem contorno padrão do navegador ---------- */
 :focus-visible {
   outline: none;
   border-radius: 0;
 }
 
+/* Foco dos campos da tela de login */
 .acesso__campo input:focus,
 .acesso__campo input:focus-visible,
 .acesso__campo:focus-within {
@@ -144,6 +167,53 @@ textarea {
   box-shadow: none;
   border-color: rgba(0, 81, 255, 0.671);
 }
+
+/* ---------- Acessibilidade: respeita "reduzir movimento" do sistema ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+
+/* ==========================================================================
+   03. UTILITÁRIOS
+   ========================================================================== */
+
+/* Texto secundário */
+.esmaecido {
+  color: var(--text-dim);
+}
+
+/* Pequeno rótulo em caixa alta acima de títulos */
+.rotulo-superior {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+/* Link simples */
+.link {
+  color: var(--blue);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.link:hover {
+  text-decoration: underline;
+}
+
+
+/* ==========================================================================
+   04. TELA DE CARREGAMENTO
+   ========================================================================== */
 
 .carregamento-tela {
   min-height: 100vh;
@@ -156,7 +226,7 @@ textarea {
   padding: 24px;
 }
 
-/* logo da tela de */
+/* ---------- Logo animada ---------- */
 .carregamento-tela__logo-wrap {
   position: relative;
   display: grid;
@@ -166,6 +236,7 @@ textarea {
   margin-bottom: 12px;
 }
 
+/* Anel externo + anel interno giratório */
 .carregamento-tela__anel {
   position: absolute;
   inset: 0;
@@ -188,6 +259,7 @@ textarea {
   animation: spinRing 3.2s linear infinite;
 }
 
+/* Esferas que orbitam o anel */
 .carregamento-tela__orbita {
   position: absolute;
   inset: 0;
@@ -216,6 +288,7 @@ textarea {
   left: 14%;
 }
 
+/* ---------- Textos ---------- */
 .carregamento-tela__palavra {
   position: relative;
   z-index: 1;
@@ -235,6 +308,7 @@ textarea {
   letter-spacing: -0.04em;
 }
 
+/* ---------- Pontos pulsantes ---------- */
 .carregamento-tela__pontos {
   display: flex;
   align-items: center;
@@ -251,6 +325,7 @@ textarea {
   animation: pulseDot 1.4s ease-in-out infinite;
 }
 
+/* Atraso escalonado para o efeito de "onda" */
 .carregamento-tela__ponto:nth-child(2) {
   animation-delay: 0.15s;
 }
@@ -269,6 +344,7 @@ textarea {
   animation-delay: 0s;
 }
 
+/* ---------- Animações da tela de carregamento ---------- */
 @keyframes spinRing {
   0% {
     transform: rotate(0deg);
@@ -302,41 +378,12 @@ textarea {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-  }
-}
 
-.esmaecido {
-  color: var(--text-dim);
-}
+/* ==========================================================================
+   05. BOTÕES
+   ========================================================================== */
 
-.rotulo-superior {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 6px;
-}
-
-.link {
-  color: var(--blue);
-  text-decoration: none;
-  font-size: 0.9rem;
-}
-.link:hover {
-  text-decoration: underline;
-}
-
-/* ---------- Buttons ---------- */
-
+/* ---------- Botão base ---------- */
 .botao {
   display: inline-flex;
   align-items: center;
@@ -360,6 +407,8 @@ textarea {
 .botao:active {
   transform: translateY(-10px);
 }
+
+/* ---------- Botão "adicionar" ---------- */
 .botao.botao--adicionar {
   display: inline-flex;
   align-items: center;
@@ -382,6 +431,7 @@ textarea {
   outline-offset: 2px;
 }
 
+/* ---------- Variações ---------- */
 .botao--principal {
   background: var(--accent);
   color: #ffffff;
@@ -427,19 +477,35 @@ textarea {
   padding: 10px 90px;
   font-size: 1rem;
 }
+
+/* ---------- Estado desabilitado ---------- */
 .botao:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* ---------- Shell / Sidebar ---------- */
 
+/* ==========================================================================
+   06. LAYOUT PRINCIPAL
+   ========================================================================== */
+
+/* ---------- Estrutura geral: sidebar + conteúdo ---------- */
 .estrutura {
   display: grid;
   grid-template-columns: 248px minmax(0, 1fr);
   min-height: 100vh;
 }
 
+/* Área de conteúdo à direita da sidebar */
+.estrutura__conteudo {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  justify-self: stretch;
+  padding: 8px 40px 60px;
+}
+
+/* ---------- Sidebar (menu lateral) ---------- */
 .sidebar {
   background: var(--surface);
   border-right: 1px solid var(--border);
@@ -451,6 +517,7 @@ textarea {
   height: 100vh;
 }
 
+/* Marca / logo no topo da sidebar */
 .sidebar__marca {
   display: flex;
   align-items: center;
@@ -499,10 +566,12 @@ textarea {
   object-fit: contain;
 }
 
+/* No tema escuro, a logo é invertida para ficar clara */
 [data-theme="dark"] .sidebar__marca-logo {
   filter: brightness(0) invert(1) brightness(0.9);
 }
 
+/* Links de navegação */
 .sidebar__navegacao {
   display: flex;
   flex-direction: column;
@@ -532,12 +601,14 @@ textarea {
   background: var(--surface-3);
   color: var(--text);
 }
+/* Link da página atual */
 .sidebar__link.esta-ativo {
   background: var(--surface-3);
   color: var(--text);
   box-shadow: inset 2px 0 0 rgba(0, 81, 255, 0.671);
 }
 
+/* Rodapé da sidebar (usuário + ações) */
 .sidebar__rodape {
   border-top: 1px solid var(--border);
   padding-top: 14px;
@@ -564,12 +635,14 @@ textarea {
   align-items: center;
   gap: 12px;
 }
+/* Botão de sair fica vermelho ao passar o mouse */
 .sidebar__acoes .botao--transparente:hover {
   background: var(--red);
   border-color: var(--red);
   color: #ffffff;
 }
 
+/* ---------- Avatares ---------- */
 .avatar {
   width: 34px;
   height: 34px;
@@ -607,6 +680,191 @@ textarea {
   font-weight: 700;
 }
 
+
+/* ==========================================================================
+   07. TOPBAR E NOTIFICAÇÕES
+   ========================================================================== */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  align-self: flex-start;
+  justify-self: end;
+  width: min(100%, 380px);
+  margin-top: 1px;
+  min-height: 40px;
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  padding: 8px 10px;
+  box-shadow: var(--shadow-card);
+  position: static;
+}
+
+/* ---------- Campo de busca ---------- */
+.topbar__busca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-height: 40px;
+  background: var(--panel-soft);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 14px;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.topbar__busca:hover {
+  border-color: rgba(0, 81, 255, 0.541);
+}
+
+.topbar__busca:focus-within {
+  border-color: rgba(0, 81, 255, 0.671);
+}
+.topbar__simbolo {
+  font-size: 1.1rem;
+  color: var(--text-dim);
+}
+.topbar__busca input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.95rem;
+  min-width: 0;
+}
+.topbar__busca input::placeholder {
+  color: var(--text-faint);
+}
+
+/* ---------- Ações (tema, notificações) ---------- */
+.topbar__acoes {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 30;
+  transform: translateY(1px);
+}
+
+.topbar__notificacoes-wrap {
+  position: relative;
+  z-index: 20;
+}
+
+.topbar__simbolo-botao {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 2px solid rgba(148, 163, 184, 0.32);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.12s ease;
+}
+
+.topbar__simbolo-botao:hover {
+  border-color: rgba(0, 81, 255, 0.541);
+  background-color: rgba(148, 163, 184, 0.32);
+}
+
+/* ---------- Menu suspenso de notificações ---------- */
+.topbar__notificacoes {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 300px;
+  padding: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.topbar__notificacoes-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+/* Contador de notificações */
+.topbar__notificacoes-cabecalho span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-size: 0.7rem;
+}
+
+.topbar__notificacao-item {
+  width: 100%;
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-align: left;
+  padding: 10px 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.topbar__notificacao-item:hover {
+  background: var(--surface-2);
+}
+
+.topbar__notificacao-item small {
+  color: var(--text-dim);
+}
+
+/* ---------- Usuário na topbar ---------- */
+.topbar__usuario {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 6px;
+}
+.topbar__usuario strong {
+  display: block;
+  font-size: 0.9rem;
+}
+.topbar__usuario small {
+  color: var(--text-faint);
+  font-size: 0.72rem;
+}
+
+
+/* ==========================================================================
+   08. PERFIL DO USUÁRIO
+   ========================================================================== */
+
+/* ---------- 08.1 Estrutura e foto (versão inicial) ---------- */
 .perfil-estrutura {
   width: 100%;
   max-width: none;
@@ -654,6 +912,7 @@ textarea {
   color: var(--text);
 }
 
+/* Botão de upload: o <input type="file"> fica invisível sobre o botão */
 .perfil-foto__botao {
   position: relative;
   overflow: hidden;
@@ -674,175 +933,7 @@ textarea {
   cursor: pointer;
 }
 
-.topbar {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  align-self: flex-start;
-  justify-self: end;
-  width: min(100%, 380px);
-  margin-top: 1px;
-  min-height: 40px;
-  background: var(--panel);
-  border: 2px solid var(--border);
-  border-radius: 18px;
-  padding: 8px 10px;
-  box-shadow: var(--shadow-card);
-  position: static;
-}
-
-.topbar__busca {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-  min-height: 40px;
-  background: var(--panel-soft);
-  border: 2px solid var(--border);
-  border-radius: 14px;
-  padding: 10px 14px;
-  transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
-}
-
-.topbar__busca:hover {
-  border-color: rgba(0, 81, 255, 0.541);
-}
-
-.topbar__busca:focus-within {
-  border-color: rgba(0, 81, 255, 0.671);
-}
-.topbar__simbolo {
-  font-size: 1.1rem;
-  color: var(--text-dim);
-}
-.topbar__busca input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  color: var(--text);
-  font-size: 0.95rem;
-  min-width: 0;
-}
-.topbar__busca input::placeholder {
-  color: var(--text-faint);
-}
-
-.topbar__acoes {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  position: relative;
-  z-index: 30;
-  transform: translateY(1px);
-}
-
-.topbar__notificacoes-wrap {
-  position: relative;
-  z-index: 20;
-}
-
-.topbar__simbolo-botao {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  border: 2px solid rgba(148, 163, 184, 0.32);
-  background: var(--panel);
-  color: var(--text);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.05rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  transition:
-    border-color 0.15s ease,
-    background 0.15s ease,
-    color 0.15s ease,
-    transform 0.12s ease;
-}
-
-.topbar__simbolo-botao:hover {
-  border-color: rgba(0, 81, 255, 0.541);
-  background-color: rgba(148, 163, 184, 0.32);
-}
-
-.topbar__notificacoes {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-  width: 300px;
-  padding: 10px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  box-shadow: var(--shadow-card);
-  z-index: 200;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.topbar__notificacoes-cabecalho {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 6px 8px 12px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 8px;
-  color: var(--text);
-}
-
-.topbar__notificacoes-cabecalho span {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  background: var(--surface-2);
-  font-size: 0.7rem;
-}
-
-.topbar__notificacao-item {
-  width: 100%;
-  border: 0;
-  margin: 0;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
-  text-align: left;
-  padding: 10px 8px;
-  border-radius: 10px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.topbar__notificacao-item:hover {
-  background: var(--surface-2);
-}
-
-.topbar__notificacao-item small {
-  color: var(--text-dim);
-}
-.topbar__usuario {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-left: 6px;
-}
-.topbar__usuario strong {
-  display: block;
-  font-size: 0.9rem;
-}
-.topbar__usuario small {
-  color: var(--text-faint);
-  font-size: 0.72rem;
-}
-
+/* ---------- 08.2 Destaque do perfil ---------- */
 .perfil-destaque {
   display: flex;
   align-items: center;
@@ -888,12 +979,15 @@ textarea {
   min-width: 140px;
 }
 
+/* ---------- 08.3 Seções do perfil ---------- */
 .perfil-secao {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 20px 20px 18px;
 }
+
+/* Título de seção com ícone */
 .secao-titulo {
   display: flex;
   align-items: center;
@@ -918,6 +1012,7 @@ textarea {
   margin-bottom: 12px;
 }
 
+/* ---------- 08.4 Formulário e campos ---------- */
 .perfil-formulario__grade,
 .seguranca-grade {
   display: grid;
@@ -944,6 +1039,7 @@ textarea {
   padding: 10px 12px;
 }
 
+/* ---------- 08.5 Resumo (cards de números) ---------- */
 .resumo-grade {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -978,6 +1074,7 @@ textarea {
   color: var(--text-dim);
   font-size: 0.75rem;
 }
+/* Variações de cor do ícone */
 .resumo-card--alerta .resumo-card__simbolo {
   background: rgba(232, 134, 46, 0.12);
   color: #f2b05e;
@@ -1001,6 +1098,7 @@ textarea {
   font-size: 0.82rem;
 }
 
+/* ---------- 08.6 Segurança (troca de senha) ---------- */
 .perfil-seguranca {
   display: flex;
   flex-direction: column;
@@ -1026,6 +1124,7 @@ textarea {
   color: #8ae0b1;
 }
 
+/* ---------- 08.7 Histórico ---------- */
 .perfil-historico {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -1073,6 +1172,7 @@ textarea {
   color: var(--text-dim);
 }
 
+/* Estado vazio com fundo suave */
 .vazio--claro {
   background: rgba(148, 163, 184, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.04);
@@ -1080,6 +1180,7 @@ textarea {
   margin-top: 8px;
 }
 
+/* ---------- 08.8 Responsivo (versão inicial do perfil) ---------- */
 @media (max-width: 960px) {
   .perfil-formulario__grade,
   .seguranca-grade,
@@ -1109,22 +1210,447 @@ textarea {
   }
 }
 
-.estrutura__conteudo {
-  width: 100%;
-  max-width: none;
-  min-width: 0;
-  justify-self: stretch;
-  padding: 8px 40px 60px;
+/* ---------- 08.9 Layout da página de perfil (versão atual: resumo + abas) ---------- */
+
+/* Cabeçalho da página */
+.perfil-pagina-cabecalho {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0 20px;
+}
+.perfil-pagina-cabecalho__marca {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.perfil-pagina-cabecalho__titulo h1 {
+  margin: 0;
+}
+.perfil-pagina-cabecalho__titulo p {
+  margin: 0;
+  color: var(--text-dim);
+}
+.perfil-pagina-cabecalho h1 {
+  font-size: 1.5rem;
+  margin-bottom: 6px;
+}
+.perfil-pagina-cabecalho p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
 }
 
-/* ---------- Página ---------- */
+/* Duas colunas: resumo (esquerda) + painel principal (direita) */
+.perfil-disposicao {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.78fr) minmax(0, 1fr);
+  gap: 22px;
+  align-items: stretch;
+  min-width: 0;
+}
 
+/* ---------- Coluna do resumo ---------- */
+.perfil-resumo {
+  background: linear-gradient(180deg, var(--panel), var(--panel-strong));
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 26px 20px;
+  min-height: 440px;
+  min-width: 0;
+  box-shadow: var(--shadow-card);
+}
+
+.perfil-resumo__avatar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.perfil-resumo__avatar {
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.92),
+    rgba(37, 99, 235, 0.95)
+  );
+  box-shadow: 0 10px 22px rgba(2, 6, 23, 0.45);
+  overflow: hidden;
+}
+.perfil-resumo__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Botão de câmera sobre o avatar (troca de foto) */
+.perfil-resumo__camera {
+  position: relative;
+  margin-top: -18px;
+  right: -56px;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.45);
+  border: 2px solid var(--panel-strong);
+  color: #fff;
+  cursor: pointer;
+}
+.perfil-resumo__camera input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.perfil-resumo__conteudo {
+  text-align: left;
+  margin-top: 40px;
+}
+.perfil-resumo__conteudo h2 {
+  margin: 6px 0 2px;
+  font-size: 1.15rem;
+}
+.perfil-resumo__conteudo p {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.92rem;
+}
+
+.perfil-resumo__lista {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.perfil-resumo__item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  color: var(--text-dim);
+  font-size: 0.92rem;
+  min-width: 0;
+}
+.perfil-resumo__item > span:last-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.perfil-resumo__simbolo {
+  min-width: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.perfil-resumo__item--empilhado {
+  align-items: flex-start;
+}
+.perfil-resumo__rotulo {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-faint);
+}
+
+/* Selo de situação (ativo) */
+.perfil-resumo__situacao {
+  margin-top: 18px;
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(34, 197, 94, 0.08);
+  border-radius: 999px;
+  color: var(--text);
+  border: 1px solid rgba(34, 197, 94, 0.22);
+  font-weight: 600;
+}
+.perfil-resumo__situacao-ponto {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--green);
+  display: inline-block;
+}
+
+/* ---------- Painel principal com abas ---------- */
+.perfil-principal-painel {
+  background: linear-gradient(180deg, var(--panel), var(--panel-strong));
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px 14px 20px;
+  box-shadow: var(--shadow-card);
+  min-height: 0;
+  height: auto;
+  min-width: 0;
+}
+
+.perfil-principal-painel__abas {
+  display: flex;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  margin-bottom: 18px;
+}
+.perfil-principal-painel__aba {
+  background: transparent;
+  border: 0;
+  color: var(--text-dim);
+  padding: 10px 14px;
+  border-radius: 10px 10px 0 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+.perfil-principal-painel__aba.esta-ativo {
+  color: var(--text);
+  box-shadow: inset 0 -3px 0 0 var(--accent);
+}
+
+.perfil-principal-painel__corpo {
+  padding: 4px 4px 6px;
+}
+
+/* ---------- Formulário do painel ---------- */
+.perfil-formulario__titulo-grupo h3 {
+  margin: 0 0 10px;
+  font-size: 1.45rem;
+}
+.perfil-formulario__titulo-grupo p {
+  color: var(--text-dim);
+  margin-bottom: 18px;
+}
+
+.perfil-formulario__grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 22px;
+}
+.campo-bloco {
+  min-width: 0;
+}
+.campo-bloco input,
+.campo-bloco select {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 46px;
+  border-radius: 10px;
+}
+
+.perfil-formulario__envio {
+  margin-top: 26px;
+}
+.perfil-formulario__envio-botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--panel-input-border);
+  background: var(--panel);
+  color: var(--text);
+  margin-top: 12px;
+  box-shadow: var(--shadow-card);
+}
+.perfil-formulario__envio-botao.botao--transparente:hover {
+  border-color: var(--panel-input-border);
+  background: var(--panel);
+}
+.perfil-formulario__observacao {
+  color: var(--text-dim);
+  margin-top: 14px;
+  font-size: 0.88rem;
+}
+
+/* ---------- Modal de recorte da foto ---------- */
+.recorte-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  place-items: center;
+}
+
+.recorte-modal__fundo {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7);
+}
+
+.recorte-modal__painel {
+  position: relative;
+  width: min(560px, calc(100vw - 24px));
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.45);
+}
+
+.recorte-modal__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.recorte-modal__cabecalho h4 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.recorte-modal__fechar {
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.recorte-modal__recorte-area {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  background: var(--surface-2);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.recorte-modal__controles {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.recorte-modal__controles label {
+  display: grid;
+  gap: 8px;
+  color: var(--text-dim);
+  font-size: 0.92rem;
+}
+
+.recorte-modal__controles input[type="range"] {
+  width: 100%;
+}
+
+.recorte-modal__acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* ---------- Ações do formulário ---------- */
+.perfil-formulario__acoes {
+  margin-top: 0;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: flex-end;
+}
+.perfil-principal-painel .perfil-formulario__acoes {
+  position: static;
+  right: auto;
+  bottom: auto;
+}
+.perfil-formulario__salvar {
+  min-width: 200px;
+  padding: 12px 18px;
+  border-radius: 12px;
+}
+
+/* ---------- Responsivo do layout de perfil ---------- */
+@media (max-width: 980px) {
+  .perfil-resumo {
+    order: 1;
+    min-height: 0;
+  }
+  .perfil-principal-painel {
+    order: 2;
+  }
+  .perfil-resumo__avatar {
+    width: 110px;
+    height: 110px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .perfil-formulario__grade {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- 08.10 Campos desabilitados / somente leitura seguem o tema ---------- */
+.campo-bloco select {
+  width: 100%;
+  padding: 10px 12px;
+  padding-right: 12px; /* mantém o espaço mesmo sem a seta */
+  border-radius: 10px;
+  border: 1px solid var(--panel-input-border);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(148, 163, 184, 0.01)
+  );
+  color: var(--text);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: none;
+}
+.campo-bloco select::-ms-expand {
+  display: none;
+}
+.campo-bloco select:disabled,
+.campo-bloco select[disabled] {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(148, 163, 184, 0.01)
+  );
+  color: var(--text);
+  border: 1px solid var(--panel-input-border);
+  opacity: 1;
+}
+
+.campo-bloco input[readonly] {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(148, 163, 184, 0.01)
+  );
+  color: var(--text);
+  border: 1px solid var(--panel-input-border);
+  opacity: 1;
+  cursor: default;
+  caret-color: transparent;
+  user-select: none;
+}
+
+
+/* ==========================================================================
+   09. ESTRUTURA DE PÁGINAS
+   ========================================================================== */
+
+/* Container padrão de qualquer página */
 .pagina {
   display: flex;
   flex-direction: column;
   gap: 20px;
   min-width: 0;
 }
+
+/* Linha superior: título à esquerda + topbar à direita */
 .pagina__superior {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(420px, 760px);
@@ -1136,13 +1662,38 @@ textarea {
   justify-content: flex-end;
   margin-top: 1px;
 }
+
+/* Página de ambientes (base; os detalhes ficam na seção 18) */
 .pagina--ambientes {
   gap: 20px;
   padding-top: 0px;
 }
 
+/* Página mais estreita e centralizada (formulários) */
+.pagina--estreita {
+  width: min(100%, 1180px);
+  max-width: 1180px;
+  margin: 8px auto 0;
+}
 
-/* ---------- Relatórios ---------- */
+/* Cabeçalho da página (título + ações) */
+.pagina__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+  padding-top: 2px;
+}
+
+.pagina__cabecalho h1 {
+  margin-bottom: 4px;
+}
+
+
+/* ==========================================================================
+   10. RELATÓRIOS
+   ========================================================================== */
 
 .pagina--relatorios {
   display: flex;
@@ -1152,13 +1703,7 @@ textarea {
   min-width: 0;
 }
 
-.pagina--estreita {
-  width: min(100%, 1180px);
-  max-width: 1180px;
-  margin: 8px auto 0;
-}
-
-/* Indicadores à esquerda e conteúdo à direita */
+/* ---------- Estrutura: indicadores à esquerda, conteúdo à direita ---------- */
 .relatorio-conteiner {
   display: grid;
   grid-template-columns: 175px minmax(0, 1fr);
@@ -1168,6 +1713,7 @@ textarea {
   min-width: 0;
 }
 
+/* ---------- Coluna esquerda: cards de resumo ---------- */
 .relatorio-resumo {
   display: grid;
   grid-template-columns: 1fr;
@@ -1206,7 +1752,7 @@ textarea {
   border-color: rgba(37, 99, 235, 0.35);
 }
 
-/* Coluna direita: agrupamento, filtros e três cards */
+/* ---------- Coluna direita: agrupamento, filtros e cards ---------- */
 .relatorio-conteudo {
   display: flex;
   flex-direction: column;
@@ -1220,7 +1766,7 @@ textarea {
   min-width: 0;
 }
 
-/* Filtros */
+/* ---------- Filtros do relatório ---------- */
 .relatorio-filtros {
   width: 100%;
   min-width: 0;
@@ -1258,6 +1804,7 @@ textarea {
   font: inherit;
 }
 
+/* Calendário nativo acompanha o tema */
 .relatorio-filtros__campo input[type="date"] {
   color-scheme: light;
 }
@@ -1271,6 +1818,7 @@ textarea {
   box-shadow: 0 0 0 3px var(--accent-dim);
 }
 
+/* Select personalizado dentro dos filtros */
 .relatorio-filtros .selecao-personalizada {
   width: 100%;
   background: transparent;
@@ -1338,7 +1886,7 @@ textarea {
   border-color: var(--accent);
 }
 
-/* Exportação */
+/* ---------- Exportação (PDF/Excel etc.) ---------- */
 .relatorio-exportacao__acoes {
   display: flex;
   align-items: center;
@@ -1392,7 +1940,7 @@ textarea {
   white-space: nowrap;
 }
 
-/* Listas e métricas */
+/* ---------- Listas e métricas ---------- */
 .relatorio-grade {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1471,7 +2019,7 @@ textarea {
   font-size: 0.8rem;
 }
 
-/* Três cards de indicadores adicionais */
+/* ---------- Três cards de indicadores adicionais ---------- */
 .relatorio-extra-grade {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1559,7 +2107,7 @@ textarea {
   font-family: var(--font-mono);
 }
 
-/* Histórico de ocorrências */
+/* ---------- Histórico de ocorrências ---------- */
 .card_historico {
   width: 100%;
   min-width: 0;
@@ -1600,27 +2148,13 @@ textarea {
   font-size: 0.76rem;
 }
 
-/* Cabeçalho */
-.pagina__cabecalho {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 40px;
-  flex-wrap: wrap;
-  padding-top: 2px;
-}
-
-.pagina__cabecalho h1 {
-  margin-bottom: 4px;
-}
-
 .relatorio-historico__acoes {
   display: flex;
   justify-content: center;
   margin-top: 16px;
 }
 
-/* Responsividade */
+/* ---------- Responsivo dos relatórios ---------- */
 @media (max-width: 1100px) {
   .relatorio-conteiner {
     grid-template-columns: 150px minmax(0, 1fr);
@@ -1680,8 +2214,11 @@ textarea {
 }
 
 
-/* ---------- Stat cards ---------- */
+/* ==========================================================================
+   11. CARDS DE ESTATÍSTICA, CARDS, GRÁFICO DE ROSCA E LISTA RECENTE
+   ========================================================================== */
 
+/* ---------- 11.1 Cards de estatística (painel) ---------- */
 .estatistica-grade {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1716,6 +2253,7 @@ textarea {
   font-size: 0.74rem;
   color: var(--text-faint);
 }
+/* Variações */
 .estatistica-card--alerta {
   background: linear-gradient(
     135deg,
@@ -1736,8 +2274,7 @@ textarea {
   color: var(--red);
 }
 
-/* ---------- Cards / grid ---------- */
-
+/* ---------- 11.2 Grades e cards genéricos ---------- */
 .grade-2 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1752,6 +2289,7 @@ textarea {
   align-items: start;
 }
 
+/* Card padrão */
 .card {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -1765,6 +2303,7 @@ textarea {
   height: auto;
 }
 
+/* ---------- 11.3 Cards específicos de cada tela ---------- */
 .card__relatorios {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -1868,6 +2407,7 @@ textarea {
   width: 100%;
 }
 
+/* ---------- 11.4 Detalhes dos cards ---------- */
 .card:last-child {
   margin-bottom: 0;
 }
@@ -1880,13 +2420,13 @@ textarea {
 .card__cabecalho h2 {
   margin: 0;
 }
+/* Card que contém uma tabela: sem padding, para a tabela ocupar tudo */
 .card--tabela {
   padding: 0;
   overflow: hidden;
 }
 
-/* ---------- Donut ---------- */
-
+/* ---------- 11.5 Gráfico de rosca (donut) ---------- */
 .grafico-rosca-linha {
   display: flex;
   align-items: center;
@@ -1939,8 +2479,7 @@ textarea {
   flex-shrink: 0;
 }
 
-/* ---------- Recent list ---------- */
-
+/* ---------- 11.6 Lista de itens recentes ---------- */
 .recente-lista {
   list-style: none;
   margin: 0;
@@ -1988,8 +2527,12 @@ textarea {
   white-space: nowrap;
 }
 
-/* ---------- Beacon (status) ---------- */
 
+/* ==========================================================================
+   12. INDICADORES DE STATUS, ETIQUETAS E FICHAS
+   ========================================================================== */
+
+/* ---------- 12.1 Sinalizador (bolinha pulsante de status) ---------- */
 .sinalizador {
   display: inline-flex;
   align-items: center;
@@ -2003,6 +2546,7 @@ textarea {
   position: relative;
   flex-shrink: 0;
 }
+/* Halo animado ao redor do ponto */
 .sinalizador__ponto::after {
   content: "";
   position: absolute;
@@ -2011,6 +2555,8 @@ textarea {
   opacity: 0.35;
   animation: pulse 2.4s ease-in-out infinite;
 }
+
+/* Cores por status */
 .sinalizador--aberto .sinalizador__ponto,
 .sinalizador--aberto .sinalizador__ponto::after {
   background: var(--orange);
@@ -2043,6 +2589,7 @@ textarea {
 .sinalizador--fechado .sinalizador__ponto::after {
   background: var(--text-faint);
 }
+/* Status "fechado" não pulsa */
 .sinalizador--fechado .sinalizador__ponto::after {
   display: none;
 }
@@ -2059,6 +2606,62 @@ textarea {
   }
 }
 
+/* ---------- 12.2 Etiquetas de prioridade ---------- */
+.etiqueta {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+.etiqueta--baixa {
+  background: rgba(251, 255, 0, 0.24);
+  color: var(--yellow);
+}
+.etiqueta--midia {
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--blue);
+}
+.etiqueta--alta {
+  background: rgba(232, 134, 46, 0.14);
+  color: var(--orange);
+}
+.etiqueta--critica {
+  background: rgba(224, 50, 90, 0.13);
+  color: var(--red);
+}
+
+/* ---------- 12.3 Fichas (perfil do usuário: administrador, técnico...) ---------- */
+.ficha {
+  font-size: 0.75rem;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  text-transform: capitalize;
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+}
+.ficha--administrador {
+  border-color: rgba(224, 50, 90, 0.45);
+  color: var(--red);
+  background: rgba(224, 50, 90, 0.08);
+}
+.ficha--tecnico {
+  border-color: rgba(37, 99, 235, 0.25);
+  color: var(--blue);
+  background: rgba(37, 99, 235, 0.08);
+}
+
+
+/* ==========================================================================
+   13. FILTROS, SELECTS PERSONALIZADOS, TABELAS E FORMULÁRIOS
+   ========================================================================== */
+
+/* ---------- 13.1 Barra de filtros e legenda de situação ---------- */
 .filtros {
   display: flex;
   align-items: center;
@@ -2095,6 +2698,7 @@ textarea {
   height: 44px;
 }
 
+/* Select de "tipo" com menu rolável */
 .personalizado-selecao--tipo {
   max-width: 220px;
 }
@@ -2109,58 +2713,7 @@ textarea {
   width: max-content;
 }
 
-/* ---------- Prioridade ---------- */
-
-.etiqueta {
-  display: inline-block;
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 3px 9px;
-  border-radius: 999px;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  white-space: nowrap;
-}
-.etiqueta--baixa {
-  background: rgba(251, 255, 0, 0.24);
-  color: var(--yellow);
-}
-.etiqueta--midia {
-  background: rgba(37, 99, 235, 0.1);
-  color: var(--blue);
-}
-.etiqueta--alta {
-  background: rgba(232, 134, 46, 0.14);
-  color: var(--orange);
-}
-.etiqueta--critica {
-  background: rgba(224, 50, 90, 0.13);
-  color: var(--red);
-}
-
-.ficha {
-  font-size: 0.75rem;
-  padding: 5px 12px;
-  border-radius: 999px;
-  background: var(--surface-3);
-  border: 1px solid var(--border);
-  text-transform: capitalize;
-  letter-spacing: 0.01em;
-  line-height: 1.5;
-}
-.ficha--administrador {
-  border-color: rgba(224, 50, 90, 0.45);
-  color: var(--red);
-  background: rgba(224, 50, 90, 0.08);
-}
-.ficha--tecnico {
-  border-color: rgba(37, 99, 235, 0.25);
-  color: var(--blue);
-  background: rgba(37, 99, 235, 0.08);
-}
-
-/* ---------- Filters ---------- */
-
+/* ---------- 13.2 Filtros (ajustes complementares) ---------- */
 .filtros {
   display: flex;
   gap: 10px;
@@ -2176,6 +2729,7 @@ textarea {
   border-radius: 14px;
 }
 
+/* ---------- 13.3 Elementos nativos de formulário ---------- */
 select option {
   background: var(--panel);
   color: var(--text);
@@ -2187,6 +2741,12 @@ textarea::placeholder {
   color: var(--text-faint);
 }
 
+textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+/* ---------- 13.4 Select personalizado (dropdown customizado) ---------- */
 .personalizado-selecao {
   position: relative;
   display: flex;
@@ -2208,6 +2768,7 @@ textarea::placeholder {
   width: 100%;
 }
 
+/* Botão que abre o menu */
 .personalizado-selecao__acionador {
   width: 100%;
   display: flex;
@@ -2234,6 +2795,7 @@ textarea::placeholder {
   box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.18);
 }
 
+/* Seta do select (gira ao abrir) */
 .personalizado-selecao__seta {
   color: inherit;
   font-size: 1rem;
@@ -2246,6 +2808,7 @@ textarea::placeholder {
   transform: rotate(180deg);
 }
 
+/* Menu com as opções */
 .personalizado-selecao__menu {
   position: absolute;
   top: calc(100% + 8px);
@@ -2298,13 +2861,7 @@ textarea::placeholder {
   box-shadow: none;
 }
 
-textarea {
-  resize: vertical;
-  font-family: inherit;
-}
-
-/* ---------- Table ---------- */
-
+/* ---------- 13.5 Tabela ---------- */
 .tabela {
   width: 100%;
   border-collapse: collapse;
@@ -2345,11 +2902,12 @@ textarea {
   color: var(--accent);
 }
 
-/* ensure a subtle divider appears above the table when inside a card--table */
+/* Linha divisória acima da tabela quando ela está dentro de um card--tabela */
 .card.card--tabela .tabela thead th {
   border-top: 1px solid var(--border);
 }
 
+/* ---------- 13.6 Estado vazio ---------- */
 .vazio {
   padding: 48px 20px;
   text-align: center;
@@ -2361,8 +2919,7 @@ textarea {
   margin-bottom: 6px;
 }
 
-/* ---------- Form ---------- */
-
+/* ---------- 13.7 Formulário padrão ---------- */
 .formulario {
   display: flex;
   flex-direction: column;
@@ -2399,6 +2956,8 @@ textarea {
     border-color 0.15s ease,
     box-shadow 0.15s ease;
 }
+
+/* Formulário de novo chamado: bordas mais grossas */
 .card__novochamado.formulario input,
 .card__novochamado.formulario select,
 .card__novochamado.formulario textarea,
@@ -2418,6 +2977,8 @@ textarea {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
 }
+.card__novochamado.formulario input:hover,
+.card__novochamado.formulario textarea:hover,
 .card__novochamado.formulario input:focus,
 .card__novochamado.formulario select:focus,
 .card__novochamado.formulario textarea:focus,
@@ -2426,6 +2987,7 @@ textarea {
 .card__novochamado.formulario .personalizado-selecao__acionador.esta-aberto {
   border-color: rgba(0, 81, 255, 0.671);
 }
+
 .formulario__linha {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2452,6 +3014,7 @@ textarea {
 .usuarios-novo-formulario > .formulario__acoes {
   margin-top: 4px;
 }
+/* No formulário de novo usuário os botões não "pulam" ao clicar */
 .usuarios-novo-formulario .botao,
 .usuarios-novo-formulario .botao:hover,
 .usuarios-novo-formulario .botao:active,
@@ -2462,6 +3025,8 @@ textarea {
   color: var(--green);
   font-size: 0.85rem;
 }
+
+/* ---------- Anexos ---------- */
 .formulario__anexos {
   display: flex;
   flex-direction: column;
@@ -2480,6 +3045,7 @@ textarea {
   align-items: center;
   margin-top: 8px;
 }
+/* O <input type="file"> fica invisível sobre o botão */
 .formulario__arquivo-botao {
   position: relative;
   overflow: hidden;
@@ -2500,8 +3066,12 @@ textarea {
   overflow-wrap: anywhere;
 }
 
-/* ---------- Ticket detail ---------- */
 
+/* ==========================================================================
+   14. DETALHE DO CHAMADO (OCORRÊNCIA) E LINHA DO TEMPO
+   ========================================================================== */
+
+/* ---------- 14.1 Estrutura base ---------- */
 .voltar-link {
   color: var(--text-dim);
   text-decoration: none;
@@ -2529,6 +3099,7 @@ textarea {
   white-space: pre-wrap;
 }
 
+/* Lista de detalhes (rótulo + valor) */
 .detalhe-lista {
   display: flex;
   flex-direction: column;
@@ -2558,8 +3129,7 @@ textarea {
   font-size: 0.9rem;
 }
 
-/* ---------- Timeline ---------- */
-
+/* ---------- 14.2 Linha do tempo (histórico e comentários) ---------- */
 .linha-do-tempo {
   list-style: none;
   margin: 0 0 18px;
@@ -2604,8 +3174,324 @@ textarea {
   flex: 1;
 }
 
-/* ---------- Login ---------- */
+/* ---------- 14.3 Acabamento visual da tela de detalhe ---------- */
+.chamado-detalhe-pagina {
+  gap: 20px;
+}
 
+.chamado-detalhe-pagina > .voltar-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+/* Cabeçalho em destaque */
+.chamado-detalhe-pagina .chamado-cabecalho {
+  padding: 22px 24px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--surface), var(--panel));
+  box-shadow: var(--shadow-card);
+}
+
+.chamado-detalhe-pagina .chamado-cabecalho h1 {
+  margin-top: 6px;
+  font-size: clamp(1.5rem, 3vw, 2.15rem);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.chamado-detalhe-pagina .chamado-cabecalho .rotulo-superior {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 4px 9px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+
+.chamado-detalhe-pagina .chamado-cabecalho__etiquetas {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-2);
+}
+
+/* Grade principal + coluna lateral */
+.chamado-detalhe-pagina .grade-2--assimetrico {
+  align-items: stretch;
+  gap: 20px;
+}
+
+.chamado-detalhe-pagina .grade-2--assimetrico > div,
+.chamado-detalhe-pagina aside {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.chamado-detalhe-pagina .card {
+  background: linear-gradient(145deg, var(--panel), var(--surface));
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  width: 100%;
+  margin: 0;
+}
+
+.chamado-detalhe-pagina .card h2 {
+  font-size: 1.05rem;
+  margin-bottom: 14px;
+}
+
+.chamado-detalhe-pagina .detalhe-lista {
+  flex: 1;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.chamado-detalhe-pagina aside > .card:first-child {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chamado-detalhe-pagina .detalhe-lista div {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.chamado-detalhe-pagina .detalhe-lista div:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+/* Histórico com altura fixa e rolagem */
+.chamado-detalhe-pagina .chamado-historico-rolagem {
+  height: 260px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 8px;
+  scrollbar-gutter: stable;
+}
+
+.chamado-detalhe-pagina .chamado-historico-rolagem .linha-do-tempo {
+  min-height: 0;
+  justify-content: flex-start;
+}
+
+/* Formulário de comentário */
+.chamado-detalhe-pagina .comentario-formulario {
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.chamado-detalhe-pagina .comentario-formulario input {
+  min-width: 0;
+  height: 46px;
+  min-height: 46px;
+  padding: 12px 14px;
+  background: var(--panel-input);
+  border: 1px solid var(--panel-input-border);
+  border-radius: 12px;
+  color: var(--text);
+}
+
+.chamado-detalhe-pagina .comentario-formulario .avatar {
+  width: 34px;
+  height: 34px;
+  font-size: 0.8rem;
+}
+
+.chamado-detalhe-pagina .formulario__erro {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--red) 45%, var(--border));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--red) 10%, transparent);
+}
+
+@media (max-width: 700px) {
+  .chamado-detalhe-pagina .chamado-cabecalho {
+    padding: 18px;
+  }
+
+  .chamado-detalhe-pagina .grade-2--assimetrico {
+    gap: 14px;
+  }
+
+  .chamado-detalhe-pagina .card {
+    padding: 14px;
+  }
+
+  .chamado-detalhe-pagina .comentario-formulario .botao {
+    width: 100%;
+  }
+}
+
+
+/* ==========================================================================
+   15. TELA DE CHAMADOS (FILTROS E AJUSTES MOBILE)
+   ========================================================================== */
+
+/* ---------- 15.1 Filtros da tela de ocorrências ---------- */
+.pagina--chamados .personalizado-selecao {
+  min-width: 0;
+}
+
+/* Select nativo estilizado com seta desenhada em CSS */
+.pagina--chamados .personalizado-selecao > select {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 0 38px 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  appearance: none;
+  background-color: var(--panel);
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 18px,
+    calc(100% - 12px) 18px;
+  background-size:
+    6px 6px,
+    6px 6px;
+  background-repeat: no-repeat;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.pagina--chamados .personalizado-selecao > select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+/* Desktop: legenda + 2 selects + botão em uma linha */
+@media (min-width: 701px) {
+  .pagina--chamados .filtros {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 190px 210px auto;
+    align-items: end;
+    gap: 12px;
+  }
+
+  .pagina--chamados .situacao-legenda-conteiner,
+  .pagina--chamados .personalizado-selecao {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .pagina--chamados .filtros {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .pagina--chamados .personalizado-selecao > select {
+    height: 46px;
+  }
+}
+
+/* ---------- 15.2 Acabamento mobile da tela de chamados ---------- */
+@media (max-width: 700px) {
+  .pagina--chamados {
+    width: 100%;
+    max-width: 100%;
+    gap: 16px;
+  }
+
+  .pagina--chamados .pagina__superior {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .pagina--chamados .pagina__cabecalho {
+    padding: 0;
+  }
+
+  .pagina--chamados .topbar {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .pagina--chamados .topbar__busca {
+    flex: 1 1 auto;
+  }
+
+  .pagina--chamados .topbar__acoes {
+    width: auto;
+    flex: 0 0 auto;
+  }
+
+  .pagina--chamados .filtros {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+    gap: 10px;
+    margin: 0;
+    padding: 12px;
+  }
+
+  .pagina--chamados .situacao-legenda-conteiner {
+    grid-column: 1 / -1;
+  }
+
+  .pagina--chamados .personalizado-selecao,
+  .pagina--chamados .filtros > .botao {
+    width: 100%;
+    min-width: 0 !important;
+  }
+
+  .pagina--chamados .filtros > .botao {
+    grid-column: 1 / -1;
+  }
+
+  .pagina--chamados .card__chamados {
+    width: 100%;
+    margin: 0;
+    padding: 8px;
+  }
+
+  .pagina--chamados .card__chamados .tabela {
+    min-width: 720px;
+  }
+
+  .pagina--chamados .personalizado-selecao__menu {
+    max-height: 220px;
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 380px) {
+  .pagina--chamados .filtros {
+    grid-template-columns: 1fr;
+  }
+
+  .pagina--chamados .situacao-legenda-conteiner,
+  .pagina--chamados .filtros > .botao {
+    grid-column: auto;
+  }
+}
+
+
+/* ==========================================================================
+   16. LOGIN, RECUPERAÇÃO DE SENHA E ANIMAÇÃO DA PLACA DE CIRCUITO
+   ========================================================================== */
+
+/* ---------- 16.1 Página de login: container e botão de tema ---------- */
 .acesso {
   position: relative;
   min-height: 100vh;
@@ -2637,6 +3523,7 @@ textarea {
   background-color: rgba(148, 163, 184, 0.32);
 }
 
+/* ---------- 16.2 Painel dividido em duas colunas (visual + formulário) ---------- */
 .acesso__painel {
   width: min(1180px, 94vw);
   min-height: min(720px, calc(100vh - 56px));
@@ -2649,6 +3536,7 @@ textarea {
   box-shadow: var(--shadow-card);
 }
 
+/* ---------- 16.3 Coluna visual (esquerda) ---------- */
 .acesso__visual {
   position: relative;
   padding: 34px 46px 28px;
@@ -2704,6 +3592,7 @@ textarea {
   max-width: 560px;
 }
 
+/* ---------- 16.4 Coluna do formulário (direita) ---------- */
 .acesso__formulario-painel {
   display: flex;
   flex-direction: column;
@@ -2730,6 +3619,7 @@ textarea {
   gap: 18px;
 }
 
+/* Campo com ícone à esquerda e (opcional) botão de mostrar senha */
 .acesso__campo {
   display: flex;
   align-items: center;
@@ -2814,6 +3704,7 @@ textarea {
   position: static;
 }
 
+/* Botões de enviar / secundário */
 .acesso__envio,
 .acesso__secundario {
   width: 100%;
@@ -2846,6 +3737,7 @@ textarea {
   color: var(--text);
 }
 
+/* ---------- 16.5 Recuperação de senha ---------- */
 .recuperacao-card {
   width: min(460px, 94vw);
   padding: 42px;
@@ -2947,7 +3839,9 @@ textarea {
   text-decoration: underline;
 }
 
-/* light theme: use accent (blue); dark theme: use muted text color */
+/* ---------- 16.6 Animação da placa de circuito impresso (SVG do login) ---------- */
+
+/* Tema claro: azul de destaque | Tema escuro: texto discreto */
 :root:not([data-theme="dark"]) .placa-circuito-impresso-animacao {
   color: rgba(0, 81, 255, 0.671);
 }
@@ -2960,6 +3854,7 @@ textarea {
 .placa-circuito-impresso-animacao svg {
   overflow: visible;
 }
+/* LEDs que piscam */
 .placa-circuito-impresso-animacao .placa-circuito-impresso-led {
   fill: currentColor;
   opacity: 0.12;
@@ -2981,6 +3876,7 @@ textarea {
   }
 }
 
+/* Pulso que percorre as trilhas */
 .placa-circuito-impresso-pulso {
   stroke: currentColor;
   stroke-dasharray: 1;
@@ -2994,6 +3890,7 @@ textarea {
   }
 }
 
+/* Chips que "respiram" */
 .placa-circuito-impresso-ficha-pulso {
   stroke: currentColor;
   stroke-opacity: 0.28;
@@ -3011,8 +3908,85 @@ textarea {
   }
 }
 
-/* ---------- Responsive ---------- */
+/* ---------- 16.7 Responsivo do login ---------- */
+@media (max-width: 900px) {
+  .acesso {
+    place-items: start center;
+    overflow-y: auto;
+  }
 
+  .acesso.recuperacao-pagina {
+    place-items: center;
+    min-height: 100dvh;
+  }
+
+  .acesso__painel {
+    width: min(680px, 100%);
+    min-height: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .acesso__visual {
+    padding: 28px 32px 24px;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .acesso__destaque {
+    margin-top: 12px;
+    padding-right: 0;
+  }
+
+  .acesso__ilustracao {
+    margin-top: 24px;
+  }
+
+  .acesso__formulario-painel {
+    padding: 40px 32px 48px;
+  }
+}
+
+@media (max-width: 560px) {
+  .acesso {
+    padding: 16px;
+  }
+
+  .recuperacao-pagina .recuperacao-card {
+    width: 100%;
+  }
+
+  .acesso__tema-alternar {
+    top: 16px;
+    right: 16px;
+  }
+
+  .acesso__painel {
+    width: 100%;
+    border-radius: 16px;
+  }
+
+  .acesso__visual {
+    padding: 24px 20px 20px;
+  }
+
+  .acesso__destaque h2 {
+    font-size: clamp(1.8rem, 8vw, 2.4rem);
+  }
+
+  .acesso__formulario-painel {
+    padding: 32px 20px 36px;
+  }
+}
+
+
+/* ==========================================================================
+   17. RESPONSIVO GLOBAL (CAMADAS SOBREPOSTAS)
+   --------------------------------------------------------------------------
+   ATENÇÃO: estas camadas se sobrescrevem na ordem em que aparecem.
+   Não reordene os blocos abaixo sem testar em todas as larguras de tela.
+   ========================================================================== */
+
+/* ---------- 17.1 Tablet e celular: layout geral (980px / 560px) ---------- */
 @media (max-width: 980px) {
   .estrutura {
     grid-template-columns: 1fr;
@@ -3084,554 +4058,7 @@ textarea {
   }
 }
 
-@media (max-width: 900px) {
-  .acesso {
-    place-items: start center;
-    overflow-y: auto;
-  }
-
-  .acesso.recuperacao-pagina {
-    place-items: center;
-    min-height: 100dvh;
-  }
-
-  .acesso__painel {
-    width: min(680px, 100%);
-    min-height: auto;
-    grid-template-columns: 1fr;
-  }
-
-  .acesso__visual {
-    padding: 28px 32px 24px;
-    border-right: 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .acesso__destaque {
-    margin-top: 12px;
-    padding-right: 0;
-  }
-
-  .acesso__ilustracao {
-    margin-top: 24px;
-  }
-
-  .acesso__formulario-painel {
-    padding: 40px 32px 48px;
-  }
-}
-
-@media (max-width: 560px) {
-  .acesso {
-    padding: 16px;
-  }
-
-  .recuperacao-pagina .recuperacao-card {
-    width: 100%;
-  }
-
-  .acesso__tema-alternar {
-    top: 16px;
-    right: 16px;
-  }
-
-  .acesso__painel {
-    width: 100%;
-    border-radius: 16px;
-  }
-
-  .acesso__visual {
-    padding: 24px 20px 20px;
-  }
-
-  .acesso__destaque h2 {
-    font-size: clamp(1.8rem, 8vw, 2.4rem);
-  }
-
-  .acesso__formulario-painel {
-    padding: 32px 20px 36px;
-  }
-}
-
-/* ---------- Profile page layout ---------- */
-.perfil-pagina-cabecalho {
-  display: flex;
-  gap: 18px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 0 20px;
-}
-.perfil-pagina-cabecalho__marca {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-.perfil-pagina-cabecalho__titulo h1 {
-  margin: 0;
-}
-.perfil-pagina-cabecalho__titulo p {
-  margin: 0;
-  color: var(--text-dim);
-}
-.perfil-pagina-cabecalho h1 {
-  font-size: 1.5rem;
-  margin-bottom: 6px;
-}
-.perfil-pagina-cabecalho p {
-  color: var(--text-dim);
-  font-size: 0.95rem;
-}
-
-.perfil-disposicao {
-  display: grid;
-  grid-template-columns: minmax(280px, 0.78fr) minmax(0, 1fr);
-  gap: 22px;
-  align-items: stretch;
-  min-width: 0;
-}
-
-.perfil-resumo {
-  background: linear-gradient(180deg, var(--panel), var(--panel-strong));
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 26px 20px;
-  min-height: 440px;
-  min-width: 0;
-  box-shadow: var(--shadow-card);
-}
-
-.perfil-resumo__avatar-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-}
-.perfil-resumo__avatar {
-  width: 132px;
-  height: 132px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-family: var(--font-display);
-  font-size: 3rem;
-  font-weight: 700;
-  color: #fff;
-  background: linear-gradient(
-    135deg,
-    rgba(59, 130, 246, 0.92),
-    rgba(37, 99, 235, 0.95)
-  );
-  box-shadow: 0 10px 22px rgba(2, 6, 23, 0.45);
-  overflow: hidden;
-}
-.perfil-resumo__avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.perfil-resumo__camera {
-  position: relative;
-  margin-top: -18px;
-  right: -56px;
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
-  display: inline-grid;
-  place-items: center;
-  background: rgba(0, 0, 0, 0.45);
-  border: 2px solid var(--panel-strong);
-  color: #fff;
-  cursor: pointer;
-}
-.perfil-resumo__camera input {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  cursor: pointer;
-}
-
-.perfil-resumo__conteudo {
-  text-align: left;
-  margin-top: 40px;
-}
-.perfil-resumo__conteudo h2 {
-  margin: 6px 0 2px;
-  font-size: 1.15rem;
-}
-.perfil-resumo__conteudo p {
-  margin: 0;
-  color: var(--text-dim);
-  font-size: 0.92rem;
-}
-
-.perfil-resumo__lista {
-  margin-top: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.perfil-resumo__item {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  color: var(--text-dim);
-  font-size: 0.92rem;
-  min-width: 0;
-}
-.perfil-resumo__item > span:last-child {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-.perfil-resumo__simbolo {
-  min-width: 22px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.perfil-resumo__item--empilhado {
-  align-items: flex-start;
-}
-.perfil-resumo__rotulo {
-  display: block;
-  font-size: 0.78rem;
-  color: var(--text-faint);
-}
-
-.perfil-resumo__situacao {
-  margin-top: 18px;
-  display: inline-flex;
-  gap: 10px;
-  align-items: center;
-  padding: 8px 12px;
-  background: rgba(34, 197, 94, 0.08);
-  border-radius: 999px;
-  color: var(--text);
-  border: 1px solid rgba(34, 197, 94, 0.22);
-  font-weight: 600;
-}
-.perfil-resumo__situacao-ponto {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--green);
-  display: inline-block;
-}
-
-.perfil-principal-painel {
-  background: linear-gradient(180deg, var(--panel), var(--panel-strong));
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 18px 20px 14px 20px;
-  box-shadow: var(--shadow-card);
-  min-height: 0;
-  height: auto;
-  min-width: 0;
-}
-
-.perfil-principal-painel__abas {
-  display: flex;
-  gap: 12px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 12px;
-  margin-bottom: 18px;
-}
-.perfil-principal-painel__aba {
-  background: transparent;
-  border: 0;
-  color: var(--text-dim);
-  padding: 10px 14px;
-  border-radius: 10px 10px 0 0;
-  cursor: pointer;
-  font-weight: 600;
-}
-.perfil-principal-painel__aba.esta-ativo {
-  color: var(--text);
-  box-shadow: inset 0 -3px 0 0 var(--accent);
-}
-
-.perfil-principal-painel__corpo {
-  padding: 4px 4px 6px;
-}
-
-.perfil-formulario__titulo-grupo h3 {
-  margin: 0 0 10px;
-  font-size: 1.45rem;
-}
-.perfil-formulario__titulo-grupo p {
-  color: var(--text-dim);
-  margin-bottom: 18px;
-}
-
-.perfil-formulario__grade {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px 22px;
-}
-.campo-bloco {
-  min-width: 0;
-}
-.campo-bloco input,
-.campo-bloco select {
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  min-height: 46px;
-  border-radius: 10px;
-}
-
-.perfil-formulario__envio {
-  margin-top: 26px;
-}
-.perfil-formulario__envio-botao {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid var(--panel-input-border);
-  background: var(--panel);
-  color: var(--text);
-  margin-top: 12px;
-  box-shadow: var(--shadow-card);
-}
-.perfil-formulario__envio-botao.botao--transparente:hover {
-  border-color: var(--panel-input-border);
-  background: var(--panel);
-}
-.perfil-formulario__observacao {
-  color: var(--text-dim);
-  margin-top: 14px;
-  font-size: 0.88rem;
-}
-
-.recorte-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 1200;
-  display: grid;
-  place-items: center;
-}
-
-.recorte-modal__fundo {
-  position: absolute;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.7);
-}
-
-.recorte-modal__painel {
-  position: relative;
-  width: min(560px, calc(100vw - 24px));
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.45);
-}
-
-.recorte-modal__cabecalho {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-.recorte-modal__cabecalho h4 {
-  margin: 0;
-  font-size: 1.1rem;
-}
-
-.recorte-modal__fechar {
-  border: 0;
-  background: transparent;
-  color: var(--text);
-  font-size: 1.8rem;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.recorte-modal__recorte-area {
-  position: relative;
-  width: 100%;
-  height: 360px;
-  background: var(--surface-2);
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-}
-
-.recorte-modal__controles {
-  display: grid;
-  gap: 14px;
-  margin-top: 18px;
-}
-
-.recorte-modal__controles label {
-  display: grid;
-  gap: 8px;
-  color: var(--text-dim);
-  font-size: 0.92rem;
-}
-
-.recorte-modal__controles input[type="range"] {
-  width: 100%;
-}
-
-.recorte-modal__acoes {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.perfil-formulario__acoes {
-  margin-top: 0;
-  margin-bottom: 6px;
-  display: flex;
-  justify-content: flex-end;
-}
-.perfil-principal-painel .perfil-formulario__acoes {
-  position: static;
-  right: auto;
-  bottom: auto;
-}
-.perfil-formulario__salvar {
-  min-width: 200px;
-  padding: 12px 18px;
-  border-radius: 12px;
-}
-
-@media (max-width: 980px) {
-  .perfil-resumo {
-    order: 1;
-    min-height: 0;
-  }
-  .perfil-principal-painel {
-    order: 2;
-  }
-  .perfil-resumo__avatar {
-    width: 110px;
-    height: 110px;
-  }
-}
-
-@media (max-width: 1100px) {
-  .perfil-formulario__grade {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* end profile styles */
-
-/* Ensure select visually follows the active theme even when disabled */
-.campo-bloco select {
-  width: 100%;
-  padding: 10px 12px;
-  padding-right: 12px; /* keep space when arrow removed */
-  border-radius: 10px;
-  border: 1px solid var(--panel-input-border);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.02),
-    rgba(148, 163, 184, 0.01)
-  );
-  color: var(--text);
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: none;
-}
-.campo-bloco select::-ms-expand {
-  display: none;
-}
-.campo-bloco select:disabled,
-.campo-bloco select[disabled] {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.02),
-    rgba(148, 163, 184, 0.01)
-  );
-  color: var(--text);
-  border: 1px solid var(--panel-input-border);
-  opacity: 1;
-}
-
-.campo-bloco input[readonly] {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.02),
-    rgba(148, 163, 184, 0.01)
-  );
-  color: var(--text);
-  border: 1px solid var(--panel-input-border);
-  opacity: 1;
-  cursor: default;
-  caret-color: transparent;
-  user-select: none;
-}
-
-/* Filtros da tela de ocorrencias */
-.pagina--chamados .personalizado-selecao {
-  min-width: 0;
-}
-
-.pagina--chamados .personalizado-selecao > select {
-  width: 100%;
-  min-width: 0;
-  height: 44px;
-  padding: 0 38px 0 12px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  appearance: none;
-  background-color: var(--panel);
-  background-image:
-    linear-gradient(45deg, transparent 50%, currentColor 50%),
-    linear-gradient(135deg, currentColor 50%, transparent 50%);
-  background-position:
-    calc(100% - 18px) 18px,
-    calc(100% - 12px) 18px;
-  background-size:
-    6px 6px,
-    6px 6px;
-  background-repeat: no-repeat;
-  color: var(--text);
-  font: inherit;
-  cursor: pointer;
-}
-
-.pagina--chamados .personalizado-selecao > select:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
-}
-
-@media (min-width: 701px) {
-  .pagina--chamados .filtros {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 190px 210px auto;
-    align-items: end;
-    gap: 12px;
-  }
-
-  .pagina--chamados .situacao-legenda-conteiner,
-  .pagina--chamados .personalizado-selecao {
-    min-width: 0;
-  }
-}
-
-@media (max-width: 700px) {
-  .pagina--chamados .filtros {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
-
-  .pagina--chamados .personalizado-selecao > select {
-    height: 46px;
-  }
-}
-
-/* ---------- Ajustes responsivos globais ---------- */
-
+/* ---------- 17.2 Ajustes responsivos globais (700px / 560px) ---------- */
 @media (max-width: 700px) {
   html,
   body,
@@ -4008,164 +4435,7 @@ textarea {
   }
 }
 
-/* Acabamento da tela de detalhe da ocorrência */
-.chamado-detalhe-pagina {
-  gap: 20px;
-}
-
-.chamado-detalhe-pagina > .voltar-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  width: fit-content;
-  padding: 8px 12px;
-  border-radius: 10px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-}
-
-.chamado-detalhe-pagina .chamado-cabecalho {
-  padding: 22px 24px;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  background: linear-gradient(135deg, var(--surface), var(--panel));
-  box-shadow: var(--shadow-card);
-}
-
-.chamado-detalhe-pagina .chamado-cabecalho h1 {
-  margin-top: 6px;
-  font-size: clamp(1.5rem, 3vw, 2.15rem);
-  line-height: 1.15;
-  overflow-wrap: anywhere;
-}
-
-.chamado-detalhe-pagina .chamado-cabecalho .rotulo-superior {
-  display: inline-flex;
-  align-items: center;
-  min-height: 26px;
-  padding: 4px 9px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--surface-2);
-}
-
-.chamado-detalhe-pagina .chamado-cabecalho__etiquetas {
-  padding: 8px 10px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--surface-2);
-}
-
-.chamado-detalhe-pagina .grade-2--assimetrico {
-  align-items: stretch;
-  gap: 20px;
-}
-
-.chamado-detalhe-pagina .grade-2--assimetrico > div,
-.chamado-detalhe-pagina aside {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  min-width: 0;
-}
-
-.chamado-detalhe-pagina .card {
-  background: linear-gradient(145deg, var(--panel), var(--surface));
-  border-radius: 16px;
-  box-shadow: var(--shadow-card);
-  width: 100%;
-  margin: 0;
-}
-
-.chamado-detalhe-pagina .card h2 {
-  font-size: 1.05rem;
-  margin-bottom: 14px;
-}
-
-.chamado-detalhe-pagina .detalhe-lista {
-  flex: 1;
-  justify-content: space-between;
-  gap: 14px;
-}
-
-.chamado-detalhe-pagina aside > .card:first-child {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.chamado-detalhe-pagina .detalhe-lista div {
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--border);
-}
-
-.chamado-detalhe-pagina .detalhe-lista div:last-child {
-  padding-bottom: 0;
-  border-bottom: 0;
-}
-
-.chamado-detalhe-pagina .chamado-historico-rolagem {
-  height: 260px;
-  max-height: 260px;
-  overflow-y: auto;
-  padding-right: 8px;
-  scrollbar-gutter: stable;
-}
-
-.chamado-detalhe-pagina .chamado-historico-rolagem .linha-do-tempo {
-  min-height: 0;
-  justify-content: flex-start;
-}
-
-.chamado-detalhe-pagina .comentario-formulario {
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.chamado-detalhe-pagina .comentario-formulario input {
-  min-width: 0;
-  height: 46px;
-  min-height: 46px;
-  padding: 12px 14px;
-  background: var(--panel-input);
-  border: 1px solid var(--panel-input-border);
-  border-radius: 12px;
-  color: var(--text);
-}
-
-.chamado-detalhe-pagina .comentario-formulario .avatar {
-  width: 34px;
-  height: 34px;
-  font-size: 0.8rem;
-}
-
-.chamado-detalhe-pagina .formulario__erro {
-  margin: 0;
-  padding: 10px 12px;
-  border: 1px solid color-mix(in srgb, var(--red) 45%, var(--border));
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--red) 10%, transparent);
-}
-
-@media (max-width: 700px) {
-  .chamado-detalhe-pagina .chamado-cabecalho {
-    padding: 18px;
-  }
-
-  .chamado-detalhe-pagina .grade-2--assimetrico {
-    gap: 14px;
-  }
-
-  .chamado-detalhe-pagina .card {
-    padding: 14px;
-  }
-
-  .chamado-detalhe-pagina .comentario-formulario .botao {
-    width: 100%;
-  }
-}
-
-/* Sidebar vertical no celular */
+/* ---------- 17.3 Sidebar vertical no celular ---------- */
 @media (max-width: 700px) {
   .sidebar {
     position: fixed;
@@ -4291,96 +4561,14 @@ textarea {
   }
 }
 
-/* Acabamento da tela de chamados em telas pequenas */
-@media (max-width: 700px) {
-  .pagina--chamados {
-    width: 100%;
-    max-width: 100%;
-    gap: 16px;
-  }
+/* ---------- 17.4 Botão hambúrguer (menu recolhível no celular) ---------- */
 
-  .pagina--chamados .pagina__superior {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .pagina--chamados .pagina__cabecalho {
-    padding: 0;
-  }
-
-  .pagina--chamados .topbar {
-    display: flex;
-    width: 100%;
-    align-items: stretch;
-    gap: 8px;
-  }
-
-  .pagina--chamados .topbar__busca {
-    flex: 1 1 auto;
-  }
-
-  .pagina--chamados .topbar__acoes {
-    width: auto;
-    flex: 0 0 auto;
-  }
-
-  .pagina--chamados .filtros {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: stretch;
-    gap: 10px;
-    margin: 0;
-    padding: 12px;
-  }
-
-  .pagina--chamados .situacao-legenda-conteiner {
-    grid-column: 1 / -1;
-  }
-
-  .pagina--chamados .personalizado-selecao,
-  .pagina--chamados .filtros > .botao {
-    width: 100%;
-    min-width: 0 !important;
-  }
-
-  .pagina--chamados .filtros > .botao {
-    grid-column: 1 / -1;
-  }
-
-  .pagina--chamados .card__chamados {
-    width: 100%;
-    margin: 0;
-    padding: 8px;
-  }
-
-  .pagina--chamados .card__chamados .tabela {
-    min-width: 720px;
-  }
-
-  .pagina--chamados .personalizado-selecao__menu {
-    max-height: 220px;
-    overflow-y: auto;
-  }
-}
-
-@media (max-width: 380px) {
-  .pagina--chamados .filtros {
-    grid-template-columns: 1fr;
-  }
-
-  .pagina--chamados .situacao-legenda-conteiner,
-  .pagina--chamados .filtros > .botao {
-    grid-column: auto;
-  }
-}
-
-/* Menu recolhível no celular */
+/* Escondido por padrão; só aparece em telas pequenas */
 .sidebar-alternar {
   display: none;
 }
 
+/* As 3 barras do ícone */
 .sidebar-alternar span {
   width: 27px;
   height: 3px;
@@ -4391,6 +4579,7 @@ textarea {
     opacity 0.2s ease;
 }
 
+/* Animação: hambúrguer vira "X" quando aberto */
 .sidebar-alternar.esta-aberto span:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
 }
@@ -4435,7 +4624,7 @@ textarea {
 
 }
 
-/* Sidebar no fluxo normal do layout mobile, sem ficar fixo na tela */
+/* ---------- 17.5 Sidebar no fluxo normal do layout mobile (sem ficar fixa) ---------- */
 @media (max-width: 700px) {
   .estrutura {
     display: grid;
@@ -4476,7 +4665,7 @@ textarea {
   }
 }
 
-/* Ordem final do menu recolhível: prevalece sobre os ajustes anteriores */
+/* ---------- 17.6 Ordem final do menu recolhível (prevalece sobre os ajustes anteriores) ---------- */
 @media (max-width: 700px) {
   .estrutura {
     grid-template-columns: 0 minmax(0, 1fr);
@@ -4490,6 +4679,7 @@ textarea {
     height: 100%;
   }
 
+  /* Sidebar aberta (classe aplicada pelo JavaScript) */
   .sidebar.sidebar--aberto {
     display: flex;
   }
@@ -4520,6 +4710,7 @@ textarea {
   }
 }
 
+/* ---------- 17.7 Telas muito pequenas (380px) ---------- */
 @media (max-width: 380px) {
   .sidebar__link {
     padding-inline: 7px;
@@ -4539,6 +4730,7 @@ textarea {
   }
 }
 
+/* ---------- 17.8 Celular (560px): cards, gráfico, perfil e exportação ---------- */
 @media (max-width: 560px) {
   .card__novochamado,
   .card__novousuario,
@@ -4632,8 +4824,15 @@ textarea {
   }
 }
 
-/* Estilos das telas de ambientes */
 
+/* ==========================================================================
+   18. AMBIENTES (LISTA, CARDS, MODAIS)
+   --------------------------------------------------------------------------
+   Esta seção contém estilos "legados" (primeiro bloco) e, mais abaixo, blocos
+   de padronização que sobrescrevem os anteriores. Mantenha a ordem.
+   ========================================================================== */
+
+/* ---------- 18.1 Container e variáveis locais ---------- */
 .ambientes {
   --sup: var(--surface);
   --sup2: var(--surface-3);
@@ -4671,6 +4870,8 @@ textarea {
   outline: none;
   outline-offset: 0;
 }
+
+/* ---------- 18.2 Botões, busca e cabeçalho ---------- */
 .ambientes-simbolo {
   background: none;
   border: 0;
@@ -4868,6 +5069,8 @@ textarea {
   cursor: pointer;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
+
+/* ---------- 18.3 Painel e filtros ---------- */
 .ambientes-painel {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -4920,6 +5123,7 @@ textarea {
   height: 42px;
 }
 
+/* Alternador grade/lista */
 .ambientes-alternar {
   display: flex;
   gap: 6px;
@@ -4940,6 +5144,8 @@ textarea {
   border-color: var(--azul);
   color: #fff;
 }
+
+/* ---------- 18.4 Grade de cards + resumo lateral ---------- */
 .ambientes-grade-wrap {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 300px;
@@ -5043,6 +5249,8 @@ textarea {
   width: 72px;
   height: 61.2px;
 }
+
+/* ---------- 18.5 Etiquetas e pílulas de status ---------- */
 .ambientes-etiqueta,
 .ambientes-pilula {
   display: inline-block;
@@ -5072,6 +5280,8 @@ textarea {
   background: #dc2626;
   color: #fff;
 }
+
+/* ---------- 18.6 Resumo lateral (indicadores, tipos, dica) ---------- */
 .ambientes-resumo h3 {
   display: flex;
   align-items: center;
@@ -5175,6 +5385,8 @@ textarea {
   padding: 24px;
   text-align: center;
 }
+
+/* ---------- 18.7 Visão de detalhe com lista lateral (versão antiga) ---------- */
 .ambientes-detalhe-wrap {
   display: grid;
   grid-template-columns: 290px minmax(0, 1fr) 300px;
@@ -5230,6 +5442,8 @@ textarea {
   color: #5aa2ff;
   border-color: var(--azul);
 }
+
+/* ---------- 18.8 Filtros de componentes ---------- */
 .ambientes-componente-filtros {
   display: flex;
   justify-content: flex-end;
@@ -5257,10 +5471,11 @@ textarea {
 .ambientes-componente-filtros .ambientes-selecao {
   width: 100%;
 }
+
+/* ---------- 18.9 Tabela de componentes (com rolagem estilizada) ---------- */
 .ambientes-tabela-wrap {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 18px;
   box-shadow: var(--shadow-card);
   z-index: 5;
   overflow: hidden;
@@ -5288,7 +5503,7 @@ textarea {
 .ambientes-tabela-wrap::-webkit-scrollbar-thumb:hover {
   background: #6b6b6b;
 }
-/* Botões das setas */
+/* Botões das setas (obs.: seletor ".minha-area" não parece ser usado no projeto) */
 .minha-area::-webkit-scrollbar-button:single-button {
   height: 17px;
   background-color: #f1f1f1;
@@ -5305,6 +5520,7 @@ textarea {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.largura3.organizacao/2000/svg' width='10' height='10'><polygon points='1,2 9,2 5,8' fill='%23777'/></svg>");
 }
 .ambientes-tabela {
+  /* Variáveis locais da tabela (tema claro) */
   --tb-border: #e2e8f0;
   --tb-hover: #e8ecf0;
   --tb-text: #0a0a0a;
@@ -5318,6 +5534,7 @@ textarea {
   color: var(--tb-text);
 }
 
+/* Variáveis da tabela no tema escuro */
 .escuro .ambientes-tabela,
 [data-theme="dark"] .ambientes-tabela {
   --tb-border: #1e293b;
@@ -5344,7 +5561,7 @@ textarea {
 .ambientes-tabela tbody tr:hover td {
   color: var(--tb-text);
 }
-/* Icone do componente */
+/* Ícone do componente */
 .ambientes-tabela .ambientes-icone {
   background: var(--tb-icon-bg);
   color: var(--tb-icon-color);
@@ -5360,6 +5577,8 @@ textarea {
   font-size: 12.5px;
   margin-top: 10px;
 }
+
+/* ---------- 18.10 Visão geral e coluna direita ---------- */
 .ambientes-visao {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -5395,6 +5614,8 @@ textarea {
   color: #5aa2ff;
   text-decoration: none;
 }
+
+/* ---------- 18.11 Modal de ambientes (cadastro/edição) ---------- */
 .ambientes-modal-fundo {
   position: fixed;
   inset: 0;
@@ -5406,6 +5627,7 @@ textarea {
   overflow: hidden;
 }
 .ambientes-modal {
+  /* Variáveis locais do modal (tema claro) */
   --modal-bg: #ffffff;
   --modal-bg-2: #f8fafc;
   --modal-border: #e2e8f0;
@@ -5438,7 +5660,7 @@ textarea {
   line-height: 1.3;
 }
 
-/* Tema escuro: deixe sÃ³ o seletor que o seu app usa */
+/* Tema escuro: deixe só o seletor que o seu app usa */
 .escuro .ambientes-modal,
 [data-theme="dark"] .ambientes-modal {
   --modal-bg: #0f172a;
@@ -5516,7 +5738,7 @@ textarea {
   border-color: var(--modal-accent);
 }
 
-/* Botôes */
+/* Botões do modal */
 .ambientes-modal button {
   background: transparent;
   color: var(--modal-text);
@@ -5577,6 +5799,8 @@ textarea {
   flex: 0 0 auto;
   min-width: 130px;
 }
+
+/* Notificações dentro da tela de ambientes */
 .topbar__notificacoes-wrap {
   position: relative;
 }
@@ -5586,6 +5810,8 @@ textarea {
   right: 0;
   z-index: 20;
 }
+
+/* ---------- 18.12 Responsivo (versão original da tela) ---------- */
 @media (max-width: 1280px) {
   .ambientes-detalhe-wrap {
     grid-template-columns: 270px minmax(0, 1fr);
@@ -5666,7 +5892,7 @@ textarea {
   }
 }
 
-/* Paleta da tela alinhada aos tokens globais, sem alterar o layout original. */
+/* ---------- 18.13 Paleta alinhada aos tokens globais (sem alterar o layout) ---------- */
 .ambientes .ambientes-painel,
 .ambientes .ambientes-card,
 .ambientes .ambientes-tabela-wrap {
@@ -5739,7 +5965,7 @@ textarea {
   color: var(--accent);
 }
 
-/* Estrutura externa alinhada ao padrão de Chamados. */
+/* ---------- 18.14 Estrutura externa alinhada ao padrão de Chamados ---------- */
 .pagina--ambientes {
   gap: 20px;
   padding-top: 0;
@@ -5781,7 +6007,7 @@ textarea {
   }
 }
 
-/* Ajustes específicos da página de ambientes, mantidos fora do JSX. */
+/* ---------- 18.15 Ajustes específicos da página (cabeçalho, busca, filtros) ---------- */
 .ambientes-cabecalho-linha {
   display: flex;
   align-items: flex-start;
@@ -5887,8 +6113,7 @@ textarea {
   min-width: 0;
 }
 
-/* Padronização final após os estilos legados da tela. */
-
+/* ---------- 18.16 Padronização final da tela (sobrescreve os blocos legados acima) ---------- */
 .pagina--ambientes .topbar__notificacao-item:hover {
   background: var(--surface-2);
 }
@@ -6004,6 +6229,7 @@ textarea {
   }
 }
 
+/* ---------- 18.17 Grade e cards da página de ambientes ---------- */
 .pagina--ambientes .card__ambientes--grade {
   column-gap: 10px;
   row-gap: 10px;
@@ -6059,6 +6285,7 @@ textarea {
   gap: 8px;
 }
 
+/* ---------- 18.18 Modal de detalhes do componente ---------- */
 .ambiente-componente-modal-fundo {
   position: fixed;
   inset: 0;
@@ -6133,8 +6360,12 @@ textarea {
   justify-content: center;
 }
 
-/* Estilos do detalhe do ambiente */
 
+/* ==========================================================================
+   19. DETALHE DO AMBIENTE
+   ========================================================================== */
+
+/* ---------- 19.1 Cabeçalho e situação ---------- */
 .ambiente-detalhe-pagina .chamado-cabecalho {
   align-items: center;
 }
@@ -6154,6 +6385,8 @@ textarea {
 .ambiente-situacao.esta-inativo {
   color: #f87171;
 }
+
+/* ---------- 19.2 Grade principal ---------- */
 .ambiente-detalhe-grade {
   align-items: start;
 }
@@ -6191,6 +6424,8 @@ textarea {
   justify-content: center;
   gap: 8px;
 }
+
+/* ---------- 19.3 Informações do ambiente ---------- */
 .ambiente-detalhe-informacao {
   display: grid;
   gap: 18px;
@@ -6219,6 +6454,8 @@ textarea {
   margin: 0;
   line-height: 1.6;
 }
+
+/* ---------- 19.4 Formulários (edição e adicionar componente) ---------- */
 .ambiente-detalhe-formulario,
 .ambiente-adicionar-formulario {
   gap: 14px;
@@ -6294,15 +6531,17 @@ textarea {
   gap: 10px;
   margin: 0;
 }
-.ambiente-componentes-card {
-  overflow: hidden;
-}
 .ambiente-adicionar-formulario {
   padding: 16px;
   margin: 0 0 18px;
   border: 1px solid var(--border);
   border-radius: 12px;
   background: var(--surface-2);
+}
+
+/* ---------- 19.5 Lista de componentes ---------- */
+.ambiente-componentes-card {
+  overflow: hidden;
 }
 .ambiente-componentes-lista {
   display: grid;
@@ -6357,6 +6596,8 @@ textarea {
   padding: 26px 12px;
   text-align: center;
 }
+
+/* ---------- 19.6 Resumo lateral ---------- */
 .ambiente-detalhe-resumo {
   width: 100%;
   margin: 0;
@@ -6424,6 +6665,8 @@ textarea {
   border-radius: 10px;
   color: #22c55e;
 }
+
+/* ---------- 19.7 Responsivo do detalhe do ambiente ---------- */
 @media (max-width: 700px) {
   .ambiente-detalhe-pagina .chamado-cabecalho {
     align-items: flex-start;
@@ -6453,6 +6696,17 @@ textarea {
     margin-left: 52px;
   }
 }
+
+
+/* ==========================================================================
+   20. FILTROS — PADRONIZAÇÃO FINAL
+   --------------------------------------------------------------------------
+   Define borda, foco e menu dos filtros de TODAS as telas (chamados,
+   relatórios, ambientes, componentes). Fica após a seção de ambientes de
+   propósito: tem a mesma especificidade de regras anteriores e precisa vencer.
+   ========================================================================== */
+
+/* Borda padrão + transição suave */
 .filtros .personalizado-selecao__acionador,
 .filtros select,
 .filtros .ambientes-busca,
@@ -6466,6 +6720,7 @@ textarea {
     border: 2px solid var(--panel-input-border);
 }
 
+/* Hover / foco / aberto: borda azul + halo */
 .filtros .personalizado-selecao__acionador:hover,
 .filtros .personalizado-selecao__acionador:focus-visible,
 .filtros .personalizado-selecao__acionador.esta-aberto,
@@ -6486,6 +6741,7 @@ textarea {
   box-shadow: 0 0 0 3px var(--accent-dim);
 }
 
+/* Fonte do botão do select */
 .filtros .personalizado-selecao__acionador,
 .relatorio-filtros .selecao-personalizada__acionador {
   font-family: var(--font-body);
@@ -6493,6 +6749,7 @@ textarea {
   font-weight: 500;
 }
 
+/* Menu suspenso */
 .filtros .personalizado-selecao__menu {
   color: var(--text);
   background: var(--panel);
@@ -6502,6 +6759,7 @@ textarea {
   box-shadow: var(--shadow-card);
 }
 
+/* Opções do menu */
 .filtros .personalizado-selecao__opcao {
   padding: 10px 12px;
   color: var(--text);
@@ -6525,7 +6783,15 @@ textarea {
   font-family: var(--font-body);
 }
 
-/* Ajustes finais para manter as páginas fluidas e o menu acessível em telas menores. */
+
+/* ==========================================================================
+   21. AJUSTES FINAIS DE RESPONSIVIDADE
+   --------------------------------------------------------------------------
+   Mantém as páginas fluidas e o menu acessível em telas menores.
+   Última camada do arquivo: vence os blocos responsivos anteriores.
+   ========================================================================== */
+
+/* ---------- 21.1 Regras fluidas gerais ---------- */
 .perfil-principal-painel {
   height: auto;
   min-width: 0;
@@ -6535,10 +6801,12 @@ textarea {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+/* Fundo escuro atrás do menu mobile (escondido no desktop) */
 .sidebar-fundo {
   display: none;
 }
 
+/* ---------- 21.2 Tablet e celular (até 980px): menu em gaveta ---------- */
 @media (max-width: 980px) {
   .estrutura {
     display: block;
@@ -6550,6 +6818,7 @@ textarea {
     grid-template-columns: minmax(0, 1fr);
   }
 
+  /* Sidebar vira uma gaveta deslizante */
   .sidebar {
     position: fixed;
     inset: 0 auto 0 0;
@@ -6667,6 +6936,7 @@ textarea {
     font-size: 0.9rem;
   }
 
+  /* Fundo escurecido que fecha o menu ao clicar */
   .sidebar-fundo {
     position: fixed;
     inset: 0;
@@ -6679,6 +6949,7 @@ textarea {
     background: rgba(15, 23, 42, 0.55);
   }
 
+  /* Botão hambúrguer */
   .sidebar-alternar {
     position: relative;
     margin: 6px 4px 0;
@@ -6702,6 +6973,7 @@ textarea {
     visibility: hidden;
   }
 
+  /* Ações da topbar ficam no canto superior direito */
   .topbar__acoes {
     position: absolute;
     top: 11px;
@@ -6716,6 +6988,7 @@ textarea {
     z-index: 20;
   }
 
+  /* Ações de exportação dos relatórios seguem o mesmo padrão */
   .pagina--relatorios .relatorio-exportacao__acoes {
     position: absolute;
     top: 9px;
@@ -6745,6 +7018,7 @@ textarea {
     width: min(300px, calc(100vw - 28px));
   }
 
+  /* Conteúdo ocupa a largura toda */
   .estrutura__conteudo,
   .estrutura:has(.sidebar--aberto) .estrutura__conteudo {
     width: 100%;
@@ -6824,6 +7098,7 @@ textarea {
   }
 }
 
+/* ---------- 21.3 Celular (até 640px) ---------- */
 @media (max-width: 640px) {
   .estrutura__conteudo,
   .estrutura:has(.sidebar--aberto) .estrutura__conteudo {
@@ -6909,12 +7184,14 @@ textarea {
   }
 }
 
+/* ---------- 21.4 Movimento reduzido: sem animação na gaveta ---------- */
 @media (prefers-reduced-motion: reduce) {
   .sidebar {
     transition: none;
   }
 }
 
+/* ---------- 21.5 Celular (até 640px): cards de ambientes ---------- */
 @media (max-width: 640px) {
   .pagina--ambientes .card__ambientes--grade {
     grid-template-columns: minmax(0, 1fr);

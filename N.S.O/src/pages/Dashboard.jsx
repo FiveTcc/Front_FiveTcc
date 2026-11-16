@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -126,6 +126,7 @@ export default function Dashboard() {
   const [nome, setNome] = useState("");
   const [busca, setBusca] = useState("");
   const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
+  const notificacoesRef = useRef(null);
 
   const [chamados, setChamados] = useState([]);
   const [carregando, setCarregando] = useState(true);
@@ -133,6 +134,21 @@ export default function Dashboard() {
 
   const [dadosDashboard, setDadosDashboard] = useState(null);
   const [carregandoDashboard, setCarregandoDashboard] = useState(true);
+
+  useEffect(() => {
+    function fecharAoClicarFora(event) {
+      if (
+        notificacoesRef.current &&
+        !notificacoesRef.current.contains(event.target)
+      ) {
+        setMostrarNotificacoes(false);
+      }
+    }
+
+    document.addEventListener("click", fecharAoClicarFora);
+    return () =>
+      document.removeEventListener("click", fecharAoClicarFora);
+  }, []);
 
   useEffect(() => {
     // Buscar nome do usuário
@@ -247,7 +263,7 @@ export default function Dashboard() {
           </div>
 
           <div className="topbar__acoes">
-            <div className="topbar__notificacoes-wrap">
+            <div className="topbar__notificacoes-wrap" ref={notificacoesRef}>
               <button
                 type="button"
                 className="topbar__simbolo-botao"

@@ -203,7 +203,7 @@ export default function Perfil() {
         </div>
 
         <div className="topbar__acoes">
-          <div className="topbar__notificacoes-wrap">
+          <div className="topbar__notificacoes-wrap" ref={notificacoesRef}>
             <button
               type="button"
               className="topbar__simbolo-botao"

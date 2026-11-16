@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { iniciais } from '../services/utils'
 
@@ -23,7 +23,22 @@ export default function Usuarios() {
   const [erro, setErro] = useState('')
   const [sucesso, setSucesso] = useState('')
   const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false)
+  const notificacoesRef = useRef(null)
   const [notificacoes] = useState([])
+
+  useEffect(() => {
+    function fecharAoClicarFora(event) {
+      if (
+        notificacoesRef.current &&
+        !notificacoesRef.current.contains(event.target)
+      ) {
+        setMostrarNotificacoes(false)
+      }
+    }
+
+    document.addEventListener('click', fecharAoClicarFora)
+    return () => document.removeEventListener('click', fecharAoClicarFora)
+  }, [])
 
   const chamadosPorUsuario = (id) => chamados.filter((c) => c.responsavelId === id || c.solicitanteId === id).length
 
@@ -125,7 +140,7 @@ export default function Usuarios() {
         </div>
 
         <div className="topbar__acoes">
-          <div className="topbar__notificacoes-wrap">
+          <div className="topbar__notificacoes-wrap" ref={notificacoesRef}>
             <button
               type="button"
               className="topbar__simbolo-botao"
@@ -159,21 +174,6 @@ export default function Usuarios() {
               </div>
             )}
           </div>
-
-          {/* <button
-            type="button"
-            className="topbar__icon-button"
-            aria-label={
-              theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
-            }
-            onClick={() =>
-              setTheme((currentTheme) =>
-                currentTheme === "dark" ? "light" : "dark"
-              )
-            }
-          >
-            {theme === "dark" ? "☀" : "☾"}
-          </button> */}
         </div>
       </header>
 
