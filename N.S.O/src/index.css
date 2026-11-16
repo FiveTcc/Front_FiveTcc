@@ -2861,6 +2861,32 @@ textarea {
   box-shadow: none;
 }
 
+.card__novochamado .personalizado-selecao__menu {
+  padding: 8px;
+  border-radius: 18px;
+}
+
+.card__novochamado .personalizado-selecao__opcao {
+  width: 100%;
+  min-height: 42px;
+  margin: 0;
+  padding: 9px 11px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.card__novochamado .personalizado-selecao__opcao.esta-selecionado {
+  background: var(--surface-2);
+  border-color: var(--panel-input-border);
+}
+
+.card__novochamado .personalizado-selecao__opcao:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
 /* ---------- 13.5 Tabela ---------- */
 .tabela {
   width: 100%;

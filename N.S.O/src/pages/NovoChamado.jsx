@@ -50,6 +50,7 @@ export default function NovoChamado() {
   ];
 
   const prioridades = [
+    "Selecione",
     "Baixa",
     "Média",
     "Alta",
