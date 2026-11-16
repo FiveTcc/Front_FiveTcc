@@ -305,28 +305,28 @@ export default function Relatorios() {
   ];
 
   return (
-    <div className="page page--reports">
-      <header className="page__header">
+    <div className="pagina pagina--relatorios">
+      <header className="pagina__cabecalho">
         <div>
           <h1>{PERFIL_LABEL[perfil] || "Relatórios"}</h1>
-          <p className="muted">
+          <p className="esmaecido">
             {ehAdmin
               ? "Visão consolidada das ocorrências do sistema."
               : "Visão das ocorrências disponibilizadas para seu perfil."}
           </p>
         </div>
 
-        <div className="report-export__actions">
+        <div className="relatorio-exportacao__acoes">
           {mensagemExportacao && (
-            <div className="report-export__status" role="status">
+            <div className="relatorio-exportacao__situacao" role="status">
               {mensagemExportacao}
             </div>
           )}
 
-          <div className="report-export" ref={menuExportarRef}>
+          <div className="relatorio-exportacao" ref={menuExportarRef}>
             <button
               type="button"
-              className="btn btn--primary"
+              className="botao botao--principal"
               disabled={exportando}
               onClick={() => setMenuExportarAberto((aberto) => !aberto)}
             >
@@ -334,7 +334,7 @@ export default function Relatorios() {
             </button>
 
             {menuExportarAberto && (
-              <div className="report-export__menu">
+              <div className="relatorio-exportacao__menu">
                 <button
                   type="button"
                   disabled={exportando}
@@ -355,17 +355,17 @@ export default function Relatorios() {
         </div>
       </header>
 
-      {carregando && <p className="muted">Carregando relatórios...</p>}
-      {erro && <p className="muted" role="alert">{erro}</p>}
+      {carregando && <p className="esmaecido">Carregando relatórios...</p>}
+      {erro && <p className="esmaecido" role="alert">{erro}</p>}
 
       {!carregando && !erro && (
         <>
-          <section className="report-container">
-            <section className="report-summary">
+          <section className="relatorio-conteiner">
+            <section className="relatorio-resumo">
               {metricas.map((item) => (
                 <div
                   key={item.label}
-                  className={`report-summary__card ${item.destaque ? "is-featured" : ""}`}
+                  className={`relatorio-resumo__card ${item.destaque ? "esta-destaque" : ""}`}
                 >
                   <span>{item.label}</span>
                   <strong>{item.valor}</strong>
@@ -373,13 +373,13 @@ export default function Relatorios() {
               ))}
             </section>
 
-            <div className="report-content">
+            <div className="relatorio-conteudo">
               {ehAdmin && agrupamento && (
                 <div className="card">
-                  <div className="card__header">
+                  <div className="card__cabecalho">
                     <h2>Ocorrências agrupadas</h2>
                   </div>
-                  <div className="report-list">
+                  <div className="relatorio-lista">
                     {agrupamento.map((item, indice) => {
                       const nome =
                         item.tecnico ||
@@ -389,7 +389,7 @@ export default function Relatorios() {
                         item.data ||
                         `Grupo ${indice + 1}`;
                       return (
-                        <div key={`${nome}-${indice}`} className="report-row">
+                        <div key={`${nome}-${indice}`} className="relatorio-linha">
                           <span>{rotuloStatus(nome)}</span>
                           <strong>{Number(item.total) || 0}</strong>
                         </div>
@@ -399,17 +399,17 @@ export default function Relatorios() {
                 </div>
               )}
 
-              <section className="card report-filters">
-                <div className="card__header">
+              <section className="card relatorio-filtros">
+                <div className="card__cabecalho">
                   <div>
                     <h2>Filtrar relatório</h2>
-                    <p className="muted">Refine os resultados pelos filtros disponíveis.</p>
+                    <p className="esmaecido">Refine os resultados pelos filtros disponíveis.</p>
                   </div>
                 </div>
 
                 <form onSubmit={pesquisarComFiltros}>
-                  <div className="report-filters__grid">
-                    <label className="report-filters__field">
+                  <div className="relatorio-filtros__grade">
+                    <label className="relatorio-filtros__campo">
                       <span>Data inicial</span>
                       <input
                         type="date"
@@ -418,7 +418,7 @@ export default function Relatorios() {
                       />
                     </label>
 
-                    <label className="report-filters__field">
+                    <label className="relatorio-filtros__campo">
                       <span>Data final</span>
                       <input
                         type="date"
@@ -428,7 +428,7 @@ export default function Relatorios() {
                       />
                     </label>
 
-                    <label className="report-filters__field">
+                    <div className="relatorio-filtros__campo">
                       <span>Status</span>
                       <CustomSelect
                         id="report-status"
@@ -443,9 +443,9 @@ export default function Relatorios() {
                         ]}
                         onChange={(value) => setFiltros((atual) => ({ ...atual, status: value }))}
                       />
-                    </label>
+                    </div>
 
-                    <label className="report-filters__field">
+                    <div className="relatorio-filtros__campo">
                       <span>Prioridade</span>
                       <CustomSelect
                         id="report-priority"
@@ -460,9 +460,9 @@ export default function Relatorios() {
                         ]}
                         onChange={(value) => setFiltros((atual) => ({ ...atual, prioridade: value }))}
                       />
-                    </label>
+                    </div>
 
-                    <label className="report-filters__field">
+                    <div className="relatorio-filtros__campo">
                       <span>Ambiente</span>
                       <CustomSelect
                         id="report-environment"
@@ -477,10 +477,10 @@ export default function Relatorios() {
                         ]}
                         onChange={(value) => setFiltros((atual) => ({ ...atual, ambiente: value }))}
                       />
-                    </label>
+                    </div>
 
                     {ehAdmin && (
-                      <label className="report-filters__field">
+                      <div className="relatorio-filtros__campo">
                         <span>Técnico</span>
                         <CustomSelect
                           id="report-technician"
@@ -495,15 +495,15 @@ export default function Relatorios() {
                           ]}
                           onChange={(value) => setFiltros((atual) => ({ ...atual, tecnico: value }))}
                         />
-                      </label>
+                      </div>
                     )}
                   </div>
 
-                  <div className="report-filters__actions">
-                    <button type="button" className="btn btn--secondary" onClick={limparFiltros} disabled={carregando}>
+                  <div className="relatorio-filtros__acoes">
+                    <button type="button" className="botao botao--secundario" onClick={limparFiltros} disabled={carregando}>
                       Limpar filtros
                     </button>
-                    <button type="submit" className="btn btn--primary" disabled={carregando}>
+                    <button type="submit" className="botao botao--principal" disabled={carregando}>
                       {carregando ? "Pesquisando..." : "Pesquisar"}
                     </button>
                   </div>
@@ -511,19 +511,19 @@ export default function Relatorios() {
               </section>
 
               {/* Indicadores adicionais dos relatórios */}
-              <section className="report-extra-grid">
+              <section className="relatorio-extra-grade">
 
                 {/* Ocorrências por ambiente */}
-                <div className="report-extra-card">
-                  <div className="report-extra-card__header">
-                    <span className="report-extra-card__icon report-extra-card__icon--blue">
+                <div className="relatorio-extra-card">
+                  <div className="relatorio-extra-card__cabecalho">
+                    <span className="relatorio-extra-card__simbolo relatorio-extra-card__simbolo--azul">
                       <i className="bi bi-building"></i>
                     </span>
                     <h3>Ambientes com mais ocorrências</h3>
                   </div>
 
                   {ocorrenciasPorAmbiente.map((item) => (
-                    <div className="report-extra-row" key={item.nome}>
+                    <div className="relatorio-extra-linha" key={item.nome}>
                       <span>{item.nome}</span>
                       <strong>{item.total}</strong>
                     </div>
@@ -531,16 +531,16 @@ export default function Relatorios() {
                 </div>
 
                 {/* Componentes com mais falhas */}
-                <div className="report-extra-card">
-                  <div className="report-extra-card__header">
-                    <span className="report-extra-card__icon report-extra-card__icon--purple">
+                <div className="relatorio-extra-card">
+                  <div className="relatorio-extra-card__cabecalho">
+                    <span className="relatorio-extra-card__simbolo relatorio-extra-card__simbolo--roxo">
                       <i className="bi bi-puzzle"></i>
                     </span>
                     <h3>Componentes com mais falhas</h3>
                   </div>
 
                   {componentesComFalha.map((item) => (
-                    <div className="report-extra-row" key={item.nome}>
+                    <div className="relatorio-extra-linha" key={item.nome}>
                       <span>{item.nome}</span>
                       <strong>{item.total}</strong>
                     </div>
@@ -549,9 +549,9 @@ export default function Relatorios() {
 
                 {/* Técnicos com mais ocorrências - somente administrador */}
                 {ehAdmin && (
-                  <div className="report-extra-card">
-                    <div className="report-extra-card__header">
-                      <span className="report-extra-card__icon report-extra-card__icon--green">
+                  <div className="relatorio-extra-card">
+                    <div className="relatorio-extra-card__cabecalho">
+                      <span className="relatorio-extra-card__simbolo relatorio-extra-card__simbolo--verde">
                         <i className="bi bi-people"></i>
                       </span>
 
@@ -560,13 +560,13 @@ export default function Relatorios() {
 
                     {tecnicosComMaisOcorrencias.length > 0 ? (
                       tecnicosComMaisOcorrencias.map((item) => (
-                        <div className="report-extra-row" key={item.nome}>
+                        <div className="relatorio-extra-linha" key={item.nome}>
                           <span>{item.nome}</span>
                           <strong>{item.total}</strong>
                         </div>
                       ))
                     ) : (
-                      <p className="muted">Nenhuma ocorrência atribuída.</p>
+                      <p className="esmaecido">Nenhuma ocorrência atribuída.</p>
                     )}
                   </div>
                 )}
@@ -576,15 +576,15 @@ export default function Relatorios() {
           </section>
 
           <div className="card_historico">
-            <div className="card__header">
+            <div className="card__cabecalho">
               <h2>Histórico de ocorrências</h2>
             </div>
 
             {historicoExibido.length > 0 ? (
               <>
-                <div className="report-history">
+                <div className="relatorio-historico">
                   {historicoExibido.map((linha) => (
-                    <div key={linha.id} className="report-history__item">
+                    <div key={linha.id} className="relatorio-historico__item">
                       <div>
                         <strong>#{linha.id}</strong>
                         <span>{linha.nome || "Sem descrição"}</span>
@@ -613,10 +613,10 @@ export default function Relatorios() {
                 </div>
 
                 {historico.length > 5 && (
-                  <div className="report-history__actions">
+                  <div className="relatorio-historico__acoes">
                     <button
                       type="button"
-                      className="btn btn--secondary"
+                      className="botao botao--secundario"
                       onClick={() =>
                         setMostrarHistoricoCompleto((atual) => !atual)
                       }
@@ -627,7 +627,7 @@ export default function Relatorios() {
                 )}
               </>
             ) : (
-              <p className="muted">Nenhuma ocorrência encontrada.</p>
+              <p className="esmaecido">Nenhuma ocorrência encontrada.</p>
             )}
           </div>
         </>

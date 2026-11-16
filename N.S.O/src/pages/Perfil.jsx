@@ -191,22 +191,22 @@ export default function Perfil() {
   }
 
   return (
-    <div className="profile-shell">
+    <div className="perfil-estrutura">
       {carregandoPerfil && <p>Carregando perfil...</p>}
 
-      <header className="profile-page-header">
-        <div className="profile-page-header__brand">
-          <div className="profile-page-header__title">
+      <header className="perfil-pagina-cabecalho">
+        <div className="perfil-pagina-cabecalho__marca">
+          <div className="perfil-pagina-cabecalho__titulo">
             <h1>Meu Perfil</h1>
             <p>Gerencie suas informações pessoais e mantenha seus dados sempre atualizados.</p>
           </div>
         </div>
 
-        <div className="topbar__actions">
-          <div className="topbar__notifications-wrap">
+        <div className="topbar__acoes">
+          <div className="topbar__notificacoes-wrap">
             <button
               type="button"
-              className="topbar__icon-button"
+              className="topbar__simbolo-botao"
               aria-label="Notificações"
               onClick={() => setMostrarNotificacoes((valor) => !valor)}
             >
@@ -215,11 +215,11 @@ export default function Perfil() {
 
             {mostrarNotificacoes && (
               <div
-                className="topbar__notifications"
+                className="topbar__notificacoes"
                 role="menu"
                 aria-label="Notificações"
               >
-                <div className="topbar__notifications-header">
+                <div className="topbar__notificacoes-cabecalho">
                   <strong>Notificações</strong>
                   <span>{notificacoes.length}</span>
                 </div>
@@ -228,7 +228,7 @@ export default function Perfil() {
                   <button
                     key={item.id}
                     type="button"
-                    className="topbar__notification-item"
+                    className="topbar__notificacao-item"
                   >
                     <span>{item.titulo}</span>
                     <small>{item.tempo}</small>
@@ -240,7 +240,7 @@ export default function Perfil() {
 
           <button
             type="button"
-            className="topbar__icon-button"
+            className="topbar__simbolo-botao"
             aria-label={
               theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
             }
@@ -255,10 +255,10 @@ export default function Perfil() {
         </div>
       </header>
 
-      <div className="profile-layout">
-        <aside className="profile-summary">
-          <div className="profile-summary__avatar-wrap">
-            <div className="profile-summary__avatar">
+      <div className="perfil-disposicao">
+        <aside className="perfil-resumo">
+          <div className="perfil-resumo__avatar-wrap">
+            <div className="perfil-resumo__avatar">
               {fotoPerfil ? (
                 <img
                   src={fotoPerfil}
@@ -278,53 +278,53 @@ export default function Perfil() {
             
           </div>
 
-          <div className="profile-summary__content">
+          <div className="perfil-resumo__conteudo">
             <h2>{perfilForm.nome || usuario?.nome || "Usuário"}</h2>
             <p>{PERFIL_LABEL[perfilForm.cargo || perfil?.user_tipo || usuario?.perfil || usuario?.user_tipo] || "Usuário"}</p>
 
-            <div className="profile-summary__list">
-              <div className="profile-summary__item">
-                <span className="profile-summary__icon" aria-hidden>✉</span>
+            <div className="perfil-resumo__lista">
+              <div className="perfil-resumo__item">
+                <span className="perfil-resumo__simbolo" aria-hidden>✉</span>
                 <span>{perfilForm.email || usuario?.email || "-"}</span>
               </div>
 
-              <div className="profile-summary__item">
-                <span className="profile-summary__icon" aria-hidden>◔</span>
+              <div className="perfil-resumo__item">
+                <span className="perfil-resumo__simbolo" aria-hidden>◔</span>
                 <span>{perfilForm.telefone || usuario?.telefone || "-"}</span>
               </div>
             </div>
 
-            <div className="profile-summary__status">
-              <span className="profile-summary__status-dot" aria-hidden />
+            <div className="perfil-resumo__situacao">
+              <span className="perfil-resumo__situacao-ponto" aria-hidden />
               Conta ativa
             </div>
           </div>
         </aside>
 
-        <section className="profile-main-panel">
-          <form className="profile-main-panel__body" onSubmit={handleSalvarPerfil}>
-            <div className="profile-form__title-group">
+        <section className="perfil-principal-painel">
+          <form className="perfil-principal-painel__corpo" onSubmit={handleSalvarPerfil}>
+            <div className="perfil-formulario__titulo-grupo">
               <h3>Dados Pessoais</h3>
               <p>Atualize suas informações pessoais e de contato.</p>
             </div>
 
-            <div className="profile-form__grid">
-              <label className="field-block">
+            <div className="perfil-formulario__grade">
+              <label className="campo-bloco">
                 <span>Nome completo</span>
                 <input type="text" name="nome" value={perfilForm.nome} onChange={handlePerfilChange} readOnly />
               </label>
 
-                <label className="field-block">
+                <label className="campo-bloco">
                   <span>E-mail</span>
                   <input type="email" name="email" value={perfilForm.email} onChange={handlePerfilChange} readOnly />
                 </label>
 
-              <label className="field-block">
+              <label className="campo-bloco">
                 <span>Telefone</span>
                 <input type="text" name="telefone" value={perfilForm.telefone} onChange={handlePerfilChange} readOnly />
               </label>
 
-              <label className="field-block">
+              <label className="campo-bloco">
                 <span>Cargo</span>
                   <select name="cargo" value={perfilForm.cargo} onChange={handlePerfilChange} disabled>
                   <option value="admin">Administrador</option>
@@ -334,7 +334,7 @@ export default function Perfil() {
               </label>
             </div>
 
-            <div className="profile-form__upload">
+            <div className="perfil-formulario__envio">
               <h4>Alterar Foto de Perfil</h4>
               <p>Use uma imagem de boa qualidade para facilitar o seu reconhecimento no sistema.</p>
 
@@ -348,7 +348,7 @@ export default function Perfil() {
 
               <label
                 htmlFor="input-foto-perfil"
-                className="btn btn--ghost profile-form__upload-button"
+                className="botao botao--transparente perfil-formulario__envio-botao"
               >
                 Escolher imagem
               </label>
@@ -365,7 +365,7 @@ export default function Perfil() {
             />
 
             {(perfilErro || perfilSucesso) && (
-              <p className={`form-message ${perfilErro ? "form-message--error" : "form-message--success"}`}>
+              <p className={`formulario-mensagem ${perfilErro ? "formulario-mensagem--erro" : "formulario-mensagem--sucesso"}`}>
                 {perfilErro || perfilSucesso}
               </p>
             )}

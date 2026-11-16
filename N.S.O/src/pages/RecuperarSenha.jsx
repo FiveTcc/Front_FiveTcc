@@ -39,39 +39,39 @@ export default function RecuperarSenha() {
   }
 
   return (
-    <div className="login recovery-page">
-      <div className="recovery-card">
-        <span className="eyebrow">Acesso seguro</span>
+    <div className="acesso recuperacao-pagina">
+      <div className="recuperacao-card">
+        <span className="rotulo-superior">Acesso seguro</span>
         <h1>Recuperar senha</h1>
-        <p className="muted">
+        <p className="esmaecido">
           Informe seu e-mail e enviaremos as instruções para redefinir sua
           senha.
         </p>
 
         {enviado ? (
-          <div className="recovery-message" role="status">
+          <div className="recuperacao-mensagem" role="status">
             Se o e-mail estiver cadastrado, você receberá as instruções em
             instantes.
           </div>
         ) : (
-          <form className="recovery-form" onSubmit={handleSubmit}>
-            <label className="recovery-field">
+          <form className="recuperacao-formulario" onSubmit={handleSubmit}>
+            <label className="recuperacao-campo">
               <span>E-mail corporativo</span>
 
               <input
                 type="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                placeholder="seu.email@torre.edu"
+                placeholder="E-mail de recuperação"
                 required
               />
             </label>
 
-            {erro && <div className="recovery-error">{erro}</div>}
+            {erro && <div className="recuperacao-erro">{erro}</div>}
 
             <button
               type="submit"
-              className="btn btn--primary recovery-form__submit"
+              className="botao botao--principal recuperacao-formulario__envio"
               disabled={carregando}
             >
               {carregando ? "Enviando..." : "Enviar"}
@@ -79,7 +79,7 @@ export default function RecuperarSenha() {
           </form>
         )}
 
-        <Link to="/login" className="recovery-back">
+        <Link to="/login" className="recuperacao-voltar">
           ← Voltar para o login
         </Link>
       </div>

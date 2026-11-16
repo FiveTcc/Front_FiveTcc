@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ocorrenciaService from "../services/ocorrenciaService";
 
@@ -19,6 +19,27 @@ export default function NovoChamado() {
   // Controle da tela
   const [enviando, setEnviando] = useState(false);
   const [openSelect, setOpenSelect] = useState(null);
+  const categoriaRef = useRef(null);
+  const prioridadeRef = useRef(null);
+
+  useEffect(() => {
+    if (!openSelect) return;
+
+    const activeSelectRef =
+      openSelect === "categoria" ? categoriaRef : prioridadeRef;
+    const closeOnOutsidePointerDown = (event) => {
+      if (
+        activeSelectRef.current &&
+        !activeSelectRef.current.contains(event.target)
+      ) {
+        setOpenSelect(null);
+      }
+    };
+
+    document.addEventListener("pointerdown", closeOnOutsidePointerDown);
+    return () =>
+      document.removeEventListener("pointerdown", closeOnOutsidePointerDown);
+  }, [openSelect]);
 
   const categorias = [
     "Hardware",
@@ -96,14 +117,14 @@ export default function NovoChamado() {
   }
 
   return (
-    <div className="page page--narrow">
+    <div className="pagina pagina--estreita">
 
-      <header className="page__header">
+      <header className="pagina__cabecalho">
         <div>
-          <span className="eyebrow">Abertura</span>
+          <span className="rotulo-superior">Abertura</span>
           <h1>Novo chamado</h1>
 
-          <p className="muted">
+          <p className="esmaecido">
             Descreva o problema com o máximo de detalhe
             possível para agilizar o atendimento.
           </p>
@@ -111,7 +132,7 @@ export default function NovoChamado() {
       </header>
 
       <form
-        className="card__novochamado form"
+        className="card__novochamado formulario"
         onSubmit={handleSubmit}
       >
 
@@ -129,17 +150,17 @@ export default function NovoChamado() {
         </label>
 
         {/* Categoria e prioridade */}
-        <div className="form__row">
+        <div className="formulario__linha">
 
-          <div className="custom-select">
-            <span className="custom-select__label">
+          <div className="personalizado-selecao" ref={categoriaRef}>
+            <span className="personalizado-selecao__rotulo">
               Categoria
             </span>
 
             <button
               type="button"
-              className={`custom-select__trigger ${
-                openSelect === "categoria" ? "is-open" : ""
+              className={`personalizado-selecao__acionador ${
+                openSelect === "categoria" ? "esta-aberto" : ""
               }`}
               onClick={() =>
                 setOpenSelect((current) =>
@@ -148,12 +169,12 @@ export default function NovoChamado() {
               }
             >
               <span>{categoria}</span>
-              <span className="custom-select__caret">▾</span>
+              <span className="personalizado-selecao__seta">▾</span>
             </button>
 
             {openSelect === "categoria" && (
               <div
-                className="custom-select__menu"
+                className="personalizado-selecao__menu"
                 role="listbox"
                 aria-label="Categoria"
               >
@@ -161,8 +182,8 @@ export default function NovoChamado() {
                   <button
                     key={option}
                     type="button"
-                    className={`custom-select__option ${
-                      categoria === option ? "is-selected" : ""
+                    className={`personalizado-selecao__opcao ${
+                      categoria === option ? "esta-selecionado" : ""
                     }`}
                     onClick={() => {
                       setCategoria(option);
@@ -176,15 +197,15 @@ export default function NovoChamado() {
             )}
           </div>
 
-          <div className="custom-select">
-            <span className="custom-select__label">
+          <div className="personalizado-selecao" ref={prioridadeRef}>
+            <span className="personalizado-selecao__rotulo">
               Prioridade
             </span>
 
             <button
               type="button"
-              className={`custom-select__trigger ${
-                openSelect === "prioridade" ? "is-open" : ""
+              className={`personalizado-selecao__acionador ${
+                openSelect === "prioridade" ? "esta-aberto" : ""
               }`}
               onClick={() =>
                 setOpenSelect((current) =>
@@ -193,12 +214,12 @@ export default function NovoChamado() {
               }
             >
               <span>{prioridade}</span>
-              <span className="custom-select__caret">▾</span>
+              <span className="personalizado-selecao__seta">▾</span>
             </button>
 
             {openSelect === "prioridade" && (
               <div
-                className="custom-select__menu"
+                className="personalizado-selecao__menu"
                 role="listbox"
                 aria-label="Prioridade"
               >
@@ -206,8 +227,8 @@ export default function NovoChamado() {
                   <button
                     key={option}
                     type="button"
-                    className={`custom-select__option ${
-                      prioridade === option ? "is-selected" : ""
+                    className={`personalizado-selecao__opcao ${
+                      prioridade === option ? "esta-selecionado" : ""
                     }`}
                     onClick={() => {
                       setPrioridade(option);
@@ -224,7 +245,7 @@ export default function NovoChamado() {
         </div>
 
         {/* IDs do banco */}
-        <div className="form__row">
+        <div className="formulario__linha">
 
           <label>
             ID do componente
@@ -255,7 +276,7 @@ export default function NovoChamado() {
         </div>
 
         {/* Descrição */}
-        <label className="form__description">
+        <label className="formulario__descricao">
           Descrição
 
           <textarea
@@ -268,11 +289,11 @@ export default function NovoChamado() {
         </label>
 
         {/* Ações */}
-        <div className="form__actions">
+        <div className="formulario__acoes">
 
           <button
             type="button"
-            className="btn btn--cancelar"
+            className="botao botao--cancelar"
             onClick={() => navigate(-1)}
             disabled={enviando}
           >
@@ -281,7 +302,7 @@ export default function NovoChamado() {
 
           <button
             type="submit"
-            className="btn btn--primary"
+            className="botao botao--principal"
             disabled={enviando}
           >
             {enviando ? "Enviando..." : "Enviar chamado"}

@@ -100,7 +100,7 @@ function getInitialTheme() {
 }
 
 function getNavLinkClassName({ isActive }) {
-  return `sidebar__link${isActive ? " is-active" : ""}`;
+  return `sidebar__link${isActive ? " esta-ativo" : ""}`;
 }
 
 export default function Sidebar() {
@@ -156,7 +156,7 @@ export default function Sidebar() {
     <>
       <button
         type="button"
-        className={`sidebar-toggle${menuAberto ? " is-open" : ""}`}
+        className={`sidebar-alternar${menuAberto ? " esta-aberto" : ""}`}
         onClick={() => setMenuAberto((aberto) => !aberto)}
         aria-label={menuAberto ? "Esconder menu" : "Mostrar menu"}
         aria-expanded={menuAberto}
@@ -170,22 +170,22 @@ export default function Sidebar() {
       {menuAberto && (
         <button
           type="button"
-          className="sidebar-backdrop"
+          className="sidebar-fundo"
           onClick={fecharMenu}
           aria-label="Fechar menu"
         />
       )}
 
-    <aside id="sidebar-navigation" className={`sidebar${menuAberto ? " sidebar--open" : ""}`}>
-      <div className="sidebar__brand">
-        <img src={logoNOS} alt="Logo N.O.S." className="sidebar__brand-logo" />
+    <aside id="sidebar-navigation" className={`sidebar${menuAberto ? " sidebar--aberto" : ""}`}>
+      <div className="sidebar__marca">
+        <img src={logoNOS} alt="Logo N.O.S." className="sidebar__marca-logo" />
         <div>
           <strong>N.O.S</strong>
           <small>New Occurrence System</small>
         </div>
       </div>
 
-      <nav className="sidebar__nav" onClick={fecharMenu}>
+      <nav className="sidebar__navegacao" onClick={fecharMenu}>
         <NavLink to="/painel" className={getNavLinkClassName}>
           {ICONS.painel}
           DashBoard
@@ -219,8 +219,8 @@ export default function Sidebar() {
         </NavLink>
       </nav>
 
-      <div className="sidebar__footer">
-        <div className="sidebar__user">
+      <div className="sidebar__rodape">
+        <div className="sidebar__usuario">
           {FotoPerfil ? (
             <img
               src={FotoPerfil}
@@ -243,8 +243,8 @@ export default function Sidebar() {
           </div>
         </div>
 
-        <div className="sidebar__actions">
-          <button className="btn btn--ghost btn--sm" onClick={logout}>
+        <div className="sidebar__acoes">
+          <button className="botao botao--transparente botao--pequeno" onClick={logout}>
             Sair
           </button>
         </div>

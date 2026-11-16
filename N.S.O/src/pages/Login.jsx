@@ -4,9 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import CircuitAnimation from "../components/CircuitAnimation";
 import LoadingScreen from "../components/LoadingScreen";
 
-
 export default function Login() {
-
   const navigate = useNavigate();
 
   const { usuario, login } = useAuth();
@@ -43,7 +41,6 @@ export default function Login() {
     }
   }, [theme]);
 
-
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -71,10 +68,7 @@ export default function Login() {
       if (!resultado?.sucesso) {
         console.log("[Login] Login retornou falha");
 
-        setErro(
-          resultado?.mensagem ||
-          "Não foi possível realizar o login."
-        );
+        setErro(resultado?.mensagem || "Não foi possível realizar o login.");
 
         return;
       }
@@ -89,14 +83,13 @@ export default function Login() {
       const tempoDecorrido = Date.now() - inicio;
       if (tempoDecorrido < tempoMinimo) {
         await new Promise((resolve) =>
-          setTimeout(resolve, tempoMinimo - tempoDecorrido)
+          setTimeout(resolve, tempoMinimo - tempoDecorrido),
         );
       }
 
-        // Limpa os campos
-    setEmail("");
-    setSenha("");
-
+      // Limpa os campos
+      setEmail("");
+      setSenha("");
 
       console.log("[Login] Navegando para /painel");
       navigate("/painel", {
@@ -107,8 +100,8 @@ export default function Login() {
 
       setErro(
         error?.response?.data?.message ||
-        error?.message ||
-        "Não foi possível realizar o login."
+          error?.message ||
+          "Não foi possível realizar o login.",
       );
     } finally {
       setCarregando(false);
@@ -125,39 +118,38 @@ export default function Login() {
   }
 
   return (
-    <div className="login">
+    <div className="acesso">
       <button
         type="button"
-        className="login__theme-toggle"
+        className="acesso__tema-alternar"
         onClick={toggleTheme}
         aria-label="Alternar tema"
       >
         {theme === "dark" ? "☀" : "☾"}
       </button>
 
-      <div className="login__panel">
-        <div className="login__visual">
-
-          <div className="login__hero">
+      <div className="acesso__painel">
+        <div className="acesso__visual">
+          <div className="acesso__destaque">
             <h2>Abra chamados em segundos.</h2>
             <p>
               Registre e acompanhe suas ocorrências de forma simples e
               transparente.
             </p>
 
-            <div className="login__illustration" aria-hidden="true">
-              <CircuitAnimation className="login__circuit" />
+            <div className="acesso__ilustracao" aria-hidden="true">
+              <CircuitAnimation className="acesso__circuito" />
             </div>
           </div>
         </div>
 
-        <div className="login__form-panel">
+        <div className="acesso__formulario-painel">
           <h3>Bem-vindo!</h3>
           <p>Entre com suas credenciais para acessar seus chamados.</p>
 
-          <form className="login__form" onSubmit={handleSubmit}>
-            <div className="login__field login__field--icon">
-              <span className="login__field-icon" aria-hidden="true">
+          <form className="acesso__formulario" onSubmit={handleSubmit}>
+            <div className="acesso__campo acesso__campo--simbolo">
+              <span className="acesso__campo-simbolo" aria-hidden="true">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <rect x="3" y="5" width="18" height="14" rx="2" />
                   <path d="m3 7 9 6 9-6" />
@@ -166,16 +158,19 @@ export default function Login() {
               <input
                 type="email"
                 value={email}
+                id="email"
+                name="email"
+                autoComplete="email"
                 onChange={(event) => setEmail(event.target.value)}
                 onFocus={() => setEmailFocused(true)}
-                onBlur={() => setEmailFocused(true)}
+                onBlur={() => setEmailFocused(false)}
                 placeholder="Email corporativo"
                 required
               />
             </div>
 
-            <div className="login__field login__field--icon login__field--password">
-              <span className="login__field-icon" aria-hidden="true">
+            <div className="acesso__campo acesso__campo--simbolo acesso__campo--senha">
+              <span className="acesso__campo-simbolo" aria-hidden="true">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <rect x="5" y="10" width="14" height="10" rx="2" />
                   <path d="M8 10V7a4 4 0 0 1 8 0v3" />
@@ -184,16 +179,19 @@ export default function Login() {
               <input
                 type={mostrarSenha ? "text" : "password"}
                 value={senha}
+                id="senha"
+                name="senha"
+                autoComplete="current-password" // use "new-password" se for cadastro
                 onChange={(event) => setSenha(event.target.value)}
                 onFocus={() => setSenhaFocused(true)}
-                onBlur={() => setSenhaFocused(true)}
+                onBlur={() => setSenhaFocused(false)}
                 placeholder="Senha"
                 required
               />
               <button
                 type="button"
-                className="login__toggle-password"
-                aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                className="acesso__alternar-senha"
+                aria-label="Mostrar senha"
                 aria-pressed={mostrarSenha}
                 onClick={() => setMostrarSenha((value) => !value)}
               >
@@ -213,18 +211,18 @@ export default function Login() {
               </button>
             </div>
 
-            {erro && (
-              <p>{erro}</p>
-            )}
+            {erro && <p>{erro}</p>}
 
-            <button type="submit"
-              className="btn btn--primary login__submit"
+            <button
+              type="submit"
+              className="botao botao--principal acesso__envio"
               disabled={carregando}
             >
-              {carregando ? "Entrando..." : "Entrar"} <span aria-hidden="true">→</span>
+              {carregando ? "Entrando..." : "Entrar"}{" "}
+              <span aria-hidden="true">→</span>
             </button>
 
-            <Link to="/recuperar-senha" className="login__forgot-password">
+            <Link to="/recuperar-senha" className="acesso__esquecida-senha">
               Recuperar senha
             </Link>
           </form>

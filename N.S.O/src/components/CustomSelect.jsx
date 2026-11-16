@@ -22,8 +22,8 @@ export default function CustomSelect({
     const close = (e) => {
       if (rootRef.current && !rootRef.current.contains(e.target)) setOpen(false);
     };
-    document.addEventListener("mousedown", close);
-    return () => document.removeEventListener("mousedown", close);
+    document.addEventListener("pointerdown", close);
+    return () => document.removeEventListener("pointerdown", close);
   }, []);
  
   const toggle = () => {
@@ -60,11 +60,11 @@ export default function CustomSelect({
   };
  
   return (
-    <div className={`cselect ${className}`.trim()} ref={rootRef}>
+    <div className={`selecao-personalizada ${className}`.trim()} ref={rootRef}>
       <button
         type="button"
         id={id}
-        className="cselect__trigger"
+        className="selecao-personalizada__acionador"
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={label}
@@ -72,20 +72,20 @@ export default function CustomSelect({
         onKeyDown={onKeyDown}
       >
         <span>{selectedOption ? optionLabel(selectedOption) : value}</span>
-        <span className="cselect__caret" aria-hidden="true" />
+        <span className="selecao-personalizada__seta" aria-hidden="true" />
       </button>
  
       {open && (
-        <ul className="cselect__menu" role="listbox" aria-label={label}>
+        <ul className="selecao-personalizada__menu" role="listbox" aria-label={label}>
           {options.map((opt, i) => (
             <li
               key={optionValue(opt)}
               role="option"
               aria-selected={optionValue(opt) === value}
               className={
-                "cselect__option" +
-                (optionValue(opt) === value ? " is-selected" : "") +
-                (i === active ? " is-active" : "")
+                "selecao-personalizada__opcao" +
+                (optionValue(opt) === value ? " esta-selecionado" : "") +
+                (i === active ? " esta-ativo" : "")
               }
               onMouseEnter={() => setActive(i)}
               onClick={() => choose(optionValue(opt))}

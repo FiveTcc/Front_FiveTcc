@@ -3,9 +3,9 @@ import Sidebar from './Sidebar'
 
 export default function Layout() {
   return (
-    <div className="shell">
+    <div className="estrutura">
       <Sidebar />
-      <main className="shell__content">
+      <main className="estrutura__conteudo">
         <Outlet />
       </main>
     </div>
