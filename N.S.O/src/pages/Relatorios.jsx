@@ -7,6 +7,7 @@ import {
 } from "../services/utils";
 import CustomSelect from "../components/CustomSelect";
 import relatorioService from "../services/relatorioService";
+import { Building2, Monitor, Users } from 'lucide-react'
 
 const PERFIL_LABEL = {
   admin: "Administrador",
@@ -517,34 +518,42 @@ export default function Relatorios() {
                 <div className="relatorio-extra-card">
                   <div className="relatorio-extra-card__cabecalho">
                     <span className="relatorio-extra-card__simbolo relatorio-extra-card__simbolo--azul">
-                      <i className="bi bi-building"></i>
+                      <Building2/>
                     </span>
                     <h3>Ambientes com mais ocorrências</h3>
                   </div>
 
-                  {ocorrenciasPorAmbiente.map((item) => (
-                    <div className="relatorio-extra-linha" key={item.nome}>
-                      <span>{item.nome}</span>
-                      <strong>{item.total}</strong>
-                    </div>
-                  ))}
+                  {ocorrenciasPorAmbiente.length > 0 ? (
+                    ocorrenciasPorAmbiente.map((item) => (
+                      <div className="relatorio-extra-linha" key={item.nome}>
+                        <span>{item.nome}</span>
+                        <strong>{item.total}</strong>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="esmaecido">Nenhuma ocorrência em ambientes.</p>
+                  )}
                 </div>
 
                 {/* Componentes com mais falhas */}
                 <div className="relatorio-extra-card">
                   <div className="relatorio-extra-card__cabecalho">
                     <span className="relatorio-extra-card__simbolo relatorio-extra-card__simbolo--roxo">
-                      <i className="bi bi-puzzle"></i>
+                      <Monitor/>
                     </span>
                     <h3>Componentes com mais falhas</h3>
                   </div>
 
-                  {componentesComFalha.map((item) => (
-                    <div className="relatorio-extra-linha" key={item.nome}>
-                      <span>{item.nome}</span>
-                      <strong>{item.total}</strong>
-                    </div>
-                  ))}
+                  {componentesComFalha.length > 0 ? (
+                    componentesComFalha.map((item) => (
+                      <div className="relatorio-extra-linha" key={item.nome}>
+                        <span>{item.nome}</span>
+                        <strong>{item.total}</strong>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="esmaecido">Nenhum componente com falha.</p>
+                  )}
                 </div>
 
                 {/* Técnicos com mais ocorrências - somente administrador */}
@@ -552,7 +561,7 @@ export default function Relatorios() {
                   <div className="relatorio-extra-card">
                     <div className="relatorio-extra-card__cabecalho">
                       <span className="relatorio-extra-card__simbolo relatorio-extra-card__simbolo--verde">
-                        <i className="bi bi-people"></i>
+                        <Users/>
                       </span>
 
                       <h3>Técnicos com mais ocorrências</h3>
