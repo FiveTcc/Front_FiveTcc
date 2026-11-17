@@ -812,7 +812,7 @@ textarea {
 
 .topbar__simbolo-botao:hover {
   border-color: rgba(0, 81, 255, 0.541);
-  background-color: rgba(148, 163, 184, 0.32);
+  background: var(--surface-2);
 }
 
 /* ---------- Menu suspenso de notificações ---------- */
@@ -871,6 +871,7 @@ textarea {
 
 .topbar__notificacao-item:hover {
   background: var(--surface-2);
+  border-color: rgba(0, 81, 255, 0.541);
 }
 
 .topbar__notificacao-item small {
@@ -2688,12 +2689,12 @@ textarea {
 
 .sinalizador--aberta .sinalizador__ponto,
 .sinalizador--aberta .sinalizador__ponto::after {
-  background: var(--orange);
+  background: #FFBF00;
 }
 
 .sinalizador--em_andamento .sinalizador__ponto,
 .sinalizador--em_andamento .sinalizador__ponto::after {
-  background: var(--blue);
+  background: #00A8FF;
 }
 
 .sinalizador--concluida .sinalizador__ponto,
@@ -2703,7 +2704,7 @@ textarea {
 
 .sinalizador--cancelada .sinalizador__ponto,
 .sinalizador--cancelada .sinalizador__ponto::after {
-  background: var(--red);
+  background: #808080;
 }
 
 .sinalizador--aguardando .sinalizador__ponto,
@@ -2753,22 +2754,22 @@ textarea {
 }
 
 .etiqueta--baixa {
-  background: rgba(251, 255, 0, 0.24);
+  background: #D9EAD3;
   color: var(--yellow);
 }
 
-.etiqueta--midia {
-  background: rgba(37, 99, 235, 0.1);
+.etiqueta--media {
+  background: #FFDE21;
   color: var(--blue);
 }
 
 .etiqueta--alta {
-  background: rgba(232, 134, 46, 0.14);
+  background: #FF746C;
   color: var(--orange);
 }
 
 .etiqueta--critica {
-  background: rgba(224, 50, 90, 0.13);
+  background: #FF2C2C;
   color: var(--red);
 }
 

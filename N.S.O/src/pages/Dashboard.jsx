@@ -10,10 +10,10 @@ import StatusBeacon from "../components/StatusBeacon";
 import PriorityBadge from "../components/PriorityBadge";
 
 const CORES_STATUS = {
-  aberta: "#E8862E",
-  "em andamento": "#2563EB",
+  aberta: "#FFBF00",
+  "em andamento": "#00A8FF",
   concluida: "#16A870",
-  cancelada: "#D42424",
+  cancelada: "#808080",
 };
 
 const STATUS_LABELS = {
