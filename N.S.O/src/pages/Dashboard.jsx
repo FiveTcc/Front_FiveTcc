@@ -234,13 +234,26 @@ export default function Dashboard() {
       .slice(0, 5);
   }, [chamados, busca]);
 
+  const capitalizar = (texto) => {
+    const excecoes = ["da", "de", "do", "das", "dos", "e"];
+    return texto
+    ?.toLowerCase()
+    .split(" ")
+    .map((palavra, i) =>
+      i > 0 && excecoes.includes(palavra)
+        ? palavra
+        : palavra.charAt(0).toUpperCase() + palavra.slice(1)
+    )
+    .join(" ");
+};
+
   return (
     <div className="pagina pagina--painel">
       <div className="pagina__superior">
         {/* Barra superior */}
         <header className="pagina__cabecalho">
           <div>
-            <h1>Olá, {(nome || usuario.nome)?.toLowerCase()} </h1>
+            <h1>Olá, {capitalizar(nome || usuario.nome)} </h1>
             <p className="esmaecido">
               Visão geral dos chamados sob monitoramento agora.
             </p>

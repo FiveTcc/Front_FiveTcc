@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
+import CustomSelect from '../components/CustomSelect'
 import { iniciais } from '../services/utils'
 
 const PERFIL_LABEL = { admin: 'Administrador', tecnico: 'Técnico', usuario: 'Usuário' }
@@ -189,21 +190,32 @@ export default function Usuarios() {
               Nome
               <input name="nome" value={form.nome} onChange={handleChange} placeholder="Ex.: Ana Souza" autoComplete="off" />
             </label>
-            <label>
-              Perfil
-              <select name="perfil" value={form.perfil} onChange={handleChange} autoComplete="off">
-                <option value="">Selecione</option>
-                <option value="usuario">Usuário</option>
-                <option value="tecnico">Técnico</option>
-                <option value="admin">Administrador</option>
-              </select>
-            </label>
+            <div className="usuarios-perfil-campo">
+              <label htmlFor="usuarios-novo-perfil">Perfil</label>
+              <CustomSelect
+                id="usuarios-novo-perfil"
+                className="usuarios-perfil-select"
+                label="Perfil"
+                value={form.perfil}
+                options={[
+                  { value: '', label: 'Selecione' },
+                  { value: 'usuario', label: 'Usuário' },
+                  { value: 'tecnico', label: 'Técnico' },
+                  { value: 'admin', label: 'Administrador' },
+                ]}
+                onChange={(value) => {
+                  setForm((prev) => ({ ...prev, perfil: value }))
+                  if (erro) setErro('')
+                  if (sucesso) setSucesso('')
+                }}
+              />
+            </div>
           </div>
 
           <div className="formulario__linha">
             <label>
               E-mail
-              <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="nome@torre.edu" autoComplete="off" />
+              <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="E-mail corporativo" autoComplete="off" />
             </label>
             <label>
               Senha inicial
@@ -243,15 +255,26 @@ export default function Usuarios() {
                 Nome
                 <input name="nome" value={editForm.nome} onChange={handleEditChange} />
               </label>
-              <label>
-                Perfil
-                <select name="perfil" value={editForm.perfil} onChange={handleEditChange}>
-                  <option value="">Selecione</option>
-                  <option value="usuario">Usuário</option>
-                  <option value="tecnico">Técnico</option>
-                  <option value="admin">Administrador</option>
-                </select>
-              </label>
+              <div className="usuarios-perfil-campo">
+                <label htmlFor="usuarios-editar-perfil">Perfil</label>
+                <CustomSelect
+                  id="usuarios-editar-perfil"
+                  className="usuarios-perfil-select"
+                  label="Perfil"
+                  value={editForm.perfil}
+                  options={[
+                    { value: '', label: 'Selecione' },
+                    { value: 'usuario', label: 'Usuário' },
+                    { value: 'tecnico', label: 'Técnico' },
+                    { value: 'admin', label: 'Administrador' },
+                  ]}
+                  onChange={(value) => {
+                    setEditForm((prev) => ({ ...prev, perfil: value }))
+                    if (erro) setErro('')
+                    if (sucesso) setSucesso('')
+                  }}
+                />
+              </div>
             </div>
 
             <div className="formulario__linha">

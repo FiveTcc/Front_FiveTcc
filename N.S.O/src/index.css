@@ -3142,6 +3142,11 @@ textarea {
   border: 2px solid var(--panel-input-border);
 }
 
+.card__novochamado.formulario .personalizado-selecao__acionador {
+  background: var(--panel-input);
+  color: var(--text);
+}
+
 .formulario input::placeholder,
 .formulario select::placeholder,
 .formulario textarea::placeholder {
@@ -5447,7 +5452,7 @@ textarea {
 
 .ambientes-card {
   background: var(--panel);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 12px;
   box-shadow: var(--shadow-card);
   padding: 16px;
@@ -6925,12 +6930,27 @@ textarea {
   background: var(--panel);
   border-color: var(--border);
   border-radius: 18px;
+  padding: 10px;
   box-shadow: var(--shadow-card);
 }
 
+.ambiente-detalhe-formulario .selecao-personalizada--formulario .selecao-personalizada__opcao {
+  width: calc(100% - 8px);
+  margin: 2px 4px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.ambiente-detalhe-formulario .selecao-personalizada--formulario .selecao-personalizada__opcao.esta-selecionado,
 .ambiente-detalhe-formulario .selecao-personalizada--formulario .selecao-personalizada__opcao.esta-ativo,
 .ambiente-detalhe-formulario .selecao-personalizada--formulario .selecao-personalizada__opcao:hover {
   background: var(--surface-3);
+  color: var(--text);
+  font-weight: 700;
   box-shadow: inset 0 0 0 1px var(--border);
 }
 
@@ -7166,11 +7186,126 @@ textarea {
 .relatorio-filtros .selecao-personalizada__acionador,
 .relatorio-filtros__campo input,
 .componentes-barra-ferramentas .componentes-busca,
-.componentes-barra-ferramentas select {
+.componentes-barra-ferramentas select,
+.usuarios-novo-formulario input,
+.usuarios-perfil-select .selecao-personalizada__acionador {
   transition:
     border-color 0.15s ease,
     box-shadow 0.15s ease;
   border: 2px solid var(--panel-input-border);
+}
+
+.usuarios-perfil-select {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+.usuarios-perfil-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.usuarios-novo-formulario input,
+.usuarios-novo-formulario .usuarios-perfil-select .selecao-personalizada__acionador {
+  min-height: 50px;
+  font-size: 1rem;
+}
+
+.usuarios-perfil-select .selecao-personalizada__acionador {
+  min-height: 42px;
+  color: var(--text);
+  background: var(--panel-input);
+  border-radius: 10px;
+}
+
+.usuarios-perfil-select .selecao-personalizada__menu {
+  color: var(--text);
+  background: var(--panel);
+  border-color: var(--border);
+  border-radius: 18px;
+  padding: 10px;
+  box-shadow: var(--shadow-card);
+}
+
+.usuarios-perfil-select .selecao-personalizada__opcao {
+  width: calc(100% - 8px);
+  margin: 2px 4px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.usuarios-perfil-select .selecao-personalizada__opcao.esta-ativo,
+.usuarios-perfil-select .selecao-personalizada__opcao.esta-selecionado,
+.usuarios-perfil-select .selecao-personalizada__opcao:hover {
+  background: var(--surface-3);
+  color: var(--text);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.card__novochamado .personalizado-selecao__menu {
+  color: var(--text);
+  background: var(--panel);
+  border-color: var(--border);
+  padding: 10px;
+  box-shadow: var(--shadow-card);
+}
+
+.card__novochamado .personalizado-selecao__opcao {
+  width: calc(100% - 8px);
+  margin: 2px 4px;
+  padding: 10px 12px;
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.card__novochamado .personalizado-selecao__opcao.esta-selecionado,
+.card__novochamado .personalizado-selecao__opcao:hover {
+  background: var(--surface-3);
+  color: var(--text);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.ambiente-detalhe-formulario input,
+.ambiente-detalhe-formulario select,
+.ambiente-detalhe-formulario textarea,
+.ambiente-adicionar-formulario input,
+.ambiente-adicionar-formulario select,
+.ambiente-adicionar-formulario textarea,
+.ambiente-detalhe-formulario .selecao-personalizada--formulario .selecao-personalizada__acionador {
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+  border: 2px solid var(--panel-input-border);
+}
+
+.ambiente-detalhe-formulario input:hover,
+.ambiente-detalhe-formulario input:focus,
+.ambiente-detalhe-formulario select:hover,
+.ambiente-detalhe-formulario select:focus,
+.ambiente-detalhe-formulario textarea:hover,
+.ambiente-detalhe-formulario textarea:focus,
+.ambiente-adicionar-formulario input:hover,
+.ambiente-adicionar-formulario input:focus,
+.ambiente-adicionar-formulario select:hover,
+.ambiente-adicionar-formulario select:focus,
+.ambiente-adicionar-formulario textarea:hover,
+.ambiente-adicionar-formulario textarea:focus,
+.ambiente-detalhe-formulario .selecao-personalizada--formulario .selecao-personalizada__acionador:hover,
+.ambiente-detalhe-formulario .selecao-personalizada--formulario .selecao-personalizada__acionador:focus-visible,
+.ambiente-detalhe-formulario .selecao-personalizada--formulario .selecao-personalizada__acionador[aria-expanded="true"] {
+  border-color: rgba(0, 81, 255, 0.671);
+  box-shadow: 0 0 0 3px var(--accent-dim);
 }
 
 /* Hover / foco / aberto: borda azul + halo */
@@ -7189,7 +7324,12 @@ textarea {
 .componentes-barra-ferramentas .componentes-busca:hover,
 .componentes-barra-ferramentas .componentes-busca:focus-within,
 .componentes-barra-ferramentas select:hover,
-.componentes-barra-ferramentas select:focus {
+.componentes-barra-ferramentas select:focus,
+.usuarios-novo-formulario input:hover,
+.usuarios-novo-formulario input:focus,
+.usuarios-perfil-select .selecao-personalizada__acionador:hover,
+.usuarios-perfil-select .selecao-personalizada__acionador:focus-visible,
+.usuarios-perfil-select .selecao-personalizada__acionador[aria-expanded="true"] {
   border-color: rgba(0, 81, 255, 0.671);
   box-shadow: 0 0 0 3px var(--accent-dim);
 }
