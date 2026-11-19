@@ -1,0 +1,441 @@
+/* ==========================================================================
+   CARDS DE ESTATÍSTICA, CARDS, GRÁFICO DE ROSCA E LISTA RECENTE
+   ========================================================================== */
+
+/* ---------- Cards de estatística (painel) ---------- */
+.estatistica-grade {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.estatistica-card {
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.09),
+    rgba(37, 99, 235, 0.02)
+  );
+  border: 1px solid var(--border);
+  border-color: rgba(37, 99, 235, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: var(--shadow-card);
+}
+.estatistica-card__rotulo {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+.estatistica-card__valor {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 600;
+}
+.estatistica-card__dica {
+  font-size: 0.74rem;
+  color: var(--text-faint);
+}
+/* Variações */
+.estatistica-card--alerta {
+  background: linear-gradient(
+    135deg,
+    rgba(224, 50, 90, 0.09),
+    rgba(224, 50, 90, 0.02)
+  );
+  border-color: rgba(224, 50, 90, 0.35);
+}
+.estatistica-card--total {
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.09),
+    rgba(37, 99, 235, 0.02)
+  );
+  border-color: rgba(37, 99, 235, 0.35);
+}
+.estatistica-card--alerta .estatistica-card__valor {
+  color: var(--red);
+}
+
+/* ---------- 11.2 Grades e cards genéricos ---------- */
+.grade-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.grade-2 > .card {
+  height: 100%;
+  margin-bottom: 0;
+}
+.grade-2--assimetrico {
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  align-items: start;
+}
+
+/* Card padrão */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+}
+
+/* ---------- Cards específicos de cada tela ---------- */
+.card__relatorios {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+  box-sizing: border-box;
+  width: 100%;
+  min-height: auto;
+  height: auto;
+}
+
+.card__novousuario {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: static;
+  flex: 0 0 auto;
+  overflow: visible;
+  padding-bottom: 20px;
+  min-height: min-content;
+  height: auto;
+}
+
+.card__tabela {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+  width: 100%;
+  height: auto;
+}
+
+.card__atividade {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: var(--shadow-card);
+  height: auto;
+}
+
+.card__chamados {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card__ambientes--grade {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.card__novochamado {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+  width: 100%;
+  height: auto;
+}
+
+.card__situacao {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 0;
+  box-shadow: var(--shadow-card);
+  width: 100%;
+  height: auto;
+}
+
+.card__historico {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+  width: 100%;
+}
+
+/* ---------- Detalhes dos cards ---------- */
+.card:last-child {
+  margin-bottom: 0;
+}
+.card__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.card__cabecalho h2 {
+  margin: 0;
+}
+/* Card que contém uma tabela: sem padding, para a tabela ocupar tudo */
+.card--tabela {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ---------- Gráfico de rosca (donut) ---------- */
+.grafico-rosca-linha {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.grafico-rosca {
+  width: 300px;
+  height: 300px;
+}
+.grafico-rosca__total {
+  fill: var(--text);
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+}
+.grafico-rosca__legenda {
+  fill: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.grafico-rosca-legenda {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 160px;
+}
+.grafico-rosca-legenda li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.15rem;
+  color: var(--text-dim);
+}
+.grafico-rosca-legenda strong {
+  margin-left: auto;
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+.grafico-rosca-legenda__ponto {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ---------- Lista de itens recentes ---------- */
+.recente-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.recente-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  color: var(--text);
+}
+.recente-lista li:last-child .recente-item {
+  border-bottom: none;
+}
+.recente-item:hover .recente-item__titulo {
+  color: var(--accent);
+}
+.recente-item__corpo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.recente-item__codigo {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-faint);
+}
+.recente-item__titulo {
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.15s ease;
+}
+.recente-item__tempo {
+  font-size: 0.75rem;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+
+/* ==========================================================================
+   INDICADORES DE STATUS, ETIQUETAS E FICHAS
+   ========================================================================== */
+
+/* ---------- Sinalizador (bolinha pulsante de status) ---------- */
+.sinalizador {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+.sinalizador__ponto {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+}
+/* Halo animado ao redor do ponto */
+.sinalizador__ponto::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  opacity: 0.35;
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+/* Cores por status */
+.sinalizador--aberto .sinalizador__ponto,
+.sinalizador--aberto .sinalizador__ponto::after {
+  background: var(--orange);
+}
+.sinalizador--aberta .sinalizador__ponto,
+.sinalizador--aberta .sinalizador__ponto::after {
+  background: #FFBF00;
+}
+.sinalizador--em_andamento .sinalizador__ponto,
+.sinalizador--em_andamento .sinalizador__ponto::after {
+  background: #00A8FF;
+}
+.sinalizador--concluida .sinalizador__ponto,
+.sinalizador--concluida .sinalizador__ponto::after {
+  background: var(--green);
+}
+.sinalizador--cancelada .sinalizador__ponto,
+.sinalizador--cancelada .sinalizador__ponto::after {
+  background: #808080;
+}
+.sinalizador--aguardando .sinalizador__ponto,
+.sinalizador--aguardando .sinalizador__ponto::after {
+  background: var(--amber);
+}
+.sinalizador--resolvido .sinalizador__ponto,
+.sinalizador--resolvido .sinalizador__ponto::after {
+  background: var(--green);
+}
+.sinalizador--fechado .sinalizador__ponto,
+.sinalizador--fechado .sinalizador__ponto::after {
+  background: var(--text-faint);
+}
+/* Status "fechado" não pulsa */
+.sinalizador--fechado .sinalizador__ponto::after {
+  display: none;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* ---------- Etiquetas de prioridade ---------- */
+.etiqueta {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+.etiqueta--baixa {
+  background: #D9EAD3;
+  color: var(--yellow);
+}
+.etiqueta--media {
+  background: #FFDE21;
+  color: var(--blue);
+}
+.etiqueta--alta {
+  background: #FF746C;
+  color: var(--orange);
+}
+.etiqueta--critica {
+  background: #FF2C2C;
+  color: var(--red);
+}
+
+/* ---------- Fichas (perfil do usuário: administrador, técnico...) ---------- */
+.ficha {
+  font-size: 0.75rem;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  text-transform: capitalize;
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+}
+.ficha--administrador {
+  border-color: rgba(224, 50, 90, 0.45);
+  color: var(--red);
+  background: rgba(224, 50, 90, 0.08);
+}
+.ficha--tecnico {
+  border-color: rgba(37, 99, 235, 0.25);
+  color: var(--blue);
+  background: rgba(37, 99, 235, 0.08);
+}

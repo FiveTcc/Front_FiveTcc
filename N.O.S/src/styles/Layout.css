@@ -1,0 +1,374 @@
+/* ==========================================================================
+   LAYOUT PRINCIPAL
+   ========================================================================== */
+
+/* ---------- Estrutura geral: sidebar + conteúdo ---------- */
+.estrutura {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+/* Área de conteúdo à direita da sidebar */
+.estrutura__conteudo {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  justify-self: stretch;
+  padding: 8px 40px 60px;
+}
+
+/* ---------- Sidebar (menu lateral) ---------- */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 16px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+/* Marca / logo no topo da sidebar */
+.sidebar__marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px 22px;
+}
+.sidebar__marca strong {
+  display: block;
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+  font-size: 1.05rem;
+}
+.sidebar__marca small {
+  display: block;
+  color: var(--text-faint);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.sidebar__marca-marca {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 45%,
+    #7ca8ff,
+    var(--accent) 70%,
+    #123a9e 100%
+  );
+  box-shadow:
+    0 0 0 4px var(--accent-dim),
+    0 0 18px rgba(37, 99, 235, 0.35);
+  flex-shrink: 0;
+}
+.sidebar__marca-marca--grande {
+  width: 52px;
+  height: 52px;
+  box-shadow:
+    0 0 0 6px var(--accent-dim),
+    0 0 30px rgba(37, 99, 235, 0.4);
+}
+
+.sidebar__marca-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+/* No tema escuro, a logo é invertida para ficar clara */
+[data-theme="dark"] .sidebar__marca-logo {
+  filter: brightness(0) invert(1) brightness(0.9);
+}
+
+/* Links de navegação */
+.sidebar__navegacao {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+.sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.92rem;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.sidebar__link svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.sidebar__link:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+/* Link da página atual */
+.sidebar__link.esta-ativo {
+  background: var(--surface-3);
+  color: var(--text);
+  box-shadow: inset 2px 0 0 rgba(0, 81, 255, 0.671);
+}
+
+/* Rodapé da sidebar (usuário + ações) */
+.sidebar__rodape {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sidebar__usuario {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sidebar__usuario strong {
+  display: block;
+  font-size: 0.85rem;
+}
+.sidebar__usuario small {
+  color: var(--text-faint);
+  text-transform: capitalize;
+  font-size: 0.72rem;
+}
+.sidebar__acoes {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+/* Botão de sair fica vermelho ao passar o mouse */
+.sidebar__acoes .botao--transparente:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: #ffffff;
+}
+
+/* ---------- Avatares ---------- */
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.sidebar__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  background: var(--surface-3);
+}
+
+.avatar--pequeno {
+  width: 35px;
+  height: 35px;
+  font-size: 0.68rem;
+}
+.avatar--extragrande {
+  width: 64px;
+  height: 64px;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+
+/* ==========================================================================
+   TOPBAR E NOTIFICAÇÕES
+   ========================================================================== */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  align-self: flex-start;
+  justify-self: end;
+  width: min(100%, 380px);
+  margin-top: 1px;
+  min-height: 40px;
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  padding: 8px 10px;
+  box-shadow: var(--shadow-card);
+  position: static;
+}
+
+/* ---------- Campo de busca ---------- */
+.topbar__busca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-height: 40px;
+  background: var(--panel-soft);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 14px;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.topbar__busca:hover {
+  border-color: rgba(0, 81, 255, 0.541);
+}
+
+.topbar__busca:focus-within {
+  border-color: rgba(0, 81, 255, 0.671);
+}
+.topbar__simbolo {
+  font-size: 1.1rem;
+  color: var(--text-dim);
+}
+.topbar__busca input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.95rem;
+  min-width: 0;
+}
+.topbar__busca input::placeholder {
+  color: var(--text-faint);
+}
+
+/* ---------- Ações (tema, notificações) ---------- */
+.topbar__acoes {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 30;
+  transform: translateY(1px);
+}
+
+.topbar__notificacoes-wrap {
+  position: relative;
+  z-index: 20;
+}
+
+.topbar__simbolo-botao {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 2px solid rgba(148, 163, 184, 0.32);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.12s ease;
+}
+
+.topbar__simbolo-botao:hover {
+  border-color: rgba(0, 81, 255, 0.541);
+  background: var(--surface-2);
+}
+
+/* ---------- Menu suspenso de notificações ---------- */
+.topbar__notificacoes {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 300px;
+  padding: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.topbar__notificacoes-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+/* Contador de notificações */
+.topbar__notificacoes-cabecalho span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-size: 0.7rem;
+}
+
+.topbar__notificacao-item {
+  width: 100%;
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-align: left;
+  padding: 10px 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.topbar__notificacao-item:hover {
+  background: var(--surface-2);
+  border-color: rgba(0, 81, 255, 0.541);
+}
+
+.topbar__notificacao-item small {
+  color: var(--text-dim);
+}
+
+/* ---------- Usuário na topbar ---------- */
+.topbar__usuario {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 6px;
+}
+.topbar__usuario strong {
+  display: block;
+  font-size: 0.9rem;
+}
+.topbar__usuario small {
+  color: var(--text-faint);
+  font-size: 0.72rem;
+}

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import "../styles/CustomSelect.css";
  
 export default function CustomSelect({
   value,

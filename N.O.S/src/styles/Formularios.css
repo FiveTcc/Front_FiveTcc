@@ -1,0 +1,440 @@
+/* ==========================================================================
+   FILTROS, SELECTS PERSONALIZADOS, TABELAS E FORMULÁRIOS
+   ========================================================================== */
+
+/* ---------- Barra de filtros e legenda de situação ---------- */
+.filtros {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+.situacao-legenda-conteiner {
+  margin-right: auto;
+  position: relative;
+}
+
+.situacao-legenda {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px 15px;
+  margin: -2px 0 0 0px;
+  padding: 0;
+  list-style: none;
+}
+
+.situacao-legenda__item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* Mesma altura para selects e botão */
+.personalizado-selecao__acionador,
+.filtros .botao {
+  height: 44px;
+}
+
+/* Select de "tipo" com menu rolável */
+.personalizado-selecao--tipo {
+  max-width: 220px;
+}
+
+.personalizado-selecao--tipo .personalizado-selecao__menu {
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.personalizado-selecao--tipo .personalizado-selecao__menu {
+  min-width: 100%;
+  width: max-content;
+}
+
+/* ---------- Filtros (ajustes complementares) ---------- */
+.filtros {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  border-radius: 18px;
+  padding: 4px;
+}
+
+.filtros__busca {
+  flex: 1;
+  min-width: 50px;
+  border-radius: 14px;
+}
+
+/* ---------- Elementos nativos de formulário ---------- */
+select option {
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 10px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-faint);
+}
+
+textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+/* ---------- Select personalizado (dropdown customizado) ---------- */
+.personalizado-selecao {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.personalizado-selecao__rotulo {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.personalizado-selecao__acionador-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.personalizado-selecao__acionador-wrapper .personalizado-selecao__acionador {
+  width: 100%;
+}
+
+/* Botão que abre o menu */
+.personalizado-selecao__acionador {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--panel-input-border);
+  border-radius: 14px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(148, 163, 184, 0.02)
+  );
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.personalizado-selecao__acionador.esta-aberto {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.18);
+}
+
+/* Seta do select (gira ao abrir) */
+.personalizado-selecao__seta {
+  color: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.personalizado-selecao__acionador.esta-aberto .personalizado-selecao__seta {
+  transform: rotate(180deg);
+}
+
+/* Menu com as opções */
+.personalizado-selecao__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+  z-index: 5;
+  overflow: hidden;
+  padding: 8px;
+}
+
+.personalizado-selecao__opcao {
+  display: block;
+  width: calc(100% - 8px);
+  margin: 2px 4px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  padding: 10px 12px;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 10px;
+  transition:
+    background 0.12s ease,
+    color 0.12s ease,
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.personalizado-selecao__opcao:hover {
+  background: var(--surface-3);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.12);
+}
+
+.personalizado-selecao__opcao.esta-selecionado {
+  background: transparent;
+  color: var(--text);
+  box-shadow: none;
+}
+
+.personalizado-selecao__opcao.esta-selecionado:hover {
+  background: var(--surface-3);
+  color: var(--text);
+  box-shadow: none;
+}
+
+/* Menu de opções no formulário de novo chamado */
+.card__novochamado .personalizado-selecao__menu {
+  padding: 8px;
+  border-radius: 18px;
+}
+
+.card__novochamado .personalizado-selecao__opcao {
+  width: 100%;
+  min-height: 42px;
+  margin: 0;
+  padding: 9px 11px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.card__novochamado .personalizado-selecao__opcao.esta-selecionado {
+  background: var(--surface-2);
+  border-color: var(--panel-input-border);
+}
+
+.card__novochamado .personalizado-selecao__opcao:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+/* ---------- Tabela ---------- */
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+}
+.tabela th {
+  text-align: left;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+  font-weight: 600;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.tabela td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.88rem;
+}
+.tabela tr:last-child td {
+  border-bottom: none;
+}
+.tabela tr:hover td {
+  background: var(--surface-2);
+}
+.tabela__codigo {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  text-decoration: none;
+}
+.tabela__titulo {
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--text);
+}
+.tabela__titulo:hover {
+  color: var(--accent);
+}
+
+/* Linha divisória acima da tabela quando ela está dentro de um card--tabela */
+.card.card--tabela .tabela thead th {
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- Estado vazio ---------- */
+.vazio {
+  padding: 48px 20px;
+  text-align: center;
+  color: var(--text-dim);
+}
+.vazio strong {
+  display: block;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+/* ---------- Formulário padrão ---------- */
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+}
+.pagina--estreita > .formulario .formulario__descricao {
+  flex: initial;
+}
+.pagina--estreita > .formulario .formulario__descricao textarea {
+  min-height: 265px;
+}
+.formulario label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+.formulario input,
+.formulario select,
+.formulario textarea {
+  width: 100%;
+  min-height: 42px;
+  background: var(--panel-input);
+  border: 1px solid var(--panel-input-border);
+  border-radius: 10px;
+  color: var(--text);
+  padding: 10px 12px;
+  box-sizing: border-box;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* Formulário de novo chamado: bordas mais grossas */
+.card__novochamado.formulario input,
+.card__novochamado.formulario select,
+.card__novochamado.formulario textarea,
+.card__novochamado.formulario .personalizado-selecao__acionador {
+  border: 2px solid var(--panel-input-border);
+}
+
+.card__novochamado.formulario .personalizado-selecao__acionador {
+  background: var(--panel-input);
+  color: var(--text);
+}
+
+.formulario input::placeholder,
+.formulario select::placeholder,
+.formulario textarea::placeholder {
+  color: var(--text-faint);
+}
+.formulario input:focus,
+.formulario select:focus,
+.formulario textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+}
+.card__novochamado.formulario input:hover,
+.card__novochamado.formulario textarea:hover,
+.card__novochamado.formulario input:focus,
+.card__novochamado.formulario select:focus,
+.card__novochamado.formulario textarea:focus,
+.card__novochamado.formulario .personalizado-selecao__acionador:hover,
+.card__novochamado.formulario .personalizado-selecao__acionador:focus-visible,
+.card__novochamado.formulario .personalizado-selecao__acionador.esta-aberto {
+  border-color: rgba(0, 81, 255, 0.671);
+}
+
+.formulario__linha {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.formulario__acoes {
+  display: flex;
+  position: static;
+  justify-content: flex-end;
+  gap: 10px;
+  width: 100%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+.formulario-novo-usuarios__acoes {
+  display: flex;
+  position: static;
+  justify-content: flex-end;
+  gap: 10px;
+  width: 100%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+.usuarios-novo-formulario > .formulario__acoes {
+  margin-top: 4px;
+}
+/* No formulário de novo usuário os botões não "pulam" ao clicar */
+.usuarios-novo-formulario .botao,
+.usuarios-novo-formulario .botao:hover,
+.usuarios-novo-formulario .botao:active,
+.usuarios-novo-formulario .botao:focus-visible {
+  transform: none;
+}
+.formulario__sucesso {
+  color: var(--green);
+  font-size: 0.85rem;
+}
+
+/* ---------- Anexos ---------- */
+.formulario__anexos {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  height: auto;
+  min-height: 0;
+  width: 100%;
+  flex-shrink: 0;
+}
+.formulario__anexo-acoes {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 8px;
+}
+/* O <input type="file"> fica invisível sobre o botão */
+.formulario__arquivo-botao {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.formulario__arquivo-botao input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+.formulario__anexos-lista {
+  margin: 0;
+  color: var(--text-faint);
+  font-size: 0.78rem;
+  overflow-wrap: anywhere;
+}

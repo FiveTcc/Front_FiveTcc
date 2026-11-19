@@ -1,0 +1,490 @@
+/* ==========================================================================
+   LOGIN, RECUPERAÇÃO DE SENHA E ANIMAÇÃO DA PLACA DE CIRCUITO
+   ========================================================================== */
+
+/* ---------- Página de login: container e botão de tema ---------- */
+.acesso {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 3vw, 28px);
+  background: var(--bg);
+}
+
+.acesso__tema-alternar {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 42px;
+  height: 42px;
+  border: 0.135em solid var(--border);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-card);
+}
+
+.acesso__tema-alternar:hover {
+  border-color: rgba(0, 81, 255, 0.541);
+  background-color: rgba(148, 163, 184, 0.32);
+}
+
+/* ---------- Painel dividido em duas colunas (visual + formulário) ---------- */
+.acesso__painel {
+  width: min(1180px, 94vw);
+  min-height: min(720px, calc(100vh - 56px));
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  background: linear-gradient(180deg, var(--surface), var(--surface-2));
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+/* ---------- Coluna visual (esquerda) ---------- */
+.acesso__visual {
+  position: relative;
+  padding: 34px 46px 28px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
+  border-right: 2px solid var(--border);
+}
+
+.acesso__marca-marca-logo {
+  width: min(80vw, 560px);
+  max-width: 100%;
+  margin: 0 auto 18px;
+  color: var(--text);
+  opacity: 0.9;
+}
+
+.acesso__marca-marca-logo svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.acesso__destaque {
+  margin-top: clamp(28px, 6vh, 76px);
+  padding-right: 28px;
+}
+
+.acesso__destaque h2 {
+  font-size: clamp(2.2rem, 2.7vw, 4rem);
+  line-height: 1.1;
+  letter-spacing: -0.05em;
+  margin: 0 0 18px;
+}
+
+.acesso__destaque p {
+  max-width: 480px;
+  color: var(--text-dim);
+  font-size: 1.04rem;
+  line-height: 1.5;
+}
+
+.acesso__ilustracao {
+  margin-top: 34px;
+  width: min(100%, 560px);
+}
+
+.acesso__circuito {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+}
+
+/* ---------- Coluna do formulário (direita) ---------- */
+.acesso__formulario-painel {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: clamp(40px, 8vh, 104px) clamp(24px, 5vw, 62px) 72px;
+  background: rgba(148, 163, 184, 0.04);
+}
+
+.acesso__formulario-painel h3 {
+  font-size: clamp(2.1rem, 2.1vw, 3rem);
+  margin: 0 0 14px;
+  letter-spacing: -0.05em;
+}
+
+.acesso__formulario-painel > p {
+  color: var(--text-dim);
+  font-size: 1rem;
+  margin-bottom: 26px;
+}
+
+.acesso__formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Campo com ícone à esquerda e (opcional) botão de mostrar senha */
+.acesso__campo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 58px;
+  padding: 0 16px 0 12px;
+  border: 2px solid var(--panel-input-border);
+  border-radius: 12px;
+  background: var(--panel-input);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.acesso__campo:hover {
+  border-color: rgba(0, 81, 255, 0.671);
+  border: 2px solid rgba(0, 81, 255, 0.671);
+}
+
+.acesso__campo-simbolo {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-dim);
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.acesso__campo-simbolo svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+
+.acesso__campo input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  padding: 16px 0;
+  font-size: 1rem;
+}
+
+.acesso__campo input:not(:placeholder-shown) {
+  color: var(--text);
+}
+
+.acesso__alternar-senha {
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+}
+
+.acesso__alternar-senha svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+
+.acesso__erro {
+  color: var(--red);
+  font-size: 0.9rem;
+  line-height: 0.6;
+  margin-top: -4px;
+  position: static;
+}
+
+/* Botões de enviar / secundário */
+.acesso__envio,
+.acesso__secundario {
+  width: 100%;
+  min-height: 52px;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.acesso__envio {
+  justify-content: center;
+  gap: 10px;
+}
+
+.acesso__esquecida-senha {
+  align-self: center;
+  padding: 2px 0;
+  background: transparent;
+  color: var(--accent);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+.acesso__esquecida-senha:hover {
+  text-decoration: underline;
+}
+
+.acesso__secundario {
+  background: transparent;
+  border: 2px solid var(--border);
+  color: var(--text);
+}
+
+/* ---------- Recuperação de senha ---------- */
+.recuperacao-card {
+  width: min(460px, 94vw);
+  padding: 42px;
+  background: linear-gradient(180deg, var(--surface), var(--surface-2));
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
+}
+.recuperacao-card h1 {
+  margin-bottom: 10px;
+}
+.recuperacao-card > .esmaecido {
+  margin-bottom: 28px;
+}
+.recuperacao-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.recuperacao-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.recuperacao-campo input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 14px;
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  color: var(--text);
+}
+.recuperacao-campo input:focus {
+  outline: none;
+  border-color: rgba(0, 81, 255, 0.671);
+  box-shadow: 0 0 0 4px rgba(43, 108, 230, 0.16);
+}
+.recuperacao-senha-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.recuperacao-senha-wrapper input {
+  padding-right: 46px;
+}
+.recuperacao-alternar-senha {
+  position: absolute;
+  right: 10px;
+  border: none;
+  border-radius: 18px;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-dim);
+  font-size: 1rem;
+}
+.recuperacao-campo--com-botao {
+  gap: 8px;
+}
+.recuperacao-formulario__envio {
+  width: 100%;
+  min-height: 52px;
+}
+.recuperacao-mensagem {
+  padding: 14px;
+  border: 2px solid rgba(22, 168, 112, 0.35);
+  border-radius: 12px;
+  color: var(--green);
+  background: rgba(22, 168, 112, 0.08);
+}
+.recuperacao-formulario--redefinicao {
+  margin-top: 18px;
+}
+.recuperacao-sucesso {
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(22, 168, 112, 0.08);
+  border: 2px solid rgba(22, 168, 112, 0.3);
+  color: var(--green);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+.recuperacao-erro {
+  color: var(--red);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-top: -4px;
+}
+.recuperacao-voltar {
+  display: block;
+  margin-top: 24px;
+  color: var(--accent);
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+.recuperacao-voltar:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Animação da placa de circuito impresso (SVG do login) ---------- */
+
+/* Tema claro: azul de destaque | Tema escuro: texto discreto */
+:root:not([data-theme="dark"]) .placa-circuito-impresso-animacao {
+  color: rgba(0, 81, 255, 0.671);
+}
+:root[data-theme="dark"] .placa-circuito-impresso-animacao {
+  color: var(--text-faint);
+}
+.placa-circuito-impresso-animacao {
+  color: var(--text-faint);
+}
+.placa-circuito-impresso-animacao svg {
+  overflow: visible;
+}
+/* LEDs que piscam */
+.placa-circuito-impresso-animacao .placa-circuito-impresso-led {
+  fill: currentColor;
+  opacity: 0.12;
+  transform-origin: center;
+  animation: pcb-led 2.6s ease-in-out infinite;
+}
+@keyframes pcb-led {
+  0% {
+    opacity: 0.12;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.12);
+  }
+  100% {
+    opacity: 0.12;
+    transform: scale(1);
+  }
+}
+
+/* Pulso que percorre as trilhas */
+.placa-circuito-impresso-pulso {
+  stroke: currentColor;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  vector-effect: non-scaling-stroke;
+  animation: pcb-trace 1.6s linear infinite;
+}
+@keyframes pcb-trace {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Chips que "respiram" */
+.placa-circuito-impresso-ficha-pulso {
+  stroke: currentColor;
+  stroke-opacity: 0.28;
+  animation: pcb-chip 1.8s ease-in-out infinite;
+}
+@keyframes pcb-chip {
+  0% {
+    stroke-opacity: 0.28;
+  }
+  50% {
+    stroke-opacity: 0.85;
+  }
+  100% {
+    stroke-opacity: 0.28;
+  }
+}
+
+/* ---------- Responsivo do login ---------- */
+@media (max-width: 900px) {
+  .acesso {
+    place-items: start center;
+    overflow-y: auto;
+  }
+
+  .acesso.recuperacao-pagina {
+    place-items: center;
+    min-height: 100dvh;
+  }
+
+  .acesso__painel {
+    width: min(680px, 100%);
+    min-height: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .acesso__visual {
+    padding: 28px 32px 24px;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .acesso__destaque {
+    margin-top: 12px;
+    padding-right: 0;
+  }
+
+  .acesso__ilustracao {
+    margin-top: 24px;
+  }
+
+  .acesso__formulario-painel {
+    padding: 40px 32px 48px;
+  }
+}
+
+@media (max-width: 560px) {
+  .acesso {
+    padding: 16px;
+  }
+
+  .recuperacao-pagina .recuperacao-card {
+    width: 100%;
+  }
+
+  .acesso__tema-alternar {
+    top: 16px;
+    right: 16px;
+  }
+
+  .acesso__painel {
+    width: 100%;
+    border-radius: 16px;
+  }
+
+  .acesso__visual {
+    padding: 24px 20px 20px;
+  }
+
+  .acesso__destaque h2 {
+    font-size: clamp(1.8rem, 8vw, 2.4rem);
+  }
+
+  .acesso__formulario-painel {
+    padding: 32px 20px 36px;
+  }
+}

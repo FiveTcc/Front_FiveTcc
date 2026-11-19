@@ -1,0 +1,530 @@
+/* ==========================================================================
+   RELATÓRIOS
+   ========================================================================== */
+
+.pagina--relatorios {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+}
+
+/* ---------- Estrutura: indicadores à esquerda, conteúdo à direita ---------- */
+.relatorio-conteiner {
+  display: grid;
+  grid-template-columns: 175px minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+  width: 100%;
+  min-width: 0;
+}
+
+/* ---------- Coluna esquerda: cards de resumo ---------- */
+.relatorio-resumo {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: start;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+}
+
+.relatorio-resumo__card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 16px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.09), rgba(37, 99, 235, 0.02));
+  border: 1px solid rgba(37, 99, 235, 0.35);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+}
+
+.relatorio-resumo__card span {
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.relatorio-resumo__card strong {
+  font-size: 1.9rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.relatorio-resumo__card.esta-destaque {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.09), rgba(37, 99, 235, 0.02));
+  border-color: rgba(37, 99, 235, 0.35);
+}
+
+/* ---------- Coluna direita: agrupamento, filtros e cards ---------- */
+.relatorio-conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+}
+
+.relatorio-conteudo > .card {
+  width: 100%;
+  min-width: 0;
+}
+
+/* ---------- Filtros do relatório ---------- */
+.relatorio-filtros {
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.relatorio-filtros__grade {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.relatorio-filtros__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.relatorio-filtros__campo > span {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.relatorio-filtros__campo input {
+  width: 100%;
+  min-height: 48px;
+  box-sizing: border-box;
+  padding: 0 14px;
+  color: var(--text);
+  background: var(--panel-input);
+  border: 1px solid var(--panel-input-border);
+  border-radius: 16px;
+  outline: none;
+  font: inherit;
+}
+
+/* Calendário nativo acompanha o tema */
+.relatorio-filtros__campo input[type="date"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] .relatorio-filtros__campo input[type="date"] {
+  color-scheme: dark;
+}
+
+.relatorio-filtros__campo input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+/* Select personalizado dentro dos filtros */
+.relatorio-filtros .selecao-personalizada {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+.relatorio-filtros .selecao-personalizada__acionador {
+  min-height: 48px;
+  color: var(--text);
+  background: var(--panel-input);
+  border-color: var(--panel-input-border);
+  border-radius: 16px;
+}
+
+.relatorio-filtros .selecao-personalizada__acionador:focus-visible,
+.relatorio-filtros .selecao-personalizada__acionador[aria-expanded="true"] {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+.relatorio-filtros .selecao-personalizada__menu {
+  color: var(--text);
+  background: var(--panel);
+  border-color: var(--border);
+  border-radius: 18px;
+  padding: 10px;
+  box-shadow: var(--shadow-card);
+}
+
+.relatorio-filtros .selecao-personalizada__opcao {
+  padding: 10px 12px;
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 22px;
+  border-radius: 10px;
+}
+
+.relatorio-filtros .selecao-personalizada__opcao.esta-selecionado,
+.relatorio-filtros .selecao-personalizada__opcao.esta-ativo,
+.relatorio-filtros .selecao-personalizada__opcao:hover {
+  background: var(--surface-3);
+  color: var(--text);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.relatorio-filtros__acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.relatorio-filtros__acoes .botao--secundario {
+  color: var(--text);
+  background: var(--panel-soft);
+  border-color: var(--border);
+}
+
+.relatorio-filtros__acoes .botao--secundario:hover:not(:disabled) {
+  background: var(--surface-2);
+  border-color: var(--accent);
+}
+
+/* ---------- Exportação (PDF/Excel etc.) ---------- */
+.relatorio-exportacao__acoes {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.relatorio-exportacao {
+  position: relative;
+  display: inline-flex;
+}
+
+.relatorio-exportacao__menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 180px;
+  padding: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+}
+
+.relatorio-exportacao__menu button {
+  padding: 10px 12px;
+  color: var(--text);
+  text-align: left;
+  font: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.relatorio-exportacao__menu button:hover {
+  background: var(--surface-2);
+}
+
+.relatorio-exportacao__situacao {
+  margin-left: auto;
+  padding: 8px 12px;
+  color: var(--text);
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+/* ---------- Listas e métricas ---------- */
+.relatorio-grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.relatorio-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.relatorio-lista h3 {
+  margin-bottom: 4px;
+  font-size: 0.93rem;
+}
+
+.relatorio-lista--compacto {
+  gap: 45px;
+}
+
+.relatorio-linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.relatorio-linha span {
+  color: var(--text-dim);
+}
+
+.relatorio-linha strong {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.relatorio-linha--historico {
+  align-items: flex-start;
+}
+
+.relatorio-linha--historico > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.relatorio-linha--historico small {
+  color: var(--text-faint);
+  font-size: 0.72rem;
+}
+
+.relatorio-metrica {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 16px;
+  background: linear-gradient(135deg, rgba(22, 168, 112, 0.08), rgba(16, 24, 40, 0.01));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.relatorio-metrica strong {
+  font-size: 2rem;
+  font-family: var(--font-display);
+}
+
+.relatorio-metrica span {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+}
+
+/* ---------- Três cards de indicadores adicionais ---------- */
+.relatorio-extra-grade {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+.relatorio-extra-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+}
+
+.relatorio-extra-card__cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 42px;
+  margin-bottom: 16px;
+}
+
+.relatorio-extra-card__cabecalho h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.relatorio-extra-card__simbolo {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  font-size: 19px;
+}
+
+.relatorio-extra-card__simbolo--azul {
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.18);
+}
+
+.relatorio-extra-card__simbolo--roxo {
+  color: #a78bfa;
+  background: rgba(139, 92, 246, 0.18);
+}
+
+.relatorio-extra-card__simbolo--verde {
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.18);
+}
+
+/* Tamanho e traço dos três ícones */
+.relatorio-extra-card__simbolo--azul svg,
+.relatorio-extra-card__simbolo--roxo svg,
+.relatorio-extra-card__simbolo--verde svg {
+  width: 34px;
+  height: 34px;
+  stroke-width: 1;
+}
+
+.relatorio-extra-linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  margin-top: 8px;
+  padding: 12px;
+  color: var(--text-dim);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.relatorio-extra-linha span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.relatorio-extra-linha strong {
+  flex-shrink: 0;
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+
+/* ---------- Histórico de ocorrências ---------- */
+.card_historico {
+  width: 100%;
+  min-width: 0;
+}
+
+.relatorio-historico {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.relatorio-historico__item {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 0.9fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.relatorio-historico__item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.relatorio-historico__item strong {
+  font-size: 0.88rem;
+}
+
+.relatorio-historico__item span,
+.relatorio-historico__item small,
+.relatorio-historico__item time {
+  color: var(--text-dim);
+  font-size: 0.76rem;
+}
+
+.relatorio-historico__acoes {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+/* ---------- Responsivo dos relatórios ---------- */
+@media (max-width: 1100px) {
+  .relatorio-conteiner {
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .relatorio-filtros__grade {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .relatorio-extra-grade {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .relatorio-conteiner {
+    grid-template-columns: 1fr;
+  }
+
+  .relatorio-resumo {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .relatorio-extra-grade {
+    grid-template-columns: 1fr;
+  }
+
+  .relatorio-grade,
+  .relatorio-historico__item {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .relatorio-resumo,
+  .relatorio-filtros__grade {
+    grid-template-columns: 1fr;
+  }
+
+  .relatorio-filtros__acoes {
+    flex-direction: column-reverse;
+  }
+
+  .relatorio-filtros__acoes button {
+    width: 100%;
+  }
+
+  .pagina__cabecalho {
+    gap: 16px;
+  }
+
+  .relatorio-exportacao__acoes {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

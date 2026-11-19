@@ -1,0 +1,51 @@
+/* ==========================================================================
+   ESTRUTURA DE PÁGINAS
+   ========================================================================== */
+
+/* Container padrão de qualquer página */
+.pagina {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* Linha superior: título à esquerda + topbar à direita */
+.pagina__superior {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(420px, 760px);
+  align-items: start;
+  gap: 24px;
+}
+.painel__acoes {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1px;
+}
+
+/* Página de ambientes (base; os detalhes ficam na seção 18) */
+.pagina--ambientes {
+  gap: 20px;
+  padding-top: 0px;
+}
+
+/* Página mais estreita e centralizada (formulários) */
+.pagina--estreita {
+  width: min(100%, 1180px);
+  max-width: 1180px;
+  margin: 8px auto 0;
+}
+
+/* Cabeçalho da página (título + ações) */
+.pagina__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+  padding-top: 2px;
+}
+
+.pagina__cabecalho h1 {
+  margin-bottom: 4px;
+}
