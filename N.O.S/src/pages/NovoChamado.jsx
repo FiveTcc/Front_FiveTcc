@@ -102,7 +102,7 @@ export default function NovoChamado() {
 
       window.alert("Chamado criado com sucesso!");
 
-      navigate("/chamados");
+      navigate("/ocorrencias");
 
     } catch (error) {
       console.error("Erro ao criar chamado:", error);

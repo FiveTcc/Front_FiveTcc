@@ -191,7 +191,7 @@ export default function Sidebar() {
           DashBoard
         </NavLink>
 
-        <NavLink to="/chamados" className={getNavLinkClassName}>
+        <NavLink to="/ocorrencias" className={getNavLinkClassName}>
           {ICONS.chamados}
           Ocorrências
         </NavLink>

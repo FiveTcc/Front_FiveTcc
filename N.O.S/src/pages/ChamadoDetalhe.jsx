@@ -240,7 +240,7 @@ export default function ChamadoDetalhe() {
 
   return (
     <div className="pagina chamado-detalhe-pagina">
-      <Link to="/chamados" className="voltar-link">← Voltar para Ocorrências</Link>
+      <Link to="/ocorrencias" className="voltar-link">← Voltar para Ocorrências</Link>
 
       <header className="pagina__cabecalho chamado-cabecalho">
         <div>

@@ -328,8 +328,8 @@ export default function Chamados() {
           )}
         </div>
 
-        <Link to="/chamados/novo" className="botao botao--principal">
-          + Nova ocorrência
+        <Link to="/novochamado" className="botao botao--principal">
+          + Novo chamado
         </Link>
       </div>
 
@@ -369,7 +369,7 @@ export default function Chamados() {
                   </td>
                   <td>
                     <Link
-                      to={`/chamados/${ocorrencia.id}`}
+                      to={`/ocorrencias/${ocorrencia.id}`}
                       className="tabela__codigo"
                     >
                       {ocorrencia.numero || ocorrencia.id}
@@ -377,7 +377,7 @@ export default function Chamados() {
                   </td>
                   <td>
                     <Link
-                      to={`/chamados/${ocorrencia.id}`}
+                      to={`/ocorrencias/${ocorrencia.id}`}
                       className="tabela__titulo"
                     >
                       {ocorrencia.titulo || ocorrencia.nome}

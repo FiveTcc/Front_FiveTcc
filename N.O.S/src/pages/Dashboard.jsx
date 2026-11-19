@@ -315,7 +315,7 @@ export default function Dashboard() {
       </div>
 
       <div className="painel__acoes">
-        <Link to="/chamados/novo" className="botao botao--principal">
+        <Link to="/novochamado" className="botao botao--principal">
           + Novo chamado
         </Link>
       </div>
@@ -391,7 +391,7 @@ export default function Dashboard() {
           <div className="card__cabecalho">
             <h2>Atividade recente</h2>
 
-            <Link to="/chamados" className="link">
+            <Link to="/ocorrencias" className="link">
               ver todos
             </Link>
           </div>
@@ -399,7 +399,7 @@ export default function Dashboard() {
           <ul className="recente-lista">
             {recentes.map((c) => (
               <li key={c.id}>
-                <Link to={`/chamados/${c.id}`} className="recente-item">
+                <Link to={`/ocorrencias/${c.id}`} className="recente-item">
                   <StatusBeacon status={c.status} comLabel={false} />
 
                   <div className="recente-item__corpo">

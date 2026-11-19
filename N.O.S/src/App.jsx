@@ -4,7 +4,7 @@ import Login from './pages/Login'
 import NovaSenha from './pages/NovaSenha'
 import RecuperarSenha from './pages/RecuperarSenha'
 import Dashboard from './pages/Dashboard'
-import Chamados from './pages/Chamados'
+import Ocorrencias from './pages/Ocorrencias'
 import ChamadoDetalhe from './pages/ChamadoDetalhe'
 import NovoChamado from './pages/NovoChamado'
 import Usuarios from './pages/Usuarios'
@@ -54,17 +54,17 @@ export default function App() {
           />
 
           <Route
-            path="chamados"
-            element={<Chamados />}
+            path="ocorrencias"
+            element={<Ocorrencias />}
           />
 
           <Route
-            path="chamados/novo"
+            path="novochamado"
             element={<NovoChamado />}
           />
 
           <Route
-            path="chamados/:id"
+            path="ocorrencias/:id"
             element={<ChamadoDetalhe />}
           />
 
