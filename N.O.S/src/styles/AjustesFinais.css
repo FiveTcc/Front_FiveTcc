@@ -15,6 +15,51 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.ambiente-detalhe-formulario input,
+.ambiente-detalhe-formulario select,
+.ambiente-detalhe-formulario textarea,
+.ambiente-detalhe-formulario .selecao-personalizada__acionador,
+.ambiente-adicionar-formulario input,
+.ambiente-adicionar-formulario select,
+.ambiente-adicionar-formulario textarea,
+.usuarios-novo-formulario input,
+.usuarios-novo-formulario .selecao-personalizada__acionador,
+.usuarios-editar-formulario input,
+.usuarios-editar-formulario select,
+.usuarios-editar-formulario textarea,
+.usuarios-editar-formulario .selecao-personalizada__acionador {
+  border: 2px solid var(--panel-input-border);
+}
+
+.ambiente-detalhe-formulario input,
+.ambiente-detalhe-formulario select,
+.ambiente-detalhe-formulario textarea,
+.ambiente-detalhe-formulario .selecao-personalizada__acionador,
+.ambiente-adicionar-formulario input,
+.ambiente-adicionar-formulario select,
+.ambiente-adicionar-formulario textarea,
+.usuarios-novo-formulario input,
+.usuarios-novo-formulario .selecao-personalizada__acionador,
+.usuarios-editar-formulario input,
+.usuarios-editar-formulario textarea,
+.usuarios-editar-formulario select,
+.usuarios-editar-formulario .selecao-personalizada__acionador {
+  min-height: 46px;
+}
+
+.ambiente-detalhe-formulario input:hover,
+.ambiente-detalhe-formulario input:focus,
+.ambiente-detalhe-formulario select:hover,
+.ambiente-detalhe-formulario select:focus,
+.ambiente-detalhe-formulario textarea:hover,
+.ambiente-detalhe-formulario textarea:focus,
+.ambiente-adicionar-formulario input:hover,
+.ambiente-adicionar-formulario input:focus,
+.ambiente-adicionar-formulario select:hover,
+.ambiente-adicionar-formulario select:focus {
+  border-color:rgba(0, 81, 255, 0.671);
+}
+
 /* Fundo escuro atrás do menu mobile (escondido no desktop) */
 .sidebar-fundo {
   display: none;
@@ -440,4 +485,31 @@
     min-width: 0;
     overflow-wrap: anywhere;
   }
+}
+
+.usuarios-novo-formulario input:hover,
+.usuarios-novo-formulario input:focus,
+.usuarios-novo-formulario .usuarios-perfil-select .selecao-personalizada__acionador:hover,
+.usuarios-novo-formulario .usuarios-perfil-select .selecao-personalizada__acionador:focus-visible,
+.usuarios-novo-formulario .usuarios-perfil-select .selecao-personalizada__acionador[aria-expanded="true"],
+.usuarios-editar-formulario input:hover,
+.usuarios-editar-formulario input:focus,
+.usuarios-editar-formulario .usuarios-perfil-select .selecao-personalizada__acionador:hover,
+.usuarios-editar-formulario .usuarios-perfil-select .selecao-personalizada__acionador:focus-visible,
+.usuarios-editar-formulario .usuarios-perfil-select .selecao-personalizada__acionador[aria-expanded="true"] {
+  border-color: rgba(0, 81, 255, 0.671);
+}
+
+.usuarios-novo-formulario input:-webkit-autofill,
+.usuarios-novo-formulario input:-webkit-autofill:hover,
+.usuarios-novo-formulario input:-webkit-autofill:focus,
+.usuarios-novo-formulario input:-webkit-autofill:active,
+.usuarios-editar-formulario input:-webkit-autofill,
+.usuarios-editar-formulario input:-webkit-autofill:hover,
+.usuarios-editar-formulario input:-webkit-autofill:focus,
+.usuarios-editar-formulario input:-webkit-autofill:active {
+  box-shadow: 0 0 0 1000px var(--panel) inset !important;
+  -webkit-text-fill-color: var(--text) !important;
+  caret-color: var(--text);
+  border-color: rgba(0, 81, 255, 0.671);
 }

@@ -121,7 +121,7 @@
 }
 
 .relatorio-filtros__campo input:focus {
-  border-color: var(--accent);
+  border-color: rgba(0, 81, 255, 0.671);
   box-shadow: 0 0 0 3px var(--accent-dim);
 }
 
@@ -144,7 +144,7 @@
 .relatorio-filtros .selecao-personalizada__acionador:focus-visible,
 .relatorio-filtros .selecao-personalizada__acionador[aria-expanded="true"] {
   outline: none;
-  border-color: var(--accent);
+  border-color: rgba(0, 81, 255, 0.671);
   box-shadow: 0 0 0 3px var(--accent-dim);
 }
 
@@ -216,7 +216,7 @@
   min-width: 180px;
   padding: 8px;
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 14px;
   box-shadow: var(--shadow-card);
 }

@@ -249,7 +249,7 @@ export default function Usuarios() {
             <h2>Editar dados pessoais</h2>
           </div>
 
-          <form className="formulario" onSubmit={handleEditSubmit}>
+          <form className="formulario usuarios-editar-formulario" onSubmit={handleEditSubmit}>
             <div className="formulario__linha">
               <label>
                 Nome

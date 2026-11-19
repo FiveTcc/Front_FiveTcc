@@ -62,7 +62,7 @@
   align-items: center;
   gap: 10px;
   background: var(--panel-input);
-  border: 1px solid var(--panel-input-border);
+  border: 2px solid var(--panel-input-border);
   border-radius: 14px;
   padding: 0 12px;
   height: 44px;
@@ -140,7 +140,7 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   border-radius: 14px;
   padding: 0 18px;
   min-height: 46px;
@@ -243,7 +243,7 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
-/* ---------- 18.3 Painel e filtros ---------- */
+/* ---------- Painel e filtros ---------- */
 .ambientes-painel {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -414,7 +414,7 @@
   display: grid;
   place-items: center;
   flex: none;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   width: 76px;
   height: 64.6px;
 }
@@ -431,7 +431,7 @@
   border-radius: 6px;
   font-size: 12px;
   font-weight: 600;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   white-space: nowrap;
 }
 .ambientes-pilula.ok {
@@ -476,7 +476,7 @@
     rgba(37, 99, 235, 0.09),
     rgba(37, 99, 235, 0.02)
   );
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-color: rgba(37, 99, 235, 0.35);
   border-radius: var(--radius-lg);
   padding: 12px;
@@ -1507,7 +1507,7 @@
   display: grid;
   gap: 6px;
   padding: 12px 14px;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 12px;
   background: var(--surface-2);
 }
@@ -1648,7 +1648,7 @@
   width: 100%;
   min-height: 44px;
   padding: 10px 12px;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 10px;
   background: var(--panel-input);
   color: var(--text);
@@ -1661,13 +1661,13 @@
   min-height: 44px;
   padding: 10px 12px;
   background: var(--panel-input);
-  border: 1px solid var(--panel-input-border);
+  border: 2px solid var(--panel-input-border);
   border-radius: 10px;
 }
 .ambiente-detalhe-formulario .selecao-personalizada--formulario .selecao-personalizada__acionador:focus-visible,
 .ambiente-detalhe-formulario .selecao-personalizada--formulario .selecao-personalizada__acionador[aria-expanded="true"] {
   outline: none;
-  border-color: var(--accent);
+  border-color:rgba(0, 81, 255, 0.671);
   box-shadow: 0 0 0 3px var(--accent-dim);
 }
 .ambiente-detalhe-formulario .selecao-personalizada--formulario .selecao-personalizada__menu {
@@ -1722,7 +1722,7 @@
 .ambiente-adicionar-formulario {
   padding: 16px;
   margin: 0 0 18px;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 12px;
   background: var(--surface-2);
 }
@@ -1739,7 +1739,7 @@
   align-items: center;
   gap: 12px;
   padding: 14px 0;
-  border-top: 1px solid var(--border);
+  border-top: 2px solid var(--border);
   width: 100%;
   background: transparent;
   border-left: 0;
@@ -1829,7 +1829,7 @@
   justify-content: space-between;
   gap: 12px;
   padding: 10px 12px;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 10px;
   background: var(--surface-2);
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.04);
@@ -1849,7 +1849,7 @@
 }
 .ambiente-detalhe-sucesso {
   padding: 10px 12px;
-  border: 1px solid color-mix(in srgb, #22c55e 40%, var(--border));
+  border: 2px solid color-mix(in srgb, #22c55e 40%, var(--border));
   border-radius: 10px;
   color: #22c55e;
 }
