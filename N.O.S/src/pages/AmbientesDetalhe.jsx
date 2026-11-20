@@ -136,7 +136,7 @@ const [novo, setNovo] = useState({ nome: "", tipoId: "", tipoTexto: "", observac
         const primeiroTipo = listaTipos[0];
         setNovo((atual) => ({
           ...atual,
-          tipoId: primeiroTipo?.id_compo_tipo ?? primeiroTipo?.id ?? primeiroTipo?.compo_tipo_id ?? "",
+          tipoId: String(primeiroTipo?.id_compo_tipo ?? primeiroTipo?.id ?? primeiroTipo?.compo_tipo_id ?? ""),
           tipoTexto: primeiroTipo?.compo_tipo ?? primeiroTipo?.nome ?? "",
         }));
         await carregarComponentes(encontrado.nome);
@@ -155,6 +155,15 @@ const [novo, setNovo] = useState({ nome: "", tipoId: "", tipoTexto: "", observac
     id: tipo.id_compo_tipo ?? tipo.id ?? tipo.compo_tipo_id,
     nome: tipo.compo_tipo ?? tipo.nome ?? tipo.tipo,
   })).filter((tipo) => tipo.id && tipo.nome), [tipos]);
+  const opcoesTipoComponente = tiposDisponiveis.length
+    ? tiposDisponiveis.map((tipo) => ({
+        value: String(tipo.id),
+        label: tipo.nome,
+      }))
+    : TIPOS_COMPONENTE_PADRAO.map((nome) => ({
+        value: nome,
+        label: nome,
+      }));
 
   const statusAmbienteTexto = statusParaTexto(ambiente?.status);
   const andarTexto = ambiente?.andar === 0 ? "Térreo" : `${ambiente?.andar ?? 0}º andar`;
@@ -251,7 +260,7 @@ const [novo, setNovo] = useState({ nome: "", tipoId: "", tipoTexto: "", observac
       const primeiroTipo = tiposDisponiveis[0];
       setNovo({
         nome: "",
-        tipoId: primeiroTipo?.id ?? "",
+        tipoId: String(primeiroTipo?.id ?? ""),
         tipoTexto: primeiroTipo?.nome ?? "",
         observacao: "",
       });
@@ -315,7 +324,7 @@ const [novo, setNovo] = useState({ nome: "", tipoId: "", tipoTexto: "", observac
                   <label>Andar<input type="number" min="0" value={form.andar} onChange={(e) => setForm({ ...form, andar: e.target.value })} /></label>
                 </div>
                 <label>Descrição<textarea rows="3" value={form.descricao} onChange={(e) => setForm({ ...form, descricao: e.target.value })} /></label>
-                <div className="formulario__acoes"><button type="button" className="botao botao--transparente" onClick={() => setEditando(false)}>Cancelar</button><button type="submit" className="botao botao--principal" disabled={salvando}>{salvando ? "Salvando..." : "Salvar alterações"}</button></div>
+                <div className="formulario__acoes"><button type="button" className="botao botao--cancelar" onClick={() => setEditando(false)}>Cancelar</button><button type="submit" className="botao botao--principal" disabled={salvando}>{salvando ? "Salvando..." : "Salvar alterações"}</button></div>
               </form>
             ) : (
               <div className="ambiente-detalhe-informacao">
@@ -348,35 +357,26 @@ const [novo, setNovo] = useState({ nome: "", tipoId: "", tipoTexto: "", observac
                   <form className="formulario ambiente-adicionar-formulario" onSubmit={adicionarComponente}>
                     <label>Nome do componente<input ref={inputNomeComponenteRef} required value={novo.nome} onChange={(e) => setNovo({ ...novo, nome: e.target.value })} placeholder="Ex.: Computador da sala" /></label>
                     <div className="formulario__linha">
-                      <label>
-                        Tipo
-                        <input
-                          type="text"
-                          list="tiposComponenteDetalhe"
-                          value={novo.tipoTexto ?? ""}
-                          onChange={(e) => {
-                            const valor = e.target.value;
-                            const tipoEncontrado = tipos.find((tipo) => {
-                              const nomeTipo = String(tipo.compo_tipo ?? tipo.nome ?? "").trim().toLowerCase();
-                              return nomeTipo === valor.trim().toLowerCase();
-                            });
-
+                      <div className="ambiente-adicionar-tipo-campo">
+                        <span>Tipo</span>
+                        <CustomSelect
+                          id="ambiente-adicionar-tipo"
+                          label="Tipo"
+                          className="selecao-personalizada--formulario ambiente-adicionar-tipo"
+                          value={novo.tipoId || "Selecione um tipo"}
+                          options={opcoesTipoComponente}
+                          onChange={(tipoId) => {
+                            const tipoSelecionado = opcoesTipoComponente.find(
+                              (opcao) => opcao.value === tipoId,
+                            );
                             setNovo({
                               ...novo,
-                              tipoTexto: valor,
-                              tipoId: tipoEncontrado
-                                ? String(tipoEncontrado.id_compo_tipo ?? tipoEncontrado.id ?? tipoEncontrado.compo_tipo_id)
-                                : novo.tipoId,
+                              tipoId,
+                              tipoTexto: tipoSelecionado?.label ?? "",
                             });
                           }}
-                          placeholder="Selecione ou digite um tipo"
                         />
-                        <datalist id="tiposComponenteDetalhe">
-                          {(tiposDisponiveis.length ? tiposDisponiveis : TIPOS_COMPONENTE_PADRAO.map((nome) => ({ id: nome, nome }))).map((tipo) => (
-                            <option key={tipo.id ?? tipo.nome} value={tipo.nome} />
-                          ))}
-                        </datalist>
-                      </label>
+                      </div>
                       <label>Observação<input value={novo.observacao} onChange={(e) => setNovo({ ...novo, observacao: e.target.value })} placeholder="Opcional" /></label>
                     </div>
                     <div className="formulario__acoes"><button type="button" className="botao botao--cancelar" onClick={() => setAdicionando(false)}>Cancelar</button><button type="submit" className="botao botao--adicionar" disabled={salvando}>{salvando ? "Salvando..." : "Adicionar componente"}</button></div>

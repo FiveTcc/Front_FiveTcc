@@ -593,14 +593,14 @@
   gap: 10px;
   padding: 10px 14px;
   border-radius: 12px;
-  border: 1px solid var(--panel-input-border);
+  border: 2px solid var(--panel-input-border);
   background: var(--panel);
   color: var(--text);
   margin-top: 12px;
   box-shadow: var(--shadow-card);
 }
 .perfil-formulario__envio-botao.botao--transparente:hover {
-  border-color: var(--panel-input-border);
+  border-color: rgba(0, 81, 255, 0.671);
   background: var(--panel);
 }
 .perfil-formulario__observacao {

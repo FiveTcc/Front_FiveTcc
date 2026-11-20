@@ -281,6 +281,7 @@ export default function Dashboard() {
                 type="button"
                 className="topbar__simbolo-botao"
                 aria-label="Notificações"
+                aria-expanded={mostrarNotificacoes}
                 onClick={() => setMostrarNotificacoes((valor) => !valor)}
               >
                 🕭

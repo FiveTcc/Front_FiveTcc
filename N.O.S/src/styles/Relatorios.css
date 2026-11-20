@@ -74,10 +74,11 @@
 }
 
 /* ---------- Filtros do relatório ---------- */
-.relatorio-filtros {
+.card.relatorio-filtros {
   width: 100%;
   min-width: 0;
   margin-bottom: 0;
+  border: 1px solid var(--border);
 }
 
 .relatorio-filtros__grade {
@@ -114,6 +115,11 @@
 /* Calendário nativo acompanha o tema */
 .relatorio-filtros__campo input[type="date"] {
   color-scheme: light;
+  border: 2px solid var(--panel-input-border);
+}
+
+.relatorio-filtros__campo input[type="date"]:hover{
+  border-color: rgba(0, 81, 255, 0.671);
 }
 
 :root[data-theme="dark"] .relatorio-filtros__campo input[type="date"] {
@@ -158,6 +164,7 @@
 }
 
 .relatorio-filtros .selecao-personalizada__opcao {
+  margin: 3px 0;
   padding: 10px 12px;
   color: var(--text);
   font-size: 0.9375rem;

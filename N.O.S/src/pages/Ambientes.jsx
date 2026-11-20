@@ -1242,7 +1242,7 @@ function Acoes({ onCancel, salvar, ok }) {
     <div className="ambientes-modal-acoes">
       <button
         type="button"
-        className="botao botao--transparente ambientes-botao-secundario"
+        className="botao botao--cancelar"
         onClick={onCancel}
       >
         Cancelar
@@ -1309,6 +1309,95 @@ function FormComponenteAmbiente({
   );
 }
 
+function TipoAmbienteInput({ value, options, onChange }) {
+  const [aberto, setAberto] = useState(false);
+  const [ativo, setAtivo] = useState(-1);
+  const rootRef = useRef(null);
+  const listboxId = "tipos-ambiente-modal";
+
+  useEffect(() => {
+    const fecharAoClicarFora = (event) => {
+      if (!rootRef.current?.contains(event.target)) setAberto(false);
+    };
+
+    document.addEventListener("pointerdown", fecharAoClicarFora);
+    return () => document.removeEventListener("pointerdown", fecharAoClicarFora);
+  }, []);
+
+  const selecionar = (opcao) => {
+    onChange(opcao);
+    setAberto(false);
+    setAtivo(-1);
+  };
+
+  const alternar = () => {
+    setAberto((atual) => !atual);
+    setAtivo(Math.max(0, options.indexOf(value)));
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Escape") {
+      setAberto(false);
+      setAtivo(-1);
+    } else if (event.key === "ArrowDown" && options.length) {
+      event.preventDefault();
+      setAberto(true);
+      setAtivo((atual) => Math.min(atual + 1, options.length - 1));
+    } else if (event.key === "ArrowUp" && options.length) {
+      event.preventDefault();
+      setAberto(true);
+      setAtivo((atual) => Math.max(atual - 1, 0));
+    } else if (
+      event.key === "Enter" &&
+      aberto &&
+      ativo >= 0 &&
+      options[ativo]
+    ) {
+      event.preventDefault();
+      selecionar(options[ativo]);
+    } else if (event.key === " " && aberto && ativo >= 0 && options[ativo]) {
+      event.preventDefault();
+      selecionar(options[ativo]);
+    }
+  };
+
+  return (
+    <div className={`ambientes-modal-tipo${aberto ? " esta-aberto" : ""}`} ref={rootRef}>
+      <button
+        type="button"
+        className="ambientes-modal-tipo__acionador"
+        aria-labelledby="ambientes-modal-tipo-label"
+        aria-haspopup="listbox"
+        aria-expanded={aberto}
+        aria-controls={listboxId}
+        onClick={alternar}
+        onKeyDown={handleKeyDown}
+      >
+        <span>{value || "Selecione um tipo"}</span>
+      </button>
+      <span className="ambientes-modal-tipo__seta" aria-hidden="true" />
+      {aberto && (
+        <ul className="ambientes-modal-tipo__opcoes" id={listboxId} role="listbox">
+          {options.map((opcao, index) => (
+            <li
+              key={opcao}
+              id={`${listboxId}-${index}`}
+              role="option"
+              aria-selected={opcao === value}
+              className={`${index === ativo ? "esta-ativo " : ""}${opcao === value ? "esta-selecionado" : ""}`}
+              onMouseEnter={() => setAtivo(index)}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => selecionar(opcao)}
+            >
+              {opcao}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 function FormAmbiente({
   valor,
   onChange,
@@ -1338,21 +1427,14 @@ function FormAmbiente({
           placeholder="Ex.: Laboratório 03"
         />
       </label>
-      <label>
-        <span>Tipo</span>
-        <input
-          type="text"
-          list="tiposAmbiente"
+      <div className="ambientes-modal-campo-tipo">
+        <span id="ambientes-modal-tipo-label">Tipo</span>
+        <TipoAmbienteInput
           value={valor.tipo || ""}
-          onChange={up("tipo")}
-          placeholder="Selecione ou digite um tipo"
+          options={opcoesTipo}
+          onChange={(tipo) => onChange({ ...valor, tipo })}
         />
-        <datalist id="tiposAmbiente">
-          {opcoesTipo.map((item) => (
-            <option key={item} value={item} />
-          ))}
-        </datalist>
-      </label>
+      </div>
       <div className="ambientes-linha">
         <label>
           Bloco

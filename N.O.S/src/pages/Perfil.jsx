@@ -208,6 +208,7 @@ export default function Perfil() {
               type="button"
               className="topbar__simbolo-botao"
               aria-label="Notificações"
+              aria-expanded={mostrarNotificacoes}
               onClick={() => setMostrarNotificacoes((valor) => !valor)}
             >
               🕭
@@ -240,7 +241,7 @@ export default function Perfil() {
 
           <button
             type="button"
-            className="topbar__simbolo-botao"
+            className="topbar__simbolo-botao topbar__tema-alternar"
             aria-label={
               theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
             }

@@ -58,7 +58,7 @@
   color: var(--red);
 }
 
-/* ---------- 11.2 Grades e cards genéricos ---------- */
+/* ---------- Grades e cards genéricos ---------- */
 .grade-2 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

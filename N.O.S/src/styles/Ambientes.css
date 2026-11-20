@@ -1,11 +1,11 @@
 /* ==========================================================================
-   18. AMBIENTES (LISTA, CARDS, MODAIS)
+   AMBIENTES (LISTA, CARDS, MODAIS)
    --------------------------------------------------------------------------
    Esta seção contém estilos "legados" (primeiro bloco) e, mais abaixo, blocos
    de padronização que sobrescrevem os anteriores. Mantenha a ordem.
    ========================================================================== */
 
-/* ---------- 18.1 Container e variáveis locais ---------- */
+/* ---------- Container e variáveis locais ---------- */
 .ambientes {
   --sup: var(--surface);
   --sup2: var(--surface-3);
@@ -44,7 +44,7 @@
   outline-offset: 0;
 }
 
-/* ---------- 18.2 Botões, busca e cabeçalho ---------- */
+/* ---------- Botões, busca e cabeçalho ---------- */
 .ambientes-simbolo {
   background: none;
   border: 0;
@@ -171,28 +171,6 @@
 .ambientes-botao-simbolo-mini {
   padding: 10px 0;
 }
-.ambientes-botao-secundario {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border-radius: 8px;
-  padding: 0 16px;
-  height: 48px;
-  cursor: pointer;
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease;
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text);
-}
-.ambientes-botao-secundario:hover {
-  background: #c81d1dc9;
-}
-.ambientes-botao-secundario:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
 .ambientes-superior-acoes {
   display: flex;
   align-items: center;
@@ -318,7 +296,7 @@
   color: #fff;
 }
 
-/* ---------- 18.4 Grade de cards + resumo lateral ---------- */
+/* ---------- Grade de cards + resumo lateral ---------- */
 .ambientes-grade-wrap {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 300px;
@@ -423,7 +401,7 @@
   height: 61.2px;
 }
 
-/* ---------- 18.5 Etiquetas e pílulas de status ---------- */
+/* ---------- Etiquetas e pílulas de status ---------- */
 .ambientes-etiqueta,
 .ambientes-pilula {
   display: inline-block;
@@ -454,7 +432,7 @@
   color: #fff;
 }
 
-/* ---------- 18.6 Resumo lateral (indicadores, tipos, dica) ---------- */
+/* ---------- Resumo lateral (indicadores, tipos, dica) ---------- */
 .ambientes-resumo h3 {
   display: flex;
   align-items: center;
@@ -559,7 +537,7 @@
   text-align: center;
 }
 
-/* ---------- 18.7 Visão de detalhe com lista lateral (versão antiga) ---------- */
+/* ---------- Visão de detalhe com lista lateral (versão antiga) ---------- */
 .ambientes-detalhe-wrap {
   display: grid;
   grid-template-columns: 290px minmax(0, 1fr) 300px;
@@ -616,7 +594,7 @@
   border-color: var(--azul);
 }
 
-/* ---------- 18.8 Filtros de componentes ---------- */
+/* ---------- Filtros de componentes ---------- */
 .ambientes-componente-filtros {
   display: flex;
   justify-content: flex-end;
@@ -645,7 +623,7 @@
   width: 100%;
 }
 
-/* ---------- 18.9 Tabela de componentes (com rolagem estilizada) ---------- */
+/* ---------- Tabela de componentes (com rolagem estilizada) ---------- */
 .ambientes-tabela-wrap {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -751,7 +729,7 @@
   margin-top: 10px;
 }
 
-/* ---------- 18.10 Visão geral e coluna direita ---------- */
+/* ---------- Visão geral e coluna direita ---------- */
 .ambientes-visao {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -788,7 +766,7 @@
   text-decoration: none;
 }
 
-/* ---------- 18.11 Modal de ambientes (cadastro/edição) ---------- */
+/* ---------- Modal de ambientes (cadastro/edição) ---------- */
 .ambientes-modal-fundo {
   position: fixed;
   inset: 0;
@@ -934,20 +912,6 @@
   filter: brightness(1.1);
   background: var(--modal-accent);
 }
-.ambientes-modal .ambientes-botao-secundario {
-  background: #dc2626;
-  border: 1px solid #dc2626;
-  color: #ffffff;
-}
-.ambientes-modal .ambientes-botao-secundario:hover {
-  background: #b91c1ca9;
-  border: 1px solid #b91c1ca9;
-  color: #ffffff;
-}
-.ambientes-modal .ambientes-botao-secundario:focus-visible {
-  outline: 2px solid #dc2626;
-  outline-offset: 2px;
-}
 /* Botão de fechar (X) */
 .ambientes-modal-cabecalho button {
   background: transparent;
@@ -984,7 +948,7 @@
   z-index: 20;
 }
 
-/* ---------- 18.12 Responsivo (versão original da tela) ---------- */
+/* ---------- Responsivo (versão original da tela) ---------- */
 @media (max-width: 1280px) {
   .ambientes-detalhe-wrap {
     grid-template-columns: 270px minmax(0, 1fr);
@@ -1065,7 +1029,7 @@
   }
 }
 
-/* ---------- 18.13 Paleta alinhada aos tokens globais (sem alterar o layout) ---------- */
+/* ---------- Paleta alinhada aos tokens globais (sem alterar o layout) ---------- */
 .ambientes .ambientes-painel,
 .ambientes .ambientes-card,
 .ambientes .ambientes-tabela-wrap {
@@ -1138,7 +1102,7 @@
   color: var(--accent);
 }
 
-/* ---------- 18.14 Estrutura externa alinhada ao padrão de Chamados ---------- */
+/* ---------- Estrutura externa alinhada ao padrão de Chamados ---------- */
 .pagina--ambientes {
   gap: 20px;
   padding-top: 0;
@@ -1180,7 +1144,7 @@
   }
 }
 
-/* ---------- 18.15 Ajustes específicos da página (cabeçalho, busca, filtros) ---------- */
+/* ---------- Ajustes específicos da página (cabeçalho, busca, filtros) ---------- */
 .ambientes-cabecalho-linha {
   display: flex;
   align-items: flex-start;
@@ -1286,7 +1250,126 @@
   min-width: 0;
 }
 
-/* ---------- 18.16 Padronização final da tela (sobrescreve os blocos legados acima) ---------- */
+/* ---------- Padronização final da tela (sobrescreve os blocos legados acima) ---------- */
+.pagina--ambientes .ambientes-modal input,
+.pagina--ambientes .ambientes-modal select,
+.pagina--ambientes .ambientes-modal textarea {
+  background: var(--panel-input);
+  border: 2px solid var(--panel-input-border);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.ambientes-modal-tipo {
+  position: relative;
+}
+
+.ambientes-modal-campo-tipo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--modal-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.ambientes-modal .ambientes-modal-tipo__acionador {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  padding: 0 36px 0 12px;
+  border: 2px solid var(--panel-input-border);
+  border-radius: 8px;
+  background: var(--panel-input);
+  color: var(--modal-text);
+  font: inherit;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.ambientes-modal-tipo__seta {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  width: 0;
+  height: 0;
+  border-top: 6px solid var(--text);
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: transform 0.15s ease;
+}
+
+.ambientes-modal-tipo.esta-aberto .ambientes-modal-tipo__seta {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.ambientes-modal .ambientes-modal-tipo__opcoes {
+  position: absolute;
+  z-index: 60;
+  top: calc(100% + 8px);
+  right: 0;
+  left: 0;
+  max-height: 260px;
+  margin: 0;
+  padding: 10px;
+  overflow-y: auto;
+  list-style: none;
+  color: var(--modal-text);
+  background: var(--modal-bg);
+  border: 1px solid var(--modal-border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+}
+
+.ambientes-modal .ambientes-modal-tipo__opcoes li {
+  margin: 3px 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 22px;
+  cursor: pointer;
+}
+
+.ambientes-modal .ambientes-modal-tipo__opcoes li:hover,
+.ambientes-modal .ambientes-modal-tipo__opcoes li.esta-ativo,
+.ambientes-modal .ambientes-modal-tipo__opcoes li.esta-selecionado {
+  background: var(--surface-3);
+  color: var(--modal-text);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px var(--modal-border);
+}
+
+.pagina--ambientes .ambientes-modal input:hover,
+.pagina--ambientes .ambientes-modal input:focus,
+.pagina--ambientes .ambientes-modal .ambientes-modal-tipo__acionador:hover,
+.pagina--ambientes .ambientes-modal .ambientes-modal-tipo__acionador:focus-visible,
+.pagina--ambientes .ambientes-modal .ambientes-modal-tipo__acionador[aria-expanded="true"],
+.pagina--ambientes .ambientes-modal select:hover,
+.pagina--ambientes .ambientes-modal select:focus,
+.pagina--ambientes .ambientes-modal textarea:hover,
+.pagina--ambientes .ambientes-modal textarea:focus {
+  outline: none;
+  background: var(--panel-input);
+  border-color: rgba(0, 81, 255, 0.671);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+.pagina--ambientes .topbar__simbolo-botao {
+  font-size: 1.05rem;
+  line-height: normal;
+}
+
 .pagina--ambientes .topbar__notificacao-item:hover {
   background: var(--surface-2);
 }
@@ -1399,10 +1482,11 @@
   .pagina--ambientes .ambientes-filtros {
     grid-template-columns: 1fr;
     justify-content: stretch;
+    padding: 10px;
   }
 }
 
-/* ---------- 18.17 Grade e cards da página de ambientes ---------- */
+/* ---------- Grade e cards da página de ambientes ---------- */
 .pagina--ambientes .card__ambientes--grade {
   column-gap: 10px;
   row-gap: 10px;
@@ -1458,7 +1542,7 @@
   gap: 8px;
 }
 
-/* ---------- 18.18 Modal de detalhes do componente ---------- */
+/* ---------- Modal de detalhes do componente ---------- */
 .ambiente-componente-modal-fundo {
   position: fixed;
   inset: 0;
@@ -1692,6 +1776,67 @@
 .ambiente-detalhe-formulario .selecao-personalizada--formulario .selecao-personalizada__opcao.esta-selecionado,
 .ambiente-detalhe-formulario .selecao-personalizada--formulario .selecao-personalizada__opcao.esta-ativo,
 .ambiente-detalhe-formulario .selecao-personalizada--formulario .selecao-personalizada__opcao:hover {
+  background: var(--surface-3);
+  color: var(--text);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.ambiente-adicionar-tipo-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  color: var(--text-dim);
+}
+.ambiente-adicionar-formulario .ambiente-adicionar-tipo {
+  width: 100%;
+  border: 0;
+  background: transparent;
+}
+.ambiente-adicionar-formulario .ambiente-adicionar-tipo.selecao-personalizada--formulario .selecao-personalizada__acionador {
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 2px solid var(--panel-input-border);
+  border-radius: 10px;
+  background: var(--panel-input);
+  color: var(--text);
+  font: inherit;
+  font-weight: 500;
+}
+.ambiente-adicionar-formulario .ambiente-adicionar-tipo.selecao-personalizada--formulario .selecao-personalizada__acionador:hover,
+.ambiente-adicionar-formulario .ambiente-adicionar-tipo.selecao-personalizada--formulario .selecao-personalizada__acionador:focus-visible,
+.ambiente-adicionar-formulario .ambiente-adicionar-tipo.selecao-personalizada--formulario .selecao-personalizada__acionador[aria-expanded="true"] {
+  outline: none;
+  border-color: rgba(0, 81, 255, 0.671);
+  background: var(--panel-input);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+.ambiente-adicionar-tipo .selecao-personalizada__seta {
+  border-top-width: 6px;
+}
+.ambiente-adicionar-formulario .ambiente-adicionar-tipo .selecao-personalizada__menu {
+  z-index: 60;
+  padding: 10px;
+  color: var(--text);
+  background: var(--panel);
+  border-color: var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+}
+.ambiente-adicionar-formulario .ambiente-adicionar-tipo .selecao-personalizada__opcao {
+  margin: 3px 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 22px;
+}
+.ambiente-adicionar-formulario .ambiente-adicionar-tipo .selecao-personalizada__opcao:hover,
+.ambiente-adicionar-formulario .ambiente-adicionar-tipo .selecao-personalizada__opcao.esta-ativo,
+.ambiente-adicionar-formulario .ambiente-adicionar-tipo .selecao-personalizada__opcao.esta-selecionado {
   background: var(--surface-3);
   color: var(--text);
   font-weight: 700;
