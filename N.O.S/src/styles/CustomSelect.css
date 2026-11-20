@@ -72,3 +72,11 @@
 .selecao-personalizada__opcao.esta-ativo {
   background: rgba(148, 163, 184, 0.12);
 }
+
+.selecao-personalizada--status .selecao-personalizada__menu {
+  top: auto;
+  bottom: calc(100% + 8px);
+  padding: 10px;
+  border-radius: 18px;
+}
+

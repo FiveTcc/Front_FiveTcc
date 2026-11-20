@@ -215,10 +215,10 @@
   gap: 4px;
   min-width: 180px;
   padding: 8px;
-  background: var(--surface);
-  border: 2px solid var(--border);
+  background: #0f172a;
+  border: 2px solid #1e293b;
   border-radius: 14px;
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 
 .relatorio-exportacao__menu button {
@@ -233,7 +233,8 @@
 }
 
 .relatorio-exportacao__menu button:hover {
-  background: var(--surface-2);
+  background: var(--surface-3);
+  border: 2px solid var(--border)
 }
 
 .relatorio-exportacao__situacao {

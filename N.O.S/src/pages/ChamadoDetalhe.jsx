@@ -265,7 +265,7 @@ export default function ChamadoDetalhe() {
 
       <div className="grade-2 grade-2--assimetrico">
         <div className="card">
-            <h2>Observação do Tecnico</h2>
+            <h2>Observação do Técnico</h2>
             <div className="chamado-historico-rolagem">
               <ul className="linha-do-tempo">
                 <li className="linha-do-tempo__item">
@@ -326,17 +326,20 @@ export default function ChamadoDetalhe() {
           {podeGerenciar && (
             <div className="card">
               <h2>Gerenciar</h2>
-              <label>
-                Status
-                <select
+              <div className="detalhe-status-filtro">
+                <span className="personalizado-selecao__rotulo">Status</span>
+                 <CustomSelect
+                  id="chamado-status"
+                  label="Status"
+                  className="selecao-personalizada--status usuarios-perfil-select"
                   value={chamado.status}
-                  onChange={(event) => atualizarStatus(event.target.value)}
-                >
-                  {Object.entries(STATUS_LABEL).map(([valor, rotulo]) => (
-                    <option key={valor} value={valor}>{rotulo}</option>
-                  ))}
-                </select>
-              </label>
+                  options={Object.entries(STATUS_LABEL).map(([valor, rotulo]) => ({
+                    value: valor,
+                    label: rotulo,
+                  }))}
+                  onChange={(valor) => atualizarStatus(valor)}
+                />
+              </div>
             </div>
           )}
         </aside>

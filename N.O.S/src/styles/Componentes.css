@@ -402,15 +402,15 @@
   white-space: nowrap;
 }
 .etiqueta--baixa {
-  background: #D9EAD3;
+  background: rgba(251, 255, 0, 0.562);
   color: var(--yellow);
 }
 .etiqueta--media {
-  background: #FFDE21;
+  background: rgba(37, 100, 235, 0.192);
   color: var(--blue);
 }
 .etiqueta--alta {
-  background: #FF746C;
+  background: rgba(232, 134, 46, 0.14);
   color: var(--orange);
 }
 .etiqueta--critica {

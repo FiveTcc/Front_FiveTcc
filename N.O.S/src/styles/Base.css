@@ -51,7 +51,6 @@
 :root[data-theme="dark"],
 html[data-theme="dark"] {
   --bg: #09111b;
-  /* --bg: linear-gradient(135deg, #0F3B73, #0F172A); */
   --surface: #101a2a;
   --surface-2: #142033;
   --surface-3: #18253d;
