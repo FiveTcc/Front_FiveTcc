@@ -8,6 +8,7 @@
   text-decoration: none;
   font-size: 0.85rem;
 }
+
 .voltar-link:hover {
   color: var(--text);
 }
@@ -19,11 +20,13 @@
   gap: 16px;
   flex-wrap: wrap;
 }
+
 .chamado-cabecalho__etiquetas {
   display: flex;
   align-items: center;
   gap: 10px;
 }
+
 .chamado-descricao {
   color: var(--text-dim);
   line-height: 1.65;
@@ -37,17 +40,20 @@
   gap: 12px;
   margin: 0;
 }
+
 .detalhe-lista div {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
+
 .detalhe-lista dt {
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--text-faint);
 }
+
 .detalhe-lista dd {
   margin: 0;
   font-size: 0.9rem;
@@ -69,22 +75,27 @@
   flex-direction: column;
   gap: 18px;
 }
+
 .linha-do-tempo__item {
   display: flex;
   gap: 12px;
 }
+
 .linha-do-tempo__item div {
   flex: 1;
   font-size: 0.88rem;
 }
+
 .linha-do-tempo__item p {
   margin: 4px 0;
   color: var(--text-dim);
 }
+
 .linha-do-tempo__item time {
   font-size: 0.72rem;
   color: var(--text-faint);
 }
+
 .linha-do-tempo__ponto {
   width: 9px;
   height: 9px;
@@ -101,6 +112,7 @@
   padding-top: 14px;
   border-top: 1px solid var(--border);
 }
+
 .comentario-formulario input {
   flex: 1;
 }
@@ -110,7 +122,7 @@
   gap: 20px;
 }
 
-.chamado-detalhe-pagina > .voltar-link {
+.chamado-detalhe-pagina>.voltar-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -160,7 +172,7 @@
   gap: 20px;
 }
 
-.chamado-detalhe-pagina .grade-2--assimetrico > div,
+.chamado-detalhe-pagina .grade-2--assimetrico>div,
 .chamado-detalhe-pagina aside {
   display: flex;
   flex-direction: column;
@@ -187,7 +199,7 @@
   gap: 14px;
 }
 
-.chamado-detalhe-pagina aside > .card:first-child {
+.chamado-detalhe-pagina aside>.card:first-child {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -266,6 +278,260 @@
   }
 }
 
+/* ==========================================================
+   ATRIBUIÇÃO DE TÉCNICOS — CHAMADO DETALHE
+   ========================================================== */
+
+.chamado-detalhe-pagina .tecnicos-vinculados {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.chamado-detalhe-pagina .tecnico-vinculado {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+
+.chamado-detalhe-pagina .tecnico-vinculado__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.chamado-detalhe-pagina .tecnico-vinculado__info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.chamado-detalhe-pagina .tecnico-vinculado__info strong {
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.chamado-detalhe-pagina .tecnico-vinculado__info span {
+  color: var(--text-faint);
+  font-size: 0.72rem;
+}
+
+/* Botão de desvincular */
+
+.chamado-detalhe-pagina .tecnico-vinculado__remover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.chamado-detalhe-pagina .tecnico-vinculado__remover:hover {
+  color: var(--red);
+  border-color: var(--red);
+  background: color-mix(in srgb, var(--red) 10%, transparent);
+}
+
+.chamado-detalhe-pagina .tecnico-vinculado__remover:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Formulário de atribuição */
+
+.chamado-detalhe-pagina .tecnico-vinculo-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* Campo de pesquisa */
+
+.chamado-detalhe-pagina .tecnico-vinculo-formulario .detalhe-status-filtro {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.chamado-detalhe-pagina .tecnico-busca {
+  position: relative;
+  width: 100%;
+}
+
+.chamado-detalhe-pagina .tecnico-busca__input {
+  display: block;
+  width: 100%;
+  height: 42px;
+  padding: 0 38px 0 12px;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  outline: none;
+  background: var(--panel-input);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.84rem;
+}
+
+.chamado-detalhe-pagina .tecnico-busca__input::placeholder {
+  color: var(--text-faint);
+}
+
+.chamado-detalhe-pagina .tecnico-busca__input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.chamado-detalhe-pagina .tecnico-busca__limpar {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+/* Resultados */
+
+.chamado-detalhe-pagina .tecnicos-resultados {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-height: 190px;
+  margin-top: 8px;
+  overflow-y: auto;
+}
+
+.chamado-detalhe-pagina .tecnico-resultado {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.chamado-detalhe-pagina .tecnico-resultado:hover {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
+.chamado-detalhe-pagina .tecnico-resultado--selecionado {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.chamado-detalhe-pagina .tecnico-resultado__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.chamado-detalhe-pagina .tecnico-resultado__nome {
+  flex: 1;
+  min-width: 0;
+  color: var(--text);
+  font-size: 0.83rem;
+}
+
+.chamado-detalhe-pagina .tecnico-resultado__check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-size: 0.75rem;
+}
+
+.chamado-detalhe-pagina .tecnicos-resultados__vazio,
+.chamado-detalhe-pagina .tecnico-busca__ajuda {
+  margin: 0;
+  color: var(--text-faint);
+  font-size: 0.78rem;
+}
+
+.chamado-detalhe-pagina .tecnico-busca__selecionado {
+  margin: 8px 0 0;
+  padding: 9px 11px;
+  border: 1px solid var(--accent);
+  border-radius: 9px;
+  background: var(--accent-soft);
+  color: var(--text);
+  font-size: 0.8rem;
+}
+
+/* Botão de vincular */
+
+.chamado-detalhe-pagina .tecnico-vinculo-formulario>.botao {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Mensagem de sucesso */
+
+.chamado-detalhe-pagina .formulario__sucesso {
+  margin: 12px 0 0;
+}
+
 
 /* ==========================================================================
    TELA DE CHAMADOS (FILTROS E AJUSTES MOBILE)
@@ -277,7 +543,7 @@
 }
 
 /* Select nativo estilizado com seta desenhada em CSS */
-.pagina--chamados .personalizado-selecao > select {
+.pagina--chamados .personalizado-selecao>select {
   width: 100%;
   min-width: 0;
   height: 44px;
@@ -301,7 +567,7 @@
   cursor: pointer;
 }
 
-.pagina--chamados .personalizado-selecao > select:focus {
+.pagina--chamados .personalizado-selecao>select:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
@@ -327,7 +593,7 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
-  .pagina--chamados .personalizado-selecao > select {
+  .pagina--chamados .personalizado-selecao>select {
     height: 46px;
   }
 }
@@ -381,12 +647,12 @@
   }
 
   .pagina--chamados .personalizado-selecao,
-  .pagina--chamados .filtros > .botao {
+  .pagina--chamados .filtros>.botao {
     width: 100%;
     min-width: 0 !important;
   }
 
-  .pagina--chamados .filtros > .botao {
+  .pagina--chamados .filtros>.botao {
     grid-column: 1 / -1;
   }
 
@@ -412,7 +678,7 @@
   }
 
   .pagina--chamados .situacao-legenda-conteiner,
-  .pagina--chamados .filtros > .botao {
+  .pagina--chamados .filtros>.botao {
     grid-column: auto;
   }
 }
