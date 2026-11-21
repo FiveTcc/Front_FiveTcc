@@ -600,7 +600,7 @@
   box-shadow: var(--shadow-card);
 }
 .perfil-formulario__envio-botao.botao--transparente:hover {
-  border-color: rgba(0, 81, 255, 0.671);
+  border-color: rgba(255, 0, 212, 0.671);
   background: var(--panel);
 }
 .perfil-formulario__observacao {
@@ -705,6 +705,104 @@
   min-width: 200px;
   padding: 12px 18px;
   border-radius: 12px;
+}
+
+
+.tabela__usuario-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.tabela__usuario-link:hover {
+  color: #60a5fa;
+}
+
+.tabela__usuario-link:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* Identificação dos tipos de usuário */
+.usuario-tipo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Cores dos tipos de usuários */
+
+.usuario-tipo--admin {
+  color: #7C3AED;
+  background: rgba(124, 58, 237, 0.12);
+}
+
+.usuario-tipo--tecnico {
+  color: #2563EB;
+  background: rgba(37, 99, 235, 0.12);
+}
+
+.usuario-tipo--funcionario {
+  color: #059669;
+  background: rgba(5, 150, 105, 0.12);
+}
+
+/* ---------- Formulário de usuários: duas colunas ---------- */
+
+.usuarios-formulario-grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 20px;
+  width: 100%;
+}
+
+.usuarios-formulario-coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+
+.usuarios-formulario-coluna label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.usuarios-formulario-coluna input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.usuarios-perfil-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.usuarios-perfil-select {
+  width: 100%;
+}
+
+/* Responsividade */
+
+@media (max-width: 700px) {
+  .usuarios-formulario-grade {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---------- Responsivo do layout de perfil ---------- */
