@@ -176,80 +176,82 @@ export default function Sidebar() {
         />
       )}
 
-    <aside id="sidebar-navigation" className={`sidebar${menuAberto ? " sidebar--aberto" : ""}`}>
-      <div className="sidebar__marca">
-        <img src={logoNOS} alt="Logo N.O.S." className="sidebar__marca-logo" />
-        <div>
-          <strong>N.O.S</strong>
-          <small>New Occurrence System</small>
-        </div>
-      </div>
-
-      <nav className="sidebar__navegacao" onClick={fecharMenu}>
-        <NavLink to="/painel" className={getNavLinkClassName}>
-          {ICONS.painel}
-          DashBoard
-        </NavLink>
-
-        <NavLink to="/ocorrencias" className={getNavLinkClassName}>
-          {ICONS.chamados}
-          Ocorrências
-        </NavLink>
-
-        <NavLink to="/ambientes" className={getNavLinkClassName}>
-          {ICONS.ambientes}
-          Ambientes
-        </NavLink>
-
-        <NavLink to="/relatorios" className={getNavLinkClassName}>
-          {ICONS.relatorios}
-          Relatórios
-        </NavLink>
-
-        {cargo === "admin" && (
-          <NavLink to="/usuarios" className={getNavLinkClassName}>
-            {ICONS.usuarios}
-            Usuários
-          </NavLink>
-        )}
-
-        <NavLink to="/perfil" className={getNavLinkClassName}>
-          {ICONS.perfil}
-          Perfil
-        </NavLink>
-      </nav>
-
-      <div className="sidebar__rodape">
-        <div className="sidebar__usuario">
-          {FotoPerfil ? (
-            <img
-              src={FotoPerfil}
-              alt="Foto de perfil"
-              className="sidebar__avatar"
-            />
-          ) : (
-            <span className="avatar">
-              {(nome || usuario?.nome)?.[0]?.toUpperCase()}
-            </span>
-          )}
-
+      <aside id="sidebar-navigation" className={`sidebar${menuAberto ? " sidebar--aberto" : ""}`}>
+        <div className="sidebar__marca">
+          <img src={logoNOS} alt="Logo N.O.S." className="sidebar__marca-logo" />
           <div>
-            <strong>{nome || usuario?.nome}</strong>
-            <small>
-              {PERFIL_LABEL[cargo || usuario?.perfil] ||
-                cargo ||
-                usuario?.perfil}
-            </small>
+            <strong>N.O.S</strong>
+            <small>New Occurrence System</small>
           </div>
         </div>
 
-        <div className="sidebar__acoes">
-          <button className="botao botao--transparente botao--pequeno" onClick={logout}>
-            Sair
-          </button>
+        <nav className="sidebar__navegacao" onClick={fecharMenu}>
+          <NavLink to="/painel" className={getNavLinkClassName}>
+            {ICONS.painel}
+            DashBoard
+          </NavLink>
+
+          <NavLink to="/ocorrencias" className={getNavLinkClassName}>
+            {ICONS.chamados}
+            Ocorrências
+          </NavLink>
+
+          <NavLink to="/ambientes" className={getNavLinkClassName}>
+            {ICONS.ambientes}
+            Ambientes
+          </NavLink>
+
+          {(cargo === "admin" || cargo === "tecnico") && (
+            <NavLink to="/relatorios" className={getNavLinkClassName}>
+              {ICONS.relatorios}
+              Relatórios
+            </NavLink>
+          )}
+
+          {cargo === "admin" && (
+            <NavLink to="/usuarios" className={getNavLinkClassName}>
+              {ICONS.usuarios}
+              Usuários
+            </NavLink>
+          )}
+
+          <NavLink to="/perfil" className={getNavLinkClassName}>
+            {ICONS.perfil}
+            Perfil
+          </NavLink>
+        </nav>
+
+        <div className="sidebar__rodape">
+          <div className="sidebar__usuario">
+            {FotoPerfil ? (
+              <img
+                src={FotoPerfil}
+                alt="Foto de perfil"
+                className="sidebar__avatar"
+              />
+            ) : (
+              <span className="avatar">
+                {(nome || usuario?.nome)?.[0]?.toUpperCase()}
+              </span>
+            )}
+
+            <div>
+              <strong>{nome || usuario?.nome}</strong>
+              <small>
+                {PERFIL_LABEL[cargo || usuario?.perfil] ||
+                  cargo ||
+                  usuario?.perfil}
+              </small>
+            </div>
+          </div>
+
+          <div className="sidebar__acoes">
+            <button className="botao botao--transparente botao--pequeno" onClick={logout}>
+              Sair
+            </button>
+          </div>
         </div>
-      </div>
-    </aside>
+      </aside>
     </>
   );
 }

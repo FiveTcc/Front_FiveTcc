@@ -188,7 +188,7 @@ export default function Chamados() {
               type="search"
               value={busca}
               onChange={(event) => setBusca(event.target.value)}
-              placeholder="Pesquisar ocorrências..."
+              placeholder="Pesquisar ocorrência..."
               aria-label="Pesquisar ocorrências"
             />
           </div>

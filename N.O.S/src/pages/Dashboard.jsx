@@ -255,7 +255,7 @@ export default function Dashboard() {
           <div>
             <h1>Olá, {capitalizar(nome || usuario.nome)} </h1>
             <p className="esmaecido">
-              Visão geral dos chamados sob monitoramento agora.
+              Visão geral das ocorrências sob monitoramento agora.
             </p>
           </div>
         </header>
@@ -270,7 +270,7 @@ export default function Dashboard() {
               type="search"
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              placeholder="Pesquisar chamados..."
+              placeholder="Pesquisar ocorrência..."
               aria-label="Pesquisar chamados"
             />
           </div>
@@ -419,7 +419,7 @@ export default function Dashboard() {
             ))}
 
             {!recentes.length && (
-              <li className="esmaecido">Nenhum chamado encontrado.</li>
+              <li className="esmaecido">Nenhuma ocorrência encontrada.</li>
             )}
           </ul>
         </div>

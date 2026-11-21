@@ -45,8 +45,12 @@ export default function App() {
             path="painel"
             element={<Dashboard />}
           />
-          <Route path="relatorios" 
-          element={<Relatorios />} />
+
+          <Route element={
+            <PrivateRoute allowedRoles={["admin", "tecnico"]} />
+          }>
+            <Route path="relatorios" element={<Relatorios />} />
+          </Route>
 
           <Route
             path="perfil"
@@ -68,10 +72,11 @@ export default function App() {
             element={<ChamadoDetalhe />}
           />
 
-          <Route
-            path="usuarios"
-            element={<Usuarios />}
-          />
+          <Route element={
+            <PrivateRoute allowedRoles={["admin"]} />
+          }>
+          <Route path="usuarios"element={<Usuarios />}/> 
+          </Route>
 
           <Route
             path="ambientes"
@@ -81,7 +86,7 @@ export default function App() {
             path="ambientes/:id"
             element={<AmbientesDetalhe />}
           />
-        
+
         </Route>
 
       </Route>
