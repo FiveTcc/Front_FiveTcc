@@ -665,7 +665,7 @@ export default function ChamadoDetalhe() {
       {/* DESCRIÇÃO */}
 
       <div className="card">
-        <h2>Observações</h2>
+        <h2>Observação</h2>
 
         <p className="chamado-descricao">
           {chamado.descricao || "—"}
@@ -965,12 +965,6 @@ export default function ChamadoDetalhe() {
                         </p>
                       )}
                     </div>
-                  )}
-
-                  {!buscaTecnico.trim() && (
-                    <p className="esmaecido tecnico-busca__ajuda">
-                      Digite o nome para localizar um técnico.
-                    </p>
                   )}
                 </div>
 

@@ -3,6 +3,7 @@
    ========================================================================== */
 
 /* ---------- Estrutura base ---------- */
+
 .voltar-link {
   color: var(--text-dim);
   text-decoration: none;
@@ -33,7 +34,8 @@
   white-space: pre-wrap;
 }
 
-/* Lista de detalhes (rótulo + valor) */
+/* ---------- Lista de detalhes ---------- */
+
 .detalhe-lista {
   display: flex;
   flex-direction: column;
@@ -66,14 +68,15 @@
   font-size: 0.9rem;
 }
 
-/* ---------- Linha do tempo (histórico e comentários) ---------- */
+/* ---------- Linha do tempo ---------- */
+
 .linha-do-tempo {
-  list-style: none;
-  margin: 0 0 18px;
-  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 18px;
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
 }
 
 .linha-do-tempo__item {
@@ -99,11 +102,13 @@
 .linha-do-tempo__ponto {
   width: 9px;
   height: 9px;
+  flex-shrink: 0;
   border-radius: 50%;
   background: var(--accent);
   margin-top: 6px;
-  flex-shrink: 0;
 }
+
+/* ---------- Formulário base de comentário ---------- */
 
 .comentario-formulario {
   display: flex;
@@ -118,11 +123,12 @@
 }
 
 /* ---------- Acabamento visual da tela de detalhe ---------- */
+
 .chamado-detalhe-pagina {
   gap: 20px;
 }
 
-.chamado-detalhe-pagina>.voltar-link {
+.chamado-detalhe-pagina > .voltar-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -133,7 +139,8 @@
   border: 1px solid var(--border);
 }
 
-/* Cabeçalho em destaque */
+/* Cabeçalho */
+
 .chamado-detalhe-pagina .chamado-cabecalho {
   padding: 22px 24px;
   border: 1px solid var(--border);
@@ -166,13 +173,14 @@
   background: var(--surface-2);
 }
 
-/* Grade principal + coluna lateral */
+/* Grade principal e coluna lateral */
+
 .chamado-detalhe-pagina .grade-2--assimetrico {
   align-items: stretch;
   gap: 20px;
 }
 
-.chamado-detalhe-pagina .grade-2--assimetrico>div,
+.chamado-detalhe-pagina .grade-2--assimetrico > div,
 .chamado-detalhe-pagina aside {
   display: flex;
   flex-direction: column;
@@ -181,11 +189,11 @@
 }
 
 .chamado-detalhe-pagina .card {
+  width: 100%;
+  margin: 0;
   background: linear-gradient(145deg, var(--panel), var(--surface));
   border-radius: 16px;
   box-shadow: var(--shadow-card);
-  width: 100%;
-  margin: 0;
 }
 
 .chamado-detalhe-pagina .card h2 {
@@ -199,9 +207,9 @@
   gap: 14px;
 }
 
-.chamado-detalhe-pagina aside>.card:first-child {
-  flex: 1;
+.chamado-detalhe-pagina aside > .card:first-child {
   display: flex;
+  flex: 1;
   flex-direction: column;
 }
 
@@ -215,10 +223,19 @@
   border-bottom: 0;
 }
 
-/* Histórico com altura fixa e rolagem */
+/* ---------- Histórico e rolagem ---------- */
+
+.chamado-detalhe-pagina .chamado-historico-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .chamado-detalhe-pagina .chamado-historico-rolagem {
-  height: 260px;
-  max-height: 260px;
+  flex: 1 1 auto;
+  min-height: 260px;
+  height: auto;
+  max-height: none;
   overflow-y: auto;
   padding-right: 8px;
   scrollbar-gutter: stable;
@@ -229,10 +246,14 @@
   justify-content: flex-start;
 }
 
-/* Formulário de comentário */
+/* ---------- Formulário de observação ---------- */
+
 .chamado-detalhe-pagina .comentario-formulario {
   flex-wrap: wrap;
   align-items: center;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .chamado-detalhe-pagina .comentario-formulario input {
@@ -252,6 +273,41 @@
   font-size: 0.8rem;
 }
 
+/* Campo e botão */
+
+.chamado-detalhe-pagina .comentario-formulario__campo {
+  display: flex;
+  flex: 1;
+  align-items: stretch;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+}
+
+.chamado-detalhe-pagina .comentario-formulario__campo input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  height: 46px;
+  box-sizing: border-box;
+}
+
+.chamado-detalhe-pagina .comentario-formulario__campo button {
+  flex: 0 0 auto;
+  min-width: 110px;
+  white-space: nowrap;
+}
+
+/* Área do formulário no final do cartão */
+
+.chamado-detalhe-pagina .comentario-area {
+  flex-shrink: 0;
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+/* ---------- Mensagens ---------- */
+
 .chamado-detalhe-pagina .formulario__erro {
   margin: 0;
   padding: 10px 12px;
@@ -260,27 +316,13 @@
   background: color-mix(in srgb, var(--red) 10%, transparent);
 }
 
-@media (max-width: 700px) {
-  .chamado-detalhe-pagina .chamado-cabecalho {
-    padding: 18px;
-  }
-
-  .chamado-detalhe-pagina .grade-2--assimetrico {
-    gap: 14px;
-  }
-
-  .chamado-detalhe-pagina .card {
-    padding: 14px;
-  }
-
-  .chamado-detalhe-pagina .comentario-formulario .botao {
-    width: 100%;
-  }
+.chamado-detalhe-pagina .formulario__sucesso {
+  margin: 12px 0 0;
 }
 
-/* ==========================================================
+/* ==========================================================================
    ATRIBUIÇÃO DE TÉCNICOS — CHAMADO DETALHE
-   ========================================================== */
+   ========================================================================== */
 
 .chamado-detalhe-pagina .tecnicos-vinculados {
   display: flex;
@@ -521,29 +563,22 @@
 
 /* Botão de vincular */
 
-.chamado-detalhe-pagina .tecnico-vinculo-formulario>.botao {
+.chamado-detalhe-pagina .tecnico-vinculo-formulario > .botao {
   width: 100%;
   justify-content: center;
 }
 
-/* Mensagem de sucesso */
-
-.chamado-detalhe-pagina .formulario__sucesso {
-  margin: 12px 0 0;
-}
-
-
 /* ==========================================================================
-   TELA DE CHAMADOS (FILTROS E AJUSTES MOBILE)
+   TELA DE CHAMADOS — FILTROS E AJUSTES RESPONSIVOS
    ========================================================================== */
 
-/* ---------- Filtros da tela de ocorrências ---------- */
 .pagina--chamados .personalizado-selecao {
   min-width: 0;
 }
 
-/* Select nativo estilizado com seta desenhada em CSS */
-.pagina--chamados .personalizado-selecao>select {
+/* Select nativo estilizado */
+
+.pagina--chamados .personalizado-selecao > select {
   width: 100%;
   min-width: 0;
   height: 44px;
@@ -558,22 +593,21 @@
   background-position:
     calc(100% - 18px) 18px,
     calc(100% - 12px) 18px;
-  background-size:
-    6px 6px,
-    6px 6px;
+  background-size: 6px 6px;
   background-repeat: no-repeat;
   color: var(--text);
   font: inherit;
   cursor: pointer;
 }
 
-.pagina--chamados .personalizado-selecao>select:focus {
+.pagina--chamados .personalizado-selecao > select:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
-/* Desktop: legenda + 2 selects + botão em uma linha */
+/* Desktop */
+
 @media (min-width: 701px) {
   .pagina--chamados .filtros {
     display: grid;
@@ -588,18 +622,34 @@
   }
 }
 
+/* Tablets e telas menores */
+
 @media (max-width: 700px) {
+  .chamado-detalhe-pagina .chamado-cabecalho {
+    padding: 18px;
+  }
+
+  .chamado-detalhe-pagina .grade-2--assimetrico {
+    gap: 14px;
+  }
+
+  .chamado-detalhe-pagina .card {
+    padding: 14px;
+  }
+
+  .chamado-detalhe-pagina .comentario-formulario .botao {
+    width: 100%;
+  }
+
   .pagina--chamados .filtros {
+    display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
-  .pagina--chamados .personalizado-selecao>select {
+  .pagina--chamados .personalizado-selecao > select {
     height: 46px;
   }
-}
 
-/* ---------- Acabamento mobile da tela de chamados ---------- */
-@media (max-width: 700px) {
   .pagina--chamados {
     width: 100%;
     max-width: 100%;
@@ -607,10 +657,10 @@
   }
 
   .pagina--chamados .pagina__superior {
-    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 14px;
+    width: 100%;
   }
 
   .pagina--chamados .pagina__cabecalho {
@@ -619,9 +669,9 @@
 
   .pagina--chamados .topbar {
     display: flex;
-    width: 100%;
     align-items: stretch;
     gap: 8px;
+    width: 100%;
   }
 
   .pagina--chamados .topbar__busca {
@@ -634,8 +684,6 @@
   }
 
   .pagina--chamados .filtros {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: stretch;
     gap: 10px;
     margin: 0;
@@ -647,12 +695,12 @@
   }
 
   .pagina--chamados .personalizado-selecao,
-  .pagina--chamados .filtros>.botao {
+  .pagina--chamados .filtros > .botao {
     width: 100%;
     min-width: 0 !important;
   }
 
-  .pagina--chamados .filtros>.botao {
+  .pagina--chamados .filtros > .botao {
     grid-column: 1 / -1;
   }
 
@@ -672,13 +720,34 @@
   }
 }
 
+/* Celulares */
+
+@media (max-width: 600px) {
+  .chamado-detalhe-pagina .comentario-formulario {
+    align-items: flex-start;
+  }
+
+  .chamado-detalhe-pagina .comentario-formulario__campo {
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .chamado-detalhe-pagina .comentario-formulario__campo input,
+  .chamado-detalhe-pagina .comentario-formulario__campo button {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* Celulares estreitos */
+
 @media (max-width: 380px) {
   .pagina--chamados .filtros {
     grid-template-columns: 1fr;
   }
 
   .pagina--chamados .situacao-legenda-conteiner,
-  .pagina--chamados .filtros>.botao {
+  .pagina--chamados .filtros > .botao {
     grid-column: auto;
   }
 }
