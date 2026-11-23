@@ -600,7 +600,7 @@
   box-shadow: var(--shadow-card);
 }
 .perfil-formulario__envio-botao.botao--transparente:hover {
-  border-color: rgba(255, 0, 212, 0.671);
+  border-color: rgba(0, 81, 255, 0.671);
   background: var(--panel);
 }
 .perfil-formulario__observacao {

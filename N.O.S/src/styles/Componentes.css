@@ -410,11 +410,11 @@
   color: var(--blue);
 }
 .etiqueta--alta {
-  background: rgba(232, 134, 46, 0.14);
+  background: rgba(253, 118, 0, 0.26);
   color: var(--orange);
 }
 .etiqueta--critica {
-  background: #FF2C2C;
+  background: rgba(236, 9, 9, 0.295);
   color: var(--red);
 }
 
