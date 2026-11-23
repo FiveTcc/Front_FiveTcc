@@ -38,7 +38,10 @@
 
 .usuarios-novo-formulario input,
 .usuarios-novo-formulario .usuarios-perfil-select .selecao-personalizada__acionador {
-  min-height: 50px;
+  width: 100%;
+  height: 46px;
+  min-height: 46px;
+  box-sizing: border-box;
   font-size: 1rem;
 }
 

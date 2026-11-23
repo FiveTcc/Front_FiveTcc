@@ -912,6 +912,18 @@
   filter: brightness(1.1);
   background: var(--modal-accent);
 }
+
+.pagina--ambientes .ambientes-modal-acoes .botao--cancelar {
+  background: var(--red);
+  color: #ffffff;
+  border-color: var(--red);
+}
+
+.pagina--ambientes .ambientes-modal-acoes .botao--cancelar:hover {
+  background: #b91c1ca9;
+  border-color: #b91c1ca9;
+}
+
 /* Botão de fechar (X) */
 .ambientes-modal-cabecalho button {
   background: transparent;

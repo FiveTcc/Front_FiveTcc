@@ -83,13 +83,55 @@
   background: rgba(37, 99, 235, 0.04);
 }
 
+.botao--transparente,
+.botao--perigo {
+  min-width: 100px;
+  height: 40px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .botao--perigo {
   background: var(--red);
   color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  white-space: nowrap;
 }
 
 .botao--perigo:hover {
   background: #c81d4b;
+}
+
+@media (max-width: 768px) {
+  .botao--perigo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 12px 0 0;
+    transform: translateX(-15px);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1375px) {
+  .tabela-acoes {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .botao--perigo {
+    margin: 12px 0 0;
+    transform: none;
+    align-self: flex-start;
+    transform: translateX(-15px);
+  }
 }
 
 .botao--pequeno {

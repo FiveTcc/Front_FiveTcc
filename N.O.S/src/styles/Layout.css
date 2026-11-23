@@ -303,7 +303,7 @@
   padding: 10px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: var(--shadow-card);
   z-index: 200;
   display: flex;

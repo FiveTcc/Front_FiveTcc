@@ -118,7 +118,7 @@ textarea {
   gap: 12px;
   padding: 10px 12px;
   border: 2px solid var(--panel-input-border);
-  border-radius: 14px;
+  border-radius: 12px;
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.02),
