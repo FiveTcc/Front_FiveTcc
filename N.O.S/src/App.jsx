@@ -70,17 +70,26 @@ export default function App() {
           <Route element={
             <PrivateRoute allowedRoles={["admin"]} />
           }>
-          <Route path="usuarios"element={<Usuarios />}/> 
+            <Route path="usuarios" element={<Usuarios />} />
           </Route>
 
-          <Route
-            path="ambientes"
-            element={<Ambientes />}
-          />
-          <Route
-            path="ambientes/:id"
-            element={<AmbientesDetalhe />}
-          />
+          <Route element={
+            <PrivateRoute allowedRoles={["admin"]} />
+          }>
+            <Route
+              path="ambientes"
+              element={<Ambientes />}
+            />
+          </Route>
+
+          <Route element={
+            <PrivateRoute allowedRoles={["admin"]} />
+          }>
+            <Route
+              path="ambientes/:id"
+              element={<AmbientesDetalhe />}
+            />
+          </Route>
 
         </Route>
 

@@ -196,10 +196,12 @@ export default function Sidebar() {
             Ocorrências
           </NavLink>
 
+           {cargo === "admin" && (
           <NavLink to="/ambientes" className={getNavLinkClassName}>
             {ICONS.ambientes}
             Ambientes
           </NavLink>
+          )}
 
           {(cargo === "admin" || cargo === "tecnico") && (
             <NavLink to="/relatorios" className={getNavLinkClassName}>
