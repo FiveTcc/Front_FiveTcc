@@ -1,8 +1,6 @@
-
 import api from "./api";
 
 const userService = {
-
     // Listar todos os usuários
     async listarUsuarios() {
         try {
@@ -105,16 +103,31 @@ const userService = {
             }
 
             const formData = new FormData();
-            formData.append("foto", arquivo);
+            const nomeArquivo = arquivo.name || "perfil.jpg";
+            formData.append("foto", arquivo, nomeArquivo);
 
-            const response = await api.post(
-                "/usuarios/Pefilfoto",
-                formData
-            );
+            const response = await api.post("/usuarios/Pefilfoto", formData, {
+                headers: {
+                    "Content-Type": undefined,
+                },
+            });
 
             return response.data;
         } catch (error) {
-            console.error("Erro ao enviar foto de perfil:", error);
+            const detalhe =
+                error?.response?.data?.message ||
+                error?.response?.data?.error ||
+                error?.response?.data;
+
+            console.error("Erro ao enviar foto de perfil:", {
+                status: error?.response?.status,
+                detalhe,
+            });
+
+            if (typeof detalhe === "string") {
+                error.message = detalhe;
+            }
+
             throw error;
         }
     },
