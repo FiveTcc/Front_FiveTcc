@@ -329,7 +329,7 @@ export default function Chamados() {
         </div>
 
         <Link to="/novochamado" className="botao botao--principal">
-          + Novo chamado
+          + Nova ocorrência
         </Link>
       </div>
 

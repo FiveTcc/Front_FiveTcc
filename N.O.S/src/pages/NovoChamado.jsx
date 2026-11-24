@@ -123,7 +123,7 @@ export default function NovoChamado() {
       <header className="pagina__cabecalho">
         <div>
           <span className="rotulo-superior">Abertura</span>
-          <h1>Novo chamado</h1>
+          <h1>Nova ocorrência</h1>
 
           <p className="esmaecido">
             Descreva o problema com o máximo de detalhe

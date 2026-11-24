@@ -146,8 +146,7 @@ export default function Dashboard() {
     }
 
     document.addEventListener("click", fecharAoClicarFora);
-    return () =>
-      document.removeEventListener("click", fecharAoClicarFora);
+    return () => document.removeEventListener("click", fecharAoClicarFora);
   }, []);
 
   useEffect(() => {
@@ -237,15 +236,15 @@ export default function Dashboard() {
   const capitalizar = (texto) => {
     const excecoes = ["da", "de", "do", "das", "dos", "e"];
     return texto
-    ?.toLowerCase()
-    .split(" ")
-    .map((palavra, i) =>
-      i > 0 && excecoes.includes(palavra)
-        ? palavra
-        : palavra.charAt(0).toUpperCase() + palavra.slice(1)
-    )
-    .join(" ");
-};
+      ?.toLowerCase()
+      .split(" ")
+      .map((palavra, i) =>
+        i > 0 && excecoes.includes(palavra)
+          ? palavra
+          : palavra.charAt(0).toUpperCase() + palavra.slice(1),
+      )
+      .join(" ");
+  };
 
   return (
     <div className="pagina pagina--painel">
@@ -317,7 +316,7 @@ export default function Dashboard() {
 
       <div className="painel__acoes">
         <Link to="/novochamado" className="botao botao--principal">
-          + Novo chamado
+          + Nova ocorrência
         </Link>
       </div>
 
@@ -374,7 +373,8 @@ export default function Dashboard() {
                   <span
                     className="grafico-rosca-legenda__ponto"
                     style={{
-                      background: CORES_STATUS[status],
+                      backgroundColor: CORES_STATUS[status],
+                      "--cor-ponto": CORES_STATUS[status],
                     }}
                   />
 
