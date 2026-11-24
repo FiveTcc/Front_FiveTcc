@@ -232,18 +232,30 @@
 }
 
 .chamado-detalhe-pagina .chamado-historico-rolagem {
-  flex: 1 1 auto;
-  min-height: 260px;
-  height: auto;
-  max-height: none;
-  overflow-y: auto;
+  flex: 0 0 320px;
+  height: 320px;
+  min-height: 320px;
+  max-height: 320px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
   padding-right: 8px;
   scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong, #8e8e8e) transparent;
 }
 
-.chamado-detalhe-pagina .chamado-historico-rolagem .linha-do-tempo {
-  min-height: 0;
-  justify-content: flex-start;
+.chamado-detalhe-pagina .chamado-historico-rolagem::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chamado-detalhe-pagina .chamado-historico-rolagem::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chamado-detalhe-pagina .chamado-historico-rolagem::-webkit-scrollbar-thumb {
+  background: var(--border-strong, #8e8e8e);
+  border-radius: 8px;
 }
 
 /* ---------- Formulário de observação ---------- */

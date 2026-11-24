@@ -158,6 +158,35 @@ function obterIdVinculo(vinculo) {
   );
 }
 
+// Normaliza os dados das observações
+function normalizarObservacao(item, index) {
+  const autor =
+    item?.usuario?.nome ||
+    item?.usuario?.user_nome ||
+    item?.usuario_nome ||
+    item?.user_nome ||
+    item?.autor ||
+    item?.nome_usuario ||
+    "Usuário";
+
+  return {
+    id: item?.id_obs ?? item?.id_observacao ?? item?.id ?? index,
+    texto:
+      item?.obs_texto ??
+      item?.texto ??
+      item?.ocor_obs ??
+      item?.observacao ??
+      "",
+    data:
+      item?.obs_criado_em ??
+      item?.criado_em ??
+      item?.criadoEm ??
+      item?.data ??
+      null,
+    autor,
+  };
+}
+
 export default function ChamadoDetalhe() {
   const { id } = useParams();
   const { usuario } = useAuth();
@@ -347,6 +376,24 @@ export default function ChamadoDetalhe() {
           } catch (error) {
             console.error("Erro ao buscar usuário criador:", error);
           }
+        }
+
+        // Carregar observações existentes
+        try {
+          const respostaObservacoes =
+            await ocorrenciaService.listarObservacoes(id);
+
+          const observacoes = extrairLista(respostaObservacoes, [
+            "observacoes",
+            "observacoes_ocorrencia",
+            "data",
+          ]);
+
+          chamadoCarregado.comentarios = observacoes
+            .map(normalizarObservacao)
+            .filter((observacao) => observacao.texto);
+        } catch (error) {
+          console.error("Erro ao carregar observações:", error);
         }
 
         if (montado) {

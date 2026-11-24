@@ -94,16 +94,29 @@ const ocorrenciaService = {
     }
   },
 
-  // Adicionar observação
-  async adicionarObservacao(id, ocor_obs) {
+  // Criar observação da ocorrência
+  async adicionarObservacao(id, obs_texto) {
     try {
-      const response = await api.patch(
-        `/ocorrencias/${id}/adicionarObservacao`,
-        { ocor_obs }
+      const response = await api.post(
+        `/ocorrencias/${id}/observacoes`,
+        { obs_texto }
       );
       return response.data;
     } catch (error) {
-      console.error("Erro ao adicionar observação:", error);
+      console.error("Erro ao criar observação:", error);
+      throw error;
+    }
+  },
+
+  // Listar observações da ocorrência
+  async listarObservacoes(id) {
+    try {
+      const response = await api.get(
+        `/ocorrencias/${id}/observacoes`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao listar observações:", error);
       throw error;
     }
   },
