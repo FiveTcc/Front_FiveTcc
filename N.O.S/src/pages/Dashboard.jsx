@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 import dashboardService from "../services/dashboardService";
-import ocorrenciaService from "../services/ocorrenciaService";
 import userService from "../services/userServices";
 
 import StatusBeacon from "../components/StatusBeacon";
@@ -23,7 +22,38 @@ const STATUS_LABELS = {
   cancelada: "Cancelada",
 };
 
-function normalizarStatus(valor) {
+// Cards de estatística por perfil (campo vem de GET /dashboard)
+const CARDS_POR_ESCOPO = {
+  administrador: [
+    { campo: "ocorrenciasAbertas", rotulo: "Em aberto", dica: "aguardando ação" },
+    { campo: "ocorrenciasCriticas", rotulo: "Críticas ativas", dica: "prioridade máxima", alerta: true },
+    { campo: "ocorrenciasResolvidas", rotulo: "Resolvidas", dica: "este período" },
+    { campo: "ocorrenciasTotal", rotulo: "Total no sistema", dica: "desde o início" },
+  ],
+  tecnico: [
+    { campo: "ocorrenciasAbertas", rotulo: "Em aberto", dica: "atribuídas a você" },
+    { campo: "ocorrenciasCriticas", rotulo: "Críticas ativas", dica: "prioridade máxima", alerta: true },
+    { campo: "ocorrenciasResolvidas", rotulo: "Resolvidas", dica: "encerradas por você" },
+    { campo: "ocorrenciasTotal", rotulo: "Total atribuída", dica: "desde o início" },
+  ],
+  funcionario: [
+    { campo: "ocorrenciasAbertas", rotulo: "Em aberto", dica: "aguardando atendimento" },
+    { campo: "ocorrenciasEmAndamento", rotulo: "Em andamento", dica: "sendo atendidas" },
+    { campo: "ocorrenciasResolvidas", rotulo: "Resolvidas", dica: "concluídas" },
+    { campo: "ocorrenciasTotal", rotulo: "Total abertas por você", dica: "desde o início" },
+  ],
+};
+
+const TEXTO_SUBTITULO = {
+  administrador: "Visão geral das ocorrências sob monitoramento agora.",
+  tecnico: "Acompanhe as ocorrências atribuídas a você.",
+  funcionario: "Acompanhe as ocorrências que você abriu.",
+};
+
+// Perfis que veem o botão "Nova ocorrência" (ajuste conforme a regra do sistema)
+const ESCOPOS_COM_NOVA_OCORRENCIA = ["administrador", "funcionario"];
+
+function normalizarTexto(valor) {
   return String(valor ?? "")
     .trim()
     .toLowerCase()
@@ -32,21 +62,72 @@ function normalizarStatus(valor) {
     .replace(/_/g, " ");
 }
 
+// Aceita tanto array [{ status, total }] quanto objeto { aberta: 3, ... }
+function normalizarContagem(porStatus) {
+  const base = {
+    aberta: 0,
+    "em andamento": 0,
+    concluida: 0,
+    cancelada: 0,
+  };
+
+  if (Array.isArray(porStatus)) {
+    porStatus.forEach((item) => {
+      const status = normalizarTexto(
+        item.status ?? item.ocor_status ?? item.ocorre_status,
+      );
+      const qtd = Number(
+        item.total ?? item.quantidade ?? item.qtd ?? item.count ?? 0,
+      );
+      if (status in base) base[status] += qtd;
+    });
+  } else if (porStatus && typeof porStatus === "object") {
+    Object.entries(porStatus).forEach(([chave, valor]) => {
+      const status = normalizarTexto(chave);
+      if (status in base) base[status] += Number(valor) || 0;
+    });
+  }
+
+  return base;
+}
+
+// Aceita item aninhado ({ ocorrencia, componente, ambiente }) ou plano
 function normalizarOcorrencia(item) {
   const ocorrencia = item?.ocorrencia || item || {};
   const componente = item?.componente || {};
   const ambiente = item?.ambiente || {};
 
+  const id =
+    ocorrencia.id_ocor ?? ocorrencia.id_ocorrencia ?? ocorrencia.id;
+
   return {
     ...item,
-    id: ocorrencia.id_ocor ?? ocorrencia.id,
-    numero: ocorrencia.id_ocor ?? ocorrencia.numero,
-    titulo: ocorrencia.ocor_nome ?? ocorrencia.titulo,
-    status: normalizarStatus(ocorrencia.ocor_status ?? ocorrencia.status),
-    prioridade: ocorrencia.ocor_prioridade ?? ocorrencia.prioridade,
-    atualizadoEm: ocorrencia.atualizado_em ?? ocorrencia.atualizadoEm,
+    id,
+    numero: id ?? ocorrencia.numero,
+    titulo:
+      ocorrencia.ocor_nome ??
+      ocorrencia.ocorre_nome ??
+      ocorrencia.nome ??
+      ocorrencia.titulo,
+    status: normalizarTexto(
+      ocorrencia.ocor_status ?? ocorrencia.ocorre_status ?? ocorrencia.status,
+    ),
+    prioridade: normalizarTexto(
+      ocorrencia.ocor_prioridade ??
+        ocorrencia.ocorre_prioridade ??
+        ocorrencia.prioridade,
+    ),
+    atualizadoEm:
+      ocorrencia.atualizado_em ??
+      ocorrencia.atualizadoEm ??
+      ocorrencia.criado_em,
     categoria:
-      componente.compo_nome || ambiente.amb_nome || ocorrencia.categoria || "",
+      componente.compo_nome ||
+      ambiente.amb_nome ||
+      ocorrencia.ambiente ||
+      ocorrencia.componente ||
+      ocorrencia.categoria ||
+      "",
   };
 }
 
@@ -90,7 +171,7 @@ function Donut({ dados, total }) {
         strokeWidth="16"
       />
       {dados.map(([status, qtd]) => {
-        if (!qtd) return null;
+        if (!qtd || !total) return null;
         const fracao = qtd / total;
         const comprimento = fracao * circunferencia;
         const dashoffset = circunferencia - acumulado;
@@ -115,7 +196,7 @@ function Donut({ dados, total }) {
         {total}
       </text>
       <text x="70" y="84" textAnchor="middle" className="grafico-rosca__legenda">
-        chamados
+        ocorrências
       </text>
     </svg>
   );
@@ -128,12 +209,9 @@ export default function Dashboard() {
   const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false);
   const notificacoesRef = useRef(null);
 
-  const [chamados, setChamados] = useState([]);
-  const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState("");
-
   const [dadosDashboard, setDadosDashboard] = useState(null);
   const [carregandoDashboard, setCarregandoDashboard] = useState(true);
+  const [erro, setErro] = useState("");
 
   useEffect(() => {
     function fecharAoClicarFora(event) {
@@ -150,7 +228,6 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    // Buscar nome do usuário
     async function buscarNome() {
       try {
         const response = await userService.buscarperfil();
@@ -160,69 +237,48 @@ export default function Dashboard() {
       }
     }
 
-    // Carregar dados do dashboard
     async function carregar() {
       try {
+        setErro("");
         const dados = await dashboardService.buscarDashboard();
         setDadosDashboard(dados);
       } catch (error) {
         console.error("Erro ao carregar dashboard:", error);
+        setErro("Não foi possível carregar o painel.");
       } finally {
         setCarregandoDashboard(false);
       }
     }
 
-    async function carregarOcorrencias() {
-      try {
-        const resposta = await ocorrenciaService.listarOcorrencias();
-        const dadosBrutos = Array.isArray(resposta)
-          ? resposta
-          : Array.isArray(resposta?.ocorrencias)
-            ? resposta.ocorrencias
-            : Array.isArray(resposta?.data)
-              ? resposta.data
-              : resposta?.ocorrencia
-                ? [resposta]
-                : [];
-        setChamados(dadosBrutos.map(normalizarOcorrencia));
-      } catch (error) {
-        console.error("Erro ao carregar ocorrências recentes:", error);
-      } finally {
-        setCarregando(false);
-      }
-    }
-
     carregar();
     buscarNome();
-    carregarOcorrencias();
   }, [usuario]);
 
   const notificacoes = [];
 
-  const contagem = useMemo(() => {
-    const base = {
-      aberta: 0,
-      "em andamento": 0,
-      concluida: 0,
-      cancelada: 0,
-    };
-    chamados.forEach((c) => {
-      base[c.status] = (base[c.status] || 0) + 1;
-    });
-    return base;
-  }, [chamados]);
+  // Escopo vem da API: administrador | tecnico | funcionario
+  const escopo = dadosDashboard?.escopo ?? "administrador";
+  const cards = CARDS_POR_ESCOPO[escopo] ?? CARDS_POR_ESCOPO.administrador;
 
-  const abertos = contagem.aberta + contagem["em andamento"];
-  const criticos = chamados.filter(
-    (c) =>
-      c.prioridade === "critica" &&
-      c.status !== "concluida" &&
-      c.status !== "cancelada",
-  ).length;
+  const contagem = useMemo(
+    () => normalizarContagem(dadosDashboard?.ocorrenciasPorStatus),
+    [dadosDashboard],
+  );
+
+  const totalDonut = useMemo(
+    () => Object.values(contagem).reduce((soma, qtd) => soma + qtd, 0),
+    [contagem],
+  );
+
+  const atividades = useMemo(
+    () => (dadosDashboard?.atividadesRecentes ?? []).map(normalizarOcorrencia),
+    [dadosDashboard],
+  );
+
   const recentes = useMemo(() => {
     const termo = busca.toLowerCase().trim();
 
-    return chamados
+    return atividades
       .filter(
         (c) =>
           !termo ||
@@ -231,7 +287,7 @@ export default function Dashboard() {
             .includes(termo),
       )
       .slice(0, 5);
-  }, [chamados, busca]);
+  }, [atividades, busca]);
 
   const capitalizar = (texto) => {
     const excecoes = ["da", "de", "do", "das", "dos", "e"];
@@ -252,9 +308,9 @@ export default function Dashboard() {
         {/* Barra superior */}
         <header className="pagina__cabecalho">
           <div>
-            <h1>Olá, {capitalizar(nome || usuario.nome)} </h1>
+            <h1>Olá, {capitalizar(nome || usuario?.nome)} </h1>
             <p className="esmaecido">
-              Visão geral das ocorrências sob monitoramento agora.
+              {TEXTO_SUBTITULO[escopo] ?? TEXTO_SUBTITULO.administrador}
             </p>
           </div>
         </header>
@@ -314,45 +370,30 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="painel__acoes">
-        <Link to="/novochamado" className="botao botao--principal">
-          + Nova ocorrência
-        </Link>
-      </div>
+      {ESCOPOS_COM_NOVA_OCORRENCIA.includes(escopo) && (
+        <div className="painel__acoes">
+          <Link to="/novochamado" className="botao botao--principal">
+            + Nova ocorrência
+          </Link>
+        </div>
+      )}
+
+      {erro && <p className="esmaecido">{erro}</p>}
 
       {/* Estatísticas */}
       <section className="estatistica-grade">
-        <div className="estatistica-card">
-          <span className="estatistica-card__rotulo">Em aberto</span>
-          <span className="estatistica-card__valor">
-            {dadosDashboard?.ocorrenciasAbertas ?? 0}
-          </span>
-          <span className="estatistica-card__dica">aguardando ação</span>
-        </div>
-
-        <div className="estatistica-card estatistica-card--alerta">
-          <span className="estatistica-card__rotulo">Críticos ativos</span>
-          <span className="estatistica-card__valor">
-            {dadosDashboard?.ocorrenciasCriticas ?? 0}
-          </span>
-          <span className="estatistica-card__dica">prioridade máxima</span>
-        </div>
-
-        <div className="estatistica-card">
-          <span className="estatistica-card__rotulo">Resolvidos</span>
-          <span className="estatistica-card__valor">
-            {dadosDashboard?.ocorrenciasResolvidas ?? 0}
-          </span>
-          <span className="estatistica-card__dica">este período</span>
-        </div>
-
-        <div className="estatistica-card">
-          <span className="estatistica-card__rotulo">Total no sistema</span>
-          <span className="estatistica-card__valor">
-            {dadosDashboard?.ocorrenciasTotal ?? 0}
-          </span>
-          <span className="estatistica-card__dica">desde o início</span>
-        </div>
+        {cards.map((card) => (
+          <div
+            key={card.campo}
+            className={`estatistica-card${card.alerta ? " estatistica-card--alerta" : ""}`}
+          >
+            <span className="estatistica-card__rotulo">{card.rotulo}</span>
+            <span className="estatistica-card__valor">
+              {carregandoDashboard ? "…" : (dadosDashboard?.[card.campo] ?? 0)}
+            </span>
+            <span className="estatistica-card__dica">{card.dica}</span>
+          </div>
+        ))}
       </section>
 
       {/* Conteúdo principal */}
@@ -362,10 +403,7 @@ export default function Dashboard() {
           <h2>Distribuição por status</h2>
 
           <div className="grafico-rosca-linha">
-            <Donut
-              dados={Object.entries(contagem)}
-              total={chamados.length || 0}
-            />
+            <Donut dados={Object.entries(contagem)} total={totalDonut} />
 
             <ul className="grafico-rosca-legenda">
               {Object.entries(contagem).map(([status, qtd]) => (
@@ -393,7 +431,7 @@ export default function Dashboard() {
             <h2>Atividade recente</h2>
 
             <Link to="/ocorrencias" className="link">
-              ver todos
+              ver todas
             </Link>
           </div>
 
