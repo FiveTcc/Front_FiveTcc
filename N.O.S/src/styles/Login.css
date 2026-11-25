@@ -275,14 +275,13 @@
   min-height: 52px;
   padding: 0 14px;
   border: 2px solid var(--border);
-  border-radius: 18px;
+  border-radius: 12px;
   background: var(--surface);
   color: var(--text);
 }
 .recuperacao-campo input:focus {
   outline: none;
   border-color: rgba(0, 81, 255, 0.671);
-  box-shadow: 0 0 0 4px rgba(43, 108, 230, 0.16);
 }
 .recuperacao-senha-wrapper {
   position: relative;
