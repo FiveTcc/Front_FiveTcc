@@ -36,6 +36,7 @@ function mapearUsuario(usuario) {
     perfil: usuario.user_tipo || '',
     ativo: usuario.user_ativo,
     imagem: usuario.user_imagem_url || null,
+    criadoEm: usuario.criado_em || null,
   }
 }
 
@@ -53,7 +54,6 @@ export default function Usuarios() {
   const { usuario: usuarioLogado, atualizarSessao } = useAuth()
 
   const [usuarios, setUsuarios] = useState([])
-  const [chamados] = useState([])
 
   const [form, setForm] = useState(formInicial)
   const [editId, setEditId] = useState('')
@@ -116,15 +116,6 @@ export default function Usuarios() {
       document.removeEventListener('click', fecharAoClicarFora)
     }
   }, [])
-
-  // =====================================================
-  // CHAMADOS POR USUÁRIO
-  // =====================================================
-
-  const chamadosPorUsuario = (id) =>
-    chamados.filter(
-      (c) => c.responsavelId === id || c.solicitanteId === id
-    ).length
 
   // =====================================================
   // MENSAGENS
@@ -269,6 +260,19 @@ export default function Usuarios() {
     } finally {
       setSalvando(false)
     }
+  }
+
+  // =====================================================
+  // FORMATAR DATA
+  // =====================================================
+
+  function formatarData(data) {
+    if (!data) return 'Não informado'
+
+    const dataFormatada = new Date(data)
+    if (Number.isNaN(dataFormatada.getTime())) return 'Não informado'
+
+    return dataFormatada.toLocaleDateString('pt-BR')
   }
 
   // =====================================================
@@ -543,7 +547,7 @@ export default function Usuarios() {
               <th>Nome</th>
               <th>E-mail</th>
               <th>Perfil</th>
-              <th>Chamados vinculados</th>
+              <th>Data de criação</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -568,11 +572,18 @@ export default function Usuarios() {
                 <tr key={u.id}>
 
                   {/* AVATAR */}
-
                   <td>
-                    <span className="avatar avatar--pequeno">
-                      {iniciais(u.nome)}
-                    </span>
+                    <div className="avatar avatar--pequeno">
+                      {u.imagem ? (
+                        <img
+                          src={u.imagem}
+                          alt={`Foto de ${u.nome}`}
+                          className="usuario-avatar-img"
+                        />
+                      ) : (
+                        iniciais(u.nome)
+                      )}
+                    </div>
                   </td>
 
                   {/* NOME CLICÁVEL */}
@@ -612,10 +623,9 @@ export default function Usuarios() {
                     </span>
                   </td>
 
-                  {/* CHAMADOS */}
-
+                  {/* DATA DE CRIAÇÃO */}
                   <td className="esmaecido">
-                    {chamadosPorUsuario(u.id)}
+                    {formatarData(u.criadoEm)}
                   </td>
 
                   {/* AÇÕES */}
