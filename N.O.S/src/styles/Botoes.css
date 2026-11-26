@@ -84,7 +84,7 @@
 }
 
 .botao--transparente,
-.botao--perigo {
+.botao--inativar {
   min-width: 100px;
   height: 40px;
   padding: 0 16px;
@@ -94,8 +94,8 @@
   align-items: center;
 }
 
-.botao--perigo {
-  background: var(--red);
+.botao--inativar {
+  background: #64748B;
   color: #ffffff;
   display: inline-flex;
   align-items: center;
@@ -104,12 +104,12 @@
   white-space: nowrap;
 }
 
-.botao--perigo:hover {
-  background: #c81d4b;
+.botao--inativar:hover {
+  background: #475569;
 }
 
 @media (max-width: 768px) {
-  .botao--perigo {
+  .botao--inativar {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -126,7 +126,7 @@
     gap: 8px;
   }
 
-  .botao--perigo {
+  .botao--inativar {
     margin: 12px 0 0;
     transform: none;
     align-self: flex-start;

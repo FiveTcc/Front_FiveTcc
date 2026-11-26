@@ -642,7 +642,7 @@ export default function Usuarios() {
 
                     <button
                       type="button"
-                      className="botao botao--perigo"
+                      className="botao botao--inativar"
                       onClick={() => handleToggleAtivo(u)}
                       disabled={alterandoStatusId === u.id}
                       style={{ marginLeft: 15 }}
