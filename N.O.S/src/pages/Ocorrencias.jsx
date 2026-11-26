@@ -328,7 +328,7 @@ export default function Chamados() {
           )}
         </div>
 
-        <Link to="/novochamado" className="botao botao--principal">
+        <Link to="/novaocorrencia" className="botao botao--principal">
           + Nova ocorrência
         </Link>
       </div>

@@ -58,7 +58,7 @@ export default function App() {
           />
 
           <Route
-            path="novochamado"
+            path="novaocorrencia"
             element={<NovoChamado />}
           />
 

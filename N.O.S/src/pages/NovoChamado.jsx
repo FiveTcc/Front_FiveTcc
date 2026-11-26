@@ -1,7 +1,8 @@
-
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ocorrenciaService from "../services/ocorrenciaService";
+import ambienteService from "../services/ambienteService";
+import componenteService from "../services/componeteService";
 
 export default function NovoChamado() {
   const navigate = useNavigate();
@@ -15,10 +16,14 @@ export default function NovoChamado() {
   // Relacionamentos com o banco
   const [componenteId, setComponenteId] = useState("");
   const [ambienteId, setAmbienteId] = useState("");
+  const [ambienteBusca, setAmbienteBusca] = useState("");
+  const [componenteBusca, setComponenteBusca] = useState("");
 
   // Controle da tela
   const [enviando, setEnviando] = useState(false);
   const [openSelect, setOpenSelect] = useState(null);
+  const [ambientes, setAmbientes] = useState([]);
+  const [componentes, setComponentes] = useState([]);
   const categoriaRef = useRef(null);
   const prioridadeRef = useRef(null);
 
@@ -40,6 +45,51 @@ export default function NovoChamado() {
     return () =>
       document.removeEventListener("pointerdown", closeOnOutsidePointerDown);
   }, [openSelect]);
+
+  useEffect(() => {
+    async function carregarAmbientes() {
+      try {
+        const resposta = await ambienteService.listarAmbientes();
+        const lista = extrairLista(resposta, ["ambientes", "ambiente"])
+          .map(normalizarAmbiente)
+          .filter((item) => item.id && item.nome);
+        setAmbientes(lista);
+      } catch (error) {
+        console.error("Erro ao carregar ambientes:", error);
+      }
+    }
+
+    carregarAmbientes();
+  }, []);
+
+  useEffect(() => {
+    async function carregarComponentes() {
+      if (!ambienteId) {
+        setComponentes([]);
+        setComponenteId("");
+        setComponenteBusca("");
+        return;
+      }
+
+      const ambiente = ambientes.find((item) => String(item.id) === String(ambienteId));
+      if (!ambiente?.nome) return;
+
+      try {
+        const resposta = await componenteService.buscarPorAmbiente(ambiente.nome);
+        const lista = extrairLista(resposta, ["componentes", "componente"])
+          .map(normalizarComponente)
+          .filter((item) => item.id && item.nome);
+        setComponentes(lista);
+        setComponenteId("");
+        setComponenteBusca("");
+      } catch (error) {
+        console.error("Erro ao carregar componentes:", error);
+        setComponentes([]);
+      }
+    }
+
+    carregarComponentes();
+  }, [ambienteId, ambientes]);
 
   const categorias = [
     "Hardware",
@@ -245,33 +295,62 @@ export default function NovoChamado() {
 
         </div>
 
-        {/* IDs do banco */}
+        {/* Ambiente e componente */}
         <div className="formulario__linha">
 
           <label>
-            ID do componente
+            Ambiente
 
             <input
-              type="number"
-              min="1"
-              value={componenteId}
-              onChange={(e) => setComponenteId(e.target.value)}
-              placeholder="Ex.: 6"
+              type="search"
+              list="ambientes-novo-chamado"
+              value={ambienteBusca}
+              onChange={(event) => {
+                const nome = event.target.value;
+                setAmbienteBusca(nome);
+                const ambiente = ambientes.find(
+                  (item) => item.nome.toLowerCase() === nome.toLowerCase()
+                );
+                setAmbienteId(ambiente ? String(ambiente.id) : "");
+              }}
+              placeholder="Digite o nome do ambiente"
               required
             />
+            <datalist id="ambientes-novo-chamado">
+              {ambientes.map((item) => (
+                <option key={item.id} value={item.nome} />
+              ))}
+            </datalist>
           </label>
 
           <label>
-            ID do ambiente
+            Componente
 
             <input
-              type="number"
-              min="1"
-              value={ambienteId}
-              onChange={(e) => setAmbienteId(e.target.value)}
-              placeholder="Ex.: 1"
+              type="search"
+              list="componentes-novo-chamado"
+              value={componenteBusca}
+              onChange={(event) => {
+                const nome = event.target.value;
+                setComponenteBusca(nome);
+                const componente = componentes.find(
+                  (item) => item.nome.toLowerCase() === nome.toLowerCase()
+                );
+                setComponenteId(componente ? String(componente.id) : "");
+              }}
+              placeholder={
+                ambienteId
+                  ? "Digite o nome do componente"
+                  : "Selecione um ambiente primeiro"
+              }
+              disabled={!ambienteId}
               required
             />
+            <datalist id="componentes-novo-chamado">
+              {componentes.map((item) => (
+                <option key={item.id} value={item.nome} />
+              ))}
+            </datalist>
           </label>
 
         </div>
@@ -314,4 +393,38 @@ export default function NovoChamado() {
       </form>
     </div>
   );
+}
+
+function extrairLista(resposta, chaves = []) {
+  if (Array.isArray(resposta)) return resposta;
+  if (!resposta || typeof resposta !== "object") return [];
+
+  for (const chave of chaves) {
+    if (Array.isArray(resposta[chave])) return resposta[chave];
+  }
+
+  if (Array.isArray(resposta.data)) return resposta.data;
+  if (resposta.data && typeof resposta.data === "object") {
+    for (const chave of chaves) {
+      if (Array.isArray(resposta.data[chave])) return resposta.data[chave];
+    }
+  }
+
+  return [];
+}
+
+function normalizarAmbiente(item) {
+  const ambiente = item?.ambiente || item || {};
+  return {
+    id: ambiente.id_amb ?? ambiente.amb_id ?? ambiente.id,
+    nome: ambiente.amb_nome ?? ambiente.nome ?? "",
+  };
+}
+
+function normalizarComponente(item) {
+  const componente = item?.componente || item || {};
+  return {
+    id: componente.id_compo ?? componente.compo_id ?? componente.id,
+    nome: componente.compo_nome ?? componente.nome ?? "",
+  };
 }

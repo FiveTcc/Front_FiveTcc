@@ -372,7 +372,7 @@ export default function Dashboard() {
 
       {ESCOPOS_COM_NOVA_OCORRENCIA.includes(escopo) && (
         <div className="painel__acoes">
-          <Link to="/novochamado" className="botao botao--principal">
+          <Link to="/novaocorrencia" className="botao botao--principal">
             + Nova ocorrência
           </Link>
         </div>
