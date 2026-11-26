@@ -189,8 +189,14 @@
 }
 
 .avatar--pequeno {
-  width: 35px;
-  height: 35px;
+  width: 44px;
+  height: 44px;
+  font-size: 0.68rem;
+}
+
+.avatar--observacao{
+  width: 44px;
+  height: 44px;
   font-size: 0.68rem;
 }
 
@@ -301,7 +307,7 @@
 }
 
 .topbar__simbolo-botao:hover {
-  border-color: rgba(0, 81, 255, 0.541);
+  border-color: rgba(0, 81, 255, 0.671);
   background: var(--surface-2);
 }
 
@@ -361,7 +367,7 @@
 
 .topbar__notificacao-item:hover {
   background: var(--surface-2);
-  border-color: rgba(0, 81, 255, 0.541);
+  border-color: rgba(0, 81, 255, 0.671);
 }
 
 .topbar__notificacao-item small {

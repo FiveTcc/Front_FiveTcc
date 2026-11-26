@@ -30,8 +30,8 @@
 }
 
 .acesso__tema-alternar:hover {
-  border-color: rgba(0, 81, 255, 0.541);
-  background-color: rgba(148, 163, 184, 0.32);
+  background: var(--surface-2);
+  border-color: rgba(0, 81, 255, 0.671);
 }
 
 /* ---------- Painel dividido em duas colunas (visual + formulário) ---------- */

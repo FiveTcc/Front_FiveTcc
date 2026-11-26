@@ -784,7 +784,7 @@ export default function ChamadoDetalhe() {
                   style={{ objectFit: "cover" }}
                 />
               ) : (
-                <span className="avatar avatar--pequeno">
+                <span className="avatar avatar--observacao">
                   {iniciais(nomeLogado)}
                 </span>
               )}

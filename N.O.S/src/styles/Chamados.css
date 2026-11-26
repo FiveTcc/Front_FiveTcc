@@ -232,10 +232,10 @@
 }
 
 .chamado-detalhe-pagina .chamado-historico-rolagem {
-  flex: 0 0 320px;
-  height: 320px;
-  min-height: 320px;
-  max-height: 320px;
+  flex: 0 0 620px;
+  height: 620px;
+  min-height: 620px;
+  max-height: 620px;
   overflow-y: scroll;
   overflow-x: hidden;
   overscroll-behavior: contain;
@@ -266,6 +266,8 @@
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
+  border-top: none;
+  padding-top: 0;
 }
 
 .chamado-detalhe-pagina .comentario-formulario input {
@@ -302,6 +304,15 @@
   min-width: 0;
   height: 46px;
   box-sizing: border-box;
+  border: 2px solid var(--border);
+}
+
+.chamado-detalhe-pagina .comentario-formulario__campo input:hover {
+  border-color: rgba(0, 81, 255, 0.671);
+}
+
+.chamado-detalhe-pagina .comentario-formulario__campo input:focus {
+  border-color: rgba(0, 81, 255, 0.671);
 }
 
 .chamado-detalhe-pagina .comentario-formulario__campo button {
@@ -316,6 +327,11 @@
   flex-shrink: 0;
   margin-top: auto;
   padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.chamado-detalhe-pagina .comentario-area h3 {
+  margin-bottom: 12px;
 }
 
 /* ---------- Mensagens ---------- */
