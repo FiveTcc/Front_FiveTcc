@@ -32,7 +32,7 @@ function normalizar(item) {
   };
 }
 
-const FORM_VAZIO = { nome: "", tipoId: "", patrimonio: "", numeroSerie: "", ambienteId: "" };
+const FORM_VAZIO = { nome: "", tipoId: "", ambienteId: "" };
 
 export default function Componentes() {
   const [searchParams] = useSearchParams();
@@ -80,25 +80,42 @@ export default function Componentes() {
 
   async function salvar(event) {
     event.preventDefault();
-    if (!form?.nome.trim() || !form.tipoId || salvando) return;
+
+    const nome = form?.nome?.trim() ?? "";
+    const tipoId = Number(form?.tipoId);
+    const ambienteId = Number(form?.ambienteId);
+
+    if (
+      nome.length < 3 ||
+      nome.length > 100 ||
+      !Number.isFinite(tipoId) ||
+      tipoId <= 0 ||
+      !Number.isFinite(ambienteId) ||
+      ambienteId <= 0 ||
+      salvando
+    ) return;
+
     const dados = {
-      compo_nome: form.nome.trim(),
-      compo_tipo_id: Number(form.tipoId),
-      compo_patrimonio: form.patrimonio.trim(),
-      compo_numero_serie: form.numeroSerie.trim(),
-      id_amb: form.ambienteId ? Number(form.ambienteId) : null,
+      compo_nome: nome,
+      compo_tipo_id: tipoId,
+      id_amb: ambienteId,
     };
 
     setSalvando(true);
     setErro("");
+
     try {
-      if (form.id) await componenteService.atualizarComponente(form.id, dados);
-      else await componenteService.cadastrarComponente(dados);
+      if (form.id) {
+        await componenteService.atualizarComponente(form.id, dados);
+      } else {
+        await componenteService.cadastrarComponente(dados);
+      }
+
       setForm(null);
       await carregar();
     } catch (error) {
-      console.error("Erro ao salvar componente:", error);
-      setErro("Não foi possível salvar o componente. Confira se a API aceita o número de série.");
+      console.error("Erro ao salvar componente:", error.response?.data || error);
+      setErro(error.response?.data?.message || "Não foi possível salvar o componente.");
     } finally {
       setSalvando(false);
     }
@@ -109,8 +126,6 @@ export default function Componentes() {
       id: item.id,
       nome: item.nome,
       tipoId: item.tipoId,
-      patrimonio: item.patrimonio === "—" ? "" : item.patrimonio,
-      numeroSerie: item.numeroSerie === "—" ? "" : item.numeroSerie,
       ambienteId: item.ambienteId,
     });
   }
@@ -183,17 +198,13 @@ export default function Componentes() {
           <section className="card componentes-modal" role="dialog" aria-modal="true" aria-labelledby="componente-form-title">
             <h2 id="componente-form-title">{form.id ? "Editar componente" : "Novo componente"}</h2>
             <form onSubmit={salvar}>
-              <label>Nome do equipamento<input autoFocus required value={form.nome} onChange={(event) => setForm({ ...form, nome: event.target.value })} placeholder="Ex.: Computador da sala 01" /></label>
+              <label>Nome do equipamento<input autoFocus required minLength={3} maxLength={100} value={form.nome} onChange={(event) => setForm({ ...form, nome: event.target.value })} placeholder="Ex.: Computador da sala 01" /></label>
               <label>Tipo<select required value={form.tipoId} onChange={(event) => setForm({ ...form, tipoId: event.target.value })}>
                 <option value="">Selecione um tipo</option>
                 {tipos.map((tipo) => <option key={tipo.id_compo_tipo ?? tipo.id} value={tipo.id_compo_tipo ?? tipo.id}>{tipo.compo_tipo ?? tipo.nome}</option>)}
               </select></label>
-              <div className="componentes-formulario-linha">
-                <label>Patrimônio<input value={form.patrimonio} onChange={(event) => setForm({ ...form, patrimonio: event.target.value })} placeholder="Número patrimonial" /></label>
-                <label>Número de série<input value={form.numeroSerie} onChange={(event) => setForm({ ...form, numeroSerie: event.target.value })} placeholder="Opcional" /></label>
-              </div>
-              <label>Ambiente<select value={form.ambienteId} onChange={(event) => setForm({ ...form, ambienteId: event.target.value })}>
-                <option value="">Sem ambiente</option>
+              <label>Ambiente<select required value={form.ambienteId} onChange={(event) => setForm({ ...form, ambienteId: event.target.value })}>
+                <option value="">Selecione um ambiente</option>
                 {ambientes.map((ambiente) => <option key={ambiente.id_amb ?? ambiente.id} value={ambiente.id_amb ?? ambiente.id}>{ambiente.amb_nome ?? ambiente.nome}</option>)}
               </select></label>
               <div className="componentes-modal__acoes">

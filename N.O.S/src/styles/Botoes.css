@@ -95,7 +95,7 @@
 }
 
 .botao--inativar {
-  background: #64748B;
+  background: #c53030;
   color: #ffffff;
   display: inline-flex;
   align-items: center;
@@ -105,7 +105,32 @@
 }
 
 .botao--inativar:hover {
-  background: #475569;
+  background: #b91c1c;
+}
+
+.botao--ativar {
+  background: #16a34a;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.botao--ativar:hover {
+  background: #15803d;
+}
+
+.botao--ativar,
+.botao--inativar {
+  min-width: 100px;
+  height: 40px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media (max-width: 768px) {

@@ -1942,6 +1942,75 @@
   text-align: center;
 }
 
+/* ---------- Cadastro de novo tipo de componente ---------- */
+.ambiente-adicionar-novo-tipo {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+
+.ambiente-adicionar-novo-tipo label {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+  color: var(--text-dim);
+}
+
+.ambiente-adicionar-novo-tipo input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 2px solid var(--panel-input-border);
+  border-radius: 10px;
+  background: var(--panel-input);
+  color: var(--text);
+  box-sizing: border-box;
+}
+
+.ambiente-adicionar-novo-tipo input::placeholder {
+  color: var(--text-dim);
+  opacity: 0.75;
+}
+
+.ambiente-adicionar-novo-tipo input:focus {
+  outline: none;
+  border-color: rgba(0, 81, 255, 0.671);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+.ambiente-adicionar-novo-tipo button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.ambiente-adicionar-novo-tipo button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsividade */
+@media (max-width: 500px) {
+  .ambiente-adicionar-novo-tipo {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ambiente-adicionar-novo-tipo label,
+  .ambiente-adicionar-novo-tipo button {
+    width: 100%;
+  }
+}
+
 /* ---------- Resumo lateral ---------- */
 .ambiente-detalhe-resumo {
   width: 100%;

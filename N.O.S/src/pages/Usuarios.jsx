@@ -1,4 +1,3 @@
-
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import CustomSelect from '../components/CustomSelect'
@@ -282,15 +281,23 @@ export default function Usuarios() {
   async function handleToggleAtivo(usuario) {
     limparMensagens()
 
+    const vaiAtivar = usuario.ativo === false
+    const acao = vaiAtivar ? 'ativar' : 'inativar'
+    const confirmado = window.confirm(
+      `Deseja realmente ${acao} o usuário "${usuario.nome}"?`
+    )
+
+    if (!confirmado) return
+
     try {
       setAlterandoStatusId(usuario.id)
 
       await userService.inativarUsuario(usuario.id)
 
       setSucesso(
-        usuario.ativo
-          ? `Usuário ${usuario.nome} inativado com sucesso.`
-          : `Usuário ${usuario.nome} ativado com sucesso.`
+        vaiAtivar
+          ? `Usuário ${usuario.nome} ativado com sucesso.`
+          : `Usuário ${usuario.nome} inativado com sucesso.`
       )
 
       await carregarUsuarios()
@@ -642,7 +649,7 @@ export default function Usuarios() {
 
                     <button
                       type="button"
-                      className="botao botao--inativar"
+                      className={`botao ${u.ativo === false ? 'botao--ativar' : 'botao--inativar'}`}
                       onClick={() => handleToggleAtivo(u)}
                       disabled={alterandoStatusId === u.id}
                       style={{ marginLeft: 15 }}

@@ -7,11 +7,17 @@ import componenteTipoService from "../services/componenteTipoService";
 import CustomSelect from "../components/CustomSelect";
 
 function normalizarLista(resposta, chave = "ambientes") {
-  const dados = resposta?.data ?? resposta?.resultado ?? resposta?.result ?? resposta?.payload ?? resposta;
+  let dados = resposta?.data ?? resposta?.resultado ?? resposta?.result ?? resposta?.payload ?? resposta;
+
+  if (dados?.data && !Array.isArray(dados)) {
+    dados = dados.data;
+  }
 
   if (Array.isArray(dados)) return dados;
   if (dados && Array.isArray(dados[chave])) return dados[chave];
   if (dados && Array.isArray(dados.ambiente)) return dados.ambiente;
+  if (dados && Array.isArray(dados.tipos)) return dados.tipos;
+  if (dados && Array.isArray(dados.componentes)) return dados.componentes;
 
   return [];
 }
@@ -63,21 +69,23 @@ export default function AmbientesDetalhe() {
   const [adicionando, setAdicionando] = useState(false);
   const [form, setForm] = useState({ nome: "", tipo: "", bloco: "", andar: 0, descricao: "", status: "ativo" });
   const TIPOS_COMPONENTE_PADRAO = [
-  "Computador",
-  "Notebook",
-  "Monitor",
-  "Impressora",
-  "Projetor",
-  "Teclado",
-  "Mouse",
-  "Roteador",
-  "Switch",
-  "Webcam",
-  "Scanner",
-  "Caixa de som",
-];
+    "Computador",
+    "Notebook",
+    "Monitor",
+    "Impressora",
+    "Projetor",
+    "Teclado",
+    "Mouse",
+    "Roteador",
+    "Switch",
+    "Webcam",
+    "Scanner",
+    "Caixa de som",
+  ];
+  const [novoTipo, setNovoTipo] = useState("");
+  const [criandoTipo, setCriandoTipo] = useState(false);
 
-const [novo, setNovo] = useState({ nome: "", tipoId: "", tipoTexto: "", observacao: "" });
+  const [novo, setNovo] = useState({ nome: "", tipoId: "", tipoTexto: "", observacao: "" });
   const [carregando, setCarregando] = useState(true);
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState("");
@@ -99,50 +107,156 @@ const [novo, setNovo] = useState({ nome: "", tipoId: "", tipoTexto: "", observac
     setComponentes(componentesNormalizados);
   }
 
+  async function cadastrarNovoTipo() {
+    const nome = novoTipo.trim();
+
+    if (!nome || criandoTipo) return;
+
+    // Evita cadastrar tipos duplicados
+    const tipoExistente = tiposDisponiveis.find(
+      (tipo) => tipo.nome.toLowerCase() === nome.toLowerCase()
+    );
+
+    if (tipoExistente) {
+      setNovo((atual) => ({
+        ...atual,
+        tipoId: String(tipoExistente.id),
+        tipoTexto: tipoExistente.nome,
+      }));
+      setNovoTipo("");
+      setErro("");
+      return;
+    }
+
+    try {
+      setCriandoTipo(true);
+      setErro("");
+
+      await componenteTipoService.cadastrarComponenteTipo({
+        compo_tipo: nome,
+      });
+
+      // Atualiza a lista de tipos
+      const resposta = await componenteTipoService.listarComponenteTipo();
+      const listaAtualizada = normalizarLista(resposta, "tipos");
+
+      setTipos(listaAtualizada);
+
+      const tipoCadastrado = listaAtualizada.find(
+        (tipo) =>
+          String(tipo.compo_tipo ?? tipo.nome ?? "").toLowerCase() ===
+          nome.toLowerCase()
+      );
+
+      if (tipoCadastrado) {
+        const idTipo =
+          tipoCadastrado.id_compo_tipo ??
+          tipoCadastrado.id ??
+          tipoCadastrado.compo_tipo_id;
+
+        const nomeTipo = tipoCadastrado.compo_tipo ?? tipoCadastrado.nome;
+
+        setNovo((atual) => ({
+          ...atual,
+          tipoId: String(idTipo),
+          tipoTexto: nomeTipo,
+        }));
+      }
+
+      setNovoTipo("");
+      setAviso("Tipo de componente criado com sucesso.");
+    } catch (error) {
+      console.error("Erro ao criar tipo de componente:", error);
+      setErro(
+        error?.response?.data?.message ||
+        "Não foi possível criar o tipo de componente."
+      );
+    } finally {
+      setCriandoTipo(false);
+    }
+  }
+
   useEffect(() => {
     let ativo = true;
     async function carregar() {
       try {
         setCarregando(true);
-        const [resAmbientes, resTipos] = await Promise.all([
-          ambienteService.listarAmbientes(),
-          componenteTipoService.listarComponenteTipo(),
-        ]);
+        setErro("");
 
-        const listaAmbientes = normalizarLista(resAmbientes, "ambientes");
-        let encontrado = listaAmbientes
-          .map(normalizarAmbiente)
-          .find((item) => String(item.id) === String(id));
+        let respostaDetalhe = null;
+        try {
+          respostaDetalhe = await ambienteService.listarAmbienteId(id);
+        } catch (error) {
+          console.warn("Não foi possível buscar o ambiente pelo ID:", error);
+        }
 
-        if (!encontrado) {
-          const respostaDetalhe = await ambienteService.listarAmbienteId(id).catch(() => null);
-          const listaDetalhe = normalizarLista(respostaDetalhe, "ambientes");
+        let encontrado = null;
+
+        if (respostaDetalhe) {
+          const dadosDetalhe = respostaDetalhe?.data ?? respostaDetalhe;
+          const listaDetalhe = normalizarLista(dadosDetalhe, "ambientes");
+
           encontrado = listaDetalhe
             .map(normalizarAmbiente)
             .find((item) => String(item.id) === String(id));
 
-          if (!encontrado && respostaDetalhe && typeof respostaDetalhe === "object") {
-            encontrado = normalizarAmbiente(respostaDetalhe);
+          if (!encontrado) {
+            const bruto = dadosDetalhe?.ambiente ?? dadosDetalhe;
+            if (bruto && typeof bruto === "object") encontrado = normalizarAmbiente(bruto);
           }
         }
 
-        if (!encontrado) throw new Error("Ambiente não encontrado.");
+        if (!encontrado) {
+          const respostaAmbientes = await ambienteService.listarAmbientes();
+          const listaAmbientes = normalizarLista(respostaAmbientes, "ambientes");
+          encontrado = listaAmbientes
+            .map(normalizarAmbiente)
+            .find((item) => String(item.id) === String(id));
+        }
 
-        const listaTipos = normalizarLista(resTipos, "tipos");
+        if (!encontrado?.id) throw new Error("Ambiente não encontrado.");
+
+        let listaTipos = [];
+        try {
+          const resTipos = await componenteTipoService.listarComponenteTipo();
+          listaTipos = normalizarLista(resTipos, "tipos");
+        } catch (error) {
+          console.warn("Não foi possível carregar os tipos de componente:", error);
+        }
+
         if (!ativo) return;
         setAmbiente(encontrado);
-        setForm({ nome: encontrado.nome, tipo: encontrado.tipo, bloco: encontrado.bloco === "—" ? "" : encontrado.bloco, andar: encontrado.andar, descricao: encontrado.descricao, status: String(encontrado.status).toLowerCase() === "inativo" ? "inativo" : "ativo" });
+        setForm({
+          nome: encontrado.nome,
+          tipo: encontrado.tipo,
+          bloco: encontrado.bloco === "—" ? "" : encontrado.bloco,
+          andar: encontrado.andar,
+          descricao: encontrado.descricao,
+          status: String(encontrado.status).toLowerCase() === "inativo" ? "inativo" : "ativo",
+        });
         setTipos(listaTipos);
+
         const primeiroTipo = listaTipos[0];
         setNovo((atual) => ({
           ...atual,
           tipoId: String(primeiroTipo?.id_compo_tipo ?? primeiroTipo?.id ?? primeiroTipo?.compo_tipo_id ?? ""),
           tipoTexto: primeiroTipo?.compo_tipo ?? primeiroTipo?.nome ?? "",
         }));
-        await carregarComponentes(encontrado.nome);
+
+        try {
+          await carregarComponentes(encontrado.nome);
+        } catch (error) {
+          console.warn("Não foi possível carregar os componentes do ambiente:", error);
+          if (ativo) setComponentes([]);
+        }
       } catch (error) {
         console.error("Erro ao carregar detalhe do ambiente:", error);
-        if (ativo) setErro(error.message === "Ambiente não encontrado." ? error.message : "Não foi possível carregar os dados do ambiente.");
+        if (ativo) {
+          setErro(
+            error.response?.data?.message ||
+            (error.message === "Ambiente não encontrado." ? error.message : "Não foi possível carregar os dados do ambiente.")
+          );
+        }
       } finally {
         if (ativo) setCarregando(false);
       }
@@ -157,13 +271,13 @@ const [novo, setNovo] = useState({ nome: "", tipoId: "", tipoTexto: "", observac
   })).filter((tipo) => tipo.id && tipo.nome), [tipos]);
   const opcoesTipoComponente = tiposDisponiveis.length
     ? tiposDisponiveis.map((tipo) => ({
-        value: String(tipo.id),
-        label: tipo.nome,
-      }))
+      value: String(tipo.id),
+      label: tipo.nome,
+    }))
     : TIPOS_COMPONENTE_PADRAO.map((nome) => ({
-        value: nome,
-        label: nome,
-      }));
+      value: nome,
+      label: nome,
+    }));
 
   const statusAmbienteTexto = statusParaTexto(ambiente?.status);
   const andarTexto = ambiente?.andar === 0 ? "Térreo" : `${ambiente?.andar ?? 0}º andar`;
@@ -237,10 +351,10 @@ const [novo, setNovo] = useState({ nome: "", tipoId: "", tipoTexto: "", observac
           });
           tipoId = Number(
             tipoCriado?.id_compo_tipo ??
-              tipoCriado?.id ??
-              tipoCriado?.data?.id_compo_tipo ??
-              tipoCriado?.data?.id ??
-              0,
+            tipoCriado?.id ??
+            tipoCriado?.data?.id_compo_tipo ??
+            tipoCriado?.data?.id ??
+            0,
           );
         } catch (error) {
           console.warn("Tipo de componente não pôde ser criado; segue com valor digitado.", error);
@@ -251,8 +365,7 @@ const [novo, setNovo] = useState({ nome: "", tipoId: "", tipoTexto: "", observac
         compo_nome: nome,
         compo_obs: novo.observacao.trim(),
         id_amb: idAmbiente,
-        ...(Number.isFinite(tipoId) && tipoId > 0 ? { compo_tipo_id: tipoId } : {}),
-        ...(tipoTexto ? { compo_tipo: tipoTexto } : {}),
+        compo_tipo_id: tipoId,
       };
 
       await componenteService.cadastrarComponente(payload);
@@ -346,7 +459,7 @@ const [novo, setNovo] = useState({ nome: "", tipoId: "", tipoTexto: "", observac
                 <div className="ambiente-componente-modal" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
                   <div className="ambiente-componente-modal-cabecalho">
                     <div>
-                      <span className= "rotulo-superior">Adicionar componente</span>
+                      <span className="rotulo-superior">Adicionar componente</span>
                       <h3>Novo componente</h3>
                     </div>
                     <button type="button" className="ambiente-componente-modal-fechar" onClick={() => setAdicionando(false)} aria-label="Fechar cadastro de componente">
@@ -378,6 +491,29 @@ const [novo, setNovo] = useState({ nome: "", tipoId: "", tipoTexto: "", observac
                         />
                       </div>
                       <label>Observação<input value={novo.observacao} onChange={(e) => setNovo({ ...novo, observacao: e.target.value })} placeholder="Opcional" /></label>
+                    </div>
+                    <div className="ambiente-adicionar-novo-tipo">
+                      <label htmlFor="novo-tipo-componente">
+                        Novo tipo de componente
+
+                        <input
+                          id="novo-tipo-componente"
+                          type="text"
+                          value={novoTipo}
+                          onChange={(e) => setNovoTipo(e.target.value)}
+                          placeholder="Ex.: Impressora, Notebook..."
+                        />
+                      </label>
+
+                      <button
+                        type="button"
+                        className="botao botao--adicionar"
+                        onClick={cadastrarNovoTipo}
+                        disabled={!novoTipo.trim() || criandoTipo}
+                      >
+                        <Plus size={16} />
+                        {criandoTipo ? "Criando..." : "Criar tipo"}
+                      </button>
                     </div>
                     <div className="formulario__acoes"><button type="button" className="botao botao--cancelar" onClick={() => setAdicionando(false)}>Cancelar</button><button type="submit" className="botao botao--adicionar" disabled={salvando}>{salvando ? "Salvando..." : "Adicionar componente"}</button></div>
                   </form>
